@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Téranga Voyages — Agence touristique Dakar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          sand:    { 50: '#FBF7F0', 100: '#F5ECDD', 200: '#ECDDC4', 300: '#DCC9A8', 400: '#B8A284', 500: '#8C7A60' },
+          ink:     { DEFAULT: '#1A1612', 900: '#1A1612', 800: '#26211B', 700: '#3A332A', 600: '#5A5142', 500: '#7C7159', 400: '#A39884' },
+          terre:   { DEFAULT: '#C8593B', 600: '#A8462C', 700: '#8B3A24', 300: '#E6987F', 100: '#F4DACA' },
+          atlantique:{ DEFAULT: '#1F5E5A', 700: '#16443F', 300: '#7BAAA5', 100: '#D5E5E2' },
+          ocre:    { DEFAULT: '#D89A3D', 300: '#EAC380', 100: '#F6E6C4' },
+        },
+        fontFamily: {
+          display: ['"Instrument Serif"', 'Georgia', 'serif'],
+          sans: ['Manrope', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      }
+    }
+  };
+</script>
+<style>
+  :root {
+    /* Defaults — overridden by Tweaks panel at runtime */
+    --tw-bg:#FBF7F0;       --tw-surface:#F5ECDD;
+    --tw-ink:#1A1612;      --tw-ink-soft:#26211B; --tw-ink-mute:#5A5142; --tw-ink-faint:#7C7159;
+    --tw-border:#ECDDC4;
+    --tw-accent:#C8593B;   --tw-accent-100:#F4DACA; --tw-accent-300:#E6987F; --tw-accent-600:#A8462C; --tw-accent-700:#8B3A24;
+    --tw-accent2:#1F5E5A;  --tw-accent2-100:#D5E5E2; --tw-accent2-300:#7BAAA5; --tw-accent2-700:#16443F;
+    --tw-font-display:"Instrument Serif"; --tw-font-body:"Manrope"; --tw-font-mono:"JetBrains Mono";
+    --tw-radius-mult:1;    --tw-container:1280px;   --tw-hero-h:100svh;
+    --tw-section-pad:1;    --tw-grain:1;
+    --tw-card-shadow:0 1px 0 rgba(26,22,18,.05), 0 10px 30px -12px rgba(26,22,18,.25);
+  }
+  html, body { background:var(--tw-bg); color:var(--tw-ink); -webkit-font-smoothing:antialiased; }
+  body { font-family:var(--tw-font-body), 'Manrope', system-ui, sans-serif; }
+  .font-display { font-family:var(--tw-font-display), 'Instrument Serif', Georgia, serif; font-weight:400; letter-spacing:-0.01em; }
+  .font-mono { font-family:var(--tw-font-mono), 'JetBrains Mono', ui-monospace, monospace; }
+  /* Subtle grain over duotone placeholders */
+  .grain::after {
+    content:''; position:absolute; inset:0; pointer-events:none; opacity:.18;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode:overlay;
+  }
+  .scrollbar-thin::-webkit-scrollbar { height:6px; width:6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background:#DCC9A8; border-radius:3px; }
+  .no-scrollbar::-webkit-scrollbar { display:none; }
+  .no-scrollbar { scrollbar-width:none; }
+  /* Marquee for instagram strip */
+  @keyframes slow-pan { from { transform:translateX(0) } to { transform:translateX(-50%) } }
+  .marquee { animation: slow-pan 60s linear infinite; }
+  /* Hide scroll anchoring jumps when switching routes */
+  html { scroll-behavior:smooth; }
+  /* Selection */
+  ::selection { background:#C8593B; color:#FBF7F0; }
+  /* Focus */
+  :focus-visible { outline:2px solid #C8593B; outline-offset:3px; border-radius:2px; }
+
+  /* "Photo" placeholder default shadow */
+  .photo-card { box-shadow: var(--tw-card-shadow); }
+
+  /* =====================================================================
+     TWEAK OVERRIDES — runtime theming via CSS vars + body data-attributes.
+     Each block targets the existing Tailwind utility classes used in the
+     source files so we can re-skin without rebuilding components.
+     ===================================================================== */
+
+  /* --- Backgrounds & ink (light tones; dark sections stay dark) ----- */
+  .bg-sand-50  { background-color: var(--tw-bg) !important; }
+  .bg-sand-100 { background-color: var(--tw-surface) !important; }
+  .border-sand-100\/60, .border-sand-100\/30 { border-color: color-mix(in oklab, var(--tw-surface) 60%, transparent) !important; }
+  .text-ink, .text-ink-900 { color: var(--tw-ink) !important; }
+  .text-ink-800 { color: var(--tw-ink-soft) !important; }
+  .text-ink-700 { color: var(--tw-ink-soft) !important; }
+  .text-ink-600 { color: var(--tw-ink-mute) !important; }
+  .text-ink-500 { color: var(--tw-ink-faint) !important; }
+  .text-ink-400 { color: var(--tw-ink-faint) !important; opacity:.7; }
+
+  /* --- Accent (primary brand color) -------------------------------- */
+  .bg-terre        { background-color: var(--tw-accent) !important; }
+  .bg-terre-100    { background-color: var(--tw-accent-100) !important; }
+  .bg-terre-600    { background-color: var(--tw-accent-600) !important; }
+  .bg-terre-700    { background-color: var(--tw-accent-700) !important; }
+  .text-terre      { color: var(--tw-accent) !important; }
+  .text-terre-300  { color: var(--tw-accent-300) !important; }
+  .text-terre-700  { color: var(--tw-accent-700) !important; }
+  .border-terre    { border-color: var(--tw-accent) !important; }
+  .from-terre      { --tw-gradient-from: var(--tw-accent) !important; --tw-gradient-stops: var(--tw-accent), var(--tw-gradient-to) !important; }
+  .to-terre-700    { --tw-gradient-to: var(--tw-accent-700) !important; }
+  /* Translucent terre */
+  .bg-terre\/5     { background-color: color-mix(in oklab, var(--tw-accent) 5%,  transparent) !important; }
+  .bg-terre\/8     { background-color: color-mix(in oklab, var(--tw-accent) 8%,  transparent) !important; }
+  .bg-terre\/10    { background-color: color-mix(in oklab, var(--tw-accent) 10%, transparent) !important; }
+  .bg-terre\/15    { background-color: color-mix(in oklab, var(--tw-accent) 15%, transparent) !important; }
+  .bg-terre\/20    { background-color: color-mix(in oklab, var(--tw-accent) 20%, transparent) !important; }
+  .border-terre\/15, .border-terre\/20, .border-terre\/30 { border-color: color-mix(in oklab, var(--tw-accent) 20%, transparent) !important; }
+  /* Hover variants */
+  .hover\:bg-terre-600:hover { background-color: var(--tw-accent-600) !important; }
+  .hover\:text-terre:hover, .group-hover\:text-terre, .group-hover\:bg-terre { /* set below in group selectors */ }
+  .group:hover .group-hover\:bg-terre { background-color: var(--tw-accent) !important; }
+  .group:hover .group-hover\:text-terre { color: var(--tw-accent) !important; }
+  .group:hover .group-hover\:text-terre-300 { color: var(--tw-accent-300) !important; }
+  /* Selection + focus */
+  ::selection { background: var(--tw-accent); color: var(--tw-bg); }
+  :focus-visible { outline-color: var(--tw-accent); }
+
+  /* --- Secondary accent (atlantique → accent2) --------------------- */
+  .bg-atlantique     { background-color: var(--tw-accent2) !important; }
+  .bg-atlantique-100, .bg-atlantique-100\/60 { background-color: color-mix(in oklab, var(--tw-accent2-100) 70%, var(--tw-surface)) !important; }
+  .text-atlantique, .text-atlantique-700 { color: var(--tw-accent2) !important; }
+  .border-atlantique\/10, .border-atlantique\/15, .border-atlantique\/20 { border-color: color-mix(in oklab, var(--tw-accent2) 20%, transparent) !important; }
+
+  /* --- Container width --------------------------------------------- */
+  .max-w-\[1280px\] { max-width: var(--tw-container) !important; }
+
+  /* --- Hero height ------------------------------------------------- */
+  [data-screen-label="01 Hero"].min-h-\[100svh\] { min-height: var(--tw-hero-h) !important; }
+
+  /* --- Border radius scale ---------------------------------------- */
+  .rounded-md  { border-radius: calc( 6px * var(--tw-radius-mult)) !important; }
+  .rounded-lg  { border-radius: calc( 8px * var(--tw-radius-mult)) !important; }
+  .rounded-xl  { border-radius: calc(12px * var(--tw-radius-mult)) !important; }
+  .rounded-2xl { border-radius: calc(16px * var(--tw-radius-mult)) !important; }
+  .rounded-3xl { border-radius: calc(24px * var(--tw-radius-mult)) !important; }
+  /* Section padding scale (common Tailwind values used in source) */
+  .py-16 { padding-block: calc(4rem * var(--tw-section-pad)) !important; }
+  .py-20 { padding-block: calc(5rem * var(--tw-section-pad)) !important; }
+  .py-24 { padding-block: calc(6rem * var(--tw-section-pad)) !important; }
+  .py-28 { padding-block: calc(7rem * var(--tw-section-pad)) !important; }
+  .py-32 { padding-block: calc(8rem * var(--tw-section-pad)) !important; }
+  @media (min-width:768px) {
+    .md\:py-20 { padding-block: calc(5rem * var(--tw-section-pad)) !important; }
+    .md\:py-24 { padding-block: calc(6rem * var(--tw-section-pad)) !important; }
+    .md\:py-28 { padding-block: calc(7rem * var(--tw-section-pad)) !important; }
+    .md\:py-32 { padding-block: calc(8rem * var(--tw-section-pad)) !important; }
+  }
+
+  /* --- Button shape (target buttons + anchor buttons specifically) --- */
+  body[data-button-shape="pill"] :is(button, a).rounded-full { border-radius: 9999px !important; }
+  body[data-button-shape="rond"] :is(button, a).rounded-full { border-radius: 10px !important; }
+  body[data-button-shape="carré"] :is(button, a).rounded-full { border-radius: 2px !important; }
+
+  /* --- Card shadow style ------------------------------------------- */
+  .photo-card { box-shadow: var(--tw-card-shadow) !important; }
+
+  /* --- Italic <em> mode ------------------------------------------- */
+  body[data-italic="non"] em { font-style: normal !important; font-family: inherit !important; }
+  body[data-italic="non"] em::before, body[data-italic="non"] em::after { display:none; }
+
+  /* --- Bold display (replaces serif display with bold sans) -------- */
+  body[data-bold-display="1"] .font-display {
+    font-family: var(--tw-font-body), system-ui, sans-serif !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+  }
+  body[data-bold-display="1"] .font-display em {
+    font-style: normal !important;
+    font-family: inherit !important;
+    color: var(--tw-accent) !important;
+  }
+
+  /* --- Uppercase kickers toggle ------------------------------------ */
+  body[data-uppercase="0"] .uppercase {
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+  }
+
+  /* --- Density (compact / normal / aéré) — gentle gap multipliers --- */
+  body[data-density="dense"]  { --tw-section-pad: calc(0.7 * var(--tw-section-pad-base, 1)); }
+  body[data-density="aéré"]   { --tw-section-pad: calc(1.3 * var(--tw-section-pad-base, 1)); }
+
+  /* --- Hide WhatsApp float / Insta strip / Grain ------------------ */
+  body[data-hide-whatsapp="1"] a.fixed.right-5 { display: none !important; }
+  body[data-hide-insta="1"]    [data-screen-label="10 Instagram"] { display: none !important; }
+  body[data-hide-grain="1"] .grain::after { display: none !important; }
+  .grain::after { opacity: calc(0.18 * var(--tw-grain, 1)) !important; }
+
+  /* --- Disable smooth scrolling if anim off ------------------------ */
+  body[data-scroll-anim="0"] { scroll-behavior: auto; }
+  body[data-scroll-anim="0"] *, body[data-scroll-anim="0"] *::before, body[data-scroll-anim="0"] *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+
+  /* --- Display global scale (font-size of every .font-display elem) - */
+  .font-display { letter-spacing: -0.01em; }
+  body { --tw-display-scale: 1; }
+</style>
+
+<!-- Tweak defaults — edited at runtime via the Tweaks panel. -->
+<script>
+  window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "accent": "terracotta",
+    "accent2": "ocean",
+    "tone": "sand",
+    "displayFont": "Instrument Serif",
+    "bodyFont": "Manrope",
+    "monoFont": "JetBrains Mono",
+    "displayScale": 1,
+    "italic": "oui",
+    "boldDisplay": false,
+    "uppercase": true,
+    "container": 1280,
+    "heroHeight": 100,
+    "sectionPad": 1,
+    "radius": 1,
+    "buttonShape": "pill",
+    "density": "normal",
+    "cardStyle": "subtle",
+    "grain": 100,
+    "overlay": 100,
+    "showWhatsapp": true,
+    "showInsta": true,
+    "showGrain": true,
+    "scrollAnim": true
+  }/*EDITMODE-END*/;
+</script>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="src/icons.jsx"></script>
+<script type="text/babel" src="src/photo.jsx"></script>
+<script type="text/babel" src="src/data.jsx"></script>
+<script type="text/babel" src="src/i18n.jsx"></script>
+<script type="text/babel" src="src/shared.jsx"></script>
+<script type="text/babel" src="src/home.jsx"></script>
+<script type="text/babel" src="src/tour.jsx"></script>
+<script type="text/babel" src="src/catalog.jsx"></script>
+<script type="text/babel" src="src/custom.jsx"></script>
+<script type="text/babel" src="src/blog.jsx"></script>
+<script type="text/babel" src="src/pages.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="src/tweaks.jsx"></script>
+<script type="text/babel" src="src/app.jsx"></script>
+</body>
+</html>
