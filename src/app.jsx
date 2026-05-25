@@ -63,7 +63,9 @@ const AppShell = () => {
       <Header route={route} go={navigate}/>
       {showPage()}
       <WhatsAppFloat message={waMessage} bottomOffset={bottomOffset}/>
-      <SiteTweaks/>
+      {/* Tweaks panel — visible en dev (localhost) et à la demande en prod via ?tweaks=1 */}
+      {(['localhost','127.0.0.1'].includes(window.location.hostname)
+        || window.location.search.includes('tweaks=1')) && <SiteTweaks/>}
     </div>
   );
 };

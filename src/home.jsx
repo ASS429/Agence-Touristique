@@ -12,15 +12,20 @@ const Hero = ({ go }) => {
   }, []);
   return (
   <section className="relative min-h-[100svh] flex flex-col" data-screen-label="01 Hero">
-    <div className="absolute inset-0">
-      <Photo tone="terre" mood="horizon" rounded="" showLabel={false} className="h-full w-full" src={IMG('Dakar', 1)} alt="Dakar, corniche"/>
-      {showVideo && (
+    <div className="absolute inset-0 bg-ink">
+      {showVideo ? (
+        // En haut débit : la vidéo. Son `poster` (Dakar/01.jpg) sert d'image
+        // initiale jusqu'à ce que le premier frame soit décodé — pas de
+        // double affichage photo→vidéo.
         <video
           autoPlay muted loop playsInline preload="metadata"
           poster={IMG('Dakar', 1)}
           className="absolute inset-0 h-full w-full object-cover">
           <source src="vidéo/senegal.mp4" type="video/mp4"/>
         </video>
+      ) : (
+        // En 2g/3g/saveData : on garde la photo statique stylisée.
+        <Photo tone="terre" mood="horizon" rounded="" showLabel={false} className="h-full w-full" src={IMG('Dakar', 1)} alt="Dakar, corniche"/>
       )}
       <div className="absolute inset-0" style={{background:'linear-gradient(180deg, rgba(26,22,18,0.65) 0%, rgba(26,22,18,0.35) 28%, rgba(26,22,18,0.45) 55%, rgba(26,22,18,0.88) 100%)'}}/>
       <div className="absolute inset-0" style={{background:'linear-gradient(90deg, rgba(26,22,18,0.55) 0%, rgba(26,22,18,0.15) 55%, rgba(26,22,18,0) 100%)'}}/>
