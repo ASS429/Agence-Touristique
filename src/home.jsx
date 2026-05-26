@@ -14,17 +14,16 @@ const Hero = ({ go }) => {
   <section className="relative min-h-[100svh] flex flex-col" data-screen-label="01 Hero">
     <div className="absolute inset-0 bg-ink">
       {showVideo ? (
-        // En haut débit : la vidéo. Son `poster` (Dakar/01.jpg) sert d'image
-        // initiale jusqu'à ce que le premier frame soit décodé — pas de
-        // double affichage photo→vidéo.
+        // Haut débit : vidéo en autoplay. Pas de `poster` — le fond `bg-ink`
+        // du parent sert de toile sombre pendant le buffering (≤ 1s en 4G).
+        // `preload="auto"` raccourcit ce délai.
         <video
-          autoPlay muted loop playsInline preload="metadata"
-          poster={IMG('Dakar', 1)}
+          autoPlay muted loop playsInline preload="auto"
           className="absolute inset-0 h-full w-full object-cover">
           <source src="vidéo/senegal.mp4" type="video/mp4"/>
         </video>
       ) : (
-        // En 2g/3g/saveData : on garde la photo statique stylisée.
+        // 2g/3g/saveData : photo statique stylisée à la place.
         <Photo tone="terre" mood="horizon" rounded="" showLabel={false} className="h-full w-full" src={IMG('Dakar', 1)} alt="Dakar, corniche"/>
       )}
       <div className="absolute inset-0" style={{background:'linear-gradient(180deg, rgba(26,22,18,0.65) 0%, rgba(26,22,18,0.35) 28%, rgba(26,22,18,0.45) 55%, rgba(26,22,18,0.88) 100%)'}}/>
@@ -61,22 +60,22 @@ const Hero = ({ go }) => {
       <div className="mt-12 md:mt-16 grid grid-cols-3 md:grid-cols-4 rounded-2xl overflow-hidden border border-sand-50/15 bg-ink/30 backdrop-blur-md shadow-2xl shadow-ink/30"
            style={{ textShadow:'none' }}>
         {[
-          { I:Icons.Users,    k:'47',      v:'guides locaux partenaires' },
-          { I:Icons.Clock,    k:'12 ans',  v:'à organiser le Sénégal' },
-          { I:Icons.Star,     k:'4.9 / 5', v:'sur 312 voyageurs' },
+          { I:Icons.Users,    k:'47',      v:'guides locaux' },
+          { I:Icons.Clock,    k:'12 ans',  v:'au Sénégal' },
+          { I:Icons.Star,     k:'4.9 / 5', v:'312 voyageurs' },
           { I:Icons.Whatsapp, k:'< 1h',    v:'réponse WhatsApp' },
         ].map((s,i)=>(
           <div key={i}
-               className={`group flex items-start gap-3 px-3 md:px-6 py-5 md:py-6 transition-colors hover:bg-sand-50/5
+               className={`group flex flex-col md:flex-row items-start gap-1.5 md:gap-3 px-3 md:px-6 py-4 md:py-6 transition-colors hover:bg-sand-50/5
                            ${i!==0 ? 'border-l border-sand-50/15' : ''}
                            ${i===3 ? 'hidden md:flex' : ''}`}>
-            <div className="h-9 w-9 rounded-full bg-sand-50/10 ring-1 ring-sand-50/20 text-terre-300 inline-flex items-center justify-center shrink-0 group-hover:bg-terre/20 group-hover:text-sand-50 transition-colors">
-              <s.I size={16}/>
+            <div className="h-7 w-7 md:h-9 md:w-9 rounded-full bg-sand-50/10 ring-1 ring-sand-50/20 text-terre-300 inline-flex items-center justify-center shrink-0 group-hover:bg-terre/20 group-hover:text-sand-50 transition-colors">
+              <s.I size={14}/>
             </div>
             <div className="min-w-0">
-              <div className="font-display text-[22px] md:text-[32px] text-sand-50 leading-none truncate"
+              <div className="font-display text-[18px] md:text-[32px] text-sand-50 leading-none"
                    style={{ textShadow:'0 1px 6px rgba(0,0,0,0.5)' }}>{s.k}</div>
-              <div className="text-[10.5px] md:text-[12px] text-sand-100/85 mt-1.5 leading-tight uppercase tracking-[0.08em]"
+              <div className="text-[10px] md:text-[12px] text-sand-100/85 mt-1 md:mt-1.5 leading-tight tracking-wide md:uppercase md:tracking-[0.08em]"
                    style={{ textShadow:'0 1px 4px rgba(0,0,0,0.55)' }}>{s.v}</div>
             </div>
           </div>
@@ -101,13 +100,15 @@ const Reassurance = () => {
   ];
   return (
     <section className="bg-sand-100 border-y border-ink/5" data-screen-label="02 Reassurance">
-      <div className="max-w-[1280px] mx-auto px-4 md:px-8 grid grid-cols-2 md:grid-cols-4">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4">
         {items.map(({I,k,d}, i) => (
-          <div key={i} className={`flex items-start gap-3 py-7 md:py-9 ${i!==0?'md:border-l border-ink/10':''} ${i%2!==0?'border-l border-ink/10 md:border-l':''} ${i>=2 ? 'border-t border-ink/10 md:border-t-0' : ''} pl-4 md:pl-8 pr-4`}>
+          <div key={i} className={`flex items-start gap-3 py-5 md:py-9
+              ${i!==0 ? 'border-t md:border-t-0 md:border-l border-ink/10' : ''}
+              md:pl-8 md:pr-4`}>
             <div className="h-10 w-10 rounded-full bg-terre/10 text-terre inline-flex items-center justify-center shrink-0"><I size={20}/></div>
-            <div>
-              <div className="font-medium text-[14px] md:text-[15px] text-ink">{k}</div>
-              <div className="text-[12.5px] md:text-[13px] text-ink-600 leading-relaxed mt-1">{d}</div>
+            <div className="min-w-0">
+              <div className="font-medium text-[14.5px] md:text-[15px] text-ink">{k}</div>
+              <div className="text-[13px] md:text-[13px] text-ink-600 leading-relaxed mt-1">{d}</div>
             </div>
           </div>
         ))}
@@ -237,7 +238,8 @@ const RetourSources = ({ go }) => (
           <Photo tone="dusk" mood="portrait" label="rencontre"   ratio="aspect-square" src={IMG('Dakar', 7)} alt="Rencontre à Dakar"/>
           <Photo tone="sand" mood="horizon" label="Saint-Louis"  ratio="aspect-square" src={IMG('Saint-Louis', 5)} alt="Saint-Louis"/>
         </div>
-        <div className="absolute -bottom-4 -left-4 md:-left-8 max-w-[300px] bg-sand-50 text-ink p-5 rounded-2xl shadow-2xl">
+        {/* Quote card : statique sous les photos sur mobile (pas de chevauchement), absolue flottante sur desktop. */}
+        <div className="static md:absolute md:-bottom-4 md:-left-4 lg:-left-8 mt-4 md:mt-0 max-w-full md:max-w-[300px] bg-sand-50 text-ink p-5 rounded-2xl shadow-2xl">
           <Icons.Quote size={18} className="text-terre mb-2"/>
           <p className="font-display text-[17px] leading-snug">"On a marché dans la Maison des Esclaves en silence. Mamadou n’a pas parlé. C’était parfait."</p>
           <div className="mt-3 text-[12px] text-ink-500 font-mono">— Aïssatou D., Brooklyn</div>
