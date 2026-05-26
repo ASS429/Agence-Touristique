@@ -60,7 +60,7 @@ const Contact = ({ go }) => {
       <section className="-mt-12 md:-mt-16 relative z-10">
         <div className="max-w-[1280px] mx-auto px-4 md:px-8 grid sm:grid-cols-3 gap-4 md:gap-5">
           {[
-            { I:Icons.Whatsapp, k:'WhatsApp', v:SITE.whatsappDisplay, cta:'Discuter maintenant', href:buildWaURL('Bonjour Téranga !'), tone:'wa', accent:'bg-[#1FA855]' },
+            { I:Icons.Whatsapp, k:'WhatsApp', v:SITE.whatsappDisplay, cta:'Discuter maintenant', href:buildWaURL('Bonjour ACT !'), tone:'wa', accent:'bg-[#1FA855]' },
             { I:Icons.Phone, k:'Téléphone', v:SITE.phone, cta:'Lun–Sam · 9h–19h', href:`tel:+${SITE.whatsapp}`, tone:'primary', accent:'bg-ink' },
             { I:Icons.Mail,  k:'Email',    v:SITE.email, cta:'Écrire un email', href:`mailto:${SITE.email}`, tone:'primary', accent:'bg-terre' },
           ].map((c,i)=>(
@@ -163,27 +163,27 @@ const Contact = ({ go }) => {
                 <circle cx="200" cy="150" r="9" fill="#C8593B"/>
                 <circle cx="200" cy="150" r="3" fill="#FBF7F0"/>
               </svg>
-              <div className="absolute top-3 left-3 bg-sand-50/95 backdrop-blur px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-wider">Almadies · Dakar</div>
+              <div className="absolute top-3 left-3 bg-sand-50/95 backdrop-blur px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-wider">{SITE.addressShort}</div>
             </div>
             <div className="p-6">
               <div className="font-display text-[22px] leading-tight">Notre bureau</div>
               <div className="mt-3 text-[14px] text-ink-700 leading-relaxed">
-                Rue 12, Almadies<br/>Dakar, Sénégal<br/>14.7392° N · 17.5048° W
+                {SITE.address}<br/>Sénégal
               </div>
               <div className="mt-5 pt-5 border-t border-ink/10 grid grid-cols-2 gap-3 text-[12.5px]">
                 <div>
                   <div className="font-mono text-[10.5px] uppercase tracking-wider text-ink-500">Horaires</div>
-                  <div className="mt-0.5">Lun–Sam · 9h–19h</div>
+                  <div className="mt-0.5">Lun–Ven · 9h–18h</div>
                 </div>
                 <div>
-                  <div className="font-mono text-[10.5px] uppercase tracking-wider text-ink-500">Licence</div>
-                  <div className="mt-0.5">SN-DKR-2024-184</div>
+                  <div className="font-mono text-[10.5px] uppercase tracking-wider text-ink-500">Depuis</div>
+                  <div className="mt-0.5">1994</div>
                 </div>
               </div>
               <div className="mt-5 flex items-center gap-2">
-                <a href="#" aria-label="Instagram" className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><Icons.Instagram size={15}/></a>
-                <a href="#" aria-label="Facebook"  className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><Icons.Facebook size={15}/></a>
-                <a href="#" aria-label="TikTok"    className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><Icons.Tiktok size={15}/></a>
+                {SITE.instagram && <a href={SITE.instagram} aria-label="Instagram" target="_blank" rel="noreferrer" className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><Icons.Instagram size={15}/></a>}
+                <a href={SITE.facebook} aria-label="Facebook" target="_blank" rel="noreferrer" className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><Icons.Facebook size={15}/></a>
+                <a href={SITE.twitter} aria-label="Twitter / X" target="_blank" rel="noreferrer" className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><Icons.Tiktok size={15}/></a>
               </div>
             </div>
           </div>
@@ -212,25 +212,25 @@ const About = ({ go }) => {
   return (
     <main className="bg-sand-50">
       <PageHero kicker="À propos" tone="terre" mood="portrait" bgImg={IMG('Saint-Louis', 6)}
-        title={<>Une agence faite par <em>celles et ceux qui vous reçoivent</em>.</>}
-        intro="Téranga, c’est l’hospitalité au Sénégal — un mot wolof qu’on essaie de tenir au quotidien, à hauteur d’humain."/>
+        title={<>Tour-opérateur de Dakar, <em>depuis 1994</em>.</>}
+        intro="Africa Connection Tours organise les voyages au Sénégal et en Afrique de l’Ouest depuis plus de trente ans. L’hospitalité — la téranga, en wolof — reste notre standard de service."/>
 
       {/* Notre histoire */}
-      <Section label="Notre histoire" title={<>Douze ans, <em>une intuition</em>.</>}
-               kicker="Mamadou Diop, Khady Diallo · co-fondateurs"
+      <Section label="Notre histoire" title={<>Plus de trente ans, <em>une expertise sous-régionale</em>.</>}
+               kicker="Salif Badiane · Directeur Général"
                className="py-20 md:py-28">
         <div className="grid md:grid-cols-[1.2fr,1fr] gap-10 md:gap-16 items-center">
           <div className="space-y-5 text-[16px] md:text-[17px] leading-relaxed text-ink-800 max-w-2xl">
-            <p>En 2014, Mamadou guidait des voyageurs au Saloum pendant ses week-ends. Khady, basée à Dakar, faisait l’accueil. On se prêtait main forte sans qu’il y ait de structure — juste l’envie de bien faire, de payer correctement les gens qu’on mobilisait, et de raconter le Sénégal autrement.</p>
-            <p>L’agence est née d’un constat simple : <em>la plupart des voyageurs reviennent avec des photos. Très peu reviennent avec des amis</em>. On a voulu changer ce ratio.</p>
-            <p>Aujourd’hui Téranga, c’est 14 circuits permanents, six personnes en équipe permanente, 47 guides et partenaires sur tout le pays. Et toujours la même obsession : que vous repartiez avec quelques visages en tête.</p>
+            <p>Fondée en 1994 par des entrepreneurs sénégalais issus des grandes maisons du tourisme international, Africa Connection Tours s’est imposée comme l’un des tour-opérateurs réceptifs de référence à Dakar.</p>
+            <p>Sous la direction de <strong>Salif Badiane</strong>, l’agence a élargi son réseau au-delà des frontières sénégalaises : des bureaux correspondants opèrent aujourd’hui en <em>Gambie, Mali, Guinée, Mauritanie, Côte d’Ivoire et Ghana</em> — permettant des circuits intégrés sur toute l’Afrique de l’Ouest.</p>
+            <p>L’équipe — Sénégalaise, formée en Europe et aux États-Unis — accueille les voyageurs en six langues (français, anglais, italien, allemand, espagnol, japonais). Trente ans d’expérience cumulés, et toujours la même obsession : un voyage qui ressemble vraiment au pays.</p>
           </div>
           <div className="relative">
             <div className="grid grid-cols-2 gap-3">
-              <Photo tone="terre" mood="portrait" label="Mamadou & Khady" ratio="aspect-[3/4]"/>
+              <Photo tone="terre" mood="portrait" label="Salif Badiane · DG" ratio="aspect-[3/4]"/>
               <div className="grid grid-rows-2 gap-3">
-                <Photo tone="sand" mood="city" label="bureau Almadies" ratio="aspect-square" src={IMG('Dakar', 6)} alt="Bureau Almadies"/>
-                <Photo tone="atlant" mood="water" label="premier circuit · 2014" ratio="aspect-square" src={IMG('Delta du Saloum', 5)} alt="Premier circuit 2014"/>
+                <Photo tone="sand" mood="city" label="siège · 52 rue Félix Faure" ratio="aspect-square" src={IMG('Dakar', 6)} alt="Siège ACT, Dakar-Peytavin"/>
+                <Photo tone="atlant" mood="water" label="bureau sous-régional" ratio="aspect-square" src={IMG('Delta du Saloum', 5)} alt="Réseau ouest-africain"/>
               </div>
             </div>
           </div>
@@ -256,7 +256,7 @@ const About = ({ go }) => {
 
       {/* L'équipe */}
       <Section label="L’équipe" title={<>Les <em>visages</em> derrière chaque voyage.</>}
-               kicker={`${TEAM.length} personnes en permanence + 47 guides & partenaires`}
+               kicker="Équipe permanente à Dakar + guides & partenaires sur tout le pays"
                className="py-20 md:py-28">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {TEAM.map((m,i) => (
@@ -274,7 +274,7 @@ const About = ({ go }) => {
       </Section>
 
       {/* Pourquoi nous + Tourisme responsable */}
-      <Section label="Pourquoi Téranga" title={<>Ce qui change <em>quand on choisit local</em>.</>}
+      <Section label="Pourquoi ACT" title={<>Ce qui change <em>quand on choisit local</em>.</>}
                className="py-20 md:py-24 bg-sand-100">
         <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
           <div className="space-y-5 text-[15.5px] md:text-[16.5px] leading-relaxed text-ink-800 max-w-xl">
@@ -290,7 +290,7 @@ const About = ({ go }) => {
               <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>Guides salariés, contrats locaux conformes</li>
               <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>Eau filtrée — zéro bouteille plastique</li>
               <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>Code de respect des communautés visitées</li>
-              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>Partenariats avec Téranga Solidaire & Nebeday</li>
+              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>Partenariats avec Sénégal Solidaire & Nebeday</li>
             </ul>
           </div>
         </div>
@@ -479,17 +479,17 @@ const LegalPage = ({ kicker, title, intro, blocks, bgImg, go }) => (
 
 const Mentions = ({ go }) => (
   <LegalPage go={go} kicker="Mentions légales" title={<>Mentions <em>légales</em>.</>}
-    intro="Informations légales relatives à l’éditeur et à l’hébergeur du site teranga-voyages.sn."
+    intro="Informations légales relatives à l’éditeur et à l’hébergeur du site actours-senegal.com."
     blocks={[
       { type:'h2', text:'1. Éditeur du site' },
-      { type:'p', html:'<strong>Téranga Voyages SARL</strong><br/>Siège social : [adresse complète à compléter], Dakar, Sénégal.<br/>Numéro de Registre du Commerce : [RCCM à compléter]<br/>NINEA : [NINEA à compléter]<br/>Licence agence de voyage n° [numéro d’agrément à compléter]<br/>Capital social : [montant à compléter] FCFA.' },
-      { type:'p', html:'<strong>Directeur de la publication :</strong> [Nom du gérant à compléter].<br/><strong>Contact :</strong> contact@teranga-voyages.sn · +221 77 000 00 00.' },
+      { type:'p', html:'<strong>Africa Connection Tours (ACT)</strong><br/>Siège social : 52, rue Félix Faure — BP 11446, Dakar-Peytavin, Sénégal.<br/>Tour-opérateur fondé en 1994.<br/>Numéro de Registre du Commerce : <em>[RCCM à confirmer avec l’agence]</em><br/>NINEA : <em>[NINEA à confirmer]</em><br/>Licence agence de voyage : <em>[numéro d’agrément à confirmer]</em><br/>Capital social : <em>[montant à confirmer] FCFA</em>.' },
+      { type:'p', html:'<strong>Directeur de la publication :</strong> Salif Badiane, Directeur Général.<br/><strong>Contact :</strong> contact@actours-senegal.com · +221 33 849 52 00.' },
       { type:'h2', text:'2. Hébergement' },
       { type:'p', html:'Le site est hébergé par [Nom de l’hébergeur à compléter], dont le siège social est situé à [adresse de l’hébergeur].' },
       { type:'h2', text:'3. Propriété intellectuelle' },
-      { type:'p', html:'L’ensemble des contenus présents sur le site (textes, photographies, illustrations, logos, marques) est protégé par le droit d’auteur et reste la propriété exclusive de Téranga Voyages SARL ou de ses ayants droit. Toute reproduction, représentation, modification ou exploitation sans autorisation écrite préalable est interdite.' },
+      { type:'p', html:'L’ensemble des contenus présents sur le site (textes, photographies, illustrations, logos, marques) est protégé par le droit d’auteur et reste la propriété exclusive de Africa Connection Tours ou de ses ayants droit. Toute reproduction, représentation, modification ou exploitation sans autorisation écrite préalable est interdite.' },
       { type:'h2', text:'4. Crédits photographiques' },
-      { type:'p', html:'Les photographies du site sont la propriété de Téranga Voyages SARL ou utilisées avec l’accord de leurs auteurs. Pour toute demande relative aux droits d’usage, écrivez à contact@teranga-voyages.sn.' },
+      { type:'p', html:'Les photographies du site sont la propriété de Africa Connection Tours ou utilisées avec l’accord de leurs auteurs. Pour toute demande relative aux droits d’usage, écrivez à contact@actours-senegal.com.' },
       { type:'h2', text:'5. Données personnelles & cookies' },
       { type:'p', html:'La gestion des données personnelles et des cookies est détaillée dans notre <a href="#/privacy">Politique de confidentialité</a>.' },
       { type:'h2', text:'6. Litiges' },
@@ -501,7 +501,7 @@ const Privacy = ({ go }) => (
   <LegalPage go={go} kicker="Confidentialité" title={<>Politique de <em>confidentialité</em>.</>}
     intro="La façon dont nous collectons, utilisons et protégeons vos données personnelles."
     blocks={[
-      { type:'p', html:'Téranga Voyages SARL prend la protection de vos données personnelles au sérieux. Cette politique explique ce que nous collectons, pourquoi, et quels droits vous avez.' },
+      { type:'p', html:'Africa Connection Tours prend la protection de vos données personnelles au sérieux. Cette politique explique ce que nous collectons, pourquoi, et quels droits vous avez.' },
       { type:'h2', text:'1. Données que nous collectons' },
       { type:'ul', items:[
         '<strong>Données de contact</strong> : nom, prénom, email, téléphone — fournis lors d’une demande de devis ou de contact.',
@@ -526,22 +526,22 @@ const Privacy = ({ go }) => (
         'Vous opposer à leur traitement à des fins commerciales.',
         'Retirer votre consentement aux communications marketing.',
       ]},
-      { type:'p', html:'Pour exercer ces droits, écrivez à <a href="mailto:contact@teranga-voyages.sn">contact@teranga-voyages.sn</a>. Nous vous répondrons sous 30 jours.' },
+      { type:'p', html:'Pour exercer ces droits, écrivez à <a href="mailto:contact@actours-senegal.com">contact@actours-senegal.com</a>. Nous vous répondrons sous 30 jours.' },
       { type:'h2', text:'5. Cookies' },
       { type:'p', html:'Le site utilise des cookies essentiels (fonctionnement du site) et des cookies de mesure d’audience (Google Analytics 4, anonymisés). Aucun cookie publicitaire n’est posé sans votre consentement explicite. Vous pouvez désactiver les cookies via les paramètres de votre navigateur.' },
       { type:'h2', text:'6. Transferts hors Sénégal' },
       { type:'p', html:'Certains de nos prestataires techniques (hébergement, analytics, paiement) sont situés hors du Sénégal. Nous nous assurons qu’ils respectent un niveau de protection équivalent à celui exigé par la loi sénégalaise.' },
       { type:'h2', text:'7. Contact' },
-      { type:'p', html:'Pour toute question sur la confidentialité : <a href="mailto:contact@teranga-voyages.sn">contact@teranga-voyages.sn</a>.' },
+      { type:'p', html:'Pour toute question sur la confidentialité : <a href="mailto:contact@actours-senegal.com">contact@actours-senegal.com</a>.' },
     ]}/>
 );
 
 const Cgv = ({ go }) => (
   <LegalPage go={go} kicker="CGV" title={<>Conditions générales <em>de vente</em>.</>}
-    intro="Conditions applicables à toute réservation effectuée auprès de Téranga Voyages SARL."
+    intro="Conditions applicables à toute réservation effectuée auprès de Africa Connection Tours."
     blocks={[
       { type:'h2', text:'1. Objet et acceptation' },
-      { type:'p', html:'Les présentes Conditions Générales de Vente (CGV) régissent les relations entre Téranga Voyages SARL (l’"Agence") et toute personne physique ou morale (le "Client") réservant une prestation de voyage. Toute réservation implique l’acceptation pleine et entière des présentes CGV.' },
+      { type:'p', html:'Les présentes Conditions Générales de Vente (CGV) régissent les relations entre Africa Connection Tours (l’"Agence") et toute personne physique ou morale (le "Client") réservant une prestation de voyage. Toute réservation implique l’acceptation pleine et entière des présentes CGV.' },
       { type:'h2', text:'2. Réservation et confirmation' },
       { type:'p', html:'La réservation devient ferme à la réception de l’acompte par l’Agence. Une confirmation écrite (email ou WhatsApp) est alors envoyée au Client, accompagnée d’une facture pro forma.' },
       { type:'h2', text:'3. Prix' },

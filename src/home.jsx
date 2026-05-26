@@ -50,7 +50,7 @@ const Hero = ({ go }) => {
           <Btn onClick={()=>go('circuits')} variant="terre" size="lg" icon={<Icons.ArrowRight size={18}/>}>
             Voir nos circuits
           </Btn>
-          <Btn as="a" href={buildWaURL('Bonjour Téranga ! Je voudrais organiser un voyage.')} target="_blank" rel="noreferrer"
+          <Btn as="a" href={buildWaURL('Bonjour ACT ! Je voudrais organiser un voyage.')} target="_blank" rel="noreferrer"
                variant="wa" size="lg" icon={<Icons.Whatsapp size={18}/>}>
             Réserver sur WhatsApp
           </Btn>
@@ -60,9 +60,9 @@ const Hero = ({ go }) => {
       <div className="mt-12 md:mt-16 grid grid-cols-3 md:grid-cols-4 rounded-2xl overflow-hidden border border-sand-50/15 bg-ink/30 backdrop-blur-md shadow-2xl shadow-ink/30"
            style={{ textShadow:'none' }}>
         {[
-          { I:Icons.Users,    k:'47',      v:'guides locaux' },
-          { I:Icons.Clock,    k:'12 ans',  v:'au Sénégal' },
-          { I:Icons.Star,     k:'4.9 / 5', v:'312 voyageurs' },
+          { I:Icons.Clock,    k:'30+ ans', v:'depuis 1994' },
+          { I:Icons.MapPin,   k:'6 pays',  v:'Afrique de l’Ouest' },
+          { I:Icons.Star,     k:'4.9 / 5', v:'avis voyageurs' },
           { I:Icons.Whatsapp, k:'< 1h',    v:'réponse WhatsApp' },
         ].map((s,i)=>(
           <div key={i}
@@ -168,7 +168,7 @@ const Pourquoi = () => {
       d:'Hébergements en maisons d’hôtes, restaurateurs du quartier, artisanat direct producteur. 78 % de ce que vous payez reste dans l’économie sénégalaise.' },
   ];
   return (
-    <Section id="pourquoi" label="Pourquoi nous" title={<>Pourquoi <em>choisir Téranga</em>.</>}
+    <Section id="pourquoi" label="Pourquoi nous" title={<>Pourquoi <em>choisir ACT</em>.</>}
              className="py-20 md:py-28" bg="bg-ink text-sand-50" dark
              intro="On ne fait pas le voyage le plus brillant. On fait celui dont on est fiers, dont nos partenaires sont fiers, et dont vous parlerez encore dans dix ans."
              screenLabel="04 Pourquoi">
@@ -315,7 +315,7 @@ const BlogTeaser = ({ go }) => {
   const picks = BLOG.slice(0, 3);
   return (
     <Section id="blog-spot" label="Conseils de voyage" title={<>Lire <em>avant de partir</em>.</>}
-             kicker="Du blog Téranga"
+             kicker="Du blog ACT"
              intro={<><button onClick={()=>go('blog')} className="underline underline-offset-4 hover:text-terre">Voir tous les articles →</button></>}
              className="py-20 md:py-28 bg-sand-100" screenLabel="09 Blog">
       <div className="grid md:grid-cols-3 gap-5 md:gap-6">
@@ -342,7 +342,7 @@ const Insta = () => (
     <div className="max-w-[1280px] mx-auto px-4 md:px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
       <div>
         <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-3">— Instagram</div>
-        <h2 className="font-display text-[32px] md:text-[44px] leading-none">@teranga.voyages</h2>
+        <h2 className="font-display text-[32px] md:text-[44px] leading-none">@actours_senegal</h2>
       </div>
       <a href="#" className="text-[14px] inline-flex items-center gap-1.5 hover:text-terre">Suivre <Icons.ArrowUpRight size={14}/></a>
     </div>

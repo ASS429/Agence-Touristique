@@ -1,17 +1,27 @@
 // Shared components: Logo, Header (router + i18n aware), WhatsAppFloat,
 // Footer, StarRow, Pills/Buttons, Section, Price (currency aware).
 
-// Site-wide contact info. Change here, propagates everywhere.
-// `whatsapp` is the wa.me digits (intl format, no + or spaces).
-// `whatsappDisplay` / `phone` / `email` are shown to users.
+// Site-wide identité + contact. Change ici, se propage partout.
+// Données vérifiées d'Africa Connection Tours (Dakar) — sources : tourism-review,
+// piaafrica, thetravelboss, ATA. À valider avec l'agence : email, numéro WhatsApp
+// dédié, numéros de licence / RCCM / NINEA (non disponibles en source publique).
 const SITE = {
-  whatsapp:        '221770000000',
-  whatsappDisplay: '+221 77 000 00 00',
-  phone:           '+221 77 000 00 00',
-  email:           'contact@teranga-voyages.sn',
+  brand:           'Africa Connection Tours',
+  brandShort:      'ACT',
+  founded:         1994,
+  whatsapp:        '221338495200',         // wa.me digits — à confirmer si un mobile WA dédié existe
+  whatsappDisplay: '+221 33 849 52 00',
+  phone:           '+221 33 849 52 00',
+  phoneAlt:        '+221 33 849 52 83',
+  fax:             '+221 33 821 83 26',
+  email:           'contact@actours-senegal.com',  // À VALIDER avec l'agence
+  address:         '52, rue Félix Faure, BP 11446, Dakar-Peytavin',
+  addressShort:    'Dakar-Plateau',
+  website:         'actours-senegal.com',
+  facebook:        'https://www.facebook.com/AfricaConnectionTours',
+  twitter:         'https://twitter.com/actours_senegal',
+  instagram:       '',                     // à fournir par l'agence
   // Endpoint Formspree (ou équivalent : Web3Forms, Formsubmit, etc.).
-  // Crée un compte gratuit sur https://formspree.io, récupère l'URL du form
-  // (ex: https://formspree.io/f/xyzabcde) et colle-la ci-dessous.
   // Tant qu'elle vaut "" le formulaire bascule automatiquement sur mailto:.
   formspree:       'https://formspree.io/f/xgoqnlaz',
 };
@@ -35,8 +45,8 @@ const Logo = ({ inverted = false, className = '', onClick }) => {
         <circle cx="22" cy="11" r="3" fill={accent}/>
       </svg>
       <div className="leading-tight">
-        <div className={`font-display text-[20px] ${inverted ? 'text-sand-50' : 'text-ink'}`}>Téranga</div>
-        <div className={`font-mono text-[9px] uppercase tracking-[0.22em] -mt-0.5 ${inverted ? 'text-sand-300' : 'text-ink-500'}`}>Voyages · Dakar</div>
+        <div className={`font-display text-[16px] md:text-[19px] whitespace-nowrap ${inverted ? 'text-sand-50' : 'text-ink'}`}>Africa Connection Tours</div>
+        <div className={`font-mono text-[9px] uppercase tracking-[0.22em] -mt-0.5 ${inverted ? 'text-sand-300' : 'text-ink-500'}`}>ACT · Dakar</div>
       </div>
     </a>
   );
@@ -178,7 +188,7 @@ const Header = ({ route, go }) => {
                 <option value="XOF">XOF</option><option value="EUR">EUR</option><option value="USD">USD</option>
               </select>
             </div>
-            <Btn as="a" href={buildWaURL('Bonjour Téranga ! J’aimerais des informations sur vos circuits.')}
+            <Btn as="a" href={buildWaURL('Bonjour ACT ! J’aimerais des informations sur vos circuits.')}
                  target="_blank" rel="noreferrer"
                  variant="wa" size="sm" className="hidden sm:inline-flex"
                  icon={<Icons.Whatsapp size={16}/>}>
@@ -230,7 +240,7 @@ const Header = ({ route, go }) => {
                 <option value="USD">USD · $</option>
               </select>
             </div>
-            <Btn as="a" href={buildWaURL('Bonjour Téranga !')} target="_blank" rel="noreferrer"
+            <Btn as="a" href={buildWaURL('Bonjour ACT !')} target="_blank" rel="noreferrer"
                  variant="wa" size="md" className="w-full" icon={<Icons.Whatsapp size={16}/>}>
               {t('cta.book')}
             </Btn>
@@ -250,7 +260,7 @@ const Header = ({ route, go }) => {
 const WhatsAppFloat = ({ message, bottomOffset = 0 }) => {
   const [hovered, setHovered] = React.useState(false);
   return (
-    <a href={buildWaURL(message || 'Bonjour Téranga ! J’aimerais des informations.')}
+    <a href={buildWaURL(message || 'Bonjour ACT ! J’aimerais des informations.')}
        target="_blank" rel="noreferrer"
        onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}
        className="fixed right-5 md:right-7 z-30 group"
@@ -350,15 +360,15 @@ const Footer = ({ go }) => {
           <div className="md:col-span-4">
             <Logo inverted onClick={(e)=>{e.preventDefault(); go('home');}}/>
             <p className="mt-5 text-sand-200 text-[14px] leading-relaxed max-w-sm">
-              Agence touristique basée à Dakar. Circuits, excursions & voyages sur mesure au Sénégal — guides locaux, réservation simple, prix justes.
+              Tour-opérateur réceptif basé à Dakar depuis 1994. Circuits, excursions, séjours sur mesure au Sénégal et en Afrique de l’Ouest — équipe locale, six langues, réseau dans 6 pays.
             </p>
             <div className="mt-6 flex items-center gap-2">
               {[
-                { I: Icons.Instagram, l:'Instagram' },
-                { I: Icons.Facebook, l:'Facebook' },
-                { I: Icons.Tiktok, l:'TikTok' },
-              ].map(({I,l},i)=>(
-                <a key={i} href="#" aria-label={l} className="h-10 w-10 rounded-full border border-sand-100/15 inline-flex items-center justify-center hover:bg-sand-50 hover:text-ink transition">
+                { I: Icons.Facebook,  l:'Facebook',     href: SITE.facebook },
+                { I: Icons.Tiktok,    l:'Twitter / X',  href: SITE.twitter },
+                ...(SITE.instagram ? [{ I: Icons.Instagram, l:'Instagram', href: SITE.instagram }] : []),
+              ].map(({I,l,href},i)=>(
+                <a key={i} href={href} target="_blank" rel="noreferrer" aria-label={l} className="h-10 w-10 rounded-full border border-sand-100/15 inline-flex items-center justify-center hover:bg-sand-50 hover:text-ink transition">
                   <I size={16}/>
                 </a>
               ))}
@@ -388,11 +398,11 @@ const Footer = ({ go }) => {
           <div className="md:col-span-4">
             <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-300 mb-4">Contact</div>
             <ul className="space-y-3 text-[14px] text-sand-100">
-              <li className="flex items-start gap-2.5"><Icons.MapPin size={16} className="mt-0.5 text-terre-300 shrink-0"/> Rue 12, Almadies, Dakar — Sénégal</li>
+              <li className="flex items-start gap-2.5"><Icons.MapPin size={16} className="mt-0.5 text-terre-300 shrink-0"/> {SITE.address} — Sénégal</li>
               <li className="flex items-center gap-2.5"><Icons.Phone size={16} className="text-terre-300"/> {SITE.phone}</li>
               <li className="flex items-center gap-2.5"><Icons.Whatsapp size={16} className="text-terre-300"/> {SITE.whatsappDisplay}</li>
               <li className="flex items-center gap-2.5"><Icons.Mail size={16} className="text-terre-300"/> {SITE.email}</li>
-              <li className="flex items-start gap-2.5"><Icons.Clock size={16} className="mt-0.5 text-terre-300 shrink-0"/> Lun–Sam · 9h–19h (GMT)</li>
+              <li className="flex items-start gap-2.5"><Icons.Clock size={16} className="mt-0.5 text-terre-300 shrink-0"/> Lun–Ven · 9h–18h (GMT)</li>
             </ul>
             <div className="mt-5 rounded-2xl overflow-hidden h-32 bg-ink-800 border border-sand-100/10 relative">
               <div className="absolute inset-0 opacity-40" style={{background:'radial-gradient(80% 80% at 30% 50%, #1F5E5A 0%, transparent 70%)'}}/>
@@ -402,8 +412,8 @@ const Footer = ({ go }) => {
                 <circle cx="120" cy="100" r="11" fill="none" stroke="#C8593B" strokeWidth="0.8" opacity=".6"/>
               </svg>
               <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-sand-300">
-                <span>Almadies · Dakar</span>
-                <span>14.7392° N, 17.5048° W</span>
+                <span>{SITE.addressShort}</span>
+                <span>Depuis 1994</span>
               </div>
             </div>
           </div>
@@ -411,11 +421,11 @@ const Footer = ({ go }) => {
 
         <div className="mt-14 pt-6 border-t border-sand-100/10 flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-[12px] text-sand-300">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span>© 2026 Téranga Voyages SARL</span>
+            <span>© 2026 Africa Connection Tours</span>
             <span className="opacity-50">·</span>
-            <span>Licence agence de voyage n° SN-DKR-2024-184</span>
+            <span>Tour-opérateur depuis 1994</span>
             <span className="opacity-50">·</span>
-            <span>NINEA · 0078234562</span>
+            <span className="opacity-70">Licence & NINEA à confirmer</span>
           </div>
           <div className="flex items-center gap-4">
             <a href="#/mentions" className="hover:text-sand-50">Mentions légales</a>

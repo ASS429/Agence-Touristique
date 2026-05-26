@@ -168,14 +168,14 @@ const BLOG = [
     author:{ name:'Awa Sow', role:'Responsable expérience client' },
     body:[
       { type:'lead', html:'<strong>Wave, Orange Money, Free Money, virement, carte bancaire</strong> — autant d’options qu’il faut parfois quelques minutes pour démêler. Voici ce qu’on explique à nos voyageurs avant chaque réservation.' },
-      { type:'p', html:'Notre standard chez Téranga est simple : prix en FCFA, conversion indicative en EUR/USD, paiement dans la devise et le canal de votre choix. Aucun supplément quel que soit le moyen retenu.' },
+      { type:'p', html:'Notre standard chez ACT est simple : prix en FCFA, conversion indicative en EUR/USD, paiement dans la devise et le canal de votre choix. Aucun supplément quel que soit le moyen retenu.' },
       { type:'h2', text:'Wave — le réflexe local' },
       { type:'p', html:'Wave est devenu en 2020 le moyen de paiement par défaut au Sénégal. Application gratuite, transferts gratuits entre particuliers, paiement aux commerçants en scannant un QR. Pour un voyageur, c’est l’option la plus rapide une fois la SIM locale activée.' },
       { type:'ul', items:[
         'Téléchargez l’application Wave (iOS / Android) à votre arrivée.',
         'Créez un compte avec votre numéro local (la SIM Orange qu’on vous offre fonctionne).',
         'Alimentez via votre carte ou auprès d’un point Wave — il y en a partout.',
-        'Payez Téranga en scannant notre QR ou via notre numéro WhatsApp.',
+        'Payez ACT en scannant notre QR ou via notre numéro WhatsApp.',
       ]},
       { type:'h2', text:'Orange Money — l’alternative historique' },
       { type:'p', html:'Le précurseur. Plus institutionnel, frais légèrement supérieurs, mais accepté absolument partout (y compris dans les petits villages où Wave ne couvre pas toujours). Si vous voyagez en zone rurale, c’est le filet de sécurité.' },
@@ -428,9 +428,9 @@ const INSTA = [
 
 // === TEAM ===================================================================
 const TEAM = [
-  { name:'Mamadou Diop',    role:'Guide & co-fondateur', langs:['Wolof','Français','Anglais'],
+  { name:'Salif Badiane',   role:'Directeur Général · ACT', langs:['Wolof','Français','Anglais','Espagnol'],
     tone:'terre', mood:'portrait',
-    quote:'Mon grand-père était piroguier au Saloum. Je raconte ce que j’ai appris de lui.' },
+    quote:'Trente ans à organiser le Sénégal. Et toujours la même envie de mieux faire — un voyageur après l’autre.' },
   { name:'Awa Sow',         role:'Responsable expérience client', langs:['Wolof','Français','Anglais','Espagnol'],
     tone:'dusk', mood:'portrait',
     quote:'Mon métier, c’est d’écouter ce que vous ne dites pas dans le formulaire.' },
@@ -465,7 +465,7 @@ const PARTNERS = [
   'Lompoul Désert Camp',
   'Sénégal Tourism Board',
   'Air Sénégal',
-  'Association Téranga Solidaire',
+  'Association Sénégal Solidaire',
 ];
 
 // === Key figures (About) ====================================================
@@ -486,14 +486,14 @@ const FAQ = [
     { q:'Dans quelle devise sont les prix ?',
       a:'Prix de référence en FCFA (XOF), avec conversion indicative en EUR et USD. Le paiement final se fait dans la devise de votre choix au taux du jour.' },
     { q:'Recevrai-je une facture officielle ?',
-      a:'Oui — facture émise par Téranga Voyages SARL, avec numéro de licence agence de voyage. Utile pour assurance, comptabilité, ou justificatifs.' },
+      a:'Oui — facture émise par Africa Connection Tours, avec numéro de licence agence de voyage. Utile pour assurance, comptabilité, ou justificatifs.' },
   ]},
   { cat:'Annulation & modifications', items:[
     { q:'Quelle est votre politique d’annulation ?',
       a:'Annulation gratuite jusqu’à 21 jours avant le départ. Entre 21 et 7 jours : 50 % remboursés. Moins de 7 jours : l’acompte est conservé mais reportable sur un autre circuit dans les 12 mois.' },
     { q:'Puis-je modifier mes dates ?',
       a:'Oui, gratuitement jusqu’à 14 jours avant le départ. Au-delà, une nouvelle réservation peut être faite avec votre acompte intact.' },
-    { q:'Et si Téranga doit annuler ?',
+    { q:'Et si ACT doit annuler ?',
       a:'Remboursement intégral sous 7 jours, ou report sans frais à la date de votre choix.' },
   ]},
   { cat:'Avant le voyage', items:[
@@ -538,7 +538,7 @@ const FAQ = [
     { q:'Quel est votre impact local ?',
       a:'78 % de votre paiement reste dans l’économie sénégalaise : guides salariés sénégalais, lodges familiaux, restaurants locaux, artisans en direct.' },
     { q:'Travaillez-vous avec des associations ?',
-      a:'Oui — partenariats avec Téranga Solidaire (éducation), Nebeday (reforestation Casamance) et le Fonds Mémoire de Gorée. On vous propose des visites si vous le souhaitez.' },
+      a:'Oui — partenariats avec Sénégal Solidaire (éducation), Nebeday (reforestation Casamance) et le Fonds Mémoire de Gorée. On vous propose des visites si vous le souhaitez.' },
     { q:'Et l’éco-attitude des voyageurs ?',
       a:'Eau filtrée (pas de bouteilles plastique), respect des protocoles photographiques en village, code de bonne conduite remis avant le départ.' },
   ]},

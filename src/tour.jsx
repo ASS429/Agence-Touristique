@@ -130,7 +130,7 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
       ...CIRCUIT_DETAIL.gallery.slice(1),
     ],
   };
-  const waMsg = `Bonjour Téranga ! Je suis intéressé·e par le circuit "${d.title}". Pouvez-vous me confirmer les disponibilités ?`;
+  const waMsg = `Bonjour ACT ! Je suis intéressé·e par le circuit "${d.title}". Pouvez-vous me confirmer les disponibilités ?`;
 
   return (
     <main className="bg-sand-50" data-screen-label={`Tour Detail · ${d.title}`}>

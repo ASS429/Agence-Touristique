@@ -142,7 +142,7 @@ const SiteTweaks = () => {
   }, [t]);
 
   return (
-    <TweaksPanel title="Téranga · Tweaks">
+    <TweaksPanel title="ACT · Tweaks">
       <TweakSection label="Palette"/>
       <ChipPalette label="Accent principal" value={t.accent} keys={Object.keys(ACCENT_PALETTES)}
         toChip={(k)=>[ACCENT_PALETTES[k][2], ACCENT_PALETTES[k][4], ACCENT_PALETTES[k][0]]}

@@ -26,13 +26,13 @@ const AppShell = () => {
   const waMessage = (() => {
     if (route === 'tour') {
       const c = CIRCUITS.find(c => c.id === tourId);
-      return c ? `Bonjour Téranga ! Je m’intéresse au circuit "${c.title}". Pouvez-vous me confirmer les disponibilités ?`
-               : 'Bonjour Téranga !';
+      return c ? `Bonjour ACT ! Je m’intéresse au circuit "${c.title}". Pouvez-vous me confirmer les disponibilités ?`
+               : 'Bonjour ACT !';
     }
-    if (route === 'custom')   return 'Bonjour Téranga ! Je voudrais composer un voyage sur mesure.';
-    if (route === 'contact')  return 'Bonjour Téranga ! J’aimerais vous contacter.';
-    if (route === 'circuits') return 'Bonjour Téranga ! J’ai une question sur vos circuits.';
-    return 'Bonjour Téranga ! J’aimerais des informations sur vos circuits.';
+    if (route === 'custom')   return 'Bonjour ACT ! Je voudrais composer un voyage sur mesure.';
+    if (route === 'contact')  return 'Bonjour ACT ! J’aimerais vous contacter.';
+    if (route === 'circuits') return 'Bonjour ACT ! J’ai une question sur vos circuits.';
+    return 'Bonjour ACT ! J’aimerais des informations sur vos circuits.';
   })();
 
   const showPage = () => {

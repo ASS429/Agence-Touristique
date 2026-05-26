@@ -25,7 +25,7 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
 
   return (
     <main className="bg-sand-50">
-      <PageHero kicker="Le blog Téranga" tone="terre" mood="city" bgImg={IMG('Saint-Louis', 8)} compact
+      <PageHero kicker="Le blog ACT" tone="terre" mood="city" bgImg={IMG('Saint-Louis', 8)} compact
         title={<>Le guide du voyage <em>au Sénégal</em>.</>}
         intro="Récits, conseils pratiques, calendriers honnêtes — par des guides qui vivent ici toute l’année.">
         <div className="relative max-w-md">
@@ -115,7 +115,7 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
         <div className="max-w-3xl mx-auto px-4 md:px-8">
           <div className="rounded-3xl bg-sand-100 border border-ink/5 p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-6 justify-between">
             <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-2">— Lettre Téranga</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-2">— Lettre ACT</div>
               <h3 className="font-display text-[24px] md:text-[28px] leading-tight">Un email par mois, jamais plus.</h3>
               <p className="text-[14px] text-ink-600 mt-1.5">Conseils saisonniers, nouvelles destinations, et nos coups de cœur de l’équipe.</p>
             </div>

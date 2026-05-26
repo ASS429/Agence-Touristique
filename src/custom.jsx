@@ -345,7 +345,7 @@ const Custom = ({ go, onOpenTour }) => {
 // --- Confirmation -----------------------------------------------------------
 const CustomConfirm = ({ form, picked, go, onOpenTour }) => {
   const suggestions = CIRCUITS.slice(0,3);
-  const waMsg = `Bonjour Téranga ! Je viens de remplir le formulaire sur mesure (${form.name || 'demande'}). Pouvons-nous échanger ?`;
+  const waMsg = `Bonjour ACT ! Je viens de remplir le formulaire sur mesure (${form.name || 'demande'}). Pouvons-nous échanger ?`;
   return (
     <main className="bg-sand-50">
       <section className="relative pt-32 md:pt-44 pb-16 md:pb-24 overflow-hidden">
