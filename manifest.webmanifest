@@ -1,0 +1,16 @@
+{
+  "name": "Africa Connection Tours",
+  "short_name": "ACT",
+  "description": "Tour-opérateur réceptif basé à Dakar depuis 1994. Circuits, excursions, séjours sur mesure au Sénégal et en Afrique de l'Ouest.",
+  "lang": "fr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF7F0",
+  "theme_color": "#C8593B",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "apple-touch-icon.svg", "sizes": "180x180", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

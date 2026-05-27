@@ -24,6 +24,22 @@ const SITE = {
   // Endpoint Formspree (ou équivalent : Web3Forms, Formsubmit, etc.).
   // Tant qu'elle vaut "" le formulaire bascule automatiquement sur mailto:.
   formspree:       'https://formspree.io/f/xgoqnlaz',
+  // ID Google Analytics 4 (G-XXXXXXXXXX). Tant que vide, gtag.js ne charge pas
+  // et aucun event n'est envoyé — les pushes dataLayer restent inertes.
+  gaId:            '',
+  // Bandeau de promo affiché au-dessus du header. Passe `active:false` ou
+  // laisse expiresAt < aujourd'hui pour le masquer. L'id sert au localStorage
+  // : si l'utilisateur a fermé la promo X, elle ne réapparaît plus avec le
+  // même id. Changer l'id pour relancer une nouvelle annonce.
+  promo: {
+    active:    true,
+    id:        'saison-seche-2026',
+    label:     'Offre saison sèche',
+    title:     'Janvier–Février : -10 % sur les circuits du Nord',
+    cta:       'Voir les circuits',
+    target:    'circuits',
+    expiresAt: '2026-02-28',
+  },
 };
 const buildWaURL = (msg) =>
   `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(msg)}`;
@@ -145,9 +161,118 @@ const Price = ({ xof, short = false, className = '', as:Tag = 'span' }) => {
 };
 
 // ============================================================================
+// Consent + Google Analytics 4 — bloc unique pour garantir que GA4 ne se
+// charge JAMAIS avant accord explicite de l'utilisateur (RGPD friendly).
+// ============================================================================
+const loadGA4 = (id) => {
+  if (!id || window.__ga4Loaded) return;
+  window.__ga4Loaded = true;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+  document.head.appendChild(s);
+  window.gtag = function() { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', id, {
+    anonymize_ip:       true,
+    allow_google_signals: false,    // pas de retargeting cross-device
+    cookie_flags:       'SameSite=Lax;Secure',
+  });
+};
+
+const getConsent = () => {
+  try { return localStorage.getItem('act_cookie_consent'); } catch { return null; }
+};
+const setConsent = (value) => {
+  try { localStorage.setItem('act_cookie_consent', value); } catch {}
+  if (value === 'accepted' && SITE.gaId) loadGA4(SITE.gaId);
+};
+
+// Si l'utilisateur a déjà accepté lors d'une visite précédente, on relance GA4
+// immédiatement au chargement du site (sans repasser par la bannière).
+if (typeof window !== 'undefined') {
+  setTimeout(() => {
+    if (getConsent() === 'accepted' && SITE.gaId) loadGA4(SITE.gaId);
+  }, 0);
+}
+
+const CookieConsent = () => {
+  const [decision, setDecision] = React.useState(() => getConsent());
+  if (decision) return null;
+  const accept  = () => { setConsent('accepted'); setDecision('accepted'); };
+  const decline = () => { setConsent('declined'); setDecision('declined'); };
+  return (
+    <div className="fixed bottom-3 left-3 right-3 md:left-auto md:right-6 md:bottom-6 md:max-w-sm z-[55]">
+      <div className="bg-ink text-sand-50 rounded-2xl shadow-2xl shadow-ink/30 p-5 md:p-6 border border-sand-100/15">
+        <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-terre-300 mb-2">— Cookies</div>
+        <div className="font-display text-[19px] md:text-[20px] leading-tight">
+          Quelques cookies pour mieux <em>vous servir</em>.
+        </div>
+        <p className="mt-2 text-[13px] text-sand-200 leading-relaxed">
+          Mesure d'audience anonymisée uniquement. Aucun cookie publicitaire. <a href="#/privacy" className="underline underline-offset-2 hover:text-terre-300">En savoir plus</a>.
+        </p>
+        <div className="mt-4 flex items-center gap-2">
+          <button onClick={decline} className="px-4 h-9 rounded-full border border-sand-100/30 text-sand-100 text-[12.5px] hover:bg-sand-50/10 transition-colors">Refuser</button>
+          <button onClick={accept}  className="flex-1 px-4 h-9 rounded-full bg-terre text-sand-50 text-[12.5px] font-medium hover:bg-terre-600 transition-colors">Accepter</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// PromoBanner — bandeau d'offre du moment, configurable via SITE.promo
+// ============================================================================
+const PromoBanner = ({ go, onHeightChange }) => {
+  const promo = SITE.promo;
+  const [show, setShow] = React.useState(false);
+  const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!promo?.active) return;
+    if (promo.expiresAt && new Date(promo.expiresAt) < new Date()) return;
+    try {
+      if (localStorage.getItem(`act_promo_dismissed_${promo.id}`) === '1') return;
+    } catch {}
+    setShow(true);
+  }, [promo?.active, promo?.id]);
+
+  React.useEffect(() => {
+    if (!onHeightChange) return;
+    onHeightChange(show && ref.current ? ref.current.offsetHeight : 0);
+  }, [show, onHeightChange]);
+
+  if (!show) return null;
+  const dismiss = () => {
+    try { localStorage.setItem(`act_promo_dismissed_${promo.id}`, '1'); } catch {}
+    setShow(false);
+  };
+
+  return (
+    <div ref={ref} className="fixed top-0 left-0 right-0 z-[60] bg-terre text-sand-50 shadow-md shadow-terre/20">
+      <div className="max-w-[1280px] mx-auto px-3 md:px-8 py-2 md:py-2.5 flex items-center gap-2 md:gap-4 text-[12.5px] md:text-[13px]">
+        <span className="hidden md:inline font-mono text-[10px] uppercase tracking-[0.22em] opacity-75 shrink-0">— {promo.label}</span>
+        <span className="flex-1 min-w-0 truncate font-medium">{promo.title}</span>
+        <button
+          onClick={() => { dismiss(); go(promo.target); }}
+          className="shrink-0 inline-flex items-center gap-1 px-3 h-7 rounded-full bg-sand-50/15 hover:bg-sand-50/25 text-sand-50 text-[12px] font-medium transition-colors">
+          {promo.cta} <Icons.ArrowRight size={12}/>
+        </button>
+        <button
+          onClick={dismiss}
+          aria-label="Fermer la promotion"
+          className="shrink-0 h-7 w-7 inline-flex items-center justify-center rounded-full hover:bg-sand-50/15 transition-colors">
+          <Icons.Close size={14}/>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
 // Header — sticky, route-aware, mobile drawer
 // ============================================================================
-const Header = ({ route, go }) => {
+const Header = ({ route, go, topOffset = 0 }) => {
   const { lang, setLang, ccy, setCcy, t } = useI18n();
   const [open, setOpen]       = React.useState(false);
   const [scrolled, setScroll] = React.useState(false);
@@ -182,7 +307,8 @@ const Header = ({ route, go }) => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        style={{ top: topOffset }}
+        className={`fixed left-0 right-0 z-40 transition-all duration-300 ${
           dense ? 'bg-sand-50/90 backdrop-blur-md border-b border-ink/5' : 'bg-transparent'
         }`}
         data-screen-label="Header"
@@ -484,6 +610,6 @@ const PageHero = ({ kicker, title, intro, tone='terre', mood='horizon', bgImg, c
 );
 
 Object.assign(window, {
-  WHATSAPP_NUMBER, buildWaURL, Logo, StarRow, Pill, Btn, Price,
-  Header, WhatsAppFloat, Section, Footer, CircuitCard, PageHero,
+  buildWaURL, Logo, StarRow, Pill, Btn, Price,
+  PromoBanner, CookieConsent, Header, WhatsAppFloat, Section, Footer, CircuitCard, PageHero,
 });

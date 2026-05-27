@@ -5,6 +5,7 @@ const AppShell = () => {
   const [tourId, setTourId] = React.useState(params.id || 'goree-lac-saloum');
   const [articleId, setArticleId] = React.useState(params.id || BLOG[0].id);
   const [catalogFilter, setCatalogFilter] = React.useState(null);
+  const [promoHeight, setPromoHeight] = React.useState(0);
 
   // Keep state in sync with router params
   React.useEffect(() => {
@@ -26,6 +27,22 @@ const AppShell = () => {
     document.addEventListener('click', onClick);
     return () => document.removeEventListener('click', onClick);
   }, [route]);
+
+  // Page view virtuelle à chaque changement de route hash. Push dans
+  // dataLayer (toujours, même sans consent — c'est juste un tableau JS)
+  // ET envoi à gtag SI GA4 est chargé (donc seulement après consent).
+  React.useEffect(() => {
+    const path  = '/' + (route || 'home') + (params.id ? '/' + params.id : '');
+    const title = `ACT — ${route || 'home'}`;
+    (window.dataLayer = window.dataLayer || []).push({
+      event:      'page_view',
+      page_path:  path,
+      page_title: title,
+    });
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'page_view', { page_path: path, page_title: title });
+    }
+  }, [route, params.id]);
 
   const openTour = (id) => { setTourId(id); go('tour', { id }); };
   const openArticle = (id) => { setArticleId(id); go('blog', { id }); };
@@ -75,9 +92,11 @@ const AppShell = () => {
 
   return (
     <div className="bg-sand-50 text-ink min-h-screen pb-0">
-      <Header route={route} go={navigate}/>
+      <PromoBanner go={navigate} onHeightChange={setPromoHeight}/>
+      <Header route={route} go={navigate} topOffset={promoHeight}/>
       {showPage()}
       <WhatsAppFloat message={waMessage} bottomOffset={bottomOffset}/>
+      <CookieConsent/>
       {/* Tweaks panel — visible en dev (localhost) et à la demande en prod via ?tweaks=1 */}
       {(['localhost','127.0.0.1'].includes(window.location.hostname)
         || window.location.search.includes('tweaks=1')) && <SiteTweaks/>}

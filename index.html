@@ -14,6 +14,13 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="apple-touch-icon" href="apple-touch-icon.svg" />
 
+<!-- PWA : manifest + couleur de barre système -->
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#C8593B" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="ACT" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
 <!-- Schema.org JSON-LD : aide les moteurs à comprendre que c'est une agence
      de voyage à Dakar. Données factuelles vérifiées sur sources publiques. -->
 <script type="application/ld+json">
@@ -302,5 +309,16 @@
 <script type="text/babel" src="tweaks-panel.jsx"></script>
 <script type="text/babel" src="src/tweaks.jsx"></script>
 <script type="text/babel" src="src/app.jsx"></script>
+
+<!-- PWA : enregistrement du service worker. Ignoré en file:// ou http://
+     (les SW exigent HTTPS, sauf localhost). Erreurs silencieuses. -->
+<script>
+  if ('serviceWorker' in navigator
+      && (location.protocol === 'https:' || ['localhost','127.0.0.1'].includes(location.hostname))) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+</script>
 </body>
 </html>
