@@ -280,6 +280,8 @@ const Custom = ({ go, onOpenTour }) => {
   const [submitted, setSubmitted] = React.useState(false);
   const [freeForm, setFreeForm] = React.useState(false);
   const [picked, setPicked] = React.useState(null);
+  const [sending, setSending] = React.useState(false);
+  const [error, setError] = React.useState('');
   const [form, setForm] = React.useState({
     duration:null,
     interests:[],
@@ -287,15 +289,96 @@ const Custom = ({ go, onOpenTour }) => {
     travelers:{ adults:2, children:0, budget:null },
     name:'', email:'', phone:'', dates:'', message:''
   });
-  const update = (patch) => setForm(prev => ({ ...prev, ...patch }));
   const setField = (k, v) => setForm(prev => ({...prev, [k]: v }));
   const step = STEPS[stepIdx];
 
-  const next = () => setStepIdx(i => Math.min(STEPS.length-1, i+1));
+  // Validation par étape : l'utilisateur ne peut pas avancer tant que la
+  // donnée demandée n'est pas renseignée. Le bouton est juste désactivé.
+  const isStepValid = () => {
+    switch (step.id) {
+      case 'duration':  return !!form.duration;
+      case 'interests': return form.interests.length > 0;
+      case 'pace':      return !!form.pace;
+      case 'travelers': return form.travelers.adults > 0 && !!form.travelers.budget;
+      case 'suggest':   return true;  // l'étape se valide par un clic sur une carte ou "page blanche"
+      case 'contact':   return !!(form.name && /.+@.+\..+/.test(form.email));
+      default:          return true;
+    }
+  };
+  const canAdvance = isStepValid();
+
+  const next = () => { if (canAdvance) setStepIdx(i => Math.min(STEPS.length-1, i+1)); };
   const prev = () => setStepIdx(i => Math.max(0, i-1));
 
   const handleSuggestPick = (c) => { setPicked(c); setFreeForm(false); setStepIdx(STEPS.length-1); };
   const handleSuggestSkip = () => { setPicked(null); setFreeForm(true); setStepIdx(STEPS.length-1); };
+
+  // Construit un payload lisible côté Formspree / mailto.
+  const buildPayload = () => {
+    const dur = DURATION_CARDS.find(d => d.id === form.duration);
+    const pace = PACE_OPTIONS.find(p => p.id === form.pace);
+    const interests = form.interests
+      .map(id => INTEREST_OPTIONS.find(o => o.id === id)?.label)
+      .filter(Boolean).join(', ');
+    const budget = ({ low:'< 400 000 FCFA / pers', mid:'400 000 – 800 000 FCFA / pers', high:'> 800 000 FCFA / pers' })[form.travelers.budget] || '—';
+    return {
+      _subject:        `Demande sur mesure — ${form.name || 'Visiteur'}`,
+      source:          'formulaire-sur-mesure',
+      nom:             form.name,
+      email:           form.email,
+      whatsapp:        form.phone,
+      dates_souhaitees:form.dates,
+      duree:           dur ? dur.label : '—',
+      centres_interet: interests || '—',
+      rythme:          pace ? pace.label : '—',
+      voyageurs:       `${form.travelers.adults} adulte(s), ${form.travelers.children} enfant(s)`,
+      budget,
+      circuit_choisi:  picked ? `${picked.title} (${picked.id})` : (freeForm ? 'Vrai sur mesure (page blanche)' : '—'),
+      message:         form.message || '—',
+    };
+  };
+
+  // mailto: toujours dispo en secours, prérempli avec tous les champs.
+  const mailtoHref = () => {
+    const p = buildPayload();
+    const body = Object.entries(p)
+      .filter(([k]) => !k.startsWith('_'))
+      .map(([k,v]) => `${k.replace(/_/g,' ').replace(/^./, c => c.toUpperCase())} : ${v}`)
+      .join('\n');
+    return `mailto:${SITE.email}?subject=${encodeURIComponent(p._subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  const submit = async () => {
+    setError('');
+    const payload = buildPayload();
+    // Tracking analytics — déclenché quoi qu'il arrive ensuite.
+    (window.dataLayer = window.dataLayer || []).push({
+      event:           'custom_quote_submitted',
+      duration:        payload.duree,
+      budget:          payload.budget,
+      circuit_picked:  payload.circuit_choisi,
+      travelers:       payload.voyageurs,
+    });
+    if (!SITE.formspree) {
+      window.location.href = mailtoHref();
+      setSubmitted(true);
+      return;
+    }
+    setSending(true);
+    try {
+      const r = await fetch(SITE.formspree, {
+        method: 'POST',
+        headers: { 'Accept':'application/json', 'Content-Type':'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      setSubmitted(true);
+    } catch (err) {
+      setError("Envoi impossible pour l’instant. Ouvrez votre messagerie pour ne pas perdre la demande.");
+    } finally {
+      setSending(false);
+    }
+  };
 
   if (submitted) return <CustomConfirm form={form} picked={picked} go={go} onOpenTour={onOpenTour}/>;
 
@@ -319,22 +402,44 @@ const Custom = ({ go, onOpenTour }) => {
           {step.id==='contact'   && <StepContact   form={form} set={setField} picked={picked} freeForm={freeForm}/>}
         </div>
 
-        <div className="mt-6 flex items-center justify-between gap-3">
+        {error && (
+          <div className="mt-4 rounded-2xl bg-terre/10 border border-terre/30 px-4 py-3 text-[13px] text-terre-700">
+            {error}
+          </div>
+        )}
+
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
           <Btn variant="ghost" onClick={prev} icon={<Icons.ArrowLeft size={14}/>} className="!gap-2 flex-row-reverse"
                style={stepIdx===0 ? { visibility:'hidden' } : null}>
             Précédent
           </Btn>
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-500">{stepIdx+1} sur {STEPS.length}</div>
+
           {step.id !== 'contact' && step.id !== 'suggest' && (
-            <Btn variant="primary" size="md" onClick={next} icon={<Icons.ArrowRight size={14}/>}>Suivant</Btn>
+            <Btn variant="primary" size="md" onClick={next} disabled={!canAdvance}
+                 icon={<Icons.ArrowRight size={14}/>}
+                 className={canAdvance ? '' : 'opacity-40 cursor-not-allowed'}>Suivant</Btn>
           )}
           {step.id === 'suggest' && (
-            <span className="text-[11px] text-ink-500"></span>
+            <span className="text-[11px] text-ink-500">Choisissez un itinéraire ci-dessus, ou la page blanche.</span>
           )}
           {step.id === 'contact' && (
-            <Btn variant="terre" size="md" onClick={()=>setSubmitted(true)} icon={<Icons.ArrowRight size={14}/>}>Envoyer ma demande</Btn>
+            <div className="flex items-center gap-2">
+              <Btn as="a" href={mailtoHref()} variant="outline" size="md" icon={<Icons.Mail size={14}/>}>
+                Mail
+              </Btn>
+              <Btn variant="terre" size="md" onClick={submit} disabled={!canAdvance || sending}
+                   className={(!canAdvance || sending) ? 'opacity-60 cursor-not-allowed' : ''}
+                   icon={<Icons.ArrowRight size={14}/>}>
+                {sending ? 'Envoi…' : 'Envoyer ma demande'}
+              </Btn>
+            </div>
           )}
         </div>
+
+        {step.id === 'contact' && !canAdvance && (
+          <p className="mt-3 text-right text-[12px] text-ink-500">Nom + email valides requis.</p>
+        )}
       </section>
 
       <Footer go={go}/>
