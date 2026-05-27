@@ -574,4 +574,31 @@ const Cgv = ({ go }) => (
     ]}/>
 );
 
-Object.assign(window, { Contact, About, Faq, Mentions, Privacy, Cgv });
+// ============================================================================
+// 404 — route inconnue
+// ============================================================================
+const NotFound = ({ go, route }) => (
+  <main className="bg-sand-50">
+    <section className="relative min-h-[80svh] flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0">
+        <Photo tone="atlant" mood="water" rounded="" showLabel={false} className="h-full w-full" src={IMG('Delta du Saloum', 6)} alt=""/>
+        <div className="absolute inset-0" style={{ background:'linear-gradient(180deg, rgba(26,22,18,0.55) 0%, rgba(26,22,18,0.85) 100%)' }}/>
+      </div>
+      <div className="relative max-w-2xl mx-auto px-4 md:px-8 py-32 text-center text-sand-50">
+        <div className="font-mono text-[11px] uppercase tracking-[0.32em] text-terre-300 mb-6">— Erreur 404</div>
+        <h1 className="font-display text-[56px] md:text-[88px] leading-[0.95]">Cette page <em className="text-terre-300">s’est perdue</em>.</h1>
+        <p className="mt-6 max-w-md mx-auto text-sand-100/90 text-[16px] leading-relaxed">
+          L’adresse <span className="font-mono text-[13px] bg-sand-50/10 px-2 py-0.5 rounded">#/{route}</span> n’existe pas — ou n’existe plus. Pas de panique, on vous remet sur la route.
+        </p>
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <Btn onClick={()=>go('home')}     variant="terre"        size="lg" icon={<Icons.ArrowRight size={18}/>}>Retour à l’accueil</Btn>
+          <Btn onClick={()=>go('circuits')} variant="outlineLight" size="lg">Voir nos circuits</Btn>
+          <Btn onClick={()=>go('contact')}  variant="outlineLight" size="lg">Nous écrire</Btn>
+        </div>
+      </div>
+    </section>
+    <Footer go={go}/>
+  </main>
+);
+
+Object.assign(window, { Contact, About, Faq, Mentions, Privacy, Cgv, NotFound });

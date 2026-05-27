@@ -9,6 +9,62 @@
 <meta property="og:description" content="Tour-opérateur basé à Dakar depuis 1994. Circuits, excursions, sur-mesure au Sénégal." />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="fr_SN" />
+
+<!-- Favicons (SVG : moderne, scale parfait) -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="apple-touch-icon" href="apple-touch-icon.svg" />
+
+<!-- Schema.org JSON-LD : aide les moteurs à comprendre que c'est une agence
+     de voyage à Dakar. Données factuelles vérifiées sur sources publiques. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  "name": "Africa Connection Tours",
+  "alternateName": ["ACT", "Africa Connection Tours Senegal"],
+  "description": "Tour-opérateur réceptif basé à Dakar depuis 1994. Circuits, excursions, séjours sur mesure au Sénégal et en Afrique de l'Ouest.",
+  "url": "https://act-senegal.com",
+  "logo": "favicon.svg",
+  "image": "apple-touch-icon.svg",
+  "telephone": "+221338495200",
+  "faxNumber": "+221338218326",
+  "email": "contact@actours-senegal.com",
+  "foundingDate": "1994",
+  "founder": { "@type": "Person", "name": "Salif Badiane" },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "52, rue Félix Faure — BP 11446",
+    "addressLocality": "Dakar-Peytavin",
+    "addressRegion": "Dakar",
+    "addressCountry": "SN"
+  },
+  "areaServed": [
+    { "@type": "Country", "name": "Sénégal" },
+    { "@type": "Country", "name": "Gambie" },
+    { "@type": "Country", "name": "Mali" },
+    { "@type": "Country", "name": "Guinée" },
+    { "@type": "Country", "name": "Mauritanie" },
+    { "@type": "Country", "name": "Côte d'Ivoire" },
+    { "@type": "Country", "name": "Ghana" }
+  ],
+  "knowsLanguage": ["fr", "en", "it", "de", "es", "ja"],
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+    "opens": "09:00",
+    "closes": "18:00"
+  },
+  "sameAs": [
+    "https://www.facebook.com/AfricaConnectionTours",
+    "https://twitter.com/actours_senegal"
+  ]
+}
+</script>
+
+<!-- Stub analytics : dataLayer initialisé tôt pour que window.trackWa()
+     (voir src/shared.jsx) puisse pusher dès le premier clic, même avant
+     l'installation de GA4/GTM côté agence. -->
+<script>window.dataLayer = window.dataLayer || [];</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />

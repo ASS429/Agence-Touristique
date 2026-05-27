@@ -21,6 +21,31 @@
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
+# Favicons : cache moyen
+[[headers]]
+  for = "/favicon.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/apple-touch-icon.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# robots.txt + sitemap.xml : pas de cache long (les crawlers doivent voir
+# les mises à jour rapidement)
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    Content-Type = "text/plain; charset=utf-8"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    Content-Type = "application/xml; charset=utf-8"
+
 # Headers de sécurité de base
 [[headers]]
   for = "/*"

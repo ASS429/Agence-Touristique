@@ -12,6 +12,21 @@ const AppShell = () => {
     if (route === 'blog' && params.id) setArticleId(params.id);
   }, [route, params.id]);
 
+  // Listener global : tout clic sur un lien wa.me passe par trackWa().
+  // Source = data-wa-source du lien si défini, sinon route active.
+  React.useEffect(() => {
+    const onClick = (e) => {
+      const link = e.target.closest('a[href*="wa.me"]');
+      if (!link) return;
+      const href = link.href || '';
+      const message = decodeURIComponent((href.split('text=')[1] || '').slice(0, 200));
+      const source  = link.dataset.waSource || route || 'unknown';
+      window.trackWa?.(source, message);
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, [route]);
+
   const openTour = (id) => { setTourId(id); go('tour', { id }); };
   const openArticle = (id) => { setArticleId(id); go('blog', { id }); };
 
@@ -51,7 +66,7 @@ const AppShell = () => {
       case 'mentions': return <Mentions go={navigate}/>;
       case 'privacy':  return <Privacy go={navigate}/>;
       case 'cgv':      return <Cgv     go={navigate}/>;
-      default:         return <Home onOpenTour={openTour} go={navigate}/>;
+      default:         return <NotFound go={navigate} route={route}/>;
     }
   };
 

@@ -28,7 +28,32 @@ const SITE = {
 const buildWaURL = (msg) =>
   `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(msg)}`;
 
-Object.assign(window, { SITE, buildWaURL });
+// Tracking unifié des clics WhatsApp.
+// Tant que GA4/GTM n'est pas branché par l'agence, on push juste dans
+// window.dataLayer et on log en dev. Quand `gtag` arrive, l'event passe
+// automatiquement (zéro changement requis).
+const trackWa = (source, message) => {
+  const payload = {
+    event: 'whatsapp_click',
+    whatsapp_source: source || 'unknown',
+    whatsapp_message_preview: (message || '').slice(0, 80),
+    page_route: (window.location.hash || '#/home').replace(/^#\//, '') || 'home',
+    ts: new Date().toISOString(),
+  };
+  (window.dataLayer = window.dataLayer || []).push(payload);
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'whatsapp_click', {
+      source: payload.whatsapp_source,
+      message_preview: payload.whatsapp_message_preview,
+      page_route: payload.page_route,
+    });
+  }
+  if (['localhost','127.0.0.1'].includes(window.location.hostname)) {
+    console.log('[trackWa]', payload);
+  }
+};
+
+Object.assign(window, { SITE, buildWaURL, trackWa });
 
 // ============================================================================
 // Logo — clickable home
