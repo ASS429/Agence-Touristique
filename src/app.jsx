@@ -92,9 +92,15 @@ const AppShell = () => {
 
   return (
     <div className="bg-sand-50 text-ink min-h-screen pb-0">
+      {/* Skip-to-content : invisible jusqu'au focus clavier — permet aux
+          utilisateurs lecteurs d'écran de sauter la navigation. */}
+      <a href="#main-content"
+         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-ink focus:text-sand-50 focus:rounded-full focus:text-[13px] focus:font-medium">
+        Aller au contenu principal
+      </a>
       <PromoBanner go={navigate} onHeightChange={setPromoHeight}/>
       <Header route={route} go={navigate} topOffset={promoHeight}/>
-      {showPage()}
+      <div id="main-content">{showPage()}</div>
       <WhatsAppFloat message={waMessage} bottomOffset={bottomOffset}/>
       <CookieConsent/>
       {/* Tweaks panel — visible en dev (localhost) et à la demande en prod via ?tweaks=1 */}

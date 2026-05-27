@@ -133,6 +133,18 @@
   /* Focus */
   :focus-visible { outline:2px solid #C8593B; outline-offset:3px; border-radius:2px; }
 
+  /* Respect prefers-reduced-motion : coupe marquee Instagram, bounce du
+     chevron 'défiler', et toutes les transitions/animations longues. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .marquee { animation: none !important; }
+  }
+
   /* "Photo" placeholder default shadow */
   .photo-card { box-shadow: var(--tw-card-shadow); }
 

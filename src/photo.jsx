@@ -164,13 +164,22 @@ const Photo = ({
     <div className={`relative overflow-hidden ${rounded} ${ratio || ''} ${className} grain photo-card`}>
       <Mood kind={mood} palette={pal} />
       {hasRealImage && (
-        <img
-          src={src}
-          alt={alt || label || ''}
-          loading="lazy"
-          onError={() => setImgFailed(true)}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <picture>
+          {/* Source WebP : utilisé automatiquement par les navigateurs modernes
+              (Safari 14+, Chrome 90+, Firefox 65+) SI un fichier .webp existe
+              au même chemin. Sinon le navigateur ignore <source> et utilise
+              le JPG en fallback. Permet d'upgrader les images progressivement
+              (script convert-webp.js) sans casser le site existant. */}
+          <source srcSet={src.replace(/\.jpe?g$/i, '.webp')} type="image/webp"/>
+          <img
+            src={src}
+            alt={alt || label || ''}
+            loading="lazy"
+            decoding="async"
+            onError={() => setImgFailed(true)}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </picture>
       )}
       {overlay && (
         <div className="absolute inset-0" style={{ background:'linear-gradient(180deg, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.55) 100%)' }} />

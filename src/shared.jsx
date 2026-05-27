@@ -315,9 +315,10 @@ const Header = ({ route, go, topOffset = 0 }) => {
       >
         <div className="max-w-[1280px] mx-auto px-4 md:px-8 h-16 md:h-[72px] flex items-center justify-between gap-4">
           <Logo inverted={!onLight} onClick={(e)=>{e.preventDefault(); go('home');}} />
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Navigation principale">
             {nav.map(n => (
               <a key={n.id} href={`#/${n.id}`} onClick={(e)=>handleNav(e, n.id)}
+                 aria-current={route===n.id ? 'page' : undefined}
                  className={`px-3 py-2 rounded-full text-[13.5px] transition-colors ${
                    onLight
                      ? (route===n.id ? 'bg-ink text-sand-50' : 'text-ink-700 hover:text-ink hover:bg-ink/5')
@@ -333,8 +334,9 @@ const Header = ({ route, go, topOffset = 0 }) => {
                 <button key={l} onClick={()=>setLang(l)}
                   className={`px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wider transition ${lang===l ? (onLight ? 'bg-ink text-sand-50' : 'bg-sand-50 text-ink') : ''}`}>{l}</button>
               ))}
-              <span className={`w-px h-4 mx-0.5 ${onLight?'bg-ink/15':'bg-sand-100/30'}`}/>
+              <span className={`w-px h-4 mx-0.5 ${onLight?'bg-ink/15':'bg-sand-100/30'}`} aria-hidden="true"/>
               <select value={ccy} onChange={(e)=>setCcy(e.target.value)}
+                aria-label="Devise d'affichage"
                 className={`bg-transparent text-[11px] font-medium tracking-wider px-1 py-1 outline-none cursor-pointer ${onLight?'text-ink-700':'text-sand-100'}`}>
                 <option value="XOF">XOF</option><option value="EUR">EUR</option><option value="USD">USD</option>
               </select>
@@ -363,17 +365,20 @@ const Header = ({ route, go, topOffset = 0 }) => {
               <Icons.Close size={22}/>
             </button>
           </div>
-          <nav className="p-5 flex flex-col">
+          <nav className="p-5 flex flex-col" aria-label="Navigation mobile">
             {nav.map(n => (
               <a key={n.id} href={`#/${n.id}`} onClick={(e)=>handleNav(e, n.id)}
+                 aria-current={route===n.id ? 'page' : undefined}
                  className="py-3.5 text-2xl font-display border-b border-ink/5 flex items-center justify-between">
                 <span>{n.label}</span>
-                <Icons.ArrowUpRight size={18} className="text-ink-400"/>
+                <Icons.ArrowUpRight size={18} className="text-ink-400" aria-hidden="true"/>
               </a>
             ))}
-            <a href="#/faq" onClick={(e)=>handleNav(e,'faq')} className="py-3.5 text-2xl font-display border-b border-ink/5 flex items-center justify-between">
+            <a href="#/faq" onClick={(e)=>handleNav(e,'faq')}
+               aria-current={route==='faq' ? 'page' : undefined}
+               className="py-3.5 text-2xl font-display border-b border-ink/5 flex items-center justify-between">
               <span>{t('nav.faq')}</span>
-              <Icons.ArrowUpRight size={18} className="text-ink-400"/>
+              <Icons.ArrowUpRight size={18} className="text-ink-400" aria-hidden="true"/>
             </a>
           </nav>
           <div className="p-5 mt-2 space-y-4">
@@ -385,6 +390,7 @@ const Header = ({ route, go, topOffset = 0 }) => {
                 ))}
               </div>
               <select value={ccy} onChange={(e)=>setCcy(e.target.value)}
+                aria-label="Devise d'affichage"
                 className="rounded-full border border-ink/15 text-xs font-medium px-3 py-2 outline-none">
                 <option value="XOF">XOF · FCFA</option>
                 <option value="EUR">EUR · €</option>
@@ -413,12 +419,13 @@ const WhatsAppFloat = ({ message, bottomOffset = 0 }) => {
   return (
     <a href={buildWaURL(message || 'Bonjour ACT ! J’aimerais des informations.')}
        target="_blank" rel="noreferrer"
+       aria-label="Discuter avec nous sur WhatsApp"
        onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}
        className="fixed right-5 md:right-7 z-30 group"
        style={{ bottom: `calc(${bottomOffset}px + 1.25rem)` }}>
-      <div className="absolute -inset-1 rounded-full bg-[#1FA855]/20 animate-ping" style={{animationDuration:'2.4s'}}/>
+      <div aria-hidden="true" className="absolute -inset-1 rounded-full bg-[#1FA855]/20 animate-ping" style={{animationDuration:'2.4s'}}/>
       <div className="relative flex items-center gap-2.5 bg-[#1FA855] text-white pl-3.5 pr-4 h-12 md:h-14 rounded-full shadow-lg shadow-[#1FA855]/30 transition-all hover:scale-[1.03]">
-        <Icons.Whatsapp size={22}/>
+        <Icons.Whatsapp size={22} aria-hidden="true"/>
         <span className={`hidden md:block text-sm font-medium transition-all ${hovered ? 'max-w-[200px] opacity-100' : 'max-w-0 opacity-0 overflow-hidden'}`}>
           Discuter avec nous
         </span>

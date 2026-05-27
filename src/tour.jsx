@@ -26,10 +26,10 @@ const TourGallery = ({ gallery }) => {
       </div>
 
       {lb !== null && (
-        <div className="fixed inset-0 z-50 bg-ink/95 flex items-center justify-center p-4" onClick={()=>setLb(null)}>
-          <button onClick={()=>setLb(null)} className="absolute top-5 right-5 h-12 w-12 rounded-full bg-sand-50/10 text-sand-50 inline-flex items-center justify-center hover:bg-sand-50/20"><Icons.Close size={22}/></button>
-          <button onClick={(e)=>{e.stopPropagation(); setLb((lb - 1 + gallery.length) % gallery.length);}} className="absolute left-3 md:left-8 h-12 w-12 rounded-full bg-sand-50/10 text-sand-50 inline-flex items-center justify-center hover:bg-sand-50/20"><Icons.ArrowLeft size={22}/></button>
-          <button onClick={(e)=>{e.stopPropagation(); setLb((lb + 1) % gallery.length);}} className="absolute right-3 md:right-8 h-12 w-12 rounded-full bg-sand-50/10 text-sand-50 inline-flex items-center justify-center hover:bg-sand-50/20"><Icons.ArrowRight size={22}/></button>
+        <div className="fixed inset-0 z-50 bg-ink/95 flex items-center justify-center p-4" onClick={()=>setLb(null)} role="dialog" aria-modal="true" aria-label="Galerie photo">
+          <button onClick={()=>setLb(null)} aria-label="Fermer la galerie" className="absolute top-5 right-5 h-12 w-12 rounded-full bg-sand-50/10 text-sand-50 inline-flex items-center justify-center hover:bg-sand-50/20"><Icons.Close size={22}/></button>
+          <button onClick={(e)=>{e.stopPropagation(); setLb((lb - 1 + gallery.length) % gallery.length);}} aria-label="Photo précédente" className="absolute left-3 md:left-8 h-12 w-12 rounded-full bg-sand-50/10 text-sand-50 inline-flex items-center justify-center hover:bg-sand-50/20"><Icons.ArrowLeft size={22}/></button>
+          <button onClick={(e)=>{e.stopPropagation(); setLb((lb + 1) % gallery.length);}} aria-label="Photo suivante" className="absolute right-3 md:right-8 h-12 w-12 rounded-full bg-sand-50/10 text-sand-50 inline-flex items-center justify-center hover:bg-sand-50/20"><Icons.ArrowRight size={22}/></button>
           <div className="w-full max-w-4xl aspect-[4/3]" onClick={(e)=>e.stopPropagation()}>
             <Photo tone={gallery[lb].tone} mood={gallery[lb].mood} label={gallery[lb].label} rounded="rounded-2xl" className="h-full w-full" src={gallery[lb].img} alt={gallery[lb].label}/>
           </div>
