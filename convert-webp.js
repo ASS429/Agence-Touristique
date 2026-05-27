@@ -23,7 +23,7 @@ try {
 }
 
 const ROOT = path.join(__dirname, 'images_du_sénégal');
-const QUALITY = 82;
+const QUALITY = 75;
 
 const walk = (dir) => {
   const out = [];
