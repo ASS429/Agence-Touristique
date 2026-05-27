@@ -16,3 +16,6 @@ desktop.ini
 .idea/
 *.swp
 *.swo
+
+# Documents internes / livrables clients (gardés en local uniquement)
+briefing-*.md
