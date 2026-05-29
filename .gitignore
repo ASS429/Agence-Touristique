@@ -19,3 +19,7 @@ desktop.ini
 
 # Documents internes / livrables clients (gardés en local uniquement)
 briefing-*.md
+contrat-*.md
+budget-*.md
+.docx_inspect/
+*.docx
