@@ -202,7 +202,8 @@ const CookieConsent = () => {
   const accept  = () => { setConsent('accepted'); setDecision('accepted'); };
   const decline = () => { setConsent('declined'); setDecision('declined'); };
   return (
-    <div className="fixed bottom-3 left-3 right-3 md:left-auto md:right-6 md:bottom-6 md:max-w-sm z-[55]">
+    <div className="fixed left-3 right-3 md:left-auto md:right-6 md:max-w-sm z-[55]"
+         style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}>
       <div className="bg-ink text-sand-50 rounded-2xl shadow-2xl shadow-ink/30 p-5 md:p-6 border border-sand-100/15">
         <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-terre-300 mb-2">— Cookies</div>
         <div className="font-display text-[19px] md:text-[20px] leading-tight">
@@ -249,7 +250,9 @@ const PromoBanner = ({ go, onHeightChange }) => {
   };
 
   return (
-    <div ref={ref} className="fixed top-0 left-0 right-0 z-[60] bg-terre text-sand-50 shadow-md shadow-terre/20">
+    <div ref={ref}
+         className="fixed left-0 right-0 z-[60] bg-terre text-sand-50 shadow-md shadow-terre/20"
+         style={{ top: 'env(safe-area-inset-top, 0px)' }}>
       <div className="max-w-[1280px] mx-auto px-3 md:px-8 py-2 md:py-2.5 flex items-center gap-2 md:gap-4 text-[12.5px] md:text-[13px]">
         <span className="hidden md:inline font-mono text-[10px] uppercase tracking-[0.22em] opacity-75 shrink-0">— {promo.label}</span>
         <span className="flex-1 min-w-0 truncate font-medium">{promo.title}</span>
@@ -307,7 +310,7 @@ const Header = ({ route, go, topOffset = 0 }) => {
   return (
     <>
       <header
-        style={{ top: topOffset }}
+        style={{ top: `calc(${topOffset}px + env(safe-area-inset-top, 0px))` }}
         className={`fixed left-0 right-0 z-40 transition-all duration-300 ${
           dense ? 'bg-sand-50/90 backdrop-blur-md border-b border-ink/5' : 'bg-transparent'
         }`}
@@ -425,7 +428,7 @@ const WhatsAppFloat = ({ message, bottomOffset = 0 }) => {
        aria-label="Discuter avec nous sur WhatsApp"
        onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}
        className="fixed right-5 md:right-7 z-30 group"
-       style={{ bottom: `calc(${bottomOffset}px + 1.25rem)` }}>
+       style={{ bottom: `calc(${bottomOffset}px + 1.25rem + env(safe-area-inset-bottom, 0px))` }}>
       <div aria-hidden="true" className="absolute -inset-1 rounded-full bg-[#1FA855]/20 animate-ping" style={{animationDuration:'2.4s'}}/>
       <div className="relative flex items-center gap-2.5 bg-[#1FA855] text-white pl-3.5 pr-4 h-12 md:h-14 rounded-full shadow-lg shadow-[#1FA855]/30 transition-all hover:scale-[1.03]">
         <Icons.Whatsapp size={22} aria-hidden="true"/>
