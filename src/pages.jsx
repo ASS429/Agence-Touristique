@@ -215,6 +215,41 @@ const About = ({ go }) => {
         title={<>Tour-opérateur de Dakar, <em>depuis 1994</em>.</>}
         intro="Africa Connection Tours organise les voyages au Sénégal et en Afrique de l’Ouest depuis plus de trente ans. L’hospitalité — la téranga, en wolof — reste notre standard de service."/>
 
+      {/* Timeline — depuis 1994 */}
+      <section className="py-16 md:py-24 bg-sand-100/40 border-y border-ink/5">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-8">
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-4">— Notre parcours</div>
+          <h2 className="font-display text-[36px] md:text-[56px] leading-[1.02] mb-12 md:mb-16 max-w-3xl">
+            De 1994 à aujourd'hui — <em>l'Afrique de l'Ouest, étape par étape</em>.
+          </h2>
+          <ol className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-3 relative">
+            {/* Ligne horizontale décorative en desktop */}
+            <div aria-hidden="true" className="hidden md:block absolute top-7 left-[10%] right-[10%] h-px bg-terre/25"/>
+            {[
+              { y:'1994', t:'Fondation à Dakar', d:'Création par des entrepreneurs sénégalais issus des grandes maisons du tourisme international.' },
+              { y:'2000s', t:'Réseau sous-régional', d:'Ouverture des bureaux correspondants en Gambie, Mali et Mauritanie.' },
+              { y:'2011', t:'Reconnaissance ATA', d:'Salif Badiane préside le chapitre Sénégal de l\'Africa Travel Association.' },
+              { y:'2010s', t:'Couverture continentale', d:'Extension du réseau en Guinée, Côte d\'Ivoire et Ghana — circuits intégrés multi-pays.' },
+              { y:'2026', t:'Cap digital', d:'Nouvelle plateforme web pour la diaspora, le marché local et les voyageurs internationaux.' },
+            ].map((step, i) => (
+              <li key={i} className="relative flex md:block items-start gap-4">
+                {/* Pastille année */}
+                <div className="relative shrink-0 inline-flex items-center justify-center h-14 w-14 md:h-14 md:w-14 rounded-full bg-terre text-sand-50 font-mono text-[11px] md:text-[12px] font-semibold ring-4 ring-sand-50 shadow-md shadow-terre/30">
+                  {step.y}
+                </div>
+                <div className="md:mt-5">
+                  <div className="font-display text-[20px] md:text-[22px] leading-tight text-ink">{step.t}</div>
+                  <p className="text-[13.5px] md:text-[14px] text-ink-600 leading-relaxed mt-1.5 max-w-[220px]">{step.d}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-10 text-[12.5px] text-ink-500 italic">
+            32 ans d'expérience cumulés, présence dans 7 pays, équipe multilingue formée en Europe et aux États-Unis.
+          </p>
+        </div>
+      </section>
+
       {/* Notre histoire */}
       <Section label="Notre histoire" title={<>Plus de trente ans, <em>une expertise sous-régionale</em>.</>}
                kicker="Salif Badiane · Directeur Général"
