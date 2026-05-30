@@ -165,12 +165,12 @@ const Photo = ({
       <Mood kind={mood} palette={pal} />
       {hasRealImage && (
         <picture>
-          {/* Source WebP : utilisé automatiquement par les navigateurs modernes
-              (Safari 14+, Chrome 90+, Firefox 65+) SI un fichier .webp existe
-              au même chemin. Sinon le navigateur ignore <source> et utilise
-              le JPG en fallback. Permet d'upgrader les images progressivement
-              (script convert-webp.js) sans casser le site existant. */}
-          <source srcSet={src.replace(/\.jpe?g$/i, '.webp')} type="image/webp"/>
+          {/* Source WebP. IMPORTANT : encodeURI() est obligatoire pour échapper
+              les espaces dans les noms de dossiers (Delta du Saloum, Désert de
+              Lompoul, Ile de gorée). Sans ça, srcset les interprète comme
+              séparateur URL/descripteur et tombe sur le JPG (perte du gain
+              WebP). Le <img src> est automatiquement encodé par le navigateur. */}
+          <source srcSet={encodeURI(src.replace(/\.jpe?g$/i, '.webp'))} type="image/webp"/>
           <img
             src={src}
             alt={alt || label || ''}
