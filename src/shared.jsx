@@ -492,8 +492,11 @@ const CircuitCard = ({ c, onOpen, size = 'md' }) => (
 // ============================================================================
 const Footer = ({ go }) => {
   const { t } = useI18n();
+  // Fallback robuste : si go n'est pas passé (cache stale d'un ancien composant
+  // parent), on retombe sur la navigation hash native, qui marche partout.
+  const nav = typeof go === 'function' ? go : (target) => { window.location.hash = '#/' + target; };
   const link = (route, label) => (
-    <li><a href={`#/${route}`} onClick={(e)=>{e.preventDefault(); go(route);}} className="hover:text-sand-50">{label}</a></li>
+    <li><a href={`#/${route}`} onClick={(e)=>{e.preventDefault(); nav(route);}} className="hover:text-sand-50">{label}</a></li>
   );
   return (
     <footer className="bg-ink text-sand-100 pt-20 pb-10 mt-24" data-screen-label="Footer">
@@ -507,7 +510,7 @@ const Footer = ({ go }) => {
             </h3>
           </div>
           <div className="flex flex-col gap-3 md:items-end">
-            <Btn onClick={()=>go('custom')} variant="primary" size="lg" className="bg-sand-50 text-ink hover:bg-sand-100" icon={<Icons.ArrowRight size={18}/>}>
+            <Btn onClick={()=>nav('custom')} variant="primary" size="lg" className="bg-sand-50 text-ink hover:bg-sand-100" icon={<Icons.ArrowRight size={18}/>}>
               Décrire mon voyage
             </Btn>
             <span className="text-sand-100/80 text-sm">Devis en 24h · sans engagement</span>
@@ -516,7 +519,7 @@ const Footer = ({ go }) => {
 
         <div className="grid md:grid-cols-12 gap-10 md:gap-8">
           <div className="md:col-span-4">
-            <Logo inverted onClick={(e)=>{e.preventDefault(); go('home');}}/>
+            <Logo inverted onClick={(e)=>{e.preventDefault(); nav('home');}}/>
             <p className="mt-5 text-sand-200 text-[14px] leading-relaxed max-w-sm">
               Tour-opérateur réceptif basé à Dakar depuis 1994. Circuits, excursions, séjours sur mesure au Sénégal et en Afrique de l’Ouest — équipe locale, six langues, réseau dans 6 pays.
             </p>
