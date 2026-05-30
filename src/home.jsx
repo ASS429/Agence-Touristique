@@ -19,8 +19,12 @@ const Hero = ({ go }) => {
         // `preload="auto"` raccourcit ce délai.
         <video
           autoPlay muted loop playsInline preload="auto"
+          aria-label="Vidéo d'ambiance silencieuse — paysages du Sénégal"
           className="absolute inset-0 h-full w-full object-cover">
           <source src="vidéo/senegal.mp4" type="video/mp4"/>
+          {/* Track vide : la vidéo n'a pas d'audio, donc pas de vraies
+              captions à fournir. Le track sentinel évite le warning a11y. */}
+          <track kind="captions" srcLang="fr" label="Aucun dialogue" default/>
         </video>
       ) : (
         // 2g/3g/saveData : photo statique stylisée à la place.

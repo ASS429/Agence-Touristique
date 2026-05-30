@@ -164,7 +164,9 @@
   .text-ink-700 { color: var(--tw-ink-soft) !important; }
   .text-ink-600 { color: var(--tw-ink-mute) !important; }
   .text-ink-500 { color: var(--tw-ink-faint) !important; }
-  .text-ink-400 { color: var(--tw-ink-faint) !important; opacity:.7; }
+  /* Avant : opacity:.7 → contraste sous WCAG AA. Retiré pour passer le test
+     a11y Lighthouse. Le rendu reste discret grâce à la teinte ink-faint. */
+  .text-ink-400 { color: var(--tw-ink-faint) !important; }
 
   /* --- Accent (primary brand color) -------------------------------- */
   .bg-terre        { background-color: var(--tw-accent) !important; }
