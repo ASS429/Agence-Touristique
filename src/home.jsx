@@ -37,25 +37,28 @@ const Hero = ({ go }) => {
     <div className="relative flex-1 max-w-[1280px] w-full mx-auto px-4 md:px-8 pt-32 md:pt-44 pb-28 md:pb-32 flex flex-col justify-end"
          style={{ textShadow:'0 2px 18px rgba(0,0,0,0.45)' }}>
       <div className="max-w-3xl">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sand-50/15 backdrop-blur-md border border-sand-50/20 text-sand-50 text-[11px] uppercase tracking-[0.22em] font-mono mb-6"
+        <div className="inline-flex items-center gap-2 px-3 py-1 md:py-1.5 rounded-full bg-sand-50/15 backdrop-blur-md border border-sand-50/20 text-sand-50 text-[10px] md:text-[11px] uppercase tracking-[0.22em] font-mono mb-4 md:mb-6"
              style={{ textShadow:'none' }}>
           <span className="h-1.5 w-1.5 rounded-full bg-terre-300 animate-pulse"/> Saison 2026 ouverte
         </div>
-        <h1 className="font-display text-[44px] sm:text-[68px] md:text-[88px] lg:text-[104px] leading-[0.95] text-sand-50"
+        <h1 className="font-display text-[36px] sm:text-[56px] md:text-[88px] lg:text-[104px] leading-[1] md:leading-[0.95] text-sand-50"
             style={{ textShadow:'0 3px 24px rgba(0,0,0,0.55)' }}>
-          Le Sénégal, <em className="text-terre-300">à la cadence</em><br/>
-          de ceux qui y vivent.
+          Le Sénégal, <em className="text-terre-300">à la cadence</em>{' '}
+          <span className="md:block">de ceux qui y vivent.</span>
         </h1>
-        <p className="mt-7 max-w-xl text-sand-50 text-[16px] md:text-[18px] leading-relaxed"
+        <p className="mt-4 md:mt-7 max-w-xl text-sand-50 text-[14.5px] md:text-[18px] leading-relaxed"
            style={{ textShadow:'0 2px 14px rgba(0,0,0,0.6)' }}>
-          Circuits et escapades imaginés par des guides dakarois. De Gorée au pays Bassari, on construit votre voyage à hauteur d’humain — sans cliché, sans pack froid, sans intermédiaire.
+          Circuits et escapades imaginés par des guides dakarois — de Gorée au pays Bassari, à hauteur d’humain<span className="hidden md:inline">. Sans cliché, sans pack froid, sans intermédiaire</span>.
         </p>
-        <div className="mt-9 flex flex-wrap items-center gap-3" style={{ textShadow:'none' }}>
+        <div className="mt-6 md:mt-9 flex flex-wrap items-center gap-3" style={{ textShadow:'none' }}>
           <Btn onClick={()=>go('circuits')} variant="terre" size="lg" icon={<Icons.ArrowRight size={18}/>}>
             Voir nos circuits
           </Btn>
+          {/* Bouton WhatsApp masqué sur mobile : le bouton flottant en bas
+              à droite remplit déjà ce rôle, c'est de la redondance. */}
           <Btn as="a" href={buildWaURL('Bonjour ACT ! Je voudrais organiser un voyage.')} target="_blank" rel="noreferrer"
-               variant="wa" size="lg" icon={<Icons.Whatsapp size={18}/>}>
+               variant="wa" size="lg" icon={<Icons.Whatsapp size={18}/>}
+               className="hidden sm:inline-flex">
             Réserver sur WhatsApp
           </Btn>
         </div>
