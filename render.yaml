@@ -1,0 +1,61 @@
+# Africa Connection Tours — config Render Static Site
+# Site statique sans build : on publie directement la racine du repo.
+# Render lit ce fichier automatiquement quand on connecte le dépôt GitHub.
+
+services:
+  - type: web
+    name: act-senegal-site
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: ./
+    pullRequestPreviewsEnabled: false
+
+    # Headers — équivalents à la config netlify.toml.
+    headers:
+      # Cache long sur les assets immuables (photos, vidéo)
+      - path: /images_du_sénégal/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /vidéo/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+
+      # Cache moyen sur les sources JSX (mises à jour fréquentes)
+      - path: /src/*
+        name: Cache-Control
+        value: public, max-age=3600
+
+      # Favicons : cache moyen
+      - path: /favicon.svg
+        name: Cache-Control
+        value: public, max-age=604800
+      - path: /apple-touch-icon.svg
+        name: Cache-Control
+        value: public, max-age=604800
+
+      # SEO files : pas de cache long pour que les crawlers voient les MAJ
+      - path: /robots.txt
+        name: Cache-Control
+        value: public, max-age=3600
+      - path: /sitemap.xml
+        name: Cache-Control
+        value: public, max-age=3600
+
+      # PWA : le service worker NE DOIT JAMAIS être caché (critique pour MAJ)
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /manifest.webmanifest
+        name: Cache-Control
+        value: public, max-age=3600
+
+      # Headers de sécurité globaux
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
