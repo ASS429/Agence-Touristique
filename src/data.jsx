@@ -135,6 +135,31 @@ const CIRCUITS = [
     types:['plage','culture','nature'], tier:'premium', start:'dakar',
     destIds:['dakar','saloum','casamance'], popularity:70,
     img: IMG('Casamance', 3) },
+
+  // ---- Produits événementiels & programmes dédiés (offre ACT distinctive) ----
+  { id:'pack-bapteme-traditionnel', title:'Pack Baptême traditionnel', subtitle:'Cérémonie communautaire & accueil familial',
+    days:2, nights:1, priceXOF:null, tone:'terre', mood:'portrait',
+    badges:['Cérémonie','Diaspora','Famille'], rating:5.0, reviews:6,
+    short:'Pour les naissances dans les familles de la diaspora — cérémonie traditionnelle wolof, accueil en famille hôte, photographe, accompagnement en français et anglais.',
+    types:['evenement','diaspora','culture','famille'], tier:'premium', start:'dakar',
+    destIds:['dakar'], popularity:78,
+    img: IMG('Ile de gorée', 7) },
+
+  { id:'pack-ceremonie-mariage', title:'Pack Cérémonie de mariage', subtitle:'Union sénégalaise sur mesure',
+    days:5, nights:4, priceXOF:null, tone:'rose', mood:'portrait',
+    badges:['Cérémonie','Sur mesure','Diaspora'], rating:5.0, reviews:4,
+    short:'Mariage traditionnel ou intercommunautaire au Sénégal — logistique complète : lieu, traiteur, tenues, officiants, hébergement des invités. Cadre Dakar, Saint-Louis ou Casamance au choix.',
+    types:['evenement','diaspora','culture'], tier:'premium', start:'dakar',
+    destIds:['dakar','saint-louis','casamance'], popularity:72,
+    img: IMG('Saint-Louis', 6) },
+
+  { id:'diaspora-premium-10j', title:'Retour aux sources · Premium 10j', subtitle:'Programme dédié à la diaspora afro-américaine',
+    days:10, nights:9, priceXOF:1450000, tone:'terre', mood:'portrait',
+    badges:['Diaspora','Premium','Photographe','Recherche généalogique'], rating:5.0, reviews:7,
+    short:'Conçu pour les familles afro-américaines en pèlerinage de mémoire : Gorée en profondeur, recherche généalogique, cérémonie d’accueil traditionnelle, rencontres avec historiens et photographe attitré sur tout le séjour.',
+    types:['diaspora','culture','evenement'], tier:'premium', start:'dakar',
+    destIds:['goree','dakar','saint-louis','saloum'], popularity:94,
+    img: IMG('Ile de gorée', 5) },
 ];
 
 // === TESTIMONIALS (home) ====================================================

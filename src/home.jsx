@@ -192,17 +192,93 @@ const Pourquoi = () => {
   );
 };
 
-const CircuitsMoment = ({ onOpenTour, go }) => {
-  // Pick a curated 4 for the home spotlight
-  const picks = ['goree-lac-saloum','casamance-essentielle','lompoul-saint-louis','kedougou-bassari']
+// ============================================================================
+// Le Sénégal selon ACT — présentation éditoriale du pays
+// ============================================================================
+const SenegalSelonACT = () => (
+  <Section id="senegal-selon-act" label="Notre regard"
+           title={<>Le Sénégal, <em>à hauteur d’humain</em>.</>}
+           kicker="Notre lecture du pays, après trente ans à l’organiser."
+           intro="Un pays-carrefour : 17 ethnies, 4 grandes régions naturelles, 700 km de côte atlantique. Et un mot wolof qu’on essaie de tenir au quotidien — téranga, l’hospitalité."
+           className="py-20 md:py-28" screenLabel="02 Le Sénégal selon ACT">
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+      {[
+        { I:Icons.Sparkle, k:'Patrimoine mondial', d:'Île de Gorée, Saint-Louis, Djoudj, Niokolo-Koba, Saloum — cinq sites inscrits par l’UNESCO.' },
+        { I:Icons.Users,   k:'Diversité culturelle', d:'Wolof, Sérère, Peul, Diola, Mandingue, Bassari… Une mosaïque qui se croise au quotidien.' },
+        { I:Icons.MapPin,  k:'Carrefour ouest-africain', d:'Au-delà du Sénégal : Gambie, Mali, Guinée, Mauritanie, Côte d’Ivoire et Ghana — nos bureaux correspondants ouvrent toute la sous-région.' },
+        { I:Icons.Globe,   k:'Six langues d’accueil', d:'FR, EN, IT, DE, ES, JA — nos guides parlent celle qui vous met à l’aise.' },
+      ].map((p, i) => (
+        <article key={i} className="rounded-3xl bg-sand-100/60 border border-ink/5 p-6 md:p-7 hover:shadow-lg hover:shadow-ink/5 transition-shadow">
+          <div className="h-11 w-11 rounded-full bg-terre/10 text-terre inline-flex items-center justify-center mb-4">
+            <p.I size={20}/>
+          </div>
+          <div className="font-display text-[22px] md:text-[24px] leading-tight">{p.k}</div>
+          <p className="mt-2 text-[14px] text-ink-600 leading-relaxed">{p.d}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+);
+
+// ============================================================================
+// Profil ACT — brève présentation de l'agence avec CTA À propos
+// ============================================================================
+const ProfilACT = ({ go }) => (
+  <section id="profil-act" className="py-20 md:py-28 bg-ink text-sand-50 relative overflow-hidden" data-screen-label="03 Profil ACT">
+    <div className="max-w-[1280px] mx-auto px-4 md:px-8 grid md:grid-cols-[1.15fr,1fr] gap-10 md:gap-16 items-center">
+      <div>
+        <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-4">— L’agence</div>
+        <h2 className="font-display text-[36px] sm:text-[44px] md:text-[60px] leading-[1.02]">
+          Africa Connection Tours, <em>depuis 1994</em>.
+        </h2>
+        <p className="mt-6 text-sand-200 max-w-xl text-[15.5px] md:text-[17px] leading-relaxed">
+          Tour-opérateur réceptif fondé à Dakar par des entrepreneurs sénégalais issus des grandes maisons du tourisme international. Une équipe permanente formée en Europe et aux États-Unis, qui accueille les voyageurs en six langues, et un réseau de bureaux correspondants dans six pays d’Afrique de l’Ouest.
+        </p>
+        <p className="mt-4 text-sand-200 max-w-xl text-[15.5px] md:text-[17px] leading-relaxed">
+          Trente ans à organiser le Sénégal — pour la diaspora, le marché local et les voyageurs internationaux.
+        </p>
+        <div className="mt-8">
+          <Btn onClick={()=>go('about')} variant="terre" size="lg" icon={<Icons.ArrowRight size={18}/>}>
+            Découvrir l’agence
+          </Btn>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
+        {[
+          { k:'30+',  v:'années d’expertise réceptive · depuis 1994' },
+          { k:'6',    v:'pays d’Afrique de l’Ouest couverts' },
+          { k:'6',    v:'langues d’accueil — FR · EN · IT · DE · ES · JA' },
+          { k:'1',    v:'standard d’accueil — la téranga, en chaque circuit' },
+        ].map((s,i) => (
+          <div key={i} className="rounded-2xl bg-sand-50/5 border border-sand-100/15 p-5 md:p-6">
+            <div className="font-display text-[40px] md:text-[52px] text-sand-50 leading-none">{s.k}</div>
+            <div className="text-[12.5px] text-sand-300 mt-2 leading-snug">{s.v}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+// ============================================================================
+// Produits & circuits — sélection de la home
+// ============================================================================
+const ProduitsCircuits = ({ onOpenTour, go }) => {
+  // Mix : circuits signature + programme diaspora pour montrer la variété
+  const picks = ['goree-lac-saloum','diaspora-essentiel','casamance-essentielle','lompoul-saint-louis']
     .map(id => CIRCUITS.find(c=>c.id===id)).filter(Boolean);
   return (
-    <Section id="circuits-spot" label="Circuits du moment" title={<>À <em>faire bientôt</em>.</>}
-             kicker="Quatre formats au choix — du week-end à la semaine longue."
-             intro={<>Catalogue complet · <button onClick={()=>go('circuits')} className="underline underline-offset-4 hover:text-terre">14 circuits permanents →</button></>}
-             className="py-20 md:py-28" screenLabel="05 Circuits du moment">
+    <Section id="produits-circuits" label="Sélection"
+             title={<>Quelques <em>circuits & produits</em>.</>}
+             kicker="Un aperçu — du circuit signature au programme Retour aux sources, en passant par les packs événements (baptême, cérémonie traditionnelle)."
+             className="py-20 md:py-28" screenLabel="05 Produits & circuits">
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
         {picks.map(c => <CircuitCard key={c.id} c={c} onOpen={onOpenTour}/>)}
+      </div>
+      <div className="mt-10 md:mt-12 flex justify-center">
+        <Btn onClick={()=>go('circuits')} variant="primary" size="lg" icon={<Icons.ArrowRight size={18}/>}>
+          Voir tous nos circuits & produits
+        </Btn>
       </div>
     </Section>
   );
@@ -371,9 +447,15 @@ const Home = ({ onOpenTour, go }) => (
   <main>
     <Hero go={go}/>
     <Reassurance/>
+    {/* Trois sections d'introduction demandées par ACT après le hero :
+        (1) Le Sénégal vu par l'agence, (2) Brève présentation ACT avec CTA
+        À propos, (3) Sélection de produits & circuits avec CTA vers le
+        catalogue renommé 'Circuits & produits'. */}
+    <SenegalSelonACT/>
+    <ProfilACT go={go}/>
+    <ProduitsCircuits onOpenTour={onOpenTour} go={go}/>
     <Destinations go={go}/>
     <Pourquoi/>
-    <CircuitsMoment onOpenTour={onOpenTour} go={go}/>
     <RetourSources go={go}/>
     <PackDakar/>
     <Temoignages/>

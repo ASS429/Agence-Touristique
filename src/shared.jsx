@@ -483,8 +483,12 @@ const CircuitCard = ({ c, onOpen, size = 'md' }) => (
     </button>
     <div className="mt-4 flex items-end justify-between">
       <div>
-        <div className="text-[10.5px] text-ink-500 font-mono uppercase tracking-wider">à partir de</div>
-        <Price xof={c.priceXOF} className="font-display text-[20px] md:text-[22px] leading-none"/>
+        <div className="text-[10.5px] text-ink-500 font-mono uppercase tracking-wider">
+          {c.priceXOF ? 'à partir de' : 'tarif'}
+        </div>
+        {c.priceXOF
+          ? <Price xof={c.priceXOF} className="font-display text-[20px] md:text-[22px] leading-none"/>
+          : <span className="font-display text-[20px] md:text-[22px] leading-none">Sur devis</span>}
       </div>
       <button onClick={()=>onOpen(c.id)} className="h-10 px-4 rounded-full bg-ink text-sand-50 text-[13px] inline-flex items-center gap-1.5 hover:bg-terre transition-colors">
         Détails <Icons.ArrowRight size={14}/>

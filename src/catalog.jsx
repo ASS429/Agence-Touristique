@@ -11,12 +11,13 @@ const DURATION_BUCKETS = [
 ];
 
 const TYPE_OPTIONS = [
-  { id:'culture',  label:'Culture & Histoire'    },
-  { id:'nature',   label:'Nature & Faune'        },
-  { id:'plage',    label:'Plage & Détente'       },
-  { id:'aventure', label:'Aventure'              },
-  { id:'famille',  label:'Famille'               },
-  { id:'diaspora', label:'Diaspora & Patrimoine' },
+  { id:'culture',    label:'Culture & Histoire'    },
+  { id:'nature',     label:'Nature & Faune'        },
+  { id:'plage',      label:'Plage & Détente'       },
+  { id:'aventure',   label:'Aventure'              },
+  { id:'famille',    label:'Famille'               },
+  { id:'diaspora',   label:'Diaspora & Patrimoine' },
+  { id:'evenement',  label:'Événements & Cérémonies' },
 ];
 
 const TIER_OPTIONS = [
@@ -168,8 +169,8 @@ const Catalog = ({ go, onOpenTour, initialFilter }) => {
   return (
     <main className="bg-sand-50">
       <PageHero kicker="Catalogue" tone="atlant" mood="water" bgImg={IMG('Delta du Saloum', 1)}
-        title={<>Tous nos <em>circuits</em>.</>}
-        intro="Du week-end à Dakar au grand tour du Sénégal — 14 itinéraires conçus avec des guides locaux."/>
+        title={<>Tous nos <em>circuits & produits</em>.</>}
+        intro="Du week-end à Dakar au grand tour du Sénégal, du programme Retour aux sources aux packs événements — toute l'offre Africa Connection Tours, en un seul endroit."/>
 
       {/* Toolbar — sticky on desktop, also collapses neatly on mobile */}
       <div className="sticky top-16 md:top-[72px] z-20 bg-sand-50/95 backdrop-blur-md border-b border-ink/10">

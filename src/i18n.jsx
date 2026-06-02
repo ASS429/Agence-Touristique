@@ -5,7 +5,7 @@ const I18nContext = React.createContext(null);
 
 const DICT = {
   FR: {
-    'nav.circuits':'Circuits',
+    'nav.circuits':'Circuits & produits',
     'nav.bespoke':'Sur mesure',
     'nav.blog':'Blog',
     'nav.about':'À propos',
@@ -15,7 +15,7 @@ const DICT = {
     'cta.book':'Réserver sur WhatsApp',
     'cta.details':'Détails',
     'cta.quote':'Demander un devis',
-    'cta.viewTours':'Voir nos circuits',
+    'cta.viewTours':'Voir nos circuits & produits',
     'cta.bespoke':'Voyage sur mesure',
     'common.from':'à partir de',
     'common.perPerson':'/ pers',
@@ -31,7 +31,7 @@ const DICT = {
     'common.of':'sur',
   },
   EN: {
-    'nav.circuits':'Tours',
+    'nav.circuits':'Tours & products',
     'nav.bespoke':'Bespoke',
     'nav.blog':'Journal',
     'nav.about':'About',
@@ -41,7 +41,7 @@ const DICT = {
     'cta.book':'Book on WhatsApp',
     'cta.details':'Details',
     'cta.quote':'Request quote',
-    'cta.viewTours':'See our tours',
+    'cta.viewTours':'See our tours & products',
     'cta.bespoke':'Tailor your trip',
     'common.from':'from',
     'common.perPerson':'/ pers',
