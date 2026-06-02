@@ -1,4 +1,4 @@
-// Convertit tous les JPG du dossier images_du_sénégal/ en WebP à côté
+// Convertit tous les JPG du dossier images_du_senegal/ en WebP à côté
 // (même nom, extension .webp). Idempotent : ignore les WebP déjà générés.
 //
 // Pré-requis (une seule fois) :
@@ -22,7 +22,7 @@ try {
   process.exit(1);
 }
 
-const ROOT = path.join(__dirname, 'images_du_sénégal');
+const ROOT = path.join(__dirname, 'images_du_senegal');
 const QUALITY = 75;
 
 const walk = (dir) => {

@@ -1,10 +1,10 @@
 // All mock data used across the site.
 
 // === IMAGE HELPERS ==========================================================
-// Real photos live in /images_du_sénégal/<destination>/<NN>.jpg.
+// Real photos live in /images_du_senegal/<destination>/<NN>.jpg.
 // The Photo component falls back silently to its duotone placeholder if a src
 // fails to load — safe to wire real paths everywhere.
-const IMG_BASE = 'images_du_sénégal';
+const IMG_BASE = 'images_du_senegal';
 const IMG = (folder, n) => `${IMG_BASE}/${folder}/${String(n).padStart(2, '0')}.jpg`;
 
 // === DESTINATIONS ===========================================================

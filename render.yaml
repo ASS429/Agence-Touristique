@@ -13,7 +13,7 @@ services:
     # Headers — équivalents à la config netlify.toml.
     headers:
       # Cache long sur les assets immuables (photos, vidéo)
-      - path: /images_du_sénégal/*
+      - path: /images_du_senegal/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
       - path: /vidéo/*
