@@ -4,7 +4,7 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v5';
+const VERSION = 'act-v6';
 
 // Pré-cache uniquement le squelette critique. Les photos et la vidéo
 // (~20 Mo total) sont mises en cache à la volée, pas pré-téléchargées.

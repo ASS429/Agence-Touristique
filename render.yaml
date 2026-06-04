@@ -25,7 +25,10 @@ services:
         name: Cache-Control
         value: public, max-age=3600
 
-      # Favicons : cache moyen
+      # Logo officiel + favicons : cache moyen
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=604800
       - path: /favicon.svg
         name: Cache-Control
         value: public, max-age=604800

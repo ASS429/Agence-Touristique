@@ -80,24 +80,24 @@ Object.assign(window, { SITE, buildWaURL, trackWa });
 // ============================================================================
 // Logo — clickable home
 // ============================================================================
-const Logo = ({ inverted = false, className = '', onClick }) => {
-  const ink   = inverted ? '#FBF7F0' : '#1A1612';
-  const accent= '#C8593B';
-  return (
-    <a href="#/home" onClick={onClick} className={`inline-flex items-center gap-2.5 ${className}`}>
-      <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
-        <circle cx="16" cy="16" r="15" fill={ink} />
-        <path d="M5 18 Q 11 13 16 18 T 27 18" stroke="#FBF7F0" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
-        <path d="M5 22 Q 11 17 16 22 T 27 22" stroke={accent} strokeWidth="1.4" fill="none" strokeLinecap="round"/>
-        <circle cx="22" cy="11" r="3" fill={accent}/>
-      </svg>
-      <div className="leading-tight">
-        <div className={`font-display text-[16px] md:text-[19px] whitespace-nowrap ${inverted ? 'text-sand-50' : 'text-ink'}`}>Africa Connection Tours</div>
-        <div className={`font-mono text-[9px] uppercase tracking-[0.22em] -mt-0.5 ${inverted ? 'text-sand-300' : 'text-ink-500'}`}>ACT · Dakar</div>
-      </div>
-    </a>
-  );
-};
+const Logo = ({ inverted = false, className = '', onClick }) => (
+  <a href="#/home" onClick={onClick}
+     aria-label="Africa Connection Tours — Accueil"
+     className={`inline-flex items-center gap-2.5 ${className}`}>
+    <img
+      src="assets/logo-act.png"
+      alt="Africa Connection Tours"
+      width="44"
+      height="44"
+      className="h-10 w-auto md:h-11 select-none"
+      draggable={false}
+    />
+    <div className="leading-tight">
+      <div className={`font-display text-[15px] md:text-[18px] whitespace-nowrap ${inverted ? 'text-sand-50' : 'text-ink'}`}>Africa Connection Tours</div>
+      <div className={`font-mono text-[9px] uppercase tracking-[0.22em] -mt-0.5 ${inverted ? 'text-sand-300' : 'text-ink-500'}`}>Sénégal · Depuis 1996</div>
+    </div>
+  </a>
+);
 
 // ============================================================================
 // StarRow
