@@ -4,4 +4,4 @@ Allow: /
 # Pas d'indexation du panneau de tweaks (dev tool)
 Disallow: /*?tweaks=1
 
-Sitemap: https://africa-connection-tours.onrender.com/sitemap.xml
+Sitemap: https://premiumservicesenegal.com/sitemap.xml
