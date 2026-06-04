@@ -177,7 +177,7 @@ const Contact = ({ go }) => {
                 </div>
                 <div>
                   <div className="font-mono text-[10.5px] uppercase tracking-wider text-ink-500">Depuis</div>
-                  <div className="mt-0.5">1994</div>
+                  <div className="mt-0.5">1996</div>
                 </div>
               </div>
               <div className="mt-5 flex items-center gap-2">
@@ -212,21 +212,21 @@ const About = ({ go }) => {
   return (
     <main className="bg-sand-50">
       <PageHero kicker="À propos" tone="terre" mood="portrait" bgImg={IMG('Saint-Louis', 6)}
-        title={<>Tour-opérateur de Dakar, <em>depuis 1994</em>.</>}
+        title={<>Tour-opérateur de Dakar, <em>depuis 1996</em>.</>}
         intro="Africa Connection Tours organise les voyages au Sénégal et en Afrique de l’Ouest depuis plus de trente ans. L’hospitalité — la téranga, en wolof — reste notre standard de service."/>
 
-      {/* Timeline — depuis 1994 */}
+      {/* Timeline — depuis 1996 */}
       <section className="py-16 md:py-24 bg-sand-100/40 border-y border-ink/5">
         <div className="max-w-[1280px] mx-auto px-4 md:px-8">
           <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-4">— Notre parcours</div>
           <h2 className="font-display text-[36px] md:text-[56px] leading-[1.02] mb-12 md:mb-16 max-w-3xl">
-            De 1994 à aujourd'hui — <em>l'Afrique de l'Ouest, étape par étape</em>.
+            De 1996 à aujourd'hui — <em>l'Afrique de l'Ouest, étape par étape</em>.
           </h2>
           <ol className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-3 relative">
             {/* Ligne horizontale décorative en desktop */}
             <div aria-hidden="true" className="hidden md:block absolute top-7 left-[10%] right-[10%] h-px bg-terre/25"/>
             {[
-              { y:'1994', t:'Fondation à Dakar', d:'Création par des entrepreneurs sénégalais issus des grandes maisons du tourisme international.' },
+              { y:'1996', t:'Fondation à Dakar', d:'Création le 19 août 1996 par des entrepreneurs sénégalais issus des grandes maisons du tourisme international (SA au capital de 20 M FCFA).' },
               { y:'2000s', t:'Réseau sous-régional', d:'Ouverture des bureaux correspondants en Gambie, Mali et Mauritanie.' },
               { y:'2011', t:'Reconnaissance ATA', d:'Salif Badiane préside le chapitre Sénégal de l\'Africa Travel Association.' },
               { y:'2010s', t:'Couverture continentale', d:'Extension du réseau en Guinée, Côte d\'Ivoire et Ghana — circuits intégrés multi-pays.' },
@@ -256,7 +256,7 @@ const About = ({ go }) => {
                className="py-20 md:py-28">
         <div className="grid md:grid-cols-[1.2fr,1fr] gap-10 md:gap-16 items-center">
           <div className="space-y-5 text-[16px] md:text-[17px] leading-relaxed text-ink-800 max-w-2xl">
-            <p>Fondée en 1994 par des entrepreneurs sénégalais issus des grandes maisons du tourisme international, Africa Connection Tours s’est imposée comme l’un des tour-opérateurs réceptifs de référence à Dakar.</p>
+            <p>Fondée le 19 août 1996 par des entrepreneurs sénégalais issus des grandes maisons du tourisme international, Africa Connection Tours s’est imposée comme l’un des tour-opérateurs réceptifs de référence à Dakar.</p>
             <p>Sous la direction de <strong>Salif Badiane</strong>, l’agence a élargi son réseau au-delà des frontières sénégalaises : des bureaux correspondants opèrent aujourd’hui en <em>Gambie, Mali, Guinée, Mauritanie, Côte d’Ivoire et Ghana</em> — permettant des circuits intégrés sur toute l’Afrique de l’Ouest.</p>
             <p>L’équipe — Sénégalaise, formée en Europe et aux États-Unis — accueille les voyageurs en six langues (français, anglais, italien, allemand, espagnol, japonais). Trente ans d’expérience cumulés, et toujours la même obsession : un voyage qui ressemble vraiment au pays.</p>
           </div>
@@ -517,7 +517,7 @@ const Mentions = ({ go }) => (
     intro="Informations légales relatives à l’éditeur et à l’hébergeur du site actours-senegal.com."
     blocks={[
       { type:'h2', text:'1. Éditeur du site' },
-      { type:'p', html:'<strong>Africa Connection Tours (ACT)</strong><br/>Siège social : 52, rue Félix Faure — BP 11446, Dakar-Peytavin, Sénégal.<br/>Tour-opérateur fondé en 1994.<br/>Numéro de Registre du Commerce : <em>[RCCM à confirmer avec l’agence]</em><br/>NINEA : <em>[NINEA à confirmer]</em><br/>Licence agence de voyage : <em>[numéro d’agrément à confirmer]</em><br/>Capital social : <em>[montant à confirmer] FCFA</em>.' },
+      { type:'p', html:'<strong>Africa Connection Tours (ACT)</strong><br/>Forme juridique : Société Anonyme (SA).<br/>Siège social : 52, rue Félix Faure — BP 11446, Dakar-Peytavin, Sénégal.<br/>Tour-opérateur fondé le 19 août 1996.<br/>Numéro de Registre du Commerce (RCCM) : SNDKR.1996/B 1449.<br/>NINEA : 20104112A3.<br/>Licence agence de voyages : n° 006523.<br/>Capital social : 20 000 000 FCFA.' },
       { type:'p', html:'<strong>Directeur de la publication :</strong> Salif Badiane, Directeur Général.<br/><strong>Contact :</strong> contact@actours-senegal.com · +221 33 849 52 00.' },
       { type:'h2', text:'2. Hébergement' },
       { type:'p', html:'Le site est hébergé par [Nom de l’hébergeur à compléter], dont le siège social est situé à [adresse de l’hébergeur].' },

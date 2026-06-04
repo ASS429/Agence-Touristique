@@ -67,7 +67,7 @@ const Hero = ({ go }) => {
       <div className="mt-12 md:mt-16 grid grid-cols-3 md:grid-cols-4 rounded-2xl overflow-hidden border border-sand-50/15 bg-ink/30 backdrop-blur-md shadow-2xl shadow-ink/30"
            style={{ textShadow:'none' }}>
         {[
-          { I:Icons.Clock,    k:'30+ ans', v:'depuis 1994' },
+          { I:Icons.Clock,    k:'30 ans',  v:'depuis 1996' },
           { I:Icons.MapPin,   k:'6 pays',  v:'Afrique de l’Ouest' },
           { I:Icons.Star,     k:'4.9 / 5', v:'avis voyageurs' },
           { I:Icons.Whatsapp, k:'< 1h',    v:'réponse WhatsApp' },
@@ -229,7 +229,7 @@ const ProfilACT = ({ go }) => (
       <div>
         <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-4">— L’agence</div>
         <h2 className="font-display text-[36px] sm:text-[44px] md:text-[60px] leading-[1.02]">
-          Africa Connection Tours, <em>depuis 1994</em>.
+          Africa Connection Tours, <em>depuis 1996</em>.
         </h2>
         <p className="mt-6 text-sand-200 max-w-xl text-[15.5px] md:text-[17px] leading-relaxed">
           Tour-opérateur réceptif fondé à Dakar par des entrepreneurs sénégalais issus des grandes maisons du tourisme international. Une équipe permanente formée en Europe et aux États-Unis, qui accueille les voyageurs en six langues, et un réseau de bureaux correspondants dans six pays d’Afrique de l’Ouest.
@@ -245,7 +245,7 @@ const ProfilACT = ({ go }) => (
       </div>
       <div className="grid grid-cols-2 gap-3 md:gap-4">
         {[
-          { k:'30+',  v:'années d’expertise réceptive · depuis 1994' },
+          { k:'30',   v:'années d’expertise réceptive · depuis 1996' },
           { k:'6',    v:'pays d’Afrique de l’Ouest couverts' },
           { k:'6',    v:'langues d’accueil — FR · EN · IT · DE · ES · JA' },
           { k:'1',    v:'standard d’accueil — la téranga, en chaque circuit' },

@@ -8,19 +8,25 @@
 const SITE = {
   brand:           'Africa Connection Tours',
   brandShort:      'ACT',
-  founded:         1994,
-  whatsapp:        '221338495200',         // wa.me digits — à confirmer si un mobile WA dédié existe
+  founded:         1996,                   // confirmé ACT : 19 août 1996 (et non 1994 comme sources tierces)
+  legalForm:       'Société Anonyme (SA)',
+  capital:         '20 000 000 FCFA',
+  rccm:            'SNDKR.1996/B 1449',
+  ninea:           '20104112A3',
+  travelLicense:   'n° 006523',
+  whatsapp:        '221338495200',         // ⚠️ ACT n'a pas encore de mobile WhatsApp dédié — fixe en attendant
   whatsappDisplay: '+221 33 849 52 00',
+  whatsappAvailable: false,                // tant que false, désactive les CTAs WhatsApp si on veut
   phone:           '+221 33 849 52 00',
   phoneAlt:        '+221 33 849 52 83',
   fax:             '+221 33 821 83 26',
-  email:           'contact@actours-senegal.com',  // À VALIDER avec l'agence
+  email:           'act@orange.sn',        // confirmé ACT (et non contact@actours-senegal.com)
   address:         '52, rue Félix Faure, BP 11446, Dakar-Peytavin',
   addressShort:    'Dakar-Plateau',
-  website:         'actours-senegal.com',
+  website:         'premiumservicesenegal.com',
   facebook:        'https://www.facebook.com/AfricaConnectionTours',
   twitter:         'https://twitter.com/actours_senegal',
-  instagram:       '',                     // à fournir par l'agence
+  instagram:       '',                     // pas encore fourni par l'agence
   // Endpoint Formspree (ou équivalent : Web3Forms, Formsubmit, etc.).
   // Tant qu'elle vaut "" le formulaire bascule automatiquement sur mailto:.
   formspree:       'https://formspree.io/f/xgoqnlaz',
@@ -531,7 +537,7 @@ const Footer = ({ go }) => {
           <div className="md:col-span-4">
             <Logo inverted onClick={(e)=>{e.preventDefault(); nav('home');}}/>
             <p className="mt-5 text-sand-200 text-[14px] leading-relaxed max-w-sm">
-              Tour-opérateur réceptif basé à Dakar depuis 1994. Circuits, excursions, séjours sur mesure au Sénégal et en Afrique de l’Ouest — équipe locale, six langues, réseau dans 6 pays.
+              Tour-opérateur réceptif basé à Dakar depuis 1996. Circuits, excursions, séjours sur mesure au Sénégal et en Afrique de l’Ouest — équipe locale, six langues, réseau dans 6 pays.
             </p>
             <div className="mt-6 flex items-center gap-2">
               {[
@@ -584,7 +590,7 @@ const Footer = ({ go }) => {
               </svg>
               <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-sand-300">
                 <span>{SITE.addressShort}</span>
-                <span>Depuis 1994</span>
+                <span>Depuis 1996</span>
               </div>
             </div>
           </div>
@@ -594,9 +600,11 @@ const Footer = ({ go }) => {
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
             <span>© 2026 Africa Connection Tours</span>
             <span className="opacity-50">·</span>
-            <span>Tour-opérateur depuis 1994</span>
+            <span>Tour-opérateur depuis 1996</span>
             <span className="opacity-50">·</span>
-            <span className="opacity-70">Licence & NINEA à confirmer</span>
+            <span>Licence agence de voyages n° 006523</span>
+            <span className="opacity-50">·</span>
+            <span>NINEA · {SITE.ninea}</span>
           </div>
           <div className="flex items-center gap-4">
             <a href="#/mentions" className="hover:text-sand-50">Mentions légales</a>
