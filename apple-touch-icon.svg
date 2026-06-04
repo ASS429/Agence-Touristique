@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
-  <rect width="180" height="180" rx="40" fill="#1A1612"/>
-  <circle cx="90" cy="90" r="74" fill="none" stroke="#FBF7F0" stroke-width="2" opacity="0.15"/>
-  <path d="M22 105 Q 56 76 90 105 T 158 105" stroke="#FBF7F0" stroke-width="7" fill="none" stroke-linecap="round"/>
-  <path d="M22 128 Q 56 100 90 128 T 158 128" stroke="#C8593B" stroke-width="7" fill="none" stroke-linecap="round"/>
-  <circle cx="126" cy="58" r="17" fill="#C8593B"/>
-  <text x="90" y="170" text-anchor="middle" fill="#FBF7F0" font-family="ui-monospace, monospace" font-size="13" font-weight="600" letter-spacing="3">ACT</text>
-</svg>

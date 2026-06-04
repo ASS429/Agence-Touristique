@@ -21,19 +21,9 @@
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
-# Logo officiel + favicons : cache moyen
+# Logo officiel ACT (sert aussi de favicon et d'apple-touch-icon)
 [[headers]]
   for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
-
-[[headers]]
-  for = "/favicon.svg"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
-
-[[headers]]
-  for = "/apple-touch-icon.svg"
   [headers.values]
     Cache-Control = "public, max-age=604800"
 
