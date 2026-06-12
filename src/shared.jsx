@@ -23,7 +23,7 @@ const SITE = {
   email:           'act@orange.sn',        // confirmé ACT (et non contact@actours-senegal.com)
   address:         '52, rue Félix Faure, BP 11446, Dakar-Peytavin',
   addressShort:    'Dakar-Plateau',
-  website:         'premiumservicesenegal.com',
+  website:         'act-senegal.com',
   facebook:        'https://www.facebook.com/AfricaConnectionTours',
   twitter:         'https://twitter.com/actours_senegal',
   instagram:       '',                     // pas encore fourni par l'agence
