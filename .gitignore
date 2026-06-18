@@ -25,3 +25,4 @@ guide-*.md
 multilingue-*.md
 .docx_inspect/
 *.docx
+*.xlsx

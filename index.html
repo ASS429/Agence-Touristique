@@ -9,6 +9,22 @@
 <meta property="og:description" content="Tour-opérateur basé à Dakar depuis 1996. Circuits, excursions, sur-mesure au Sénégal." />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="fr_SN" />
+<meta property="og:locale:alternate" content="en_US" />
+<meta property="og:locale:alternate" content="it_IT" />
+<meta property="og:locale:alternate" content="de_DE" />
+
+<!-- Canonical + hreflang. Tant que le site utilise un hash router et que toutes
+     les langues partagent la même URL racine (basculement côté client via le
+     contexte i18n), les balises hreflang pointent toutes vers la racine et
+     servent surtout à signaler à Google que le contenu existe en 4 langues.
+     À régénérer en URLs distinctes une fois le passage en vraies routes
+     (Vite ou Laravel) validé par l'agence. -->
+<link rel="canonical" href="https://act-senegal.com/" />
+<link rel="alternate" hreflang="en" href="https://act-senegal.com/" />
+<link rel="alternate" hreflang="fr" href="https://act-senegal.com/" />
+<link rel="alternate" hreflang="it" href="https://act-senegal.com/" />
+<link rel="alternate" hreflang="de" href="https://act-senegal.com/" />
+<link rel="alternate" hreflang="x-default" href="https://act-senegal.com/" />
 
 <!-- Favicon = logo officiel ACT (PNG). Le SVG d'origine est supprimé
      parce que Chrome/Firefox préfèrent systématiquement le SVG s'il est

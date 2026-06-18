@@ -203,24 +203,29 @@ if (typeof window !== 'undefined') {
 }
 
 const CookieConsent = () => {
+  const { t } = useI18n();
   const [decision, setDecision] = React.useState(() => getConsent());
   if (decision) return null;
   const accept  = () => { setConsent('accepted'); setDecision('accepted'); };
   const decline = () => { setConsent('declined'); setDecision('declined'); };
+  // Couper le titre autour de "titleEm" pour mettre la partie italique en <em>.
+  const title = t('cookies.title');
+  const em    = t('cookies.titleEm');
+  const [before, after] = title.includes(em) ? title.split(em) : [title, ''];
   return (
     <div className="fixed left-3 right-3 md:left-auto md:right-6 md:max-w-sm z-[55]"
          style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}>
       <div className="bg-ink text-sand-50 rounded-2xl shadow-2xl shadow-ink/30 p-5 md:p-6 border border-sand-100/15">
-        <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-terre-300 mb-2">— Cookies</div>
+        <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-terre-300 mb-2">— {t('cookies.kicker')}</div>
         <div className="font-display text-[19px] md:text-[20px] leading-tight">
-          Quelques cookies pour mieux <em>vous servir</em>.
+          {before}<em>{em}</em>{after}
         </div>
         <p className="mt-2 text-[13px] text-sand-200 leading-relaxed">
-          Mesure d'audience anonymisée uniquement. Aucun cookie publicitaire. <a href="#/privacy" className="underline underline-offset-2 hover:text-terre-300">En savoir plus</a>.
+          {t('cookies.body')} <a href="#/privacy" className="underline underline-offset-2 hover:text-terre-300">{t('cookies.learnMore')}</a>.
         </p>
         <div className="mt-4 flex items-center gap-2">
-          <button onClick={decline} className="px-4 h-9 rounded-full border border-sand-100/30 text-sand-100 text-[12.5px] hover:bg-sand-50/10 transition-colors">Refuser</button>
-          <button onClick={accept}  className="flex-1 px-4 h-9 rounded-full bg-terre text-sand-50 text-[12.5px] font-medium hover:bg-terre-600 transition-colors">Accepter</button>
+          <button onClick={decline} className="px-4 h-9 rounded-full border border-sand-100/30 text-sand-100 text-[12.5px] hover:bg-sand-50/10 transition-colors">{t('cookies.decline')}</button>
+          <button onClick={accept}  className="flex-1 px-4 h-9 rounded-full bg-terre text-sand-50 text-[12.5px] font-medium hover:bg-terre-600 transition-colors">{t('cookies.accept')}</button>
         </div>
       </div>
     </div>
@@ -338,25 +343,27 @@ const Header = ({ route, go, topOffset = 0 }) => {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <div className={`hidden md:flex items-center gap-1 rounded-full border ${onLight ? 'border-ink/15 text-ink-700' : 'border-sand-100/30 text-sand-100'} px-1 py-1`}>
-              {['FR','EN'].map(l => (
+            <div className={`hidden md:flex items-center gap-0.5 rounded-full border ${onLight ? 'border-ink/15 text-ink-700' : 'border-sand-100/30 text-sand-100'} px-1 py-1`}
+                 role="group" aria-label={t('common.languageSwitcher')}>
+              {LANGS.map(l => (
                 <button key={l} onClick={()=>setLang(l)}
-                  className={`px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wider transition ${lang===l ? (onLight ? 'bg-ink text-sand-50' : 'bg-sand-50 text-ink') : ''}`}>{l}</button>
+                  aria-pressed={lang===l}
+                  className={`px-2 py-1 rounded-full text-[11px] font-medium tracking-wider transition ${lang===l ? (onLight ? 'bg-ink text-sand-50' : 'bg-sand-50 text-ink') : ''}`}>{l}</button>
               ))}
               <span className={`w-px h-4 mx-0.5 ${onLight?'bg-ink/15':'bg-sand-100/30'}`} aria-hidden="true"/>
               <select value={ccy} onChange={(e)=>setCcy(e.target.value)}
-                aria-label="Devise d'affichage"
+                aria-label={t('common.currencySwitcher')}
                 className={`bg-transparent text-[11px] font-medium tracking-wider px-1 py-1 outline-none cursor-pointer ${onLight?'text-ink-700':'text-sand-100'}`}>
                 <option value="XOF">XOF</option><option value="EUR">EUR</option><option value="USD">USD</option>
               </select>
             </div>
-            <Btn as="a" href={buildWaURL('Bonjour ACT ! J’aimerais des informations sur vos circuits.')}
+            <Btn as="a" href={buildWaURL(t('wa.greeting'))}
                  target="_blank" rel="noreferrer"
                  variant="wa" size="sm" className="hidden sm:inline-flex"
                  icon={<Icons.Whatsapp size={16}/>}>
               {t('cta.whatsapp')}
             </Btn>
-            <button onClick={()=>setOpen(true)} aria-label="Menu"
+            <button onClick={()=>setOpen(true)} aria-label={t('common.menu')}
               className={`lg:hidden inline-flex items-center justify-center h-10 w-10 rounded-full ${onLight ? 'text-ink hover:bg-ink/5' : 'text-sand-50 hover:bg-white/10'}`}>
               <Icons.Menu size={22}/>
             </button>
@@ -373,7 +380,7 @@ const Header = ({ route, go, topOffset = 0 }) => {
         <div className={`absolute right-0 top-0 h-full w-[88%] max-w-[380px] bg-sand-50 transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex items-center justify-between p-5 border-b border-ink/5">
             <Logo onClick={(e)=>{e.preventDefault(); setOpen(false); go('home');}} />
-            <button onClick={()=>setOpen(false)} aria-label="Fermer" className="h-10 w-10 inline-flex items-center justify-center rounded-full hover:bg-ink/5">
+            <button onClick={()=>setOpen(false)} aria-label={t('common.close')} className="h-10 w-10 inline-flex items-center justify-center rounded-full hover:bg-ink/5">
               <Icons.Close size={22}/>
             </button>
           </div>
@@ -394,22 +401,24 @@ const Header = ({ route, go, topOffset = 0 }) => {
             </a>
           </nav>
           <div className="p-5 mt-2 space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="flex rounded-full border border-ink/15 p-1">
-                {['FR','EN'].map(l => (
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex rounded-full border border-ink/15 p-1"
+                   role="group" aria-label={t('common.languageSwitcher')}>
+                {LANGS.map(l => (
                   <button key={l} onClick={()=>setLang(l)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${lang===l ? 'bg-ink text-sand-50' : 'text-ink-700'}`}>{l}</button>
+                    aria-pressed={lang===l}
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium ${lang===l ? 'bg-ink text-sand-50' : 'text-ink-700'}`}>{l}</button>
                 ))}
               </div>
               <select value={ccy} onChange={(e)=>setCcy(e.target.value)}
-                aria-label="Devise d'affichage"
+                aria-label={t('common.currencySwitcher')}
                 className="rounded-full border border-ink/15 text-xs font-medium px-3 py-2 outline-none">
                 <option value="XOF">XOF · FCFA</option>
                 <option value="EUR">EUR · €</option>
                 <option value="USD">USD · $</option>
               </select>
             </div>
-            <Btn as="a" href={buildWaURL('Bonjour ACT !')} target="_blank" rel="noreferrer"
+            <Btn as="a" href={buildWaURL(t('wa.greetingShort'))} target="_blank" rel="noreferrer"
                  variant="wa" size="md" className="w-full" icon={<Icons.Whatsapp size={16}/>}>
               {t('cta.book')}
             </Btn>
@@ -427,11 +436,12 @@ const Header = ({ route, go, topOffset = 0 }) => {
 // WhatsApp floating button
 // ============================================================================
 const WhatsAppFloat = ({ message, bottomOffset = 0 }) => {
+  const { t } = useI18n();
   const [hovered, setHovered] = React.useState(false);
   return (
-    <a href={buildWaURL(message || 'Bonjour ACT ! J’aimerais des informations.')}
+    <a href={buildWaURL(message || t('wa.greeting'))}
        target="_blank" rel="noreferrer"
-       aria-label="Discuter avec nous sur WhatsApp"
+       aria-label={t('cta.chatOnWhatsapp')}
        onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}
        className="fixed right-5 md:right-7 z-30 group"
        style={{ bottom: `calc(${bottomOffset}px + 1.25rem + env(safe-area-inset-bottom, 0px))` }}>
@@ -439,7 +449,7 @@ const WhatsAppFloat = ({ message, bottomOffset = 0 }) => {
       <div className="relative flex items-center gap-2.5 bg-[#1FA855] text-white pl-3.5 pr-4 h-12 md:h-14 rounded-full shadow-lg shadow-[#1FA855]/30 transition-all hover:scale-[1.03]">
         <Icons.Whatsapp size={22} aria-hidden="true"/>
         <span className={`hidden md:block text-sm font-medium transition-all ${hovered ? 'max-w-[200px] opacity-100' : 'max-w-0 opacity-0 overflow-hidden'}`}>
-          Discuter avec nous
+          {t('cta.chatWithUs')}
         </span>
       </div>
     </a>
@@ -474,34 +484,37 @@ const Section = ({ id, label, title, kicker, intro, children, className = '', bg
 // ============================================================================
 // CircuitCard — reused on home, catalog, related-tours, blog sidebar
 // ============================================================================
-const CircuitCard = ({ c, onOpen, size = 'md' }) => (
-  <article className="group flex flex-col" data-comment-anchor={`circuit-card-${c.id}`}>
-    <button onClick={()=>onOpen(c.id)} className="block w-full text-left">
-      <Photo tone={c.tone} mood={c.mood} label={`${c.days}j`} ratio={size==='sm' ? 'aspect-[5/4]' : 'aspect-[4/5]'} className="mb-4 group-hover:scale-[1.01] transition-transform" rounded="rounded-2xl" src={c.img} alt={c.title}/>
-    </button>
-    <div className="flex items-center gap-2 mb-2">
-      <StarRow value={c.rating} size={12}/>
-      <span className="text-[12px] text-ink-500">{c.rating} · {c.reviews} avis</span>
-    </div>
-    <button onClick={()=>onOpen(c.id)} className="text-left">
-      <h3 className="font-display text-[22px] md:text-[24px] leading-tight group-hover:text-terre transition-colors">{c.title}</h3>
-      <div className="text-[13px] text-ink-600 mt-1">{c.subtitle}</div>
-    </button>
-    <div className="mt-4 flex items-end justify-between">
-      <div>
-        <div className="text-[10.5px] text-ink-500 font-mono uppercase tracking-wider">
-          {c.priceXOF ? 'à partir de' : 'tarif'}
-        </div>
-        {c.priceXOF
-          ? <Price xof={c.priceXOF} className="font-display text-[20px] md:text-[22px] leading-none"/>
-          : <span className="font-display text-[20px] md:text-[22px] leading-none">Sur devis</span>}
-      </div>
-      <button onClick={()=>onOpen(c.id)} className="h-10 px-4 rounded-full bg-ink text-sand-50 text-[13px] inline-flex items-center gap-1.5 hover:bg-terre transition-colors">
-        Détails <Icons.ArrowRight size={14}/>
+const CircuitCard = ({ c, onOpen, size = 'md' }) => {
+  const { t } = useI18n();
+  return (
+    <article className="group flex flex-col" data-comment-anchor={`circuit-card-${c.id}`}>
+      <button onClick={()=>onOpen(c.id)} className="block w-full text-left">
+        <Photo tone={c.tone} mood={c.mood} label={`${c.days}j`} ratio={size==='sm' ? 'aspect-[5/4]' : 'aspect-[4/5]'} className="mb-4 group-hover:scale-[1.01] transition-transform" rounded="rounded-2xl" src={c.img} alt={c.title}/>
       </button>
-    </div>
-  </article>
-);
+      <div className="flex items-center gap-2 mb-2">
+        <StarRow value={c.rating} size={12}/>
+        <span className="text-[12px] text-ink-500">{c.rating} · {c.reviews} {t('common.reviews')}</span>
+      </div>
+      <button onClick={()=>onOpen(c.id)} className="text-left">
+        <h3 className="font-display text-[22px] md:text-[24px] leading-tight group-hover:text-terre transition-colors">{c.title}</h3>
+        <div className="text-[13px] text-ink-600 mt-1">{c.subtitle}</div>
+      </button>
+      <div className="mt-4 flex items-end justify-between">
+        <div>
+          <div className="text-[10.5px] text-ink-500 font-mono uppercase tracking-wider">
+            {c.priceXOF ? t('common.from') : t('common.priceLabel')}
+          </div>
+          {c.priceXOF
+            ? <Price xof={c.priceXOF} className="font-display text-[20px] md:text-[22px] leading-none"/>
+            : <span className="font-display text-[20px] md:text-[22px] leading-none">{t('common.onQuote')}</span>}
+        </div>
+        <button onClick={()=>onOpen(c.id)} className="h-10 px-4 rounded-full bg-ink text-sand-50 text-[13px] inline-flex items-center gap-1.5 hover:bg-terre transition-colors">
+          {t('cta.details')} <Icons.ArrowRight size={14}/>
+        </button>
+      </div>
+    </article>
+  );
+};
 
 // ============================================================================
 // Footer
@@ -520,16 +533,16 @@ const Footer = ({ go }) => {
         {/* CTA tailor-made */}
         <div className="mb-20 rounded-3xl bg-gradient-to-br from-terre to-terre-700 p-8 md:p-14 grid md:grid-cols-[1.4fr,1fr] gap-8 items-end">
           <div>
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-100/80 mb-3">— Sur mesure</div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-100/80 mb-3">— {t('footer.bespokeKicker')}</div>
             <h3 className="font-display text-[36px] sm:text-[44px] md:text-[56px] leading-[1.02] text-sand-50">
-              Pas trouvé ce que vous cherchez&nbsp;? <em className="text-sand-100">On vous fait un voyage sur mesure.</em>
+              {t('footer.bespokeTitle')} <em className="text-sand-100">{t('footer.bespokeTitleEm')}</em>
             </h3>
           </div>
           <div className="flex flex-col gap-3 md:items-end">
             <Btn onClick={()=>nav('custom')} variant="primary" size="lg" className="bg-sand-50 text-ink hover:bg-sand-100" icon={<Icons.ArrowRight size={18}/>}>
-              Décrire mon voyage
+              {t('cta.describeTrip')}
             </Btn>
-            <span className="text-sand-100/80 text-sm">Devis en 24h · sans engagement</span>
+            <span className="text-sand-100/80 text-sm">{t('footer.bespokeNote')}</span>
           </div>
         </div>
 
@@ -537,7 +550,7 @@ const Footer = ({ go }) => {
           <div className="md:col-span-4">
             <Logo inverted onClick={(e)=>{e.preventDefault(); nav('home');}}/>
             <p className="mt-5 text-sand-200 text-[14px] leading-relaxed max-w-sm">
-              Tour-opérateur réceptif basé à Dakar depuis 1996. Circuits, excursions, séjours sur mesure au Sénégal et en Afrique de l’Ouest — équipe locale, six langues, réseau dans 6 pays.
+              {t('footer.tagline')}
             </p>
             <div className="mt-6 flex items-center gap-2">
               {[
@@ -553,33 +566,33 @@ const Footer = ({ go }) => {
           </div>
 
           <div className="md:col-span-2">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-300 mb-4">Explorer</div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-300 mb-4">{t('footer.exploreLabel')}</div>
             <ul className="space-y-2.5 text-[14px] text-sand-100">
-              {link('circuits','Tous les circuits')}
-              {link('custom','Voyage sur mesure')}
-              {link('blog','Blog & conseils')}
-              {link('faq','FAQ')}
+              {link('circuits', t('footer.allTours'))}
+              {link('custom',   t('footer.bespokeTrip'))}
+              {link('blog',     t('footer.blogAdvice'))}
+              {link('faq',      t('nav.faq'))}
             </ul>
           </div>
 
           <div className="md:col-span-2">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-300 mb-4">Agence</div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-300 mb-4">{t('footer.agencyLabel')}</div>
             <ul className="space-y-2.5 text-[14px] text-sand-100">
-              {link('about','À propos')}
-              {link('about','Nos guides')}
-              {link('contact','Contact')}
-              <li><a href="#" className="hover:text-sand-50">Engagement local</a></li>
+              {link('about',   t('nav.about'))}
+              {link('about',   t('footer.guides'))}
+              {link('contact', t('nav.contact'))}
+              <li><a href="#" className="hover:text-sand-50">{t('footer.localEngagement')}</a></li>
             </ul>
           </div>
 
           <div className="md:col-span-4">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-300 mb-4">Contact</div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-300 mb-4">{t('footer.contactLabel')}</div>
             <ul className="space-y-3 text-[14px] text-sand-100">
               <li className="flex items-start gap-2.5"><Icons.MapPin size={16} className="mt-0.5 text-terre-300 shrink-0"/> {SITE.address} — Sénégal</li>
               <li className="flex items-center gap-2.5"><Icons.Phone size={16} className="text-terre-300"/> {SITE.phone}</li>
               <li className="flex items-center gap-2.5"><Icons.Whatsapp size={16} className="text-terre-300"/> {SITE.whatsappDisplay}</li>
               <li className="flex items-center gap-2.5"><Icons.Mail size={16} className="text-terre-300"/> {SITE.email}</li>
-              <li className="flex items-start gap-2.5"><Icons.Clock size={16} className="mt-0.5 text-terre-300 shrink-0"/> Lun–Ven · 9h–18h (GMT)</li>
+              <li className="flex items-start gap-2.5"><Icons.Clock size={16} className="mt-0.5 text-terre-300 shrink-0"/> {t('footer.openingHours')}</li>
             </ul>
             <div className="mt-5 rounded-2xl overflow-hidden h-32 bg-ink-800 border border-sand-100/10 relative">
               <div className="absolute inset-0 opacity-40" style={{background:'radial-gradient(80% 80% at 30% 50%, #1F5E5A 0%, transparent 70%)'}}/>
@@ -590,7 +603,7 @@ const Footer = ({ go }) => {
               </svg>
               <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-sand-300">
                 <span>{SITE.addressShort}</span>
-                <span>Depuis 1996</span>
+                <span>{t('footer.sinceTagline').replace(/^Tour[- ]operator |^Tour-opérateur |^Tour operator |^Reiseveranstalter /,'')}</span>
               </div>
             </div>
           </div>
@@ -598,18 +611,18 @@ const Footer = ({ go }) => {
 
         <div className="mt-14 pt-6 border-t border-sand-100/10 flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-[12px] text-sand-300">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span>© 2026 Africa Connection Tours</span>
+            <span>{t('footer.copyright')}</span>
             <span className="opacity-50">·</span>
-            <span>Tour-opérateur depuis 1996</span>
+            <span>{t('footer.sinceTagline')}</span>
             <span className="opacity-50">·</span>
-            <span>Licence agence de voyages n° 006523</span>
+            <span>{t('footer.licenseLabel')}</span>
             <span className="opacity-50">·</span>
             <span>NINEA · {SITE.ninea}</span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="#/mentions" className="hover:text-sand-50">Mentions légales</a>
-            <a href="#/cgv" className="hover:text-sand-50">CGV</a>
-            <a href="#/privacy" className="hover:text-sand-50">Confidentialité</a>
+            <a href="#/mentions" className="hover:text-sand-50">{t('footer.legal')}</a>
+            <a href="#/cgv"      className="hover:text-sand-50">{t('footer.cgv')}</a>
+            <a href="#/privacy"  className="hover:text-sand-50">{t('footer.privacy')}</a>
           </div>
         </div>
       </div>
