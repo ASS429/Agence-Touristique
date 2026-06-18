@@ -4,6 +4,7 @@
 // CONTACT
 // ============================================================================
 const Contact = ({ go }) => {
+  const { t, richT } = useI18n();
   const [form, setForm] = React.useState({ name:'', email:'', phone:'', subject:'devis', message:'' });
   const [sent, setSent] = React.useState(false);
   const [sending, setSending] = React.useState(false);
@@ -52,9 +53,9 @@ const Contact = ({ go }) => {
 
   return (
     <main className="bg-sand-50">
-      <PageHero kicker="Contact" tone="dusk" mood="city" bgImg={IMG('Dakar', 8)} compact
-        title={<>Parlons de <em>votre voyage</em>.</>}
-        intro="Trois canaux, une équipe. WhatsApp répond toujours en moins d’une heure pendant nos horaires d’ouverture."/>
+      <PageHero kicker={t('page.contact.kicker')} tone="dusk" mood="city" bgImg={IMG('Dakar', 8)} compact
+        title={richT(t('page.contact.title'))}
+        intro={t('page.contact.intro')}/>
 
       {/* Three contact cards */}
       <section className="-mt-12 md:-mt-16 relative z-10">
@@ -209,11 +210,12 @@ const ContactField = ({ label, value, onChange, type='text', placeholder, requir
 // ABOUT
 // ============================================================================
 const About = ({ go }) => {
+  const { t, richT } = useI18n();
   return (
     <main className="bg-sand-50">
-      <PageHero kicker="À propos" tone="terre" mood="portrait" bgImg={IMG('Saint-Louis', 6)}
-        title={<>Tour-opérateur de Dakar, <em>depuis 1996</em>.</>}
-        intro="Africa Connection Tours organise les voyages au Sénégal et en Afrique de l’Ouest depuis plus de trente ans. L’hospitalité — la téranga, en wolof — reste notre standard de service."/>
+      <PageHero kicker={t('page.about.kicker')} tone="terre" mood="portrait" bgImg={IMG('Saint-Louis', 6)}
+        title={richT(t('page.about.title'))}
+        intro={t('page.about.intro')}/>
 
       {/* Timeline — depuis 1996 */}
       <section className="py-16 md:py-24 bg-sand-100/40 border-y border-ink/5">
@@ -410,6 +412,7 @@ const FaqAccordion = ({ items }) => {
 };
 
 const Faq = ({ go }) => {
+  const { t, richT } = useI18n();
   const [query, setQuery] = React.useState('');
   const filtered = FAQ
     .map(g => ({ ...g, items: g.items.filter(it => {
@@ -423,12 +426,12 @@ const Faq = ({ go }) => {
 
   return (
     <main className="bg-sand-50">
-      <PageHero kicker="FAQ" tone="atlant" mood="horizon" bgImg={IMG('Saint-Louis', 7)} compact
-        title={<>Les questions <em>fréquentes</em>.</>}
-        intro="Tout ce qu’on nous demande le plus souvent, classé par thème. Une réponse manque ? On vous répond sur WhatsApp en moins d’une heure.">
+      <PageHero kicker={t('page.faq.kicker')} tone="atlant" mood="horizon" bgImg={IMG('Saint-Louis', 7)} compact
+        title={richT(t('page.faq.title'))}
+        intro={t('page.faq.intro')}>
         <div className="relative max-w-md">
           <Icons.Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-500"/>
-          <input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Chercher une question…"
+          <input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder={t('page.faq.search')}
             className="w-full h-12 rounded-full bg-sand-50 border border-sand-50/30 text-ink pl-11 pr-4 outline-none text-[14px]"/>
         </div>
       </PageHero>

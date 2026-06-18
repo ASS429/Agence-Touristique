@@ -2,6 +2,7 @@
 
 // =============== List page ==================================================
 const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
+  const { t, richT } = useI18n();
   const [cat, setCat]     = React.useState('all');
   const [query, setQuery] = React.useState('');
   const [page, setPage]   = React.useState(1);
@@ -25,13 +26,13 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
 
   return (
     <main className="bg-sand-50">
-      <PageHero kicker="Le blog ACT" tone="terre" mood="city" bgImg={IMG('Saint-Louis', 8)} compact
-        title={<>Le guide du voyage <em>au Sénégal</em>.</>}
-        intro="Récits, conseils pratiques, calendriers honnêtes — par des guides qui vivent ici toute l’année.">
+      <PageHero kicker={t('page.blog.kicker')} tone="terre" mood="city" bgImg={IMG('Saint-Louis', 8)} compact
+        title={richT(t('page.blog.title'))}
+        intro={t('page.blog.intro')}>
         <div className="relative max-w-md">
           <Icons.Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-500"/>
           <input value={query} onChange={(e)=>setQuery(e.target.value)}
-            placeholder="Rechercher un article…"
+            placeholder={t('page.blog.search')}
             className="w-full h-12 rounded-full bg-sand-50 border border-sand-50/30 text-ink pl-11 pr-4 outline-none text-[14px]"/>
         </div>
       </PageHero>

@@ -149,6 +149,7 @@ const FiltersBody = ({ f, set, count }) => {
 
 // --- Catalog page -----------------------------------------------------------
 const Catalog = ({ go, onOpenTour, initialFilter }) => {
+  const { t, richT } = useI18n();
   const [f, setF] = React.useState(() => {
     const base = defaultFilters();
     if (initialFilter === 'diaspora') base.types = ['diaspora'];
@@ -168,9 +169,9 @@ const Catalog = ({ go, onOpenTour, initialFilter }) => {
 
   return (
     <main className="bg-sand-50">
-      <PageHero kicker="Catalogue" tone="atlant" mood="water" bgImg={IMG('Delta du Saloum', 1)}
-        title={<>Tous nos <em>circuits & produits</em>.</>}
-        intro="Du week-end à Dakar au grand tour du Sénégal, du programme Retour aux sources aux packs événements — toute l'offre Africa Connection Tours, en un seul endroit."/>
+      <PageHero kicker={t('page.catalog.kicker')} tone="atlant" mood="water" bgImg={IMG('Delta du Saloum', 1)}
+        title={richT(t('page.catalog.title'))}
+        intro={t('page.catalog.intro')}/>
 
       {/* Toolbar — sticky on desktop, also collapses neatly on mobile */}
       <div className="sticky top-16 md:top-[72px] z-20 bg-sand-50/95 backdrop-blur-md border-b border-ink/10">

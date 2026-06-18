@@ -1,6 +1,7 @@
 // Home page — uses shared CircuitCard, Price, and go() for in-app navigation.
 
 const Hero = ({ go }) => {
+  const { t, richT } = useI18n();
   // Skip the hero video on slow / data-saver connections. The poster image
   // (Dakar/01.jpg) stays as fallback — critical for the 3G/4G context.
   const [showVideo, setShowVideo] = React.useState(false);
@@ -10,6 +11,12 @@ const Hero = ({ go }) => {
     const slow = conn.saveData || ['slow-2g','2g','3g'].includes(conn.effectiveType);
     setShowVideo(!slow);
   }, []);
+  const stats = [
+    { I:Icons.Clock,    k:t('home.hero.stat1Key'), v:t('home.hero.stat1Val') },
+    { I:Icons.MapPin,   k:t('home.hero.stat2Key'), v:t('home.hero.stat2Val') },
+    { I:Icons.Star,     k:t('home.hero.stat3Key'), v:t('home.hero.stat3Val') },
+    { I:Icons.Whatsapp, k:t('home.hero.stat4Key'), v:t('home.hero.stat4Val') },
+  ];
   return (
   <section className="relative min-h-[100svh] flex flex-col" data-screen-label="01 Hero">
     <div className="absolute inset-0 bg-ink">
@@ -19,7 +26,7 @@ const Hero = ({ go }) => {
         // `preload="auto"` raccourcit ce délai.
         <video
           autoPlay muted loop playsInline preload="auto"
-          aria-label="Vidéo d'ambiance silencieuse — paysages du Sénégal"
+          aria-label={t('home.hero.videoAria')}
           className="absolute inset-0 h-full w-full object-cover">
           <source src="vidéo/senegal.mp4" type="video/mp4"/>
           {/* Track vide : la vidéo n'a pas d'audio, donc pas de vraies
@@ -41,39 +48,33 @@ const Hero = ({ go }) => {
       <div className="max-w-3xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 md:py-1.5 rounded-full bg-sand-50/15 backdrop-blur-md border border-sand-50/20 text-sand-50 text-[10px] md:text-[11px] uppercase tracking-[0.22em] font-mono mb-4 md:mb-6"
              style={{ textShadow:'none' }}>
-          <span className="h-1.5 w-1.5 rounded-full bg-terre-300 animate-pulse"/> Saison 2026 ouverte
+          <span className="h-1.5 w-1.5 rounded-full bg-terre-300 animate-pulse"/> {t('home.hero.badge')}
         </div>
         <h1 className="font-display text-[36px] sm:text-[56px] md:text-[88px] lg:text-[104px] leading-[1] md:leading-[0.95] text-sand-50"
             style={{ textShadow:'0 3px 24px rgba(0,0,0,0.55)' }}>
-          Le Sénégal, <em className="text-terre-300">à la cadence</em>{' '}
-          <span className="md:block">de ceux qui y vivent.</span>
+          {richT(t('home.hero.title'), { emClassName: 'text-terre-300' })}
         </h1>
         <p className="mt-4 md:mt-7 max-w-xl text-sand-50 text-[14.5px] md:text-[18px] leading-relaxed"
            style={{ textShadow:'0 2px 14px rgba(0,0,0,0.6)' }}>
-          Circuits et escapades imaginés par des guides dakarois — de Gorée au pays Bassari, à hauteur d’humain<span className="hidden md:inline">. Sans cliché, sans pack froid, sans intermédiaire</span>.
+          {t('home.hero.intro')}
         </p>
         <div className="mt-6 md:mt-9 flex flex-wrap items-center gap-3" style={{ textShadow:'none' }}>
           <Btn onClick={()=>go('circuits')} variant="terre" size="lg" icon={<Icons.ArrowRight size={18}/>}>
-            Voir nos circuits
+            {t('home.hero.ctaSeeTours')}
           </Btn>
           {/* Bouton WhatsApp masqué sur mobile : le bouton flottant en bas
               à droite remplit déjà ce rôle, c'est de la redondance. */}
-          <Btn as="a" href={buildWaURL('Bonjour ACT ! Je voudrais organiser un voyage.')} target="_blank" rel="noreferrer"
+          <Btn as="a" href={buildWaURL(t('wa.planTrip'))} target="_blank" rel="noreferrer"
                variant="wa" size="lg" icon={<Icons.Whatsapp size={18}/>}
                className="hidden sm:inline-flex">
-            Réserver sur WhatsApp
+            {t('cta.book')}
           </Btn>
         </div>
       </div>
 
       <div className="mt-12 md:mt-16 grid grid-cols-3 md:grid-cols-4 rounded-2xl overflow-hidden border border-sand-50/15 bg-ink/30 backdrop-blur-md shadow-2xl shadow-ink/30"
            style={{ textShadow:'none' }}>
-        {[
-          { I:Icons.Clock,    k:'30 ans',  v:'depuis 1996' },
-          { I:Icons.MapPin,   k:'6 pays',  v:'Afrique de l’Ouest' },
-          { I:Icons.Star,     k:'4.9 / 5', v:'avis voyageurs' },
-          { I:Icons.Whatsapp, k:'< 1h',    v:'réponse WhatsApp' },
-        ].map((s,i)=>(
+        {stats.map((s,i)=>(
           <div key={i}
                className={`group flex flex-col md:flex-row items-start gap-1.5 md:gap-3 px-3 md:px-6 py-4 md:py-6 transition-colors hover:bg-sand-50/5
                            ${i!==0 ? 'border-l border-sand-50/15' : ''}
@@ -93,7 +94,7 @@ const Hero = ({ go }) => {
     </div>
 
     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-sand-50/85 pointer-events-none select-none">
-      <span className="font-mono text-[10px] uppercase tracking-[0.32em]" style={{ textShadow:'0 1px 6px rgba(0,0,0,0.6)' }}>défiler</span>
+      <span className="font-mono text-[10px] uppercase tracking-[0.32em]" style={{ textShadow:'0 1px 6px rgba(0,0,0,0.6)' }}>{t('home.hero.scroll')}</span>
       <Icons.ChevronDown size={20} className="animate-bounce" style={{ filter:'drop-shadow(0 1px 4px rgba(0,0,0,0.5))' }}/>
     </div>
   </section>

@@ -126,6 +126,39 @@ const DICT = {
     // WhatsApp messages
     'wa.greeting':"Hello ACT! I'd love some information about your tours.",
     'wa.greetingShort':'Hello ACT!',
+    'wa.planTrip':"Hello ACT! I'd like to plan a trip.",
+    // Home Hero
+    'home.hero.badge':'2026 season open',
+    'home.hero.title':'Senegal, {em}at the pace{/em} of those who live here.',
+    'home.hero.intro':'Tours and getaways crafted by Dakar-based guides — from Gorée Island to Bassari country, at human scale. No clichés, no cookie-cutter packages, no middlemen.',
+    'home.hero.scroll':'scroll',
+    'home.hero.videoAria':'Silent ambient video — landscapes of Senegal',
+    'home.hero.ctaSeeTours':'See our tours',
+    'home.hero.stat1Key':'30 years',  'home.hero.stat1Val':'since 1996',
+    'home.hero.stat2Key':'6 countries','home.hero.stat2Val':'West Africa',
+    'home.hero.stat3Key':'4.9 / 5',   'home.hero.stat3Val':'traveller reviews',
+    'home.hero.stat4Key':'< 1h',      'home.hero.stat4Val':'WhatsApp reply',
+    // Page heroes (catalog, blog, custom, contact, about, faq)
+    'page.catalog.kicker':'Catalogue',
+    'page.catalog.title':'All our {em}tours & products{/em}.',
+    'page.catalog.intro':"From a weekend in Dakar to the grand tour of Senegal, from the Return to Roots program to event packages — the entire Africa Connection Tours offer, in one place.",
+    'page.blog.kicker':'The ACT journal',
+    'page.blog.title':'The travel guide {em}to Senegal{/em}.',
+    'page.blog.intro':'Stories, practical advice, honest calendars — by guides who live here all year round.',
+    'page.blog.search':'Search articles…',
+    'page.custom.kicker':'Bespoke',
+    'page.custom.title':"Let's compose your {em}ideal trip{/em}.",
+    'page.custom.intro':"A dozen questions, 3 minutes. We come back with an itinerary that fits you.",
+    'page.contact.kicker':'Contact',
+    'page.contact.title':"Let's talk about {em}your trip{/em}.",
+    'page.contact.intro':'Three channels, one team. WhatsApp always replies in under an hour during our opening hours.',
+    'page.about.kicker':'About',
+    'page.about.title':'Dakar-based tour operator, {em}since 1996{/em}.',
+    'page.about.intro':'Africa Connection Tours has been organising trips in Senegal and West Africa for more than thirty years. Hospitality — téranga in Wolof — remains our standard of service.',
+    'page.faq.kicker':'FAQ',
+    'page.faq.title':'Frequently {em}asked questions{/em}.',
+    'page.faq.intro':"Everything we get asked most often, sorted by theme. A question is missing? We'll reply on WhatsApp in under an hour.",
+    'page.faq.search':'Search a question…',
   },
   FR: {
     // Navigation
@@ -204,6 +237,39 @@ const DICT = {
     // WhatsApp messages
     'wa.greeting':'Bonjour ACT ! J’aimerais des informations sur vos circuits.',
     'wa.greetingShort':'Bonjour ACT !',
+    'wa.planTrip':'Bonjour ACT ! Je voudrais organiser un voyage.',
+    // Home Hero
+    'home.hero.badge':'Saison 2026 ouverte',
+    'home.hero.title':'Le Sénégal, {em}à la cadence{/em} de ceux qui y vivent.',
+    'home.hero.intro':"Circuits et escapades imaginés par des guides dakarois — de Gorée au pays Bassari, à hauteur d'humain. Sans cliché, sans pack froid, sans intermédiaire.",
+    'home.hero.scroll':'défiler',
+    'home.hero.videoAria':"Vidéo d'ambiance silencieuse — paysages du Sénégal",
+    'home.hero.ctaSeeTours':'Voir nos circuits',
+    'home.hero.stat1Key':'30 ans',   'home.hero.stat1Val':'depuis 1996',
+    'home.hero.stat2Key':'6 pays',   'home.hero.stat2Val':"Afrique de l'Ouest",
+    'home.hero.stat3Key':'4.9 / 5',  'home.hero.stat3Val':'avis voyageurs',
+    'home.hero.stat4Key':'< 1h',     'home.hero.stat4Val':'réponse WhatsApp',
+    // Page heroes
+    'page.catalog.kicker':'Catalogue',
+    'page.catalog.title':'Tous nos {em}circuits & produits{/em}.',
+    'page.catalog.intro':"Du week-end à Dakar au grand tour du Sénégal, du programme Retour aux sources aux packs événements — toute l'offre Africa Connection Tours, en un seul endroit.",
+    'page.blog.kicker':'Le blog ACT',
+    'page.blog.title':'Le guide du voyage {em}au Sénégal{/em}.',
+    'page.blog.intro':"Récits, conseils pratiques, calendriers honnêtes — par des guides qui vivent ici toute l'année.",
+    'page.blog.search':'Chercher un article…',
+    'page.custom.kicker':'Sur mesure',
+    'page.custom.title':'Composons votre voyage {em}idéal{/em}.',
+    'page.custom.intro':'Une dizaine de questions, 3 minutes. À la fin, on revient avec un itinéraire qui vous ressemble.',
+    'page.contact.kicker':'Contact',
+    'page.contact.title':'Parlons de {em}votre voyage{/em}.',
+    'page.contact.intro':"Trois canaux, une équipe. WhatsApp répond toujours en moins d’une heure pendant nos horaires d’ouverture.",
+    'page.about.kicker':'À propos',
+    'page.about.title':'Tour-opérateur de Dakar, {em}depuis 1996{/em}.',
+    'page.about.intro':"Africa Connection Tours organise les voyages au Sénégal et en Afrique de l’Ouest depuis plus de trente ans. L’hospitalité — la téranga, en wolof — reste notre standard de service.",
+    'page.faq.kicker':'FAQ',
+    'page.faq.title':'Les questions {em}fréquentes{/em}.',
+    'page.faq.intro':"Tout ce qu’on nous demande le plus souvent, classé par thème. Une réponse manque ? On vous répond sur WhatsApp en moins d’une heure.",
+    'page.faq.search':'Chercher une question…',
   },
   IT: {
     // Navigation
@@ -282,6 +348,39 @@ const DICT = {
     // WhatsApp messages
     'wa.greeting':'Buongiorno ACT! Vorrei alcune informazioni sui vostri tour.',
     'wa.greetingShort':'Buongiorno ACT!',
+    'wa.planTrip':'Buongiorno ACT! Vorrei organizzare un viaggio.',
+    // Home Hero
+    'home.hero.badge':'Stagione 2026 aperta',
+    'home.hero.title':"Il Senegal, {em}al ritmo{/em} di chi ci vive.",
+    'home.hero.intro':"Tour e fughe ideati da guide di Dakar — dall'Isola di Gorée al paese Bassari, a misura d'uomo. Senza cliché, senza pacchetti freddi, senza intermediari.",
+    'home.hero.scroll':'scorri',
+    'home.hero.videoAria':'Video ambient silenzioso — paesaggi del Senegal',
+    'home.hero.ctaSeeTours':'Vedi i nostri tour',
+    'home.hero.stat1Key':'30 anni',   'home.hero.stat1Val':'dal 1996',
+    'home.hero.stat2Key':'6 paesi',   'home.hero.stat2Val':'Africa occidentale',
+    'home.hero.stat3Key':'4.9 / 5',   'home.hero.stat3Val':'recensioni viaggiatori',
+    'home.hero.stat4Key':'< 1h',      'home.hero.stat4Val':'risposta WhatsApp',
+    // Page heroes
+    'page.catalog.kicker':'Catalogo',
+    'page.catalog.title':'Tutti i nostri {em}tour e prodotti{/em}.',
+    'page.catalog.intro':"Da un fine settimana a Dakar al gran tour del Senegal, dal programma Ritorno alle origini ai pacchetti eventi — tutta l'offerta Africa Connection Tours, in un unico luogo.",
+    'page.blog.kicker':'Il blog ACT',
+    'page.blog.title':'La guida di viaggio {em}in Senegal{/em}.',
+    'page.blog.intro':"Racconti, consigli pratici, calendari onesti — da guide che vivono qui tutto l'anno.",
+    'page.blog.search':'Cerca un articolo…',
+    'page.custom.kicker':'Su misura',
+    'page.custom.title':'Componiamo il tuo viaggio {em}ideale{/em}.',
+    'page.custom.intro':'Una dozzina di domande, 3 minuti. Alla fine, torniamo con un itinerario che ti somiglia.',
+    'page.contact.kicker':'Contatti',
+    'page.contact.title':'Parliamo del {em}tuo viaggio{/em}.',
+    'page.contact.intro':"Tre canali, una sola squadra. WhatsApp risponde sempre in meno di un'ora durante i nostri orari di apertura.",
+    'page.about.kicker':'Chi siamo',
+    'page.about.title':'Tour operator di Dakar, {em}dal 1996{/em}.',
+    'page.about.intro':"Africa Connection Tours organizza viaggi in Senegal e in Africa occidentale da oltre trent'anni. L'ospitalità — téranga, in wolof — resta il nostro standard di servizio.",
+    'page.faq.kicker':'FAQ',
+    'page.faq.title':'Le domande {em}frequenti{/em}.',
+    'page.faq.intro':"Tutto ciò che ci viene chiesto più spesso, ordinato per tema. Manca una risposta? Rispondiamo su WhatsApp in meno di un'ora.",
+    'page.faq.search':'Cerca una domanda…',
   },
   DE: {
     // Navigation
@@ -360,6 +459,39 @@ const DICT = {
     // WhatsApp messages
     'wa.greeting':'Hallo ACT! Ich hätte gerne Informationen zu Ihren Touren.',
     'wa.greetingShort':'Hallo ACT!',
+    'wa.planTrip':'Hallo ACT! Ich möchte eine Reise planen.',
+    // Home Hero
+    'home.hero.badge':'Saison 2026 eröffnet',
+    'home.hero.title':'Senegal, {em}im Rhythmus{/em} derer, die hier leben.',
+    'home.hero.intro':'Touren und Ausflüge, konzipiert von Guides aus Dakar — von der Insel Gorée bis ins Bassari-Land, auf Augenhöhe. Ohne Klischees, ohne starre Pakete, ohne Mittelsmänner.',
+    'home.hero.scroll':'scrollen',
+    'home.hero.videoAria':'Stilles Ambient-Video — Landschaften des Senegals',
+    'home.hero.ctaSeeTours':'Touren ansehen',
+    'home.hero.stat1Key':'30 Jahre',   'home.hero.stat1Val':'seit 1996',
+    'home.hero.stat2Key':'6 Länder',   'home.hero.stat2Val':'Westafrika',
+    'home.hero.stat3Key':'4,9 / 5',    'home.hero.stat3Val':'Reisebewertungen',
+    'home.hero.stat4Key':'< 1h',       'home.hero.stat4Val':'WhatsApp-Antwort',
+    // Page heroes
+    'page.catalog.kicker':'Katalog',
+    'page.catalog.title':'Alle unsere {em}Touren & Produkte{/em}.',
+    'page.catalog.intro':'Vom Wochenende in Dakar bis zur großen Senegal-Rundreise, vom Programm Zurück zu den Wurzeln bis zu Event-Paketen — das gesamte Angebot von Africa Connection Tours, an einem Ort.',
+    'page.blog.kicker':'Das ACT-Blog',
+    'page.blog.title':'Der Reiseführer {em}für den Senegal{/em}.',
+    'page.blog.intro':'Geschichten, praktische Tipps, ehrliche Kalender — von Guides, die das ganze Jahr hier leben.',
+    'page.blog.search':'Artikel suchen…',
+    'page.custom.kicker':'Maßgeschneidert',
+    'page.custom.title':'Gestalten wir Ihre {em}perfekte Reise{/em}.',
+    'page.custom.intro':'Ein Dutzend Fragen, 3 Minuten. Am Ende kommen wir mit einer Reiseroute zurück, die zu Ihnen passt.',
+    'page.contact.kicker':'Kontakt',
+    'page.contact.title':'Sprechen wir über {em}Ihre Reise{/em}.',
+    'page.contact.intro':'Drei Kanäle, ein Team. WhatsApp antwortet während unserer Öffnungszeiten immer in unter einer Stunde.',
+    'page.about.kicker':'Über uns',
+    'page.about.title':'Reiseveranstalter aus Dakar, {em}seit 1996{/em}.',
+    'page.about.intro':'Africa Connection Tours organisiert seit über dreißig Jahren Reisen im Senegal und in Westafrika. Gastfreundschaft — téranga, auf Wolof — bleibt unser Servicestandard.',
+    'page.faq.kicker':'FAQ',
+    'page.faq.title':'Die {em}häufigsten Fragen{/em}.',
+    'page.faq.intro':'Alles, was uns am häufigsten gefragt wird, nach Themen sortiert. Eine Antwort fehlt? Wir antworten auf WhatsApp in unter einer Stunde.',
+    'page.faq.search':'Eine Frage suchen…',
   },
 };
 
@@ -427,7 +559,29 @@ const I18nProvider = ({ children }) => {
     return '$' + Math.round(v);
   }, [ccy]);
 
-  const value = { lang, setLang, langs: LANGS, locale: LOCALE[lang], ccy, setCcy, t, formatPrice, shortPrice };
+  // richT(template, opts) — rendu d'une chaîne contenant des marqueurs
+  // {em}…{/em} sous forme de fragment React, avec <em> autour des segments
+  // marqués. Permet de localiser un titre type "Composons votre voyage
+  // {em}idéal{/em}." sans casser la mise en forme (em coloré, etc.).
+  // L'ordre des segments peut différer entre langues sans toucher au JSX.
+  const richT = React.useCallback((template, opts = {}) => {
+    if (template == null) return null;
+    const text = String(template);
+    const { emClassName } = opts;
+    const parts = [];
+    let i = 0, k = 0;
+    const re = /\{em\}([\s\S]*?)\{\/em\}/g;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      if (m.index > i) parts.push(text.slice(i, m.index));
+      parts.push(<em key={`em-${k++}`} className={emClassName}>{m[1]}</em>);
+      i = m.index + m[0].length;
+    }
+    if (i < text.length) parts.push(text.slice(i));
+    return parts.length === 1 ? parts[0] : parts;
+  }, []);
+
+  const value = { lang, setLang, langs: LANGS, locale: LOCALE[lang], ccy, setCcy, t, richT, formatPrice, shortPrice };
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };
 

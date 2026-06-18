@@ -276,6 +276,7 @@ const Field = ({ label, value, onChange, type='text', placeholder }) => (
 
 // --- Page wrapper -----------------------------------------------------------
 const Custom = ({ go, onOpenTour }) => {
+  const { t, richT } = useI18n();
   const [stepIdx, setStepIdx] = React.useState(0);
   const [submitted, setSubmitted] = React.useState(false);
   const [freeForm, setFreeForm] = React.useState(false);
@@ -384,9 +385,9 @@ const Custom = ({ go, onOpenTour }) => {
 
   return (
     <main className="bg-sand-50">
-      <PageHero kicker="Sur mesure" tone="ocre" mood="dunes" bgImg={IMG('Désert de Lompoul', 5)} compact
-        title={<>Composons votre voyage <em>idéal</em>.</>}
-        intro="Une dizaine de questions, 3 minutes. À la fin, on revient avec un itinéraire qui vous ressemble."/>
+      <PageHero kicker={t('page.custom.kicker')} tone="ocre" mood="dunes" bgImg={IMG('Désert de Lompoul', 5)} compact
+        title={richT(t('page.custom.title'))}
+        intro={t('page.custom.intro')}/>
 
       <section className="max-w-3xl mx-auto px-4 md:px-8 py-12 md:py-20">
         <div className="mb-10 md:mb-14">
