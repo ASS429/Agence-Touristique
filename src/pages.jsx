@@ -61,9 +61,9 @@ const Contact = ({ go }) => {
       <section className="-mt-12 md:-mt-16 relative z-10">
         <div className="max-w-[1280px] mx-auto px-4 md:px-8 grid sm:grid-cols-3 gap-4 md:gap-5">
           {[
-            { I:Icons.Whatsapp, k:'WhatsApp', v:SITE.whatsappDisplay, cta:'Discuter maintenant', href:buildWaURL('Bonjour ACT !'), tone:'wa', accent:'bg-[#1FA855]' },
-            { I:Icons.Phone, k:'Téléphone', v:SITE.phone, cta:'Lun–Sam · 9h–19h', href:`tel:+${SITE.whatsapp}`, tone:'primary', accent:'bg-ink' },
-            { I:Icons.Mail,  k:'Email',    v:SITE.email, cta:'Écrire un email', href:`mailto:${SITE.email}`, tone:'primary', accent:'bg-terre' },
+            { I:Icons.Whatsapp, k:t('cta.whatsapp'),         v:SITE.whatsappDisplay, cta:t('contact.cards.whatsapp.cta'), href:buildWaURL(t('wa.greetingShort')), tone:'wa', accent:'bg-[#1FA855]' },
+            { I:Icons.Phone,    k:t('contact.cards.phone.k'),v:SITE.phone,           cta:t('contact.cards.phone.cta'),    href:`tel:+${SITE.whatsapp}`,         tone:'primary', accent:'bg-ink' },
+            { I:Icons.Mail,     k:t('contact.cards.email.k'),v:SITE.email,           cta:t('contact.cards.email.cta'),    href:`mailto:${SITE.email}`,          tone:'primary', accent:'bg-terre-600' },
           ].map((c,i)=>(
             <a key={i} href={c.href} target="_blank" rel="noreferrer"
                className="group bg-sand-50 border border-ink/5 rounded-3xl p-6 shadow-xl shadow-ink/5 hover:-translate-y-0.5 transition-transform">
@@ -79,39 +79,40 @@ const Contact = ({ go }) => {
       {/* Form + map */}
       <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-16 md:py-24 grid md:grid-cols-[1.2fr,1fr] gap-10 md:gap-16">
         <div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-3">— Formulaire</div>
-          <h2 className="font-display text-[32px] md:text-[44px] leading-tight">Écrivez-nous.</h2>
-          <p className="mt-3 text-ink-600 max-w-md">Réponse en moins de 24h ouvrées. Pour une urgence, préférez WhatsApp.</p>
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-3">— {t('contact.form.kicker')}</div>
+          <h2 className="font-display text-[32px] md:text-[44px] leading-tight">{t('contact.form.title')}</h2>
+          <p className="mt-3 text-ink-600 max-w-md">{t('contact.form.intro')}</p>
 
           {sent ? (
             <div className="mt-8 rounded-3xl bg-terre/10 border border-terre/20 p-6">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-terre text-sand-50 inline-flex items-center justify-center"><Icons.Check size={18}/></div>
+                <div className="h-10 w-10 rounded-full bg-terre-600 text-sand-50 inline-flex items-center justify-center"><Icons.Check size={18}/></div>
                 <div>
-                  <div className="font-display text-[22px] leading-tight">Message envoyé.</div>
-                  <div className="text-[13px] text-ink-600 mt-0.5">On revient vers vous très vite.</div>
+                  <div className="font-display text-[22px] leading-tight">{t('contact.form.sent.title')}</div>
+                  <div className="text-[13px] text-ink-600 mt-0.5">{t('contact.form.sent.body')}</div>
                 </div>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="mt-8 grid md:grid-cols-2 gap-4">
-              <ContactField label="Prénom et nom" value={form.name} onChange={(v)=>set('name', v)} required/>
-              <ContactField label="Email" type="email" value={form.email} onChange={(v)=>set('email', v)} required/>
-              <ContactField label="WhatsApp (facultatif)" value={form.phone} onChange={(v)=>set('phone', v)} placeholder="+33 6 …"/>
+              <ContactField label={t('contact.form.field.name')}  value={form.name}  onChange={(v)=>set('name', v)}  required/>
+              <ContactField label={t('contact.form.field.email')} type="email" value={form.email} onChange={(v)=>set('email', v)} required/>
+              <ContactField label={t('contact.form.field.phone')} value={form.phone} onChange={(v)=>set('phone', v)} placeholder={t('contact.form.field.phonePlaceholder')}/>
               <div>
-                <label className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-ink-500 block mb-1.5">Sujet</label>
+                <label className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-ink-500 block mb-1.5">{t('contact.form.field.subject')}</label>
                 <select value={form.subject} onChange={(e)=>set('subject', e.target.value)}
+                  aria-label={t('contact.form.field.subject')}
                   className="w-full h-12 rounded-full border border-ink/15 bg-sand-50 px-4 text-[14px] outline-none focus:border-terre cursor-pointer">
-                  <option value="devis">Demande de devis</option>
-                  <option value="question">Question générale</option>
-                  <option value="partenariat">Partenariat</option>
-                  <option value="autre">Autre</option>
+                  <option value="devis">{t('contact.form.subject.devis')}</option>
+                  <option value="question">{t('contact.form.subject.question')}</option>
+                  <option value="partenariat">{t('contact.form.subject.partenariat')}</option>
+                  <option value="autre">{t('contact.form.subject.autre')}</option>
                 </select>
               </div>
               <div className="md:col-span-2">
-                <label className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-ink-500 block mb-1.5">Message</label>
+                <label className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-ink-500 block mb-1.5">{t('contact.form.field.message')}</label>
                 <textarea required rows={6} value={form.message} onChange={(e)=>set('message', e.target.value)}
-                  placeholder="Dites-nous ce que vous avez en tête…"
+                  placeholder={t('contact.form.messagePlaceholder')}
                   className="w-full rounded-2xl border border-ink/15 bg-sand-50 p-4 text-[14px] outline-none focus:border-terre"/>
               </div>
               {error && (
@@ -120,13 +121,13 @@ const Contact = ({ go }) => {
                 </div>
               )}
               <div className="md:col-span-2 flex flex-wrap items-center justify-between gap-4">
-                <p className="text-[12px] text-ink-500 max-w-sm">En envoyant ce message, vous acceptez notre <a href="#/privacy" className="underline underline-offset-2 hover:text-terre">politique de confidentialité</a>.</p>
+                <p className="text-[12px] text-ink-500 max-w-sm">{t('contact.form.privacyText')} <a href="#/privacy" className="underline underline-offset-2 hover:text-terre">{t('contact.form.privacyLink')}</a>.</p>
                 <div className="flex items-center gap-3">
                   <Btn as="a" href={mailtoHref()} variant="outline" size="lg" icon={<Icons.Mail size={16}/>}>
-                    Ouvrir mon mail
+                    {t('contact.form.openMail')}
                   </Btn>
                   <Btn variant="terre" size="lg" as="button" type="submit" disabled={sending} icon={<Icons.ArrowRight size={16}/>}>
-                    {sending ? 'Envoi…' : 'Envoyer'}
+                    {sending ? t('contact.form.sending') : t('contact.form.send')}
                   </Btn>
                 </div>
               </div>
@@ -167,17 +168,17 @@ const Contact = ({ go }) => {
               <div className="absolute top-3 left-3 bg-sand-50/95 backdrop-blur px-3 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-wider">{SITE.addressShort}</div>
             </div>
             <div className="p-6">
-              <div className="font-display text-[22px] leading-tight">Notre bureau</div>
+              <div className="font-display text-[22px] leading-tight">{t('contact.aside.title')}</div>
               <div className="mt-3 text-[14px] text-ink-700 leading-relaxed">
-                {SITE.address}<br/>Sénégal
+                {SITE.address}<br/>{t('contact.aside.country')}
               </div>
               <div className="mt-5 pt-5 border-t border-ink/10 grid grid-cols-2 gap-3 text-[12.5px]">
                 <div>
-                  <div className="font-mono text-[10.5px] uppercase tracking-wider text-ink-500">Horaires</div>
-                  <div className="mt-0.5">Lun–Ven · 9h–18h</div>
+                  <div className="font-mono text-[10.5px] uppercase tracking-wider text-ink-500">{t('contact.aside.hours')}</div>
+                  <div className="mt-0.5">{t('footer.openingHours')}</div>
                 </div>
                 <div>
-                  <div className="font-mono text-[10.5px] uppercase tracking-wider text-ink-500">Depuis</div>
+                  <div className="font-mono text-[10.5px] uppercase tracking-wider text-ink-500">{t('contact.aside.since')}</div>
                   <div className="mt-0.5">1996</div>
                 </div>
               </div>
