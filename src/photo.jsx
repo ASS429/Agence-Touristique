@@ -156,6 +156,7 @@ const Photo = ({
   ratio,           // e.g. 'aspect-[4/5]'
   src,             // real image URL (optional)
   alt = '',
+  priority = false, // true for above-the-fold images (hero) — eager loading + high fetch priority for LCP
 }) => {
   const pal = PALETTES[tone] || PALETTES.terre;
   const [imgFailed, setImgFailed] = React.useState(false);
@@ -174,8 +175,13 @@ const Photo = ({
           <img
             src={src}
             alt={alt || label || ''}
-            loading="lazy"
+            // `priority` réservée au hero / above-the-fold pour ne pas dégrader
+            // le LCP. Par défaut, lazy+async = pas de blocage du first paint.
+            // Attribut en lowercase (`fetchpriority`) pour compatibilité avec
+            // les versions de React qui ne reconnaissent pas la camelCase.
+            loading={priority ? 'eager' : 'lazy'}
             decoding="async"
+            {...(priority ? { fetchpriority: 'high' } : {})}
             onError={() => setImgFailed(true)}
             className="absolute inset-0 w-full h-full object-cover"
           />

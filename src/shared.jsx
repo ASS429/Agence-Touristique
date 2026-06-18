@@ -483,21 +483,28 @@ const Section = ({ id, label, title, kicker, intro, children, className = '', bg
 
 // ============================================================================
 // CircuitCard — reused on home, catalog, related-tours, blog sidebar
+//
+// Pattern i18n des données : titre et sous-titre passent par des clés
+// `circuit.<id>.title` / `.subtitle` avec fallback sur la valeur FR
+// d'origine. Quand les traductions DeepL Pro arrivent (Phase 2), elles
+// remplacent automatiquement le fallback sans modification de code.
 // ============================================================================
 const CircuitCard = ({ c, onOpen, size = 'md' }) => {
   const { t } = useI18n();
+  const title    = t(`circuit.${c.id}.title`,    c.title);
+  const subtitle = t(`circuit.${c.id}.subtitle`, c.subtitle);
   return (
     <article className="group flex flex-col" data-comment-anchor={`circuit-card-${c.id}`}>
       <button onClick={()=>onOpen(c.id)} className="block w-full text-left">
-        <Photo tone={c.tone} mood={c.mood} label={`${c.days}j`} ratio={size==='sm' ? 'aspect-[5/4]' : 'aspect-[4/5]'} className="mb-4 group-hover:scale-[1.01] transition-transform" rounded="rounded-2xl" src={c.img} alt={c.title}/>
+        <Photo tone={c.tone} mood={c.mood} label={`${c.days}j`} ratio={size==='sm' ? 'aspect-[5/4]' : 'aspect-[4/5]'} className="mb-4 group-hover:scale-[1.01] transition-transform" rounded="rounded-2xl" src={c.img} alt={title}/>
       </button>
       <div className="flex items-center gap-2 mb-2">
         <StarRow value={c.rating} size={12}/>
         <span className="text-[12px] text-ink-500">{c.rating} · {c.reviews} {t('common.reviews')}</span>
       </div>
       <button onClick={()=>onOpen(c.id)} className="text-left">
-        <h3 className="font-display text-[22px] md:text-[24px] leading-tight group-hover:text-terre transition-colors">{c.title}</h3>
-        <div className="text-[13px] text-ink-600 mt-1">{c.subtitle}</div>
+        <h3 className="font-display text-[22px] md:text-[24px] leading-tight group-hover:text-terre transition-colors">{title}</h3>
+        <div className="text-[13px] text-ink-600 mt-1">{subtitle}</div>
       </button>
       <div className="mt-4 flex items-end justify-between">
         <div>
@@ -636,7 +643,8 @@ const Footer = ({ go }) => {
 const PageHero = ({ kicker, title, intro, tone='terre', mood='horizon', bgImg, children, dark=true, compact=false }) => (
   <section className={`relative ${compact ? 'min-h-[60svh]' : 'min-h-[68svh]'} flex items-end overflow-hidden`}>
     <div className="absolute inset-0">
-      <Photo tone={tone} mood={mood} rounded="" showLabel={false} className="h-full w-full" src={bgImg} alt=""/>
+      {/* priority : c'est l'image principale de la page (above-the-fold). */}
+      <Photo tone={tone} mood={mood} rounded="" showLabel={false} className="h-full w-full" src={bgImg} alt="" priority/>
       <div className="absolute inset-0" style={{background:'linear-gradient(180deg, rgba(26,22,18,0.55) 0%, rgba(26,22,18,0.25) 40%, rgba(26,22,18,0.85) 100%)'}}/>
     </div>
     <div className="relative max-w-[1280px] mx-auto w-full px-4 md:px-8 pt-32 md:pt-40 pb-14 md:pb-20">

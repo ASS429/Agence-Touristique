@@ -28,7 +28,9 @@ const Hero = ({ go }) => {
         </video>
       ) : (
         // 2g/3g/saveData : photo statique stylisée à la place.
-        <Photo tone="terre" mood="horizon" rounded="" showLabel={false} className="h-full w-full" src={IMG('Dakar', 1)} alt="Dakar, corniche"/>
+        // priority : c'est le hero (above-the-fold) → eager + fetchPriority high
+        // pour optimiser le LCP, surtout critique en 3G/4G.
+        <Photo tone="terre" mood="horizon" rounded="" showLabel={false} className="h-full w-full" src={IMG('Dakar', 1)} alt="Dakar, corniche" priority/>
       )}
       <div className="absolute inset-0" style={{background:'linear-gradient(180deg, rgba(26,22,18,0.65) 0%, rgba(26,22,18,0.35) 28%, rgba(26,22,18,0.45) 55%, rgba(26,22,18,0.88) 100%)'}}/>
       <div className="absolute inset-0" style={{background:'linear-gradient(90deg, rgba(26,22,18,0.55) 0%, rgba(26,22,18,0.15) 55%, rgba(26,22,18,0) 100%)'}}/>
@@ -125,7 +127,10 @@ const Reassurance = () => {
 };
 
 const Destinations = ({ go }) => {
+  const { t } = useI18n();
   const [filter, setFilter] = React.useState('Tous');
+  // Filtres : "Tous" est localisé, les autres restent en lowercase
+  // (catégories techniques utilisées comme labels visuels).
   const filters = ['Tous','culture','nature','aventure','patrimoine'];
   const list = filter === 'Tous' ? DESTINATIONS : DESTINATIONS.filter(d=>d.tag===filter);
   return (
@@ -134,32 +139,39 @@ const Destinations = ({ go }) => {
              intro="Chaque destination est travaillée avec des partenaires locaux : guides, hébergeurs, restaurateurs, artisans."
              className="py-20 md:py-28" screenLabel="03 Destinations">
       <div className="flex items-center gap-2 mb-8 overflow-x-auto no-scrollbar">
-        {filters.map(f => (
-          <button key={f} onClick={()=>setFilter(f)}
-            className={`shrink-0 px-4 h-9 rounded-full text-[12.5px] font-medium border transition-colors capitalize ${filter===f ? 'bg-ink text-sand-50 border-ink' : 'bg-transparent text-ink-700 border-ink/15 hover:border-ink/40'}`}>
-            {f}
-          </button>
-        ))}
+        {filters.map(f => {
+          const label = f === 'Tous' ? t('common.all', 'Tous') : t(`destination.tag.${f}`, f);
+          return (
+            <button key={f} onClick={()=>setFilter(f)}
+              className={`shrink-0 px-4 h-9 rounded-full text-[12.5px] font-medium border transition-colors capitalize ${filter===f ? 'bg-ink text-sand-50 border-ink' : 'bg-transparent text-ink-700 border-ink/15 hover:border-ink/40'}`}>
+              {label}
+            </button>
+          );
+        })}
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
-        {list.map((d) => (
-          <button key={d.id} onClick={()=>go('circuits')} className="group relative aspect-[3/4] block text-left">
-            <Photo tone={d.tone} mood={d.mood} label={d.tag} overlay rounded="rounded-2xl" className="h-full" src={d.img} alt={d.name}/>
-            <div className="absolute inset-x-3 bottom-3 text-sand-50">
-              <div className="flex items-end justify-between gap-2">
-                <div>
-                  <div className="font-display text-[24px] md:text-[28px] leading-none">{d.name}</div>
-                  <div className="text-[11.5px] mt-1.5 text-sand-200 flex items-center gap-1.5">
-                    <Icons.MapPin size={11}/> {d.duration} de Dakar
+        {list.map((d) => {
+          const dname     = t(`destination.${d.id}.name`,     d.name);
+          const dduration = t(`destination.${d.id}.duration`, d.duration);
+          return (
+            <button key={d.id} onClick={()=>go('circuits')} className="group relative aspect-[3/4] block text-left">
+              <Photo tone={d.tone} mood={d.mood} label={t(`destination.tag.${d.tag}`, d.tag)} overlay rounded="rounded-2xl" className="h-full" src={d.img} alt={dname}/>
+              <div className="absolute inset-x-3 bottom-3 text-sand-50">
+                <div className="flex items-end justify-between gap-2">
+                  <div>
+                    <div className="font-display text-[24px] md:text-[28px] leading-none">{dname}</div>
+                    <div className="text-[11.5px] mt-1.5 text-sand-200 flex items-center gap-1.5">
+                      <Icons.MapPin size={11}/> {dduration} {t('destination.fromDakar', 'de Dakar')}
+                    </div>
+                  </div>
+                  <div className="h-9 w-9 rounded-full bg-sand-50 text-ink inline-flex items-center justify-center group-hover:bg-terre group-hover:text-sand-50 transition-colors">
+                    <Icons.ArrowUpRight size={16}/>
                   </div>
                 </div>
-                <div className="h-9 w-9 rounded-full bg-sand-50 text-ink inline-flex items-center justify-center group-hover:bg-terre group-hover:text-sand-50 transition-colors">
-                  <Icons.ArrowUpRight size={16}/>
-                </div>
               </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
     </Section>
   );

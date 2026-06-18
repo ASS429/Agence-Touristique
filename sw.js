@@ -4,7 +4,25 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v9';
+const VERSION = 'act-v10';
+
+// Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
+// Sans plafond, le cache gonfle indéfiniment au fil des visites (mauvais
+// pour les téléphones bas de gamme du marché sénégalais).
+const MEDIA_CACHE = 'act-media-v1';
+const MEDIA_MAX_ENTRIES = 80;
+const MEDIA_RE = /\.(jpe?g|webp|avif|png|svg|mp4|webm|woff2?)(\?|$)/i;
+
+// Garde au maximum MEDIA_MAX_ENTRIES dans le cache média (FIFO simple).
+const trimMediaCache = async () => {
+  try {
+    const c = await caches.open(MEDIA_CACHE);
+    const keys = await c.keys();
+    if (keys.length <= MEDIA_MAX_ENTRIES) return;
+    const toDelete = keys.slice(0, keys.length - MEDIA_MAX_ENTRIES);
+    await Promise.all(toDelete.map(k => c.delete(k)));
+  } catch {}
+};
 
 // Pré-cache uniquement le squelette critique. Les photos et la vidéo
 // (~20 Mo total) sont mises en cache à la volée, pas pré-téléchargées.
@@ -37,9 +55,12 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('activate', (e) => {
+  // On garde le cache média entre versions (les photos ne changent pas) ;
+  // seuls les caches versionnés (act-vX) obsolètes sont purgés.
+  const KEEP = new Set([VERSION, MEDIA_CACHE]);
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k)))
+      Promise.all(keys.filter(k => !KEEP.has(k)).map(k => caches.delete(k)))
     )
   );
   self.clients.claim();
@@ -66,7 +87,25 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // Assets statiques : cache-first, fallback réseau (puis mise en cache).
+  // Médias (images, vidéo, fonts) : cache séparé avec plafond d'entrées.
+  // Cache-first + mise à jour réseau silencieuse au besoin.
+  if (MEDIA_RE.test(url.pathname)) {
+    e.respondWith(
+      caches.match(req).then(cached => {
+        if (cached) return cached;
+        return fetch(req).then(resp => {
+          if (resp.ok && resp.type === 'basic') {
+            const copy = resp.clone();
+            caches.open(MEDIA_CACHE).then(c => c.put(req, copy)).then(trimMediaCache).catch(() => {});
+          }
+          return resp;
+        }).catch(() => cached);
+      })
+    );
+    return;
+  }
+
+  // Autres assets statiques (JSX, CSS, manifest…) : cache versionné.
   e.respondWith(
     caches.match(req).then(cached => {
       if (cached) return cached;

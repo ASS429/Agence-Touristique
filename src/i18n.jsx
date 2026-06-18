@@ -87,6 +87,13 @@ const DICT = {
     'common.menu':'Menu',
     'common.languageSwitcher':'Choose language',
     'common.currencySwitcher':'Display currency',
+    'common.all':'All',
+    // Destination tags (filters used on the home destinations grid)
+    'destination.tag.culture':'Culture',
+    'destination.tag.nature':'Nature',
+    'destination.tag.aventure':'Adventure',
+    'destination.tag.patrimoine':'Heritage',
+    'destination.fromDakar':'from Dakar',
     // Footer
     'footer.exploreLabel':'Explore',
     'footer.agencyLabel':'Agency',
@@ -158,6 +165,13 @@ const DICT = {
     'common.menu':'Menu',
     'common.languageSwitcher':'Choisir la langue',
     'common.currencySwitcher':"Devise d'affichage",
+    'common.all':'Tous',
+    // Destination tags
+    'destination.tag.culture':'Culture',
+    'destination.tag.nature':'Nature',
+    'destination.tag.aventure':'Aventure',
+    'destination.tag.patrimoine':'Patrimoine',
+    'destination.fromDakar':'de Dakar',
     // Footer
     'footer.exploreLabel':'Explorer',
     'footer.agencyLabel':'Agence',
@@ -229,6 +243,13 @@ const DICT = {
     'common.menu':'Menu',
     'common.languageSwitcher':'Scegli la lingua',
     'common.currencySwitcher':'Valuta di visualizzazione',
+    'common.all':'Tutti',
+    // Destination tags
+    'destination.tag.culture':'Cultura',
+    'destination.tag.nature':'Natura',
+    'destination.tag.aventure':'Avventura',
+    'destination.tag.patrimoine':'Patrimonio',
+    'destination.fromDakar':'da Dakar',
     // Footer
     'footer.exploreLabel':'Esplora',
     'footer.agencyLabel':'Agenzia',
@@ -300,6 +321,13 @@ const DICT = {
     'common.menu':'Menü',
     'common.languageSwitcher':'Sprache wählen',
     'common.currencySwitcher':'Anzeigewährung',
+    'common.all':'Alle',
+    // Destination tags
+    'destination.tag.culture':'Kultur',
+    'destination.tag.nature':'Natur',
+    'destination.tag.aventure':'Abenteuer',
+    'destination.tag.patrimoine':'Erbe',
+    'destination.fromDakar':'ab Dakar',
     // Footer
     'footer.exploreLabel':'Entdecken',
     'footer.agencyLabel':'Agentur',
@@ -365,10 +393,16 @@ const I18nProvider = ({ children }) => {
     }
   }, [lang]);
 
-  // Repli en cascade : lang → EN → FR → clé brute (signal de dette de trad).
-  const t = React.useCallback((key) => {
+  // Repli en cascade : lang → EN → FR → fallback fourni → clé brute.
+  // Le `fallback` permet aux composants utilisant les données encore en FR
+  // (data.jsx : circuits, destinations, blogs…) de pré-câbler des clés
+  // i18n sans casser le rendu. Quand une traduction sera ajoutée au DICT
+  // (typiquement via DeepL Pro en Phase 2), elle remplacera automatiquement
+  // le fallback, sans modification de code côté composant.
+  // Exemple : t(`circuit.${c.id}.title`, c.title)
+  const t = React.useCallback((key, fallback) => {
     const tryLang = (l) => DICT[l] && DICT[l][key];
-    return tryLang(lang) || tryLang('EN') || tryLang('FR') || key;
+    return tryLang(lang) || tryLang('EN') || tryLang('FR') || (fallback != null ? fallback : key);
   }, [lang]);
 
   const formatPrice = React.useCallback((xof) => {
@@ -438,5 +472,43 @@ const useRouter = () => {
   }, []);
   return { ...state, go };
 };
+
+// ============================================================================
+// Pattern d'extension — contenu provenant de data.jsx (circuits, destinations,
+// blogs, FAQ, etc.). Documenté ici pour faciliter la passe DeepL Pro (Phase 2).
+//
+// Côté composant : on utilise t(key, fallback) où le fallback est la valeur
+// FR d'origine — donc TANT QUE la clé n'est pas dans le DICT, le rendu actuel
+// est préservé à l'identique. Dès qu'on ajoute la clé dans DICT pour une
+// langue, elle prend le relais automatiquement, sans toucher le composant.
+//
+// Conventions de nommage des clés data :
+//
+//   circuit.<id>.title             → titre principal du circuit
+//   circuit.<id>.subtitle          → accroche / sous-titre
+//   circuit.<id>.short             → description courte (1-2 phrases)
+//   circuit.<id>.badges.<n>        → badge n (Famille, Confort+, etc.)
+//   circuit.<id>.program.<day>     → texte d'une journée du programme
+//
+//   destination.<id>.name          → nom officiel de la destination
+//   destination.<id>.duration      → durée d'accès depuis Dakar
+//   destination.tag.<tag>          → libellé d'un tag de catégorie
+//
+//   blog.<id>.title                → titre d'article
+//   blog.<id>.excerpt              → résumé
+//   blog.<id>.body                 → corps (markdown ou HTML léger)
+//
+//   faq.<id>.question              → question
+//   faq.<id>.answer                → réponse
+//
+//   testimonial.<id>.text          → témoignage client
+//
+// Exemple : pour traduire le circuit "goree-lac-saloum" en anglais, ajouter
+// dans DICT.EN les clés :
+//   'circuit.goree-lac-saloum.title'   : 'Gorée · Pink Lake · Saloum',
+//   'circuit.goree-lac-saloum.subtitle': 'Memory, salt & mangrove',
+//   'circuit.goree-lac-saloum.short'   : 'Three places that tell Senegal differently…',
+// Aucune modification de composant requise.
+// ============================================================================
 
 Object.assign(window, { I18nProvider, useI18n, useRouter, RATES, CCY_SYM, DICT, LANGS, LOCALE });
