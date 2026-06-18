@@ -80,13 +80,16 @@ Object.assign(window, { SITE, buildWaURL, trackWa });
 // ============================================================================
 // Logo — clickable home
 // ============================================================================
+// Pas d'aria-label sur l'<a> : le texte visible "Africa Connection Tours"
+// + "Sénégal · Depuis 1996" + l'alt de l'image suffisent comme nom accessible.
+// Un aria-label "Africa Connection Tours — Accueil" cassait label-content-name-mismatch
+// (le texte visible n'est pas inclus dans le label déclaré).
 const Logo = ({ inverted = false, className = '', onClick }) => (
   <a href="#/home" onClick={onClick}
-     aria-label="Africa Connection Tours — Accueil"
      className={`inline-flex items-center gap-2.5 ${className}`}>
     <img
       src="assets/logo-act.png"
-      alt="Africa Connection Tours"
+      alt=""
       width="44"
       height="44"
       className="h-10 w-auto md:h-11 select-none"
@@ -101,12 +104,15 @@ const Logo = ({ inverted = false, className = '', onClick }) => (
 
 // ============================================================================
 // StarRow
+// role="img" est requis pour qu'aria-label soit valide sur un <div>
+// (sans role, axe-core / Lighthouse signalent aria-prohibited-attr).
 // ============================================================================
 const StarRow = ({ value = 5, max = 5, size = 14, className = '' }) => {
   const full = Math.floor(value);
   const half = value - full >= 0.5;
   return (
-    <div className={`inline-flex items-center gap-[2px] text-ocre ${className}`} aria-label={`${value} sur ${max}`}>
+    <div className={`inline-flex items-center gap-[2px] text-ocre ${className}`}
+         role="img" aria-label={`${value} / ${max}`}>
       {Array.from({length: max}).map((_, i) => {
         if (i < full) return <Icons.Star key={i} size={size} />;
         if (i === full && half) return <Icons.StarHalf key={i} size={size} />;
@@ -143,7 +149,7 @@ const Btn = ({ as:Tag = 'button', variant = 'primary', size = 'md', icon, childr
   const sizes = { sm:'h-9 px-4 text-[13px]', md:'h-11 px-5 text-[14px]', lg:'h-12 px-6 text-[15px]' };
   const variants = {
     primary:   'bg-ink text-sand-50 hover:bg-ink-700 active:scale-[0.98]',
-    terre:     'bg-terre text-sand-50 hover:bg-terre-600 active:scale-[0.98]',
+    terre:     'bg-terre-600 text-sand-50 hover:bg-terre-700 active:scale-[0.98]',
     wa:        'bg-[#1FA855] text-white hover:bg-[#1B924A] active:scale-[0.98]',
     outline:   'border border-ink/20 text-ink hover:bg-ink hover:text-sand-50',
     outlineLight:'border border-sand-100/60 text-sand-50 hover:bg-sand-50 hover:text-ink',
@@ -225,7 +231,7 @@ const CookieConsent = () => {
         </p>
         <div className="mt-4 flex items-center gap-2">
           <button onClick={decline} className="px-4 h-9 rounded-full border border-sand-100/30 text-sand-100 text-[12.5px] hover:bg-sand-50/10 transition-colors">{t('cookies.decline')}</button>
-          <button onClick={accept}  className="flex-1 px-4 h-9 rounded-full bg-terre text-sand-50 text-[12.5px] font-medium hover:bg-terre-600 transition-colors">{t('cookies.accept')}</button>
+          <button onClick={accept}  className="flex-1 px-4 h-9 rounded-full bg-terre-600 text-sand-50 text-[12.5px] font-medium hover:bg-terre-700 transition-colors">{t('cookies.accept')}</button>
         </div>
       </div>
     </div>

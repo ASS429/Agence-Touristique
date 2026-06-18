@@ -1,7 +1,8 @@
+# Africa Connection Tours — robots.txt
+# Spec : https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt
+
 User-agent: *
 Allow: /
-
-# Pas d'indexation du panneau de tweaks (dev tool)
-Disallow: /*?tweaks=1
+Disallow: /*tweaks=
 
 Sitemap: https://act-senegal.com/sitemap.xml

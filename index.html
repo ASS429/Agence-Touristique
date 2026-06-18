@@ -181,7 +181,10 @@
   .text-ink-800 { color: var(--tw-ink-soft) !important; }
   .text-ink-700 { color: var(--tw-ink-soft) !important; }
   .text-ink-600 { color: var(--tw-ink-mute) !important; }
-  .text-ink-500 { color: var(--tw-ink-faint) !important; }
+  /* ink-500 redirigé sur ink-mute (au lieu d'ink-faint) pour passer le seuil
+     WCAG AA 4.5:1 sur fond sand-100 / sand-50. Texte 12px à la limite avec
+     ink-faint (#7C7159 → 3.83), pleinement lisible avec ink-mute (#5A5142). */
+  .text-ink-500 { color: var(--tw-ink-mute) !important; }
   /* Avant : opacity:.7 → contraste sous WCAG AA. Retiré pour passer le test
      a11y Lighthouse. Le rendu reste discret grâce à la teinte ink-faint. */
   .text-ink-400 { color: var(--tw-ink-faint) !important; }
@@ -191,7 +194,11 @@
   .bg-terre-100    { background-color: var(--tw-accent-100) !important; }
   .bg-terre-600    { background-color: var(--tw-accent-600) !important; }
   .bg-terre-700    { background-color: var(--tw-accent-700) !important; }
-  .text-terre      { color: var(--tw-accent) !important; }
+  /* text-terre utilise la nuance -700 (et non -DEFAULT) pour passer le seuil
+     WCAG AA de contraste (4.5:1) sur les fonds sand-50/sand-100, en particulier
+     sur les petits kickers mono (11px). La couleur DEFAULT #C8593B reste
+     intacte pour les surfaces et bordures (bg-terre, border-terre). */
+  .text-terre      { color: var(--tw-accent-700) !important; }
   .text-terre-300  { color: var(--tw-accent-300) !important; }
   .text-terre-700  { color: var(--tw-accent-700) !important; }
   .border-terre    { border-color: var(--tw-accent) !important; }
