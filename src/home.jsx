@@ -102,23 +102,24 @@ const Hero = ({ go }) => {
 };
 
 const Reassurance = () => {
+  const { t } = useI18n();
   const items = [
-    { I:Icons.Compass,  k:'Guides locaux', d:'Certifiés, francophones & anglophones — vos hôtes, pas des récitants.' },
-    { I:Icons.Wallet,   k:'Wave · OM · Carte', d:'Paiement mobile sénégalais ou carte bancaire — acompte 30%, solde au départ.' },
-    { I:Icons.RefreshCw,k:'Annulation flexible', d:'Annulation gratuite jusqu’à 21 jours avant. Report sans frais à 7 jours.' },
-    { I:Icons.Star,     k:'4.9 / 5', d:'Sur 312 voyageurs, en 12 ans d’activité. On compte chaque avis.' },
+    { I:Icons.Compass,  kKey:'home.reassurance.guides.k',   dKey:'home.reassurance.guides.d'   },
+    { I:Icons.Wallet,   kKey:'home.reassurance.payment.k',  dKey:'home.reassurance.payment.d'  },
+    { I:Icons.RefreshCw,kKey:'home.reassurance.cancel.k',   dKey:'home.reassurance.cancel.d'   },
+    { I:Icons.Star,     kKey:'home.reassurance.rating.k',   dKey:'home.reassurance.rating.d'   },
   ];
   return (
     <section className="bg-sand-100 border-y border-ink/5" data-screen-label="02 Reassurance">
       <div className="max-w-[1280px] mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4">
-        {items.map(({I,k,d}, i) => (
+        {items.map(({I,kKey,dKey}, i) => (
           <div key={i} className={`flex items-start gap-3 py-5 md:py-9
               ${i!==0 ? 'border-t md:border-t-0 md:border-l border-ink/10' : ''}
               md:pl-8 md:pr-4`}>
             <div className="h-10 w-10 rounded-full bg-terre/10 text-terre inline-flex items-center justify-center shrink-0"><I size={20}/></div>
             <div className="min-w-0">
-              <div className="font-medium text-[14.5px] md:text-[15px] text-ink">{k}</div>
-              <div className="text-[13px] md:text-[13px] text-ink-600 leading-relaxed mt-1">{d}</div>
+              <div className="font-medium text-[14.5px] md:text-[15px] text-ink">{t(kKey)}</div>
+              <div className="text-[13px] md:text-[13px] text-ink-600 leading-relaxed mt-1">{t(dKey)}</div>
             </div>
           </div>
         ))}
@@ -128,16 +129,16 @@ const Reassurance = () => {
 };
 
 const Destinations = ({ go }) => {
-  const { t } = useI18n();
+  const { t, richT } = useI18n();
   const [filter, setFilter] = React.useState('Tous');
   // Filtres : "Tous" est localisé, les autres restent en lowercase
   // (catégories techniques utilisées comme labels visuels).
   const filters = ['Tous','culture','nature','aventure','patrimoine'];
   const list = filter === 'Tous' ? DESTINATIONS : DESTINATIONS.filter(d=>d.tag===filter);
   return (
-    <Section id="destinations" label="Destinations" title={<>Huit lieux, <em>huit Sénégal.</em></>}
-             kicker="L’agence couvre tout le pays — du cœur de Dakar aux frontières mandingues."
-             intro="Chaque destination est travaillée avec des partenaires locaux : guides, hébergeurs, restaurateurs, artisans."
+    <Section id="destinations" label={t('home.destinations.label')} title={richT(t('home.destinations.title'))}
+             kicker={t('home.destinations.kicker')}
+             intro={t('home.destinations.intro')}
              className="py-20 md:py-28" screenLabel="03 Destinations">
       <div className="flex items-center gap-2 mb-8 overflow-x-auto no-scrollbar">
         {filters.map(f => {
@@ -179,25 +180,23 @@ const Destinations = ({ go }) => {
 };
 
 const Pourquoi = () => {
+  const { t, richT } = useI18n();
   const cols = [
-    { num:'01', t:'Nos guides sont chez eux.',
-      d:'Né·e·s ici, formé·e·s ici. Mamadou connaît les bolongs du Saloum depuis l’enfance, Awa raconte Gorée comme une histoire de famille — parce que ça l’est.' },
-    { num:'02', t:'Un voyage, pas un produit.',
-      d:'On ne vend pas des cases à cocher. On écoute, on ajuste, on retire ce qui n’a pas de sens. Un programme à 5h du matin, c’est non — sauf si vous voulez voir les pêcheurs partir.' },
-    { num:'03', t:'L’argent du voyage reste ici.',
-      d:'Hébergements en maisons d’hôtes, restaurateurs du quartier, artisanat direct producteur. 78 % de ce que vous payez reste dans l’économie sénégalaise.' },
+    { num:'01', tKey:'home.pourquoi.col1.t', dKey:'home.pourquoi.col1.d' },
+    { num:'02', tKey:'home.pourquoi.col2.t', dKey:'home.pourquoi.col2.d' },
+    { num:'03', tKey:'home.pourquoi.col3.t', dKey:'home.pourquoi.col3.d' },
   ];
   return (
-    <Section id="pourquoi" label="Pourquoi nous" title={<>Pourquoi <em>choisir ACT</em>.</>}
+    <Section id="pourquoi" label={t('home.pourquoi.label')} title={richT(t('home.pourquoi.title'))}
              className="py-20 md:py-28" bg="bg-ink text-sand-50" dark
-             intro="On ne fait pas le voyage le plus brillant. On fait celui dont on est fiers, dont nos partenaires sont fiers, et dont vous parlerez encore dans dix ans."
+             intro={t('home.pourquoi.intro')}
              screenLabel="04 Pourquoi">
       <div className="grid md:grid-cols-3 gap-10 md:gap-14">
         {cols.map((c,i)=>(
           <div key={i} className="relative">
             <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-4">— {c.num}</div>
-            <h3 className="font-display text-[28px] md:text-[34px] leading-tight mb-4">{c.t}</h3>
-            <p className="text-sand-200 leading-relaxed">{c.d}</p>
+            <h3 className="font-display text-[28px] md:text-[34px] leading-tight mb-4">{t(c.tKey)}</h3>
+            <p className="text-sand-200 leading-relaxed">{t(c.dKey)}</p>
           </div>
         ))}
       </div>
@@ -208,211 +207,232 @@ const Pourquoi = () => {
 // ============================================================================
 // Le Sénégal selon ACT — présentation éditoriale du pays
 // ============================================================================
-const SenegalSelonACT = () => (
-  <Section id="senegal-selon-act" label="Notre regard"
-           title={<>Le Sénégal, <em>à hauteur d’humain</em>.</>}
-           kicker="Notre lecture du pays, après trente ans à l’organiser."
-           intro="Un pays-carrefour : 17 ethnies, 4 grandes régions naturelles, 700 km de côte atlantique. Et un mot wolof qu’on essaie de tenir au quotidien — téranga, l’hospitalité."
-           className="py-20 md:py-28" screenLabel="02 Le Sénégal selon ACT">
-    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-      {[
-        { I:Icons.Sparkle, k:'Patrimoine mondial', d:'Île de Gorée, Saint-Louis, Djoudj, Niokolo-Koba, Saloum — cinq sites inscrits par l’UNESCO.' },
-        { I:Icons.Users,   k:'Diversité culturelle', d:'Wolof, Sérère, Peul, Diola, Mandingue, Bassari… Une mosaïque qui se croise au quotidien.' },
-        { I:Icons.MapPin,  k:'Carrefour ouest-africain', d:'Au-delà du Sénégal : Gambie, Mali, Guinée, Mauritanie, Côte d’Ivoire et Ghana — nos bureaux correspondants ouvrent toute la sous-région.' },
-        { I:Icons.Globe,   k:'Six langues d’accueil', d:'FR, EN, IT, DE, ES, JA — nos guides parlent celle qui vous met à l’aise.' },
-      ].map((p, i) => (
-        <article key={i} className="rounded-3xl bg-sand-100/60 border border-ink/5 p-6 md:p-7 hover:shadow-lg hover:shadow-ink/5 transition-shadow">
-          <div className="h-11 w-11 rounded-full bg-terre/10 text-terre inline-flex items-center justify-center mb-4">
-            <p.I size={20}/>
-          </div>
-          <div className="font-display text-[22px] md:text-[24px] leading-tight">{p.k}</div>
-          <p className="mt-2 text-[14px] text-ink-600 leading-relaxed">{p.d}</p>
-        </article>
-      ))}
-    </div>
-  </Section>
-);
+const SenegalSelonACT = () => {
+  const { t, richT } = useI18n();
+  const items = [
+    { I:Icons.Sparkle, kKey:'home.senegal.item1.k', dKey:'home.senegal.item1.d' },
+    { I:Icons.Users,   kKey:'home.senegal.item2.k', dKey:'home.senegal.item2.d' },
+    { I:Icons.MapPin,  kKey:'home.senegal.item3.k', dKey:'home.senegal.item3.d' },
+    { I:Icons.Globe,   kKey:'home.senegal.item4.k', dKey:'home.senegal.item4.d' },
+  ];
+  return (
+    <Section id="senegal-selon-act" label={t('home.senegal.label')}
+             title={richT(t('home.senegal.title'))}
+             kicker={t('home.senegal.kicker')}
+             intro={t('home.senegal.intro')}
+             className="py-20 md:py-28" screenLabel="02 Le Sénégal selon ACT">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+        {items.map((p, i) => (
+          <article key={i} className="rounded-3xl bg-sand-100/60 border border-ink/5 p-6 md:p-7 hover:shadow-lg hover:shadow-ink/5 transition-shadow">
+            <div className="h-11 w-11 rounded-full bg-terre/10 text-terre inline-flex items-center justify-center mb-4">
+              <p.I size={20}/>
+            </div>
+            <div className="font-display text-[22px] md:text-[24px] leading-tight">{t(p.kKey)}</div>
+            <p className="mt-2 text-[14px] text-ink-600 leading-relaxed">{t(p.dKey)}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+  );
+};
 
 // ============================================================================
 // Profil ACT — brève présentation de l'agence avec CTA À propos
 // ============================================================================
-const ProfilACT = ({ go }) => (
-  <section id="profil-act" className="py-20 md:py-28 bg-ink text-sand-50 relative overflow-hidden" data-screen-label="03 Profil ACT">
-    <div className="max-w-[1280px] mx-auto px-4 md:px-8 grid md:grid-cols-[1.15fr,1fr] gap-10 md:gap-16 items-center">
-      <div>
-        <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-4">— L’agence</div>
-        <h2 className="font-display text-[36px] sm:text-[44px] md:text-[60px] leading-[1.02]">
-          Africa Connection Tours, <em>depuis 1996</em>.
-        </h2>
-        <p className="mt-6 text-sand-200 max-w-xl text-[15.5px] md:text-[17px] leading-relaxed">
-          Tour-opérateur réceptif fondé à Dakar par des entrepreneurs sénégalais issus des grandes maisons du tourisme international. Une équipe permanente formée en Europe et aux États-Unis, qui accueille les voyageurs en six langues, et un réseau de bureaux correspondants dans six pays d’Afrique de l’Ouest.
-        </p>
-        <p className="mt-4 text-sand-200 max-w-xl text-[15.5px] md:text-[17px] leading-relaxed">
-          Trente ans à organiser le Sénégal — pour la diaspora, le marché local et les voyageurs internationaux.
-        </p>
-        <div className="mt-8">
-          <Btn onClick={()=>go('about')} variant="terre" size="lg" icon={<Icons.ArrowRight size={18}/>}>
-            Découvrir l’agence
-          </Btn>
+const ProfilACT = ({ go }) => {
+  const { t, richT } = useI18n();
+  const stats = [
+    { kKey:'home.profil.stat1.k', vKey:'home.profil.stat1.v' },
+    { kKey:'home.profil.stat2.k', vKey:'home.profil.stat2.v' },
+    { kKey:'home.profil.stat3.k', vKey:'home.profil.stat3.v' },
+    { kKey:'home.profil.stat4.k', vKey:'home.profil.stat4.v' },
+  ];
+  return (
+    <section id="profil-act" className="py-20 md:py-28 bg-ink text-sand-50 relative overflow-hidden" data-screen-label="03 Profil ACT">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8 grid md:grid-cols-[1.15fr,1fr] gap-10 md:gap-16 items-center">
+        <div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-4">— {t('home.profil.label')}</div>
+          <h2 className="font-display text-[36px] sm:text-[44px] md:text-[60px] leading-[1.02]">
+            {richT(t('home.profil.title'))}
+          </h2>
+          <p className="mt-6 text-sand-200 max-w-xl text-[15.5px] md:text-[17px] leading-relaxed">
+            {t('home.profil.body1')}
+          </p>
+          <p className="mt-4 text-sand-200 max-w-xl text-[15.5px] md:text-[17px] leading-relaxed">
+            {t('home.profil.body2')}
+          </p>
+          <div className="mt-8">
+            <Btn onClick={()=>go('about')} variant="terre" size="lg" icon={<Icons.ArrowRight size={18}/>}>
+              {t('home.profil.cta')}
+            </Btn>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
+          {stats.map((s,i) => (
+            <div key={i} className="rounded-2xl bg-sand-50/5 border border-sand-100/15 p-5 md:p-6">
+              <div className="font-display text-[40px] md:text-[52px] text-sand-50 leading-none">{t(s.kKey)}</div>
+              <div className="text-[12.5px] text-sand-300 mt-2 leading-snug">{t(s.vKey)}</div>
+            </div>
+          ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3 md:gap-4">
-        {[
-          { k:'30',   v:'années d’expertise réceptive · depuis 1996' },
-          { k:'6',    v:'pays d’Afrique de l’Ouest couverts' },
-          { k:'6',    v:'langues d’accueil — FR · EN · IT · DE · ES · JA' },
-          { k:'1',    v:'standard d’accueil — la téranga, en chaque circuit' },
-        ].map((s,i) => (
-          <div key={i} className="rounded-2xl bg-sand-50/5 border border-sand-100/15 p-5 md:p-6">
-            <div className="font-display text-[40px] md:text-[52px] text-sand-50 leading-none">{s.k}</div>
-            <div className="text-[12.5px] text-sand-300 mt-2 leading-snug">{s.v}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 // ============================================================================
 // Produits & circuits — sélection de la home
 // ============================================================================
 const ProduitsCircuits = ({ onOpenTour, go }) => {
+  const { t, richT } = useI18n();
   // Mix : circuits signature + programme diaspora pour montrer la variété
   const picks = ['goree-lac-saloum','diaspora-essentiel','casamance-essentielle','lompoul-saint-louis']
     .map(id => CIRCUITS.find(c=>c.id===id)).filter(Boolean);
   return (
-    <Section id="produits-circuits" label="Sélection"
-             title={<>Quelques <em>circuits & produits</em>.</>}
-             kicker="Un aperçu — du circuit signature au programme Retour aux sources, en passant par les packs événements (baptême, cérémonie traditionnelle)."
+    <Section id="produits-circuits" label={t('home.produits.label')}
+             title={richT(t('home.produits.title'))}
+             kicker={t('home.produits.kicker')}
              className="py-20 md:py-28" screenLabel="05 Produits & circuits">
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
         {picks.map(c => <CircuitCard key={c.id} c={c} onOpen={onOpenTour}/>)}
       </div>
       <div className="mt-10 md:mt-12 flex justify-center">
         <Btn onClick={()=>go('circuits')} variant="primary" size="lg" icon={<Icons.ArrowRight size={18}/>}>
-          Voir tous nos circuits & produits
+          {t('home.produits.cta')}
         </Btn>
       </div>
     </Section>
   );
 };
 
-const RetourSources = ({ go }) => (
-  <section id="diaspora" className="relative bg-ink text-sand-50 py-20 md:py-32 overflow-hidden" data-screen-label="06 Retour aux sources">
-    <div className="absolute inset-0">
-      <Photo tone="terre" mood="city" rounded="" showLabel={false} className="h-full w-full opacity-50" src={IMG('Ile de gorée', 6)} alt="Île de Gorée"/>
-      <div className="absolute inset-0" style={{background:'linear-gradient(90deg, rgba(26,22,18,0.95) 0%, rgba(26,22,18,0.6) 100%)'}}/>
-    </div>
-    <div className="relative max-w-[1280px] mx-auto px-4 md:px-8 grid md:grid-cols-[1.1fr,1fr] gap-12 items-center">
-      <div>
-        <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-4">— Diaspora</div>
-        <h2 className="font-display text-[40px] sm:text-[52px] md:text-[68px] leading-[0.98]">
-          Le retour aux <em>sources</em>,<br/>fait avec le cœur.
-        </h2>
-        <p className="mt-6 max-w-xl text-sand-200 text-[15.5px] leading-relaxed">
-          Pour celles et ceux qui descendent de cette terre, Gorée n’est pas une étape. C’est un moment. On vous accompagne avec patience — vos questions, vos silences, votre rythme. Nos guides ont accueilli des familles entières en pèlerinage de mémoire.
-        </p>
-        <ul className="mt-7 space-y-3 text-[14.5px] text-sand-100">
-          {[
-            'Recherche généalogique avec partenaires locaux (sur demande)',
-            'Cérémonie d’accueil traditionnelle en village',
-            'Rencontres avec historien·ne·s & artistes',
-            'Photographe sur tout le séjour'
-          ].map((t,i)=>(
-            <li key={i} className="flex items-start gap-3"><Icons.Check size={18} className="text-terre-300 mt-0.5 shrink-0"/>{t}</li>
-          ))}
-        </ul>
-        <div className="mt-9">
-          <Btn onClick={()=>go('circuits','diaspora')} variant="terre" size="lg" icon={<Icons.ArrowRight size={18}/>}>
-            Découvrir nos circuits culturels
-          </Btn>
-        </div>
+const RetourSources = ({ go }) => {
+  const { t, richT } = useI18n();
+  const bullets = [
+    t('home.retour.bullet1'),
+    t('home.retour.bullet2'),
+    t('home.retour.bullet3'),
+    t('home.retour.bullet4'),
+  ];
+  return (
+    <section id="diaspora" className="relative bg-ink text-sand-50 py-20 md:py-32 overflow-hidden" data-screen-label="06 Retour aux sources">
+      <div className="absolute inset-0">
+        <Photo tone="terre" mood="city" rounded="" showLabel={false} className="h-full w-full opacity-50" src={IMG('Ile de gorée', 6)} alt="Île de Gorée"/>
+        <div className="absolute inset-0" style={{background:'linear-gradient(90deg, rgba(26,22,18,0.95) 0%, rgba(26,22,18,0.6) 100%)'}}/>
       </div>
-      <div className="relative">
-        <div className="grid grid-cols-2 gap-3 md:gap-4">
-          <Photo tone="terre" mood="city" label="Gorée — porte" ratio="aspect-[3/4]" className="row-span-2" src={IMG('Ile de gorée', 7)} alt="Île de Gorée"/>
-          <Photo tone="dusk" mood="portrait" label="rencontre"   ratio="aspect-square" src={IMG('Dakar', 7)} alt="Rencontre à Dakar"/>
-          <Photo tone="sand" mood="horizon" label="Saint-Louis"  ratio="aspect-square" src={IMG('Saint-Louis', 5)} alt="Saint-Louis"/>
-        </div>
-        {/* Quote card : statique sous les photos sur mobile (pas de chevauchement), absolue flottante sur desktop. */}
-        <div className="static md:absolute md:-bottom-4 md:-left-4 lg:-left-8 mt-4 md:mt-0 max-w-full md:max-w-[300px] bg-sand-50 text-ink p-5 rounded-2xl shadow-2xl">
-          <Icons.Quote size={18} className="text-terre mb-2"/>
-          <p className="font-display text-[17px] leading-snug">"On a marché dans la Maison des Esclaves en silence. Mamadou n’a pas parlé. C’était parfait."</p>
-          <div className="mt-3 text-[12px] text-ink-500 font-mono">— Aïssatou D., Brooklyn</div>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-const PackDakar = () => (
-  <Section id="dakar-pack" label="Pack étrangers" title={<>Dakar, <em>sans stress.</em></>}
-           kicker="Pour un premier voyage en Afrique de l’Ouest — tout est pris en charge dès l’atterrissage."
-           className="py-20 md:py-28 bg-sand-100" screenLabel="07 Pack Dakar">
-    <div className="grid md:grid-cols-[1.1fr,1fr] gap-10 md:gap-16 items-start">
-      <div>
-        <ol className="space-y-5">
-          {[
-            { n:'01', t:'Accueil à l’aéroport AIBD', d:'Quelle que soit l’heure. Pancarte à votre nom, eau fraîche, SIM locale offerte.' },
-            { n:'02', t:'Transfert privé climatisé', d:'1h vers Dakar. Chauffeur professionnel, paiement déjà réglé, zéro négociation.' },
-            { n:'03', t:'Tour de Dakar guidé', d:'Médina, Almadies, Île N’Gor, marché HLM. Un guide qui adapte selon votre énergie.' },
-            { n:'04', t:'Assistance WhatsApp 24/7', d:'Un numéro local toujours joignable — pour la moindre question, à n’importe quelle heure.' },
-            { n:'05', t:'Retour à l’aéroport', d:'À l’heure, sans stress. On sait combien de temps prend Dakar le vendredi soir.' },
-          ].map((s,i)=>(
-            <li key={i} className="grid grid-cols-[40px,1fr] gap-4 md:gap-6 border-b border-ink/10 pb-5 last:border-0">
-              <div className="font-mono text-terre text-[12px] tracking-[0.2em] pt-1.5">{s.n}</div>
-              <div>
-                <div className="font-display text-[22px] md:text-[26px] leading-tight">{s.t}</div>
-                <div className="text-[14px] text-ink-600 leading-relaxed mt-1">{s.d}</div>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div className="relative md:sticky md:top-28">
-        <Photo tone="atlant" mood="city" label="Dakar / Almadies" ratio="aspect-[4/5]" rounded="rounded-3xl" className="shadow-xl" src={IMG('Dakar', 6)} alt="Dakar — Almadies"/>
-        <div className="absolute -bottom-6 -right-3 md:-right-6 bg-sand-50 rounded-2xl p-5 shadow-xl border border-ink/5 w-[240px]">
-          <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-ink-500">À partir de</div>
-          <Price xof={280000} className="font-display text-[30px] leading-none mt-1 block"/>
-          <div className="text-[12px] text-ink-600 mt-1.5">3 jours / 2 nuits</div>
-          <Btn as="a" href={buildWaURL('Bonjour, je suis intéressé·e par le pack Dakar sans stress.')} target="_blank" rel="noreferrer"
-               variant="wa" size="sm" className="mt-4 w-full" icon={<Icons.Whatsapp size={14}/>}>Demander ce pack</Btn>
-        </div>
-      </div>
-    </div>
-  </Section>
-);
-
-const Temoignages = () => (
-  <Section id="avis" label="Ils sont partis avec nous" title={<>Ce qu’ils en <em>retiennent</em>.</>}
-           className="py-20 md:py-28" screenLabel="08 Témoignages">
-    <div className="grid md:grid-cols-3 gap-5 md:gap-6">
-      {TESTIMONIALS.map((t,i)=>(
-        <figure key={i} className="bg-sand-100 rounded-3xl p-6 md:p-7 flex flex-col h-full">
-          <Icons.Quote size={22} className="text-terre mb-3"/>
-          <blockquote className="font-display text-[22px] md:text-[24px] leading-snug text-ink">"{t.text}"</blockquote>
-          <div className="mt-auto pt-6 flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full overflow-hidden shrink-0">
-              <Photo tone={t.tone} mood={t.mood} rounded="rounded-full" showLabel={false} className="h-12 w-12"/>
-            </div>
-            <div className="flex-1">
-              <div className="font-medium text-[14px]">{t.name}</div>
-              <div className="text-[12px] text-ink-500">{t.from} · <span className="text-ink-700">{t.circuit}</span></div>
-            </div>
-            <StarRow value={t.stars} size={12}/>
+      <div className="relative max-w-[1280px] mx-auto px-4 md:px-8 grid md:grid-cols-[1.1fr,1fr] gap-12 items-center">
+        <div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-4">— {t('home.retour.label')}</div>
+          <h2 className="font-display text-[40px] sm:text-[52px] md:text-[68px] leading-[0.98]">
+            {richT(t('home.retour.title'))}
+          </h2>
+          <p className="mt-6 max-w-xl text-sand-200 text-[15.5px] leading-relaxed">
+            {t('home.retour.intro')}
+          </p>
+          <ul className="mt-7 space-y-3 text-[14.5px] text-sand-100">
+            {bullets.map((b,i)=>(
+              <li key={i} className="flex items-start gap-3"><Icons.Check size={18} className="text-terre-300 mt-0.5 shrink-0"/>{b}</li>
+            ))}
+          </ul>
+          <div className="mt-9">
+            <Btn onClick={()=>go('circuits','diaspora')} variant="terre" size="lg" icon={<Icons.ArrowRight size={18}/>}>
+              {t('home.retour.cta')}
+            </Btn>
           </div>
-        </figure>
-      ))}
-    </div>
-  </Section>
-);
+        </div>
+        <div className="relative">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
+            <Photo tone="terre" mood="city" label={t('home.retour.photo1')} ratio="aspect-[3/4]" className="row-span-2" src={IMG('Ile de gorée', 7)} alt={t('home.retour.photo1')}/>
+            <Photo tone="dusk" mood="portrait" label={t('home.retour.photo2')} ratio="aspect-square" src={IMG('Dakar', 7)} alt={t('home.retour.photo2')}/>
+            <Photo tone="sand" mood="horizon" label={t('home.retour.photo3')} ratio="aspect-square" src={IMG('Saint-Louis', 5)} alt={t('home.retour.photo3')}/>
+          </div>
+          {/* Quote card : statique sous les photos sur mobile (pas de chevauchement), absolue flottante sur desktop. */}
+          <div className="static md:absolute md:-bottom-4 md:-left-4 lg:-left-8 mt-4 md:mt-0 max-w-full md:max-w-[300px] bg-sand-50 text-ink p-5 rounded-2xl shadow-2xl">
+            <Icons.Quote size={18} className="text-terre mb-2"/>
+            <p className="font-display text-[17px] leading-snug">{t('home.retour.quote')}</p>
+            <div className="mt-3 text-[12px] text-ink-500 font-mono">— Aïssatou D., Brooklyn</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const PackDakar = () => {
+  const { t, richT } = useI18n();
+  const steps = [
+    { n:'01', tKey:'home.pack.step1.t', dKey:'home.pack.step1.d' },
+    { n:'02', tKey:'home.pack.step2.t', dKey:'home.pack.step2.d' },
+    { n:'03', tKey:'home.pack.step3.t', dKey:'home.pack.step3.d' },
+    { n:'04', tKey:'home.pack.step4.t', dKey:'home.pack.step4.d' },
+    { n:'05', tKey:'home.pack.step5.t', dKey:'home.pack.step5.d' },
+  ];
+  return (
+    <Section id="dakar-pack" label={t('home.pack.label')} title={richT(t('home.pack.title'))}
+             kicker={t('home.pack.kicker')}
+             className="py-20 md:py-28 bg-sand-100" screenLabel="07 Pack Dakar">
+      <div className="grid md:grid-cols-[1.1fr,1fr] gap-10 md:gap-16 items-start">
+        <div>
+          <ol className="space-y-5">
+            {steps.map((s,i)=>(
+              <li key={i} className="grid grid-cols-[40px,1fr] gap-4 md:gap-6 border-b border-ink/10 pb-5 last:border-0">
+                <div className="font-mono text-terre text-[12px] tracking-[0.2em] pt-1.5">{s.n}</div>
+                <div>
+                  <div className="font-display text-[22px] md:text-[26px] leading-tight">{t(s.tKey)}</div>
+                  <div className="text-[14px] text-ink-600 leading-relaxed mt-1">{t(s.dKey)}</div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="relative md:sticky md:top-28">
+          <Photo tone="atlant" mood="city" label="Dakar / Almadies" ratio="aspect-[4/5]" rounded="rounded-3xl" className="shadow-xl" src={IMG('Dakar', 6)} alt="Dakar — Almadies"/>
+          <div className="absolute -bottom-6 -right-3 md:-right-6 bg-sand-50 rounded-2xl p-5 shadow-xl border border-ink/5 w-[240px]">
+            <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-ink-500">{t('home.pack.priceFrom')}</div>
+            <Price xof={280000} className="font-display text-[30px] leading-none mt-1 block"/>
+            <div className="text-[12px] text-ink-600 mt-1.5">{t('home.pack.priceDuration')}</div>
+            <Btn as="a" href={buildWaURL(t('home.pack.wa'))} target="_blank" rel="noreferrer"
+                 variant="wa" size="sm" className="mt-4 w-full" icon={<Icons.Whatsapp size={14}/>}>{t('home.pack.cta')}</Btn>
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+};
+
+const Temoignages = () => {
+  const { t, richT } = useI18n();
+  return (
+    <Section id="avis" label={t('home.testimonials.label')} title={richT(t('home.testimonials.title'))}
+             className="py-20 md:py-28" screenLabel="08 Témoignages">
+      <div className="grid md:grid-cols-3 gap-5 md:gap-6">
+        {TESTIMONIALS.map((tt,i)=>(
+          <figure key={i} className="bg-sand-100 rounded-3xl p-6 md:p-7 flex flex-col h-full">
+            <Icons.Quote size={22} className="text-terre mb-3"/>
+            <blockquote className="font-display text-[22px] md:text-[24px] leading-snug text-ink">"{tt.text}"</blockquote>
+            <div className="mt-auto pt-6 flex items-center gap-3">
+              <div className="h-12 w-12 rounded-full overflow-hidden shrink-0">
+                <Photo tone={tt.tone} mood={tt.mood} rounded="rounded-full" showLabel={false} className="h-12 w-12"/>
+              </div>
+              <div className="flex-1">
+                <div className="font-medium text-[14px]">{tt.name}</div>
+                <div className="text-[12px] text-ink-500">{tt.from} · <span className="text-ink-700">{tt.circuit}</span></div>
+              </div>
+              <StarRow value={tt.stars} size={12}/>
+            </div>
+          </figure>
+        ))}
+      </div>
+    </Section>
+  );
+};
 
 const BlogTeaser = ({ go }) => {
+  const { t, richT } = useI18n();
   const picks = BLOG.slice(0, 3);
   return (
-    <Section id="blog-spot" label="Conseils de voyage" title={<>Lire <em>avant de partir</em>.</>}
-             kicker="Du blog ACT"
-             intro={<><button onClick={()=>go('blog')} className="underline underline-offset-4 hover:text-terre">Voir tous les articles →</button></>}
+    <Section id="blog-spot" label={t('home.blog.label')} title={richT(t('home.blog.title'))}
+             kicker={t('home.blog.kicker')}
+             intro={<button onClick={()=>go('blog')} className="underline underline-offset-4 hover:text-terre">{t('home.blog.viewAll')}</button>}
              className="py-20 md:py-28 bg-sand-100" screenLabel="09 Blog">
       <div className="grid md:grid-cols-3 gap-5 md:gap-6">
         {picks.map(b => (
@@ -423,7 +443,7 @@ const BlogTeaser = ({ go }) => {
               <h3 className="font-display text-[24px] leading-tight mt-2 group-hover:text-terre transition-colors">{b.title}</h3>
               <p className="text-[14px] text-ink-600 leading-relaxed mt-2.5">{b.excerpt}</p>
               <div className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium">
-                Lire l’article <Icons.ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform"/>
+                {t('home.blog.readArticle')} <Icons.ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform"/>
               </div>
             </div>
           </button>
@@ -433,15 +453,17 @@ const BlogTeaser = ({ go }) => {
   );
 };
 
-const Insta = () => (
-  <section className="py-20 md:py-24 overflow-hidden" data-screen-label="10 Instagram">
-    <div className="max-w-[1280px] mx-auto px-4 md:px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
-      <div>
-        <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-3">— Instagram</div>
-        <h2 className="font-display text-[32px] md:text-[44px] leading-none">@actours_senegal</h2>
+const Insta = () => {
+  const { t } = useI18n();
+  return (
+    <section className="py-20 md:py-24 overflow-hidden" data-screen-label="10 Instagram">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+        <div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-3">— {t('home.insta.label')}</div>
+          <h2 className="font-display text-[32px] md:text-[44px] leading-none">@actours_senegal</h2>
+        </div>
+        <a href="#" className="text-[14px] inline-flex items-center gap-1.5 hover:text-terre">{t('home.insta.follow')} <Icons.ArrowUpRight size={14}/></a>
       </div>
-      <a href="#" className="text-[14px] inline-flex items-center gap-1.5 hover:text-terre">Suivre <Icons.ArrowUpRight size={14}/></a>
-    </div>
     <div className="relative">
       <div className="flex gap-3 md:gap-4 marquee w-max">
         {[...INSTA, ...INSTA].map((p,i)=>(
@@ -453,8 +475,9 @@ const Insta = () => (
       <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-sand-50 to-transparent"/>
       <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-sand-50 to-transparent"/>
     </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const Home = ({ onOpenTour, go }) => (
   <main>
