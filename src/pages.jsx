@@ -221,54 +221,51 @@ const About = ({ go }) => {
       {/* Timeline — depuis 1996 */}
       <section className="py-16 md:py-24 bg-sand-100/40 border-y border-ink/5">
         <div className="max-w-[1280px] mx-auto px-4 md:px-8">
-          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-4">— Notre parcours</div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-4">— {t('about.timeline.label')}</div>
           <h2 className="font-display text-[36px] md:text-[56px] leading-[1.02] mb-12 md:mb-16 max-w-3xl">
-            De 1996 à aujourd'hui — <em>l'Afrique de l'Ouest, étape par étape</em>.
+            {richT(t('about.timeline.title'))}
           </h2>
           <ol className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-3 relative">
             {/* Ligne horizontale décorative en desktop */}
             <div aria-hidden="true" className="hidden md:block absolute top-7 left-[10%] right-[10%] h-px bg-terre/25"/>
             {[
-              { y:'1996', t:'Fondation à Dakar', d:'Création le 19 août 1996 par des entrepreneurs sénégalais issus des grandes maisons du tourisme international (SA au capital de 20 M FCFA).' },
-              { y:'2000s', t:'Réseau sous-régional', d:'Ouverture des bureaux correspondants en Gambie, Mali et Mauritanie.' },
-              { y:'2011', t:'Reconnaissance ATA', d:'Salif Badiane préside le chapitre Sénégal de l\'Africa Travel Association.' },
-              { y:'2010s', t:'Couverture continentale', d:'Extension du réseau en Guinée, Côte d\'Ivoire et Ghana — circuits intégrés multi-pays.' },
-              { y:'2026', t:'Cap digital', d:'Nouvelle plateforme web pour la diaspora, le marché local et les voyageurs internationaux.' },
+              { y:'1996',  tKey:'about.timeline.1.t', dKey:'about.timeline.1.d' },
+              { y:'2000s', tKey:'about.timeline.2.t', dKey:'about.timeline.2.d' },
+              { y:'2011',  tKey:'about.timeline.3.t', dKey:'about.timeline.3.d' },
+              { y:'2010s', tKey:'about.timeline.4.t', dKey:'about.timeline.4.d' },
+              { y:'2026',  tKey:'about.timeline.5.t', dKey:'about.timeline.5.d' },
             ].map((step, i) => (
               <li key={i} className="relative flex md:block items-start gap-4">
-                {/* Pastille année */}
-                <div className="relative shrink-0 inline-flex items-center justify-center h-14 w-14 md:h-14 md:w-14 rounded-full bg-terre text-sand-50 font-mono text-[11px] md:text-[12px] font-semibold ring-4 ring-sand-50 shadow-md shadow-terre/30">
+                <div className="relative shrink-0 inline-flex items-center justify-center h-14 w-14 md:h-14 md:w-14 rounded-full bg-terre-600 text-sand-50 font-mono text-[11px] md:text-[12px] font-semibold ring-4 ring-sand-50 shadow-md shadow-terre/30">
                   {step.y}
                 </div>
                 <div className="md:mt-5">
-                  <div className="font-display text-[20px] md:text-[22px] leading-tight text-ink">{step.t}</div>
-                  <p className="text-[13.5px] md:text-[14px] text-ink-600 leading-relaxed mt-1.5 max-w-[220px]">{step.d}</p>
+                  <div className="font-display text-[20px] md:text-[22px] leading-tight text-ink">{t(step.tKey)}</div>
+                  <p className="text-[13.5px] md:text-[14px] text-ink-600 leading-relaxed mt-1.5 max-w-[220px]">{t(step.dKey)}</p>
                 </div>
               </li>
             ))}
           </ol>
-          <p className="mt-10 text-[12.5px] text-ink-500 italic">
-            32 ans d'expérience cumulés, présence dans 7 pays, équipe multilingue formée en Europe et aux États-Unis.
-          </p>
+          <p className="mt-10 text-[12.5px] text-ink-500 italic">{t('about.timeline.note')}</p>
         </div>
       </section>
 
       {/* Notre histoire */}
-      <Section label="Notre histoire" title={<>Plus de trente ans, <em>une expertise sous-régionale</em>.</>}
-               kicker="Salif Badiane · Directeur Général"
+      <Section label={t('about.histoire.label')} title={richT(t('about.histoire.title'))}
+               kicker={t('about.histoire.kicker')}
                className="py-20 md:py-28">
         <div className="grid md:grid-cols-[1.2fr,1fr] gap-10 md:gap-16 items-center">
           <div className="space-y-5 text-[16px] md:text-[17px] leading-relaxed text-ink-800 max-w-2xl">
-            <p>Fondée le 19 août 1996 par des entrepreneurs sénégalais issus des grandes maisons du tourisme international, Africa Connection Tours s’est imposée comme l’un des tour-opérateurs réceptifs de référence à Dakar.</p>
-            <p>Sous la direction de <strong>Salif Badiane</strong>, l’agence a élargi son réseau au-delà des frontières sénégalaises : des bureaux correspondants opèrent aujourd’hui en <em>Gambie, Mali, Guinée, Mauritanie, Côte d’Ivoire et Ghana</em> — permettant des circuits intégrés sur toute l’Afrique de l’Ouest.</p>
-            <p>L’équipe — Sénégalaise, formée en Europe et aux États-Unis — accueille les voyageurs en six langues (français, anglais, italien, allemand, espagnol, japonais). Trente ans d’expérience cumulés, et toujours la même obsession : un voyage qui ressemble vraiment au pays.</p>
+            <p>{t('about.histoire.p1')}</p>
+            <p>{t('about.histoire.p2')}</p>
+            <p>{t('about.histoire.p3')}</p>
           </div>
           <div className="relative">
             <div className="grid grid-cols-2 gap-3">
-              <Photo tone="terre" mood="portrait" label="Salif Badiane · DG" ratio="aspect-[3/4]"/>
+              <Photo tone="terre" mood="portrait" label={t('about.histoire.photo.salif')} ratio="aspect-[3/4]"/>
               <div className="grid grid-rows-2 gap-3">
-                <Photo tone="sand" mood="city" label="siège · 52 rue Félix Faure" ratio="aspect-square" src={IMG('Dakar', 6)} alt="Siège ACT, Dakar-Peytavin"/>
-                <Photo tone="atlant" mood="water" label="bureau sous-régional" ratio="aspect-square" src={IMG('Delta du Saloum', 5)} alt="Réseau ouest-africain"/>
+                <Photo tone="sand" mood="city" label={t('about.histoire.photo.siege')} ratio="aspect-square" src={IMG('Dakar', 6)} alt="Siège ACT, Dakar-Peytavin"/>
+                <Photo tone="atlant" mood="water" label={t('about.histoire.photo.bureau')} ratio="aspect-square" src={IMG('Delta du Saloum', 5)} alt="Réseau ouest-africain"/>
               </div>
             </div>
           </div>
@@ -276,7 +273,7 @@ const About = ({ go }) => {
       </Section>
 
       {/* Valeurs */}
-      <Section label="Nos valeurs" title={<>Quatre <em>piliers</em>.</>}
+      <Section label={t('about.valeurs.label')} title={richT(t('about.valeurs.title'))}
                className="py-20 md:py-24 bg-ink text-sand-50" dark>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {VALUES.map((v,i)=>{
@@ -284,8 +281,8 @@ const About = ({ go }) => {
             return (
               <div key={i} className="border-t border-sand-100/15 pt-6">
                 <div className="h-12 w-12 rounded-full bg-terre/15 text-terre-300 inline-flex items-center justify-center mb-5"><I size={22}/></div>
-                <div className="font-display text-[26px] leading-tight">{v.t}</div>
-                <div className="text-sand-200 mt-2 leading-relaxed text-[14px]">{v.d}</div>
+                <div className="font-display text-[26px] leading-tight">{t(`about.value.${i+1}.t`, v.t)}</div>
+                <div className="text-sand-200 mt-2 leading-relaxed text-[14px]">{t(`about.value.${i+1}.d`, v.d)}</div>
               </div>
             );
           })}
@@ -293,18 +290,18 @@ const About = ({ go }) => {
       </Section>
 
       {/* L'équipe */}
-      <Section label="L’équipe" title={<>Les <em>visages</em> derrière chaque voyage.</>}
-               kicker="Équipe permanente à Dakar + guides & partenaires sur tout le pays"
+      <Section label={t('about.equipe.label')} title={richT(t('about.equipe.title'))}
+               kicker={t('about.equipe.kicker')}
                className="py-20 md:py-28">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {TEAM.map((m,i) => (
             <article key={i} className="bg-sand-100 rounded-3xl overflow-hidden border border-ink/5">
               <Photo tone={m.tone} mood={m.mood} label={m.name.split(' ')[0].toLowerCase()} ratio="aspect-[5/4]" rounded=""/>
               <div className="p-5 md:p-6">
-                <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-terre">{m.role}</div>
+                <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-terre">{t(`team.${i}.role`, m.role)}</div>
                 <div className="font-display text-[24px] leading-tight mt-1">{m.name}</div>
                 <div className="text-[12.5px] text-ink-600 mt-2">{m.langs.join(' · ')}</div>
-                <p className="mt-3.5 text-[14px] text-ink-800 leading-relaxed italic">"{m.quote}"</p>
+                <p className="mt-3.5 text-[14px] text-ink-800 leading-relaxed italic">"{t(`team.${i}.quote`, m.quote)}"</p>
               </div>
             </article>
           ))}
@@ -312,32 +309,31 @@ const About = ({ go }) => {
       </Section>
 
       {/* Pourquoi nous + Tourisme responsable */}
-      <Section label="Pourquoi ACT" title={<>Ce qui change <em>quand on choisit local</em>.</>}
+      <Section label={t('about.pourquoi.label')} title={richT(t('about.pourquoi.title'))}
                className="py-20 md:py-24 bg-sand-100">
         <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
           <div className="space-y-5 text-[15.5px] md:text-[16.5px] leading-relaxed text-ink-800 max-w-xl">
-            <p>Choisir une agence locale n’est pas qu’un geste éthique — c’est aussi un voyage plus juste, plus fluide, plus vivant. Nos chauffeurs connaissent les routes ; nos cuisiniers savent à quelle heure le poisson arrive ; nos guides ont des amis dans chaque village qu’on traverse.</p>
-            <p>Quand quelque chose ne va pas — un orage, un véhicule qui lâche, une étape qui ne vous parle plus — il y a toujours quelqu’un à 30 minutes pour aider. <em>C’est ça, voyager avec des locaux.</em></p>
+            <p>{t('about.pourquoi.p1')}</p>
+            <p>{richT(t('about.pourquoi.p2'))}</p>
           </div>
           <div className="rounded-3xl bg-terre/8 border border-terre/15 p-6 md:p-8">
             <div className="flex items-center gap-2 mb-3 text-terre">
-              <Icons.Leaf size={18}/> <span className="font-mono text-[11px] uppercase tracking-[0.22em]">Tourisme responsable</span>
+              <Icons.Leaf size={18}/> <span className="font-mono text-[11px] uppercase tracking-[0.22em]">{t('about.responsable.label')}</span>
             </div>
             <ul className="space-y-3 text-[14.5px] text-ink-800">
-              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>78 % du chiffre reste dans l’économie sénégalaise</li>
-              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>Guides salariés, contrats locaux conformes</li>
-              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>Eau filtrée — zéro bouteille plastique</li>
-              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>Code de respect des communautés visitées</li>
-              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>Partenariats avec Sénégal Solidaire & Nebeday</li>
+              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>{t('about.responsable.item1')}</li>
+              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>{t('about.responsable.item2')}</li>
+              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>{t('about.responsable.item3')}</li>
+              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>{t('about.responsable.item4')}</li>
+              <li className="flex items-start gap-3"><Icons.Check size={16} className="text-terre mt-0.5"/>{t('about.responsable.item5')}</li>
             </ul>
           </div>
         </div>
       </Section>
 
-      {/* Partenaires — mur de logos sobre, monospace, lignes décoratives */}
-      <Section label="Nos partenaires"
-               title={<>Ils nous <em>font confiance</em>.</>}
-               kicker="Hébergeurs, transporteurs, opérateurs paiement, associations locales — l’écosystème qui rend les voyages possibles."
+      {/* Partenaires */}
+      <Section label={t('about.partenaires.label')} title={richT(t('about.partenaires.title'))}
+               kicker={t('about.partenaires.kicker')}
                className="py-16 md:py-24">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 border-t border-l border-ink/10">
           {PARTNERS.map((p,i)=>(
@@ -351,7 +347,7 @@ const About = ({ go }) => {
             </div>
           ))}
         </div>
-        <p className="mt-6 text-[12.5px] text-ink-500 font-mono">— Les logos seront ajoutés à la livraison finale.</p>
+        <p className="mt-6 text-[12.5px] text-ink-500 font-mono">{t('about.partenaires.note')}</p>
       </Section>
 
       {/* Chiffres */}
@@ -360,7 +356,7 @@ const About = ({ go }) => {
           {FIGURES.map((f,i)=>(
             <div key={i} className={`${i<FIGURES.length-1?'sm:border-r border-sand-100/15':''} sm:pr-8`}>
               <div className="font-display text-[44px] md:text-[64px] leading-none text-sand-50">{f.k}</div>
-              <div className="text-[13px] md:text-[14px] text-sand-200 mt-2">{f.v}</div>
+              <div className="text-[13px] md:text-[14px] text-sand-200 mt-2">{t(`about.figure.${i}.v`, f.v)}</div>
             </div>
           ))}
         </div>
@@ -369,10 +365,10 @@ const About = ({ go }) => {
       {/* CTA */}
       <section className="py-20">
         <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
-          <h3 className="font-display text-[32px] md:text-[48px] leading-tight">On vous montre <em>notre Sénégal</em>&nbsp;?</h3>
+          <h3 className="font-display text-[32px] md:text-[48px] leading-tight">{richT(t('about.cta.title'))}</h3>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Btn onClick={()=>go('circuits')} variant="terre" size="lg" icon={<Icons.ArrowRight size={16}/>}>Voir les circuits</Btn>
-            <Btn onClick={()=>go('contact')}  variant="outline" size="lg">Nous contacter</Btn>
+            <Btn onClick={()=>go('circuits')} variant="terre" size="lg" icon={<Icons.ArrowRight size={16}/>}>{t('about.cta.tours')}</Btn>
+            <Btn onClick={()=>go('contact')}  variant="outline" size="lg">{t('about.cta.contact')}</Btn>
           </div>
         </div>
       </section>
@@ -440,21 +436,21 @@ const Faq = ({ go }) => {
       <section className="max-w-3xl mx-auto px-4 md:px-8 py-16 md:py-24">
         {query && (
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-500 mb-6">
-            {total} résultat{total>1?'s':''} pour "{query}"
+            {(total>1 ? t('faq.results.plural') : t('faq.results.singular')).replace('{n}', total).replace('{query}', query)}
           </div>
         )}
         {filtered.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-ink/20 p-12 text-center">
-            <div className="font-display text-[26px]">Aucun résultat pour "{query}".</div>
-            <p className="text-ink-600 mt-2">Essayez un autre mot, ou écrivez-nous directement.</p>
-            <Btn as="a" href={buildWaURL('Bonjour, j’ai une question :')} target="_blank" rel="noreferrer"
-                 variant="wa" size="md" className="mt-5" icon={<Icons.Whatsapp size={16}/>}>Demander sur WhatsApp</Btn>
+            <div className="font-display text-[26px]">{t('faq.empty.title').replace('{query}', query)}</div>
+            <p className="text-ink-600 mt-2">{t('faq.empty.body')}</p>
+            <Btn as="a" href={buildWaURL(t('faq.wa.question'))} target="_blank" rel="noreferrer"
+                 variant="wa" size="md" className="mt-5" icon={<Icons.Whatsapp size={16}/>}>{t('faq.askWhatsApp')}</Btn>
           </div>
         ) : (
           <div className="space-y-12 md:space-y-16">
             {filtered.map((g, i) => (
               <div key={i}>
-                <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-4">— {g.cat}</div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-4">— {t(`faq.cat.${i}`, g.cat)}</div>
                 <FaqAccordion items={g.items}/>
               </div>
             ))}
@@ -463,13 +459,13 @@ const Faq = ({ go }) => {
 
         {/* Bottom CTA */}
         <div className="mt-16 md:mt-20 rounded-3xl bg-ink text-sand-50 p-8 md:p-10 text-center">
-          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-3">— On répond toujours</div>
-          <h3 className="font-display text-[28px] md:text-[36px] leading-tight">Vous n’avez pas trouvé <em>votre réponse</em>&nbsp;?</h3>
-          <p className="text-sand-200 mt-3 max-w-md mx-auto">On vous répond sur WhatsApp en moins d’une heure, en français, wolof ou anglais.</p>
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-3">— {t('faq.bottomCTA.label')}</div>
+          <h3 className="font-display text-[28px] md:text-[36px] leading-tight">{richT(t('faq.bottomCTA.title'))}</h3>
+          <p className="text-sand-200 mt-3 max-w-md mx-auto">{t('faq.bottomCTA.body')}</p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Btn as="a" href={buildWaURL('Bonjour, j’ai une question :')} target="_blank" rel="noreferrer"
-                 variant="wa" size="lg" icon={<Icons.Whatsapp size={16}/>}>Demander sur WhatsApp</Btn>
-            <Btn onClick={()=>go('contact')} variant="outlineLight" size="lg">Écrire un email</Btn>
+            <Btn as="a" href={buildWaURL(t('faq.wa.question'))} target="_blank" rel="noreferrer"
+                 variant="wa" size="lg" icon={<Icons.Whatsapp size={16}/>}>{t('faq.askWhatsApp')}</Btn>
+            <Btn onClick={()=>go('contact')} variant="outlineLight" size="lg">{t('faq.bottomCTA.emailCTA')}</Btn>
           </div>
         </div>
       </section>
@@ -485,41 +481,46 @@ const Faq = ({ go }) => {
 // Shared layout for the three legal pages. Each consumer passes { kicker,
 // title, blocks } — blocks reuse the same shape as ArticleBody.
 
-const LegalPage = ({ kicker, title, intro, blocks, bgImg, go }) => (
-  <main className="bg-sand-50">
-    <PageHero kicker={kicker} tone="sand" mood="horizon" bgImg={bgImg || IMG('Saint-Louis', 9)} compact
-      title={title} intro={intro}/>
-    <section className="max-w-3xl mx-auto px-4 md:px-8 py-16 md:py-24">
-      <div className="article-body text-[16px] md:text-[17px] leading-[1.75] text-ink-800">
-        <style>{`
-          .article-body p { margin: 0 0 1.1em; }
-          .article-body h2 { font-family:'Instrument Serif', Georgia, serif; font-size: 28px; line-height: 1.2; margin: 2em 0 0.6em; color:#1A1612; }
-          .article-body h3 { font-family:'Instrument Serif', Georgia, serif; font-size: 22px; line-height: 1.2; margin: 1.5em 0 0.5em; color:#1A1612; }
-          .article-body ul { margin: 0.8em 0 1.3em; padding-left: 1.2em; }
-          .article-body ul li { margin-bottom: 0.4em; list-style: disc; }
-          .article-body strong { color:#1A1612; }
-          .article-body a { color:#C8593B; text-decoration: underline; text-underline-offset: 3px; }
-        `}</style>
-        {blocks.map((b, i) => {
-          switch (b.type) {
-            case 'p':   return <p key={i} dangerouslySetInnerHTML={{__html: b.html}}/>;
-            case 'h2':  return <h2 key={i}>{b.text}</h2>;
-            case 'h3':  return <h3 key={i}>{b.text}</h3>;
-            case 'ul':  return <ul key={i}>{b.items.map((it, j) => <li key={j} dangerouslySetInnerHTML={{__html: it}}/>)}</ul>;
-            default: return null;
-          }
-        })}
-        <p className="text-ink-500 text-[13px] mt-12 pt-6 border-t border-ink/10">Dernière mise à jour : 25 mai 2026.</p>
-      </div>
-    </section>
-    <Footer go={go}/>
-  </main>
-);
+const LegalPage = ({ kicker, title, intro, blocks, bgImg, go }) => {
+  const { t } = useI18n();
+  return (
+    <main className="bg-sand-50">
+      <PageHero kicker={kicker} tone="sand" mood="horizon" bgImg={bgImg || IMG('Saint-Louis', 9)} compact
+        title={title} intro={intro}/>
+      <section className="max-w-3xl mx-auto px-4 md:px-8 py-16 md:py-24">
+        <div className="article-body text-[16px] md:text-[17px] leading-[1.75] text-ink-800">
+          <style>{`
+            .article-body p { margin: 0 0 1.1em; }
+            .article-body h2 { font-family:'Instrument Serif', Georgia, serif; font-size: 28px; line-height: 1.2; margin: 2em 0 0.6em; color:#1A1612; }
+            .article-body h3 { font-family:'Instrument Serif', Georgia, serif; font-size: 22px; line-height: 1.2; margin: 1.5em 0 0.5em; color:#1A1612; }
+            .article-body ul { margin: 0.8em 0 1.3em; padding-left: 1.2em; }
+            .article-body ul li { margin-bottom: 0.4em; list-style: disc; }
+            .article-body strong { color:#1A1612; }
+            .article-body a { color:#C8593B; text-decoration: underline; text-underline-offset: 3px; }
+          `}</style>
+          {blocks.map((b, i) => {
+            switch (b.type) {
+              case 'p':   return <p key={i} dangerouslySetInnerHTML={{__html: b.html}}/>;
+              case 'h2':  return <h2 key={i}>{b.text}</h2>;
+              case 'h3':  return <h3 key={i}>{b.text}</h3>;
+              case 'ul':  return <ul key={i}>{b.items.map((it, j) => <li key={j} dangerouslySetInnerHTML={{__html: it}}/>)}</ul>;
+              default: return null;
+            }
+          })}
+          <p className="text-ink-500 text-[13px] mt-12 pt-6 border-t border-ink/10">{t('legal.lastUpdate')}</p>
+        </div>
+      </section>
+      <Footer go={go}/>
+    </main>
+  );
+};
 
-const Mentions = ({ go }) => (
-  <LegalPage go={go} kicker="Mentions légales" title={<>Mentions <em>légales</em>.</>}
-    intro="Informations légales relatives à l’éditeur et à l’hébergeur du site actours-senegal.com."
-    blocks={[
+const Mentions = ({ go }) => {
+  const { t, richT } = useI18n();
+  return (
+    <LegalPage go={go} kicker={t('legal.mentions.kicker')} title={richT(t('legal.mentions.title'))}
+      intro={t('legal.mentions.intro')}
+      blocks={[
       { type:'h2', text:'1. Éditeur du site' },
       { type:'p', html:'<strong>Africa Connection Tours (ACT)</strong><br/>Forme juridique : Société Anonyme (SA).<br/>Siège social : 52, rue Félix Faure — BP 11446, Dakar-Peytavin, Sénégal.<br/>Tour-opérateur fondé le 19 août 1996.<br/>Numéro de Registre du Commerce (RCCM) : SNDKR.1996/B 1449.<br/>NINEA : 20104112A3.<br/>Licence agence de voyages : n° 006523.<br/>Capital social : 20 000 000 FCFA.' },
       { type:'p', html:'<strong>Directeur de la publication :</strong> Salif Badiane, Directeur Général.<br/><strong>Contact :</strong> contact@actours-senegal.com · +221 33 849 52 00.' },
@@ -534,12 +535,15 @@ const Mentions = ({ go }) => (
       { type:'h2', text:'6. Litiges' },
       { type:'p', html:'Le présent site est soumis au droit sénégalais. En cas de litige, et après tentative de résolution amiable, les tribunaux compétents de Dakar seront seuls compétents.' },
     ]}/>
-);
+  );
+};
 
-const Privacy = ({ go }) => (
-  <LegalPage go={go} kicker="Confidentialité" title={<>Politique de <em>confidentialité</em>.</>}
-    intro="La façon dont nous collectons, utilisons et protégeons vos données personnelles."
-    blocks={[
+const Privacy = ({ go }) => {
+  const { t, richT } = useI18n();
+  return (
+    <LegalPage go={go} kicker={t('legal.privacy.kicker')} title={richT(t('legal.privacy.title'))}
+      intro={t('legal.privacy.intro')}
+      blocks={[
       { type:'p', html:'Africa Connection Tours prend la protection de vos données personnelles au sérieux. Cette politique explique ce que nous collectons, pourquoi, et quels droits vous avez.' },
       { type:'h2', text:'1. Données que nous collectons' },
       { type:'ul', items:[
@@ -573,12 +577,15 @@ const Privacy = ({ go }) => (
       { type:'h2', text:'7. Contact' },
       { type:'p', html:'Pour toute question sur la confidentialité : <a href="mailto:contact@actours-senegal.com">contact@actours-senegal.com</a>.' },
     ]}/>
-);
+  );
+};
 
-const Cgv = ({ go }) => (
-  <LegalPage go={go} kicker="CGV" title={<>Conditions générales <em>de vente</em>.</>}
-    intro="Conditions applicables à toute réservation effectuée auprès de Africa Connection Tours."
-    blocks={[
+const Cgv = ({ go }) => {
+  const { t, richT } = useI18n();
+  return (
+    <LegalPage go={go} kicker={t('legal.cgv.kicker')} title={richT(t('legal.cgv.title'))}
+      intro={t('legal.cgv.intro')}
+      blocks={[
       { type:'h2', text:'1. Objet et acceptation' },
       { type:'p', html:'Les présentes Conditions Générales de Vente (CGV) régissent les relations entre Africa Connection Tours (l’"Agence") et toute personne physique ou morale (le "Client") réservant une prestation de voyage. Toute réservation implique l’acceptation pleine et entière des présentes CGV.' },
       { type:'h2', text:'2. Réservation et confirmation' },
@@ -611,33 +618,43 @@ const Cgv = ({ go }) => (
       { type:'h2', text:'11. Droit applicable et juridiction' },
       { type:'p', html:'Les présentes CGV sont soumises au droit sénégalais. En cas de litige, et après tentative de résolution amiable, les tribunaux compétents de Dakar seront seuls compétents.' },
     ]}/>
-);
+  );
+};
 
 // ============================================================================
 // 404 — route inconnue
 // ============================================================================
-const NotFound = ({ go, route }) => (
-  <main className="bg-sand-50">
-    <section className="relative min-h-[80svh] flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0">
-        <Photo tone="atlant" mood="water" rounded="" showLabel={false} className="h-full w-full" src={IMG('Delta du Saloum', 6)} alt=""/>
-        <div className="absolute inset-0" style={{ background:'linear-gradient(180deg, rgba(26,22,18,0.55) 0%, rgba(26,22,18,0.85) 100%)' }}/>
-      </div>
-      <div className="relative max-w-2xl mx-auto px-4 md:px-8 py-32 text-center text-sand-50">
-        <div className="font-mono text-[11px] uppercase tracking-[0.32em] text-terre-300 mb-6">— Erreur 404</div>
-        <h1 className="font-display text-[56px] md:text-[88px] leading-[0.95]">Cette page <em className="text-terre-300">s’est perdue</em>.</h1>
-        <p className="mt-6 max-w-md mx-auto text-sand-100/90 text-[16px] leading-relaxed">
-          L’adresse <span className="font-mono text-[13px] bg-sand-50/10 px-2 py-0.5 rounded">#/{route}</span> n’existe pas — ou n’existe plus. Pas de panique, on vous remet sur la route.
-        </p>
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Btn onClick={()=>go('home')}     variant="terre"        size="lg" icon={<Icons.ArrowRight size={18}/>}>Retour à l’accueil</Btn>
-          <Btn onClick={()=>go('circuits')} variant="outlineLight" size="lg">Voir nos circuits</Btn>
-          <Btn onClick={()=>go('contact')}  variant="outlineLight" size="lg">Nous écrire</Btn>
+const NotFound = ({ go, route }) => {
+  const { t, richT } = useI18n();
+  // Split the body : injecter le span monospace stylé autour de l'URL.
+  const renderBody = () => {
+    const raw = t('notfound.body');
+    const parts = raw.split('{url}');
+    return <>{parts[0]}<span className="font-mono text-[13px] bg-sand-50/10 px-2 py-0.5 rounded">#/{route}</span>{parts[1] || ''}</>;
+  };
+  return (
+    <main className="bg-sand-50">
+      <section className="relative min-h-[80svh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0">
+          <Photo tone="atlant" mood="water" rounded="" showLabel={false} className="h-full w-full" src={IMG('Delta du Saloum', 6)} alt=""/>
+          <div className="absolute inset-0" style={{ background:'linear-gradient(180deg, rgba(26,22,18,0.55) 0%, rgba(26,22,18,0.85) 100%)' }}/>
         </div>
-      </div>
-    </section>
-    <Footer go={go}/>
-  </main>
-);
+        <div className="relative max-w-2xl mx-auto px-4 md:px-8 py-32 text-center text-sand-50">
+          <div className="font-mono text-[11px] uppercase tracking-[0.32em] text-terre-300 mb-6">— {t('notfound.kicker')}</div>
+          <h1 className="font-display text-[56px] md:text-[88px] leading-[0.95]">{richT(t('notfound.title'), { emClassName: 'text-terre-300' })}</h1>
+          <p className="mt-6 max-w-md mx-auto text-sand-100/90 text-[16px] leading-relaxed">
+            {renderBody()}
+          </p>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <Btn onClick={()=>go('home')}     variant="terre"        size="lg" icon={<Icons.ArrowRight size={18}/>}>{t('notfound.cta.home')}</Btn>
+            <Btn onClick={()=>go('circuits')} variant="outlineLight" size="lg">{t('notfound.cta.tours')}</Btn>
+            <Btn onClick={()=>go('contact')}  variant="outlineLight" size="lg">{t('notfound.cta.contact')}</Btn>
+          </div>
+        </div>
+      </section>
+      <Footer go={go}/>
+    </main>
+  );
+};
 
 Object.assign(window, { Contact, About, Faq, Mentions, Privacy, Cgv, NotFound });
