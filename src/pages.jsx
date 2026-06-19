@@ -289,20 +289,28 @@ const About = ({ go }) => {
         </div>
       </Section>
 
-      {/* L'équipe */}
+      {/* L'équipe — présentation structurelle non-nominative (directive ACT
+          du 18 juin 2026 : composition susceptible de changer, présentation
+          de la structure plutôt que des personnes). */}
       <Section label={t('about.equipe.label')} title={richT(t('about.equipe.title'))}
                kicker={t('about.equipe.kicker')}
                className="py-20 md:py-28">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          {TEAM.map((m,i) => (
-            <article key={i} className="bg-sand-100 rounded-3xl overflow-hidden border border-ink/5">
-              <Photo tone={m.tone} mood={m.mood} label={m.name.split(' ')[0].toLowerCase()} ratio="aspect-[5/4]" rounded=""/>
-              <div className="p-5 md:p-6">
-                <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-terre">{t(`team.${i}.role`, m.role)}</div>
-                <div className="font-display text-[24px] leading-tight mt-1">{m.name}</div>
-                <div className="text-[12.5px] text-ink-600 mt-2">{m.langs.join(' · ')}</div>
-                <p className="mt-3.5 text-[14px] text-ink-800 leading-relaxed italic">"{t(`team.${i}.quote`, m.quote)}"</p>
+        <div className="grid md:grid-cols-2 gap-5 md:gap-6">
+          {[
+            { I:Icons.Star,    tKey:'about.equipe.unit1.t', dKey:'about.equipe.unit1.d' },
+            { I:Icons.Users,   tKey:'about.equipe.unit2.t', dKey:'about.equipe.unit2.d' },
+            { I:Icons.Compass, tKey:'about.equipe.unit3.t', dKey:'about.equipe.unit3.d' },
+            { I:Icons.Globe,   tKey:'about.equipe.unit4.t', dKey:'about.equipe.unit4.d' },
+          ].map((u, i) => (
+            <article key={i} className="bg-sand-100 rounded-3xl p-6 md:p-8 border border-ink/5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-12 w-12 rounded-full bg-terre/10 text-terre inline-flex items-center justify-center shrink-0">
+                  <u.I size={22}/>
+                </div>
+                <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-500">0{i+1}</div>
               </div>
+              <div className="font-display text-[26px] md:text-[28px] leading-tight">{t(u.tKey)}</div>
+              <p className="mt-3 text-[14.5px] md:text-[15px] text-ink-700 leading-relaxed">{t(u.dKey)}</p>
             </article>
           ))}
         </div>
@@ -331,23 +339,34 @@ const About = ({ go }) => {
         </div>
       </Section>
 
-      {/* Partenaires */}
-      <Section label={t('about.partenaires.label')} title={richT(t('about.partenaires.title'))}
-               kicker={t('about.partenaires.kicker')}
+      {/* Notre réseau — présentation catégorisée par nature et géographie,
+          sans nommer les partenaires (directive ACT du 18 juin 2026 :
+          confidentialité commerciale, mention par pays/type uniquement). */}
+      <Section label={t('about.network.label')} title={richT(t('about.network.title'))}
+               kicker={t('about.network.kicker')}
                className="py-16 md:py-24">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 border-t border-l border-ink/10">
-          {PARTNERS.map((p,i)=>(
-            <div key={i}
-                 className="group relative aspect-[5/2] border-r border-b border-ink/10 flex items-center justify-center px-5 transition-colors hover:bg-sand-100">
-              <span className="absolute top-3 left-3 font-mono text-[9px] uppercase tracking-[0.22em] text-ink-400">{String(i+1).padStart(2,'0')}</span>
-              <div className="font-mono text-[11px] md:text-[12px] uppercase tracking-[0.18em] text-ink-700 group-hover:text-terre text-center leading-tight">
-                {p}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          {[
+            { I:Icons.MapPin,   tKey:'about.network.cat1.t', dKey:'about.network.cat1.d' },
+            { I:Icons.ArrowUpRight, tKey:'about.network.cat2.t', dKey:'about.network.cat2.d' },
+            { I:Icons.Shield,   tKey:'about.network.cat3.t', dKey:'about.network.cat3.d' },
+            { I:Icons.Heart,    tKey:'about.network.cat4.t', dKey:'about.network.cat4.d' },
+            { I:Icons.Leaf,     tKey:'about.network.cat5.t', dKey:'about.network.cat5.d' },
+            { I:Icons.Globe,    tKey:'about.network.cat6.t', dKey:'about.network.cat6.d' },
+          ].map((c, i) => (
+            <article key={i} className="group bg-sand-50 rounded-2xl p-5 md:p-6 border border-ink/10 hover:border-terre/30 hover:shadow-md hover:shadow-ink/5 transition-all">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-10 w-10 rounded-full bg-terre/10 text-terre inline-flex items-center justify-center shrink-0 group-hover:bg-terre group-hover:text-sand-50 transition-colors">
+                  <c.I size={18}/>
+                </div>
+                <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-400">{String(i+1).padStart(2,'0')}</span>
               </div>
-              <span className="absolute bottom-3 right-3 h-px w-6 bg-ink/15 group-hover:bg-terre transition-colors"/>
-            </div>
+              <div className="font-display text-[20px] md:text-[22px] leading-tight">{t(c.tKey)}</div>
+              <p className="mt-2 text-[13.5px] text-ink-600 leading-relaxed">{t(c.dKey)}</p>
+            </article>
           ))}
         </div>
-        <p className="mt-6 text-[12.5px] text-ink-500 font-mono">{t('about.partenaires.note')}</p>
+        <p className="mt-8 text-[12.5px] text-ink-500 font-mono italic max-w-2xl">{t('about.network.note')}</p>
       </Section>
 
       {/* Chiffres */}

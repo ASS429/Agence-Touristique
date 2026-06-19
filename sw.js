@@ -4,7 +4,7 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v18';
+const VERSION = 'act-v19';
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
 // Sans plafond, le cache gonfle indéfiniment au fil des visites (mauvais
