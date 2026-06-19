@@ -26,3 +26,7 @@ multilingue-*.md
 .docx_inspect/
 *.docx
 *.xlsx
+
+# Photos brutes extraites du book ACT — à trier/renommer/optimiser avant
+# intégration dans /images_du_senegal/. Conservées en local uniquement.
+photos_act_book/

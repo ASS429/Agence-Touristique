@@ -29,21 +29,21 @@ const DESTINATIONS = [
 const CIRCUITS = [
   // ---- 1-day ----
   { id:'excursion-goree', title:'Excursion Gorée', subtitle:'Une journée mémoire',
-    days:1, nights:0, priceXOF:35000, tone:'terre', mood:'horizon',
+    days:1, nights:0, priceXOF:null, tone:'terre', mood:'horizon',
     badges:['Guide local','Demi-journée OK'], rating:4.9, reviews:118,
     short:'Traversée en ferry, Maison des Esclaves, ruelles d’artistes, déjeuner créole sur l’île.',
     types:['culture','diaspora','famille'], tier:'eco', start:'dakar', destIds:['goree'], popularity:96,
     img: IMG('Ile de gorée', 2) },
 
   { id:'excursion-lac-rose', title:'Excursion Lac Rose', subtitle:'Sel, dunes & baignade',
-    days:1, nights:0, priceXOF:42000, tone:'rose', mood:'water',
+    days:1, nights:0, priceXOF:null, tone:'rose', mood:'water',
     badges:['Famille bienvenue','Sans-stress'], rating:4.8, reviews:74,
     short:'Récolte du sel avec les ramasseurs, baignade dans l’eau saline, quad optionnel sur les dunes.',
     types:['nature','famille','plage'], tier:'eco', start:'dakar', destIds:['lac-rose'], popularity:88,
     img: IMG('Lac Rose', 2) },
 
   { id:'dakar-essentiel', title:'Dakar essentiel', subtitle:'Tour de ville en une journée',
-    days:1, nights:0, priceXOF:38000, tone:'dusk', mood:'city',
+    days:1, nights:0, priceXOF:null, tone:'dusk', mood:'city',
     badges:['Guide local','Pied + voiture'], rating:4.8, reviews:62,
     short:'Médina, Marché Sandaga, Almadies, monument de la Renaissance, déjeuner Yassa.',
     types:['culture','famille'], tier:'eco', start:'dakar', destIds:['dakar'], popularity:80,
@@ -51,14 +51,14 @@ const CIRCUITS = [
 
   // ---- weekend (2-3 days) ----
   { id:'weekend-saint-louis', title:'Week-end Saint-Louis', subtitle:'Architecture & fleuve',
-    days:3, nights:2, priceXOF:185000, tone:'terre', mood:'city',
+    days:3, nights:2, priceXOF:null, tone:'terre', mood:'city',
     badges:['Guide local','Couples'], rating:4.7, reviews:41,
     short:'L’île historique, balade en calèche, dîner au son du jazz, balade sur le fleuve.',
     types:['culture','plage'], tier:'confort', start:'dakar', destIds:['saint-louis'], popularity:78,
     img: IMG('Saint-Louis', 2) },
 
   { id:'weekend-saloum', title:'Week-end Saloum', subtitle:'Mangrove & pirogue',
-    days:3, nights:2, priceXOF:210000, tone:'atlant', mood:'water',
+    days:3, nights:2, priceXOF:null, tone:'atlant', mood:'water',
     badges:['Famille bienvenue','Nature'], rating:4.9, reviews:53,
     short:'Pirogue dans les bolongs, dîner sous les fromagers, observation d’oiseaux au lever du jour.',
     types:['nature','famille'], tier:'confort', start:'dakar', destIds:['saloum'], popularity:82,
@@ -66,7 +66,7 @@ const CIRCUITS = [
 
   // ---- 3-5 days ----
   { id:'goree-lac-saloum', title:'Gorée · Lac Rose · Saloum', subtitle:'Mémoire, sel & mangrove',
-    days:5, nights:4, priceXOF:395000, tone:'atlant', mood:'water',
+    days:5, nights:4, priceXOF:null, tone:'atlant', mood:'water',
     badges:['Guide local','Privé','Famille bienvenue'], rating:4.9, reviews:47,
     short:'Trois lieux qui racontent le Sénégal autrement : l’île-mémoire, le lac qui rosit au soleil, et les bolongs du delta en pirogue.',
     types:['culture','nature','diaspora','famille'], tier:'confort', start:'dakar',
@@ -74,14 +74,14 @@ const CIRCUITS = [
     img: IMG('Delta du Saloum', 3) },
 
   { id:'lompoul-saint-louis', title:'Lompoul & Saint-Louis', subtitle:'Désert, dunes & jazz fluvial',
-    days:4, nights:3, priceXOF:320000, tone:'ocre', mood:'dunes',
+    days:4, nights:3, priceXOF:null, tone:'ocre', mood:'dunes',
     badges:['Guide local','Bivouac'], rating:4.9, reviews:22,
     short:'Une nuit sous tente dans les dunes, café au lever du soleil, puis l’architecture coloniale et le jazz de Saint-Louis.',
     types:['aventure','culture'], tier:'confort', start:'dakar', destIds:['lompoul','saint-louis'], popularity:84,
     img: IMG('Désert de Lompoul', 2) },
 
   { id:'diaspora-essentiel', title:'Retour aux sources', subtitle:'Diaspora · 5 jours',
-    days:5, nights:4, priceXOF:480000, tone:'terre', mood:'portrait',
+    days:5, nights:4, priceXOF:null, tone:'terre', mood:'portrait',
     badges:['Diaspora','Cérémonie','Photographe'], rating:5.0, reviews:19,
     short:'Conçu pour les familles afro-descendantes : Gorée en profondeur, rencontre généalogique, cérémonie d’accueil en village.',
     types:['diaspora','culture'], tier:'premium', start:'dakar', destIds:['goree','dakar','saint-louis'], popularity:90,
@@ -89,14 +89,14 @@ const CIRCUITS = [
 
   // ---- 6-10 days ----
   { id:'casamance-essentielle', title:'Casamance essentielle', subtitle:'Cap Skirring & villages diolas',
-    days:7, nights:6, priceXOF:695000, tone:'forest', mood:'leaves',
+    days:7, nights:6, priceXOF:null, tone:'forest', mood:'leaves',
     badges:['Guide local','Petit groupe'], rating:4.8, reviews:31,
     short:'Plages du sud, fleuve Casamance, hospitalité diola — un Sénégal plus intime, loin des routes touristiques.',
     types:['nature','plage','culture'], tier:'confort', start:'dakar', destIds:['casamance'], popularity:86,
     img: IMG('Casamance', 2) },
 
   { id:'grand-tour-7j', title:'Grand tour du nord', subtitle:'7 jours, Dakar → Désert → Saint-Louis',
-    days:7, nights:6, priceXOF:720000, tone:'ocre', mood:'horizon',
+    days:7, nights:6, priceXOF:null, tone:'ocre', mood:'horizon',
     badges:['Guide local','Confort+'], rating:4.8, reviews:24,
     short:'Une boucle complète : Dakar, Lac Rose, Lompoul, Saint-Louis, parc de la Langue de Barbarie. Un voyage à rythme posé.',
     types:['culture','aventure','nature'], tier:'confort', start:'dakar',
@@ -104,7 +104,7 @@ const CIRCUITS = [
     img: IMG('Saint-Louis', 3) },
 
   { id:'familles-10j', title:'Famille · 10 jours', subtitle:'Doux, varié, sans stress',
-    days:10, nights:9, priceXOF:920000, tone:'sand', mood:'horizon',
+    days:10, nights:9, priceXOF:null, tone:'sand', mood:'horizon',
     badges:['Famille bienvenue','Pace tranquille'], rating:4.9, reviews:17,
     short:'Pensé pour les familles avec enfants : journées courtes, hôtels familiaux, baignades, ateliers cuisine et artisanat.',
     types:['famille','culture','plage','nature'], tier:'confort', start:'dakar',
@@ -113,7 +113,7 @@ const CIRCUITS = [
 
   // ---- 10+ days ----
   { id:'kedougou-bassari', title:'Kédougou & pays Bassari', subtitle:'Cascades, montagnes & rencontres',
-    days:8, nights:7, priceXOF:850000, tone:'forest', mood:'horizon',
+    days:8, nights:7, priceXOF:null, tone:'forest', mood:'horizon',
     badges:['Aventure','Guide local'], rating:4.9, reviews:18,
     short:'Le sud-est : chutes de Dindéfélo, villages bedik, sommets de la Niokolo-Koba — un voyage pour marcheurs curieux.',
     types:['aventure','nature','culture'], tier:'confort', start:'dakar',
@@ -121,7 +121,7 @@ const CIRCUITS = [
     img: IMG('Kédougou', 2) },
 
   { id:'grand-tour-14j', title:'Sénégal du Nord au Sud · 14j', subtitle:'Le tour intégral',
-    days:14, nights:13, priceXOF:1480000, tone:'atlant', mood:'water',
+    days:14, nights:13, priceXOF:null, tone:'atlant', mood:'water',
     badges:['Privé','Premium','Petit groupe'], rating:5.0, reviews:9,
     short:'Le voyage intégral : Saint-Louis, Lompoul, Saloum, Casamance, Kédougou. Pour ceux qui veulent tout voir avec calme.',
     types:['culture','nature','aventure','plage'], tier:'premium', start:'dakar',
@@ -129,7 +129,7 @@ const CIRCUITS = [
     img: IMG('Saint-Louis', 4) },
 
   { id:'luxe-premium-9j', title:'Privé Premium · 9 jours', subtitle:'Lodges signature & guide privé',
-    days:9, nights:8, priceXOF:1850000, tone:'rose', mood:'water',
+    days:9, nights:8, priceXOF:null, tone:'rose', mood:'water',
     badges:['Premium','Chauffeur privé','Lodges signature'], rating:5.0, reviews:11,
     short:'Hébergement haut de gamme à chaque étape, dégustations privées, transferts en 4x4 V8 climatisé, photographe sur 2 jours.',
     types:['plage','culture','nature'], tier:'premium', start:'dakar',
@@ -154,7 +154,7 @@ const CIRCUITS = [
     img: IMG('Saint-Louis', 6) },
 
   { id:'diaspora-premium-10j', title:'Retour aux sources · Premium 10j', subtitle:'Programme dédié à la diaspora afro-américaine',
-    days:10, nights:9, priceXOF:1450000, tone:'terre', mood:'portrait',
+    days:10, nights:9, priceXOF:null, tone:'terre', mood:'portrait',
     badges:['Diaspora','Premium','Photographe','Recherche généalogique'], rating:5.0, reviews:7,
     short:'Conçu pour les familles afro-américaines en pèlerinage de mémoire : Gorée en profondeur, recherche généalogique, cérémonie d’accueil traditionnelle, rencontres avec historiens et photographe attitré sur tout le séjour.',
     types:['diaspora','culture','evenement'], tier:'premium', start:'dakar',
@@ -576,7 +576,7 @@ const CIRCUIT_DETAIL = {
   subtitle:'5 jours · 4 nuits · au départ de Dakar',
   rating: 4.9, reviews: 47,
   badges:['Guide local certifié', 'Privé ou petit groupe', 'Famille bienvenue', 'Annulation flexible'],
-  priceXOF: 395000,
+  priceXOF:null,
   gallery: [
     { tone:'atlant', mood:'water',   label:'pirogue Saloum / golden hour', img: IMG('Delta du Saloum', 6) },
     { tone:'terre',  mood:'city',    label:'Gorée — porte du voyage',      img: IMG('Ile de gorée', 7) },

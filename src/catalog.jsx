@@ -24,11 +24,9 @@ const TYPE_OPTIONS = [
   { id:'evenement', fallback:'Événements & Cérémonies' },
 ];
 
-const TIER_OPTIONS = [
-  { id:'eco',     fallback:'Économique', helper:'-' },
-  { id:'confort', fallback:'Confort',    helper:'--' },
-  { id:'premium', fallback:'Premium',    helper:'---' },
-];
+// Filtre "Budget" supprimé (décision ACT : pas de prix affichés). Les options
+// TIER_OPTIONS sont conservées dans data.jsx pour l'analytique côté agence
+// mais n'apparaissent plus dans l'UI catalogue.
 
 const START_OPTIONS = [
   { id:'dakar',       fallback:'Dakar' },
@@ -36,10 +34,10 @@ const START_OPTIONS = [
   { id:'autre',       fallback:'Autre' },
 ];
 
+// Tris par prix supprimés (décision ACT : sur devis). Pertinence, Durée et
+// Popularité couvrent les besoins de tri restants.
 const SORTS = [
   { id:'pertinence', fallback:'Pertinence' },
-  { id:'priceAsc',   fallback:'Prix croissant' },
-  { id:'priceDesc',  fallback:'Prix décroissant' },
   { id:'duration',   fallback:'Durée' },
   { id:'popularity', fallback:'Popularité' },
 ];
@@ -65,10 +63,8 @@ const filterCircuits = (filters) => {
   if (filters.tier) list = list.filter(c => c.tier === filters.tier);
   if (filters.start) list = list.filter(c => c.start === filters.start);
   if (filters.destIds.length) list = list.filter(c => filters.destIds.some(d => c.destIds.includes(d)));
-  // sort
+  // sort (tris par prix retirés — décision ACT : pas de prix affichés)
   switch (filters.sort) {
-    case 'priceAsc':   list.sort((a,b)=>a.priceXOF-b.priceXOF); break;
-    case 'priceDesc':  list.sort((a,b)=>b.priceXOF-a.priceXOF); break;
     case 'duration':   list.sort((a,b)=>a.days-b.days); break;
     case 'popularity': list.sort((a,b)=>b.popularity-a.popularity); break;
     default: /* pertinence: keep original order */ break;
@@ -125,18 +121,6 @@ const FiltersBody = ({ f, set, count }) => {
         </div>
       </FilterGroup>
 
-      <FilterGroup title={t('catalog.filters.budget')}>
-        <div className="grid grid-cols-3 gap-2">
-          {TIER_OPTIONS.map(opt => (
-            <button key={opt.id} onClick={()=>setOne('tier', opt.id)}
-              className={`p-3 rounded-2xl text-left border transition-colors ${f.tier===opt.id ? 'bg-ink text-sand-50 border-ink' : 'border-ink/15 hover:border-ink/40'}`}>
-              <div className="font-mono text-[10.5px] tracking-wider opacity-70">{opt.helper}</div>
-              <div className="font-medium text-[13px] mt-0.5">{t(`catalog.tier.${opt.id}`, opt.fallback)}</div>
-            </button>
-          ))}
-        </div>
-      </FilterGroup>
-
       <FilterGroup title={t('catalog.filters.destination')}>
         <div className="flex flex-wrap gap-2">
           {DESTINATIONS.map(d => (
@@ -177,7 +161,7 @@ const Catalog = ({ go, onOpenTour, initialFilter }) => {
   const list = filterCircuits(f);
   const pages = Math.max(1, Math.ceil(list.length / perPage));
   const view = list.slice((page-1)*perPage, page*perPage);
-  const activeCount = f.durations.length + f.types.length + f.destIds.length + (f.tier?1:0) + (f.start?1:0);
+  const activeCount = f.durations.length + f.types.length + f.destIds.length + (f.start?1:0);
   const reset = () => setF(defaultFilters());
 
   return (

@@ -386,10 +386,12 @@ const PackDakar = () => {
         </div>
         <div className="relative md:sticky md:top-28">
           <Photo tone="atlant" mood="city" label="Dakar / Almadies" ratio="aspect-[4/5]" rounded="rounded-3xl" className="shadow-xl" src={IMG('Dakar', 6)} alt="Dakar — Almadies"/>
-          <div className="absolute -bottom-6 -right-3 md:-right-6 bg-sand-50 rounded-2xl p-5 shadow-xl border border-ink/5 w-[240px]">
-            <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-ink-500">{t('home.pack.priceFrom')}</div>
-            <Price xof={280000} className="font-display text-[30px] leading-none mt-1 block"/>
-            <div className="text-[12px] text-ink-600 mt-1.5">{t('home.pack.priceDuration')}</div>
+          {/* Carte CTA — décision ACT : pas de prix affichés, on garde la durée
+              et un CTA "Demander ce pack" pour le devis WhatsApp. */}
+          <div className="absolute -bottom-6 -right-3 md:-right-6 bg-sand-50 rounded-2xl p-5 shadow-xl border border-ink/5 w-[260px]">
+            <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-terre">{t('home.pack.priceDuration')}</div>
+            <div className="font-display text-[22px] leading-tight mt-1">{t('home.pack.cardTitle')}</div>
+            <p className="text-[12.5px] text-ink-600 mt-1.5 leading-relaxed">{t('home.pack.cardIntro')}</p>
             <Btn as="a" href={buildWaURL(t('home.pack.wa'))} target="_blank" rel="noreferrer"
                  variant="wa" size="sm" className="mt-4 w-full" icon={<Icons.Whatsapp size={14}/>}>{t('home.pack.cta')}</Btn>
           </div>

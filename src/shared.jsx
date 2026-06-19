@@ -349,6 +349,8 @@ const Header = ({ route, go, topOffset = 0 }) => {
             ))}
           </nav>
           <div className="flex items-center gap-2">
+            {/* Sélecteur de devise retiré : décision ACT — aucun prix affiché
+                sur le site, tous les circuits sont sur devis. */}
             <div className={`hidden md:flex items-center gap-0.5 rounded-full border ${onLight ? 'border-ink/15 text-ink-700' : 'border-sand-100/30 text-sand-100'} px-1 py-1`}
                  role="group" aria-label={t('common.languageSwitcher')}>
               {LANGS.map(l => (
@@ -356,12 +358,6 @@ const Header = ({ route, go, topOffset = 0 }) => {
                   aria-pressed={lang===l}
                   className={`px-2 py-1 rounded-full text-[11px] font-medium tracking-wider transition ${lang===l ? (onLight ? 'bg-ink text-sand-50' : 'bg-sand-50 text-ink') : ''}`}>{l}</button>
               ))}
-              <span className={`w-px h-4 mx-0.5 ${onLight?'bg-ink/15':'bg-sand-100/30'}`} aria-hidden="true"/>
-              <select value={ccy} onChange={(e)=>setCcy(e.target.value)}
-                aria-label={t('common.currencySwitcher')}
-                className={`bg-transparent text-[11px] font-medium tracking-wider px-1 py-1 outline-none cursor-pointer ${onLight?'text-ink-700':'text-sand-100'}`}>
-                <option value="XOF">XOF</option><option value="EUR">EUR</option><option value="USD">USD</option>
-              </select>
             </div>
             <Btn as="a" href={buildWaURL(t('wa.greeting'))}
                  target="_blank" rel="noreferrer"
@@ -416,13 +412,6 @@ const Header = ({ route, go, topOffset = 0 }) => {
                     className={`px-2.5 py-1 rounded-full text-xs font-medium ${lang===l ? 'bg-ink text-sand-50' : 'text-ink-700'}`}>{l}</button>
                 ))}
               </div>
-              <select value={ccy} onChange={(e)=>setCcy(e.target.value)}
-                aria-label={t('common.currencySwitcher')}
-                className="rounded-full border border-ink/15 text-xs font-medium px-3 py-2 outline-none">
-                <option value="XOF">XOF · FCFA</option>
-                <option value="EUR">EUR · €</option>
-                <option value="USD">USD · $</option>
-              </select>
             </div>
             <Btn as="a" href={buildWaURL(t('wa.greetingShort'))} target="_blank" rel="noreferrer"
                  variant="wa" size="md" className="w-full" icon={<Icons.Whatsapp size={16}/>}>

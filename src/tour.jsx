@@ -175,20 +175,21 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
           </p>
         </div>
 
-        {/* Sticky price (desktop) */}
+        {/* Sticky quote card (desktop) — décision ACT : pas de prix affichés,
+            on bascule sur un encart "Sur devis" centré sur les CTAs. */}
         <aside className="md:sticky md:top-28 self-start hidden md:block">
           <div className="rounded-3xl border border-ink/10 bg-sand-50 p-6 shadow-xl shadow-ink/5">
-            <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-ink-500">{t('tour.price.from')}</div>
-            <Price xof={d.priceXOF} className="font-display text-[44px] leading-none mt-1 block"/>
-            <div className="text-[13px] text-ink-500 mt-1.5">{t('tour.price.base')}</div>
+            <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-terre">{t('tour.quote.kicker')}</div>
+            <div className="font-display text-[34px] md:text-[38px] leading-[1.05] mt-1.5">{t('tour.quote.title')}</div>
+            <p className="text-[13.5px] text-ink-600 mt-2.5 leading-relaxed">{t('tour.quote.intro')}</p>
 
             <div className="mt-5 space-y-2.5">
               <Btn as="a" href={buildWaURL(waMsg)} target="_blank" rel="noreferrer"
                    variant="wa" size="lg" className="w-full" icon={<Icons.Whatsapp size={18}/>}>
-                {t('cta.book')}
+                {t('cta.quoteWhatsApp')}
               </Btn>
               <Btn variant="outline" size="lg" className="w-full" icon={<Icons.Mail size={16}/>}>
-                {t('cta.quote')}
+                {t('cta.quoteEmail')}
               </Btn>
             </div>
 
@@ -355,15 +356,11 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
 
       <Footer go={go}/>
 
-      {/* Mobile sticky price bar */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-sand-50 border-t border-ink/10 px-4 py-3 flex items-center gap-3 shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.15)]">
-        <div className="flex-1 min-w-0">
-          <div className="text-[10px] font-mono uppercase tracking-wider text-ink-500">{t('common.from')}</div>
-          <Price xof={d.priceXOF} className="font-display text-[22px] leading-none truncate block"/>
-        </div>
+      {/* Mobile sticky bar — décision ACT : pas de prix, CTA "Devis" plein largeur */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-sand-50 border-t border-ink/10 px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.15)]">
         <Btn as="a" href={buildWaURL(waMsg)} target="_blank" rel="noreferrer"
-             variant="wa" size="md" className="shrink-0" icon={<Icons.Whatsapp size={16}/>}>
-          {t('tour.mobile.book')}
+             variant="wa" size="md" className="w-full" icon={<Icons.Whatsapp size={16}/>}>
+          {t('cta.quoteWhatsApp')}
         </Btn>
       </div>
     </main>
