@@ -29,4 +29,6 @@ multilingue-*.md
 
 # Photos brutes extraites du book ACT — à trier/renommer/optimiser avant
 # intégration dans /images_du_senegal/. Conservées en local uniquement.
-photos_act_book/
+# (Pattern ancré à la racine pour ne pas exclure images_du_senegal/photos_act_book/
+# qui contient les versions optimisées et catégorisées, à versionner.)
+/photos_act_book/
