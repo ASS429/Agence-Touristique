@@ -306,12 +306,15 @@ const Header = ({ route, go, topOffset = 0 }) => {
 
   React.useEffect(()=>{ document.body.style.overflow = open ? 'hidden' : ''; }, [open]);
 
+  // Décision ACT (juin 2026) : 3 catégories produits distinctes —
+  // Circuits (plusieurs jours) / Excursions (½-journée ou journée) / Croisières
   const nav = [
-    { id:'circuits', label: t('nav.circuits') },
-    { id:'custom',   label: t('nav.bespoke') },
-    { id:'blog',     label: t('nav.blog') },
-    { id:'about',    label: t('nav.about') },
-    { id:'contact',  label: t('nav.contact') },
+    { id:'circuits',    label: t('nav.circuits') },
+    { id:'excursions',  label: t('nav.excursions') },
+    { id:'croisieres',  label: t('nav.croisieres') },
+    { id:'custom',      label: t('nav.bespoke') },
+    { id:'about',       label: t('nav.about') },
+    { id:'contact',     label: t('nav.contact') },
   ];
 
   // Hero is dark only on home (transparent top), elsewhere header is light
@@ -570,10 +573,12 @@ const Footer = ({ go }) => {
           <div className="md:col-span-2">
             <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-300 mb-4">{t('footer.exploreLabel')}</div>
             <ul className="space-y-2.5 text-[14px] text-sand-100">
-              {link('circuits', t('footer.allTours'))}
-              {link('custom',   t('footer.bespokeTrip'))}
-              {link('blog',     t('footer.blogAdvice'))}
-              {link('faq',      t('nav.faq'))}
+              {link('circuits',   t('footer.allTours'))}
+              {link('excursions', t('nav.excursions'))}
+              {link('croisieres', t('nav.croisieres'))}
+              {link('custom',     t('footer.bespokeTrip'))}
+              {link('blog',       t('footer.blogAdvice'))}
+              {link('faq',        t('nav.faq'))}
             </ul>
           </div>
 

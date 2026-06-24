@@ -44,6 +44,9 @@ const AppShell = () => {
     }
   }, [route, params.id]);
 
+  // Ouverture d'un Tour OU d'une Excursion. Les deux passent par la même
+  // fiche détail (mêmes données : days/short/destIds/photos) — la page Tour
+  // détecte d'où vient l'id et fallback sur CIRCUIT_DETAIL si excursion.
   const openTour = (id) => { setTourId(id); go('tour', { id }); };
   const openArticle = (id) => { setArticleId(id); go('blog', { id }); };
 
@@ -71,8 +74,10 @@ const AppShell = () => {
     switch (route) {
       case 'home':     return <Home onOpenTour={openTour} go={navigate}/>;
       case 'tour':     return <Tour tourId={tourId} onBack={()=>navigate('home')} onOpenTour={openTour} go={navigate}/>;
-      case 'circuits': return <Catalog go={navigate} onOpenTour={openTour} initialFilter={catalogFilter}/>;
-      case 'custom':   return <Custom go={navigate} onOpenTour={openTour}/>;
+      case 'circuits':   return <Catalog go={navigate} onOpenTour={openTour} initialFilter={catalogFilter}/>;
+      case 'excursions': return <Excursions go={navigate} onOpenTour={openTour}/>;
+      case 'croisieres': return <Croisieres go={navigate}/>;
+      case 'custom':     return <Custom go={navigate} onOpenTour={openTour}/>;
       case 'blog':
         return params.id
           ? <BlogArticle id={articleId} go={navigate} onOpenArticle={openArticle} onOpenTour={openTour}/>

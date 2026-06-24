@@ -4,7 +4,7 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v20';
+const VERSION = 'act-v21';
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
 // Sans plafond, le cache gonfle indéfiniment au fil des visites (mauvais
@@ -40,6 +40,8 @@ const CORE = [
   '/src/home.jsx',
   '/src/tour.jsx',
   '/src/catalog.jsx',
+  '/src/excursions.jsx',
+  '/src/croisieres.jsx',
   '/src/custom.jsx',
   '/src/blog.jsx',
   '/src/pages.jsx',
