@@ -4,7 +4,16 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v21';
+const VERSION = 'act-v22';
+// Note de version — affichée aux utilisateurs PWA via la notification
+// "nouvelle version disponible" (voir NotifyUpdate dans shared.jsx).
+// Format : { fr, en, it, de }. Mise à jour à chaque nouvelle version.
+const RELEASE_NOTES = {
+  fr: 'Nouveau : excursions au départ de Saly, 9 ateliers artisanat/musique/danse, page Croisières activée.',
+  en: 'New: Excursions departing from Saly, 9 craft/music/dance workshops, Cruises page live.',
+  it: 'Novità: escursioni con partenza da Saly, 9 laboratori di artigianato/musica/danza, pagina Crociere attiva.',
+  de: 'Neu: Ausflüge ab Saly, 9 Workshops für Handwerk/Musik/Tanz, Kreuzfahrten-Seite live.',
+};
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
 // Sans plafond, le cache gonfle indéfiniment au fil des visites (mauvais
@@ -42,6 +51,7 @@ const CORE = [
   '/src/catalog.jsx',
   '/src/excursions.jsx',
   '/src/croisieres.jsx',
+  '/src/ateliers.jsx',
   '/src/custom.jsx',
   '/src/blog.jsx',
   '/src/pages.jsx',
@@ -53,7 +63,21 @@ self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(VERSION).then(c => c.addAll(CORE)).catch(() => {})
   );
-  self.skipWaiting();
+  // On NE skipWaiting PAS automatiquement : on attend l'accord de
+  // l'utilisateur via le bouton "Actualiser" de la bannière — ça évite
+  // de recharger la page pendant qu'il navigue.
+});
+
+// Communication client ↔ SW pour les updates PWA :
+// - 'GET_VERSION'   → renvoie {version, notes}
+// - 'SKIP_WAITING'  → active immédiatement le nouveau SW (bouton actualiser)
+self.addEventListener('message', (e) => {
+  if (!e.data) return;
+  if (e.data.type === 'GET_VERSION') {
+    e.source?.postMessage({ type: 'VERSION', version: VERSION, notes: RELEASE_NOTES });
+  } else if (e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('activate', (e) => {

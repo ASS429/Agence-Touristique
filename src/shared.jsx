@@ -239,6 +239,76 @@ const CookieConsent = () => {
 };
 
 // ============================================================================
+// UpdateNotifier — bannière PWA "Nouvelle version disponible"
+//
+// Détecte les mises à jour du service worker (voir SW register dans
+// index.html). Quand un nouveau SW est prêt et propose des notes de
+// version, on affiche une bannière discrète avec les notes traduites
+// dans la langue active et deux boutons : "Actualiser" (skip waiting
+// + reload) et "Plus tard" (dismiss, réapparaît au prochain check).
+//
+// Objectif ACT : les utilisateurs qui ont installé la PWA reçoivent une
+// notification chaque fois qu'ACT publie du nouveau contenu (nouveau
+// circuit, nouvel atelier, etc.).
+// ============================================================================
+const UpdateNotifier = () => {
+  const { lang, t } = useI18n();
+  const [update, setUpdate] = React.useState(null);
+  const [dismissed, setDismissed] = React.useState(false);
+
+  React.useEffect(() => {
+    // Vérification initiale (au cas où un update est arrivé avant montage)
+    if (window.__actUpdate) setUpdate(window.__actUpdate);
+    const onUpdate = (e) => setUpdate(e.detail);
+    window.addEventListener('act-update-available', onUpdate);
+    // Notifier le SW que le composant est prêt à recevoir
+    window.__actUpdateReady?.();
+    return () => window.removeEventListener('act-update-available', onUpdate);
+  }, []);
+
+  if (!update || dismissed) return null;
+  const notes = update.notes?.[lang.toLowerCase()] || update.notes?.fr || '';
+
+  const apply = () => {
+    // Demande au SW en attente de prendre la main → reload auto
+    if (window.__actSwReg?.waiting) {
+      window.__actSwReg.waiting.postMessage({ type: 'SKIP_WAITING' });
+    } else {
+      window.location.reload();
+    }
+  };
+
+  return (
+    <div className="fixed left-3 right-3 md:left-6 md:right-auto md:max-w-md z-[55]"
+         style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}>
+      <div className="bg-terre-600 text-sand-50 rounded-2xl shadow-2xl shadow-terre/30 p-5 border border-sand-50/15">
+        <div className="flex items-start gap-3">
+          <div className="h-9 w-9 rounded-full bg-sand-50/15 inline-flex items-center justify-center shrink-0">
+            <Icons.RefreshCw size={17}/>
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-sand-100 mb-1">
+              {t('update.kicker', 'Nouvelle version')}
+            </div>
+            <div className="font-display text-[17px] leading-snug">{notes}</div>
+            <div className="mt-3 flex items-center gap-2">
+              <button onClick={()=>setDismissed(true)}
+                className="px-3 h-8 rounded-full border border-sand-50/30 text-sand-50 text-[12px] hover:bg-sand-50/10 transition-colors">
+                {t('update.later', 'Plus tard')}
+              </button>
+              <button onClick={apply}
+                className="px-4 h-8 rounded-full bg-sand-50 text-terre-700 text-[12px] font-medium hover:bg-sand-100 transition-colors">
+                {t('update.refresh', 'Actualiser')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
 // PromoBanner — bandeau d'offre du moment, configurable via SITE.promo
 // ============================================================================
 const PromoBanner = ({ go, onHeightChange }) => {
@@ -311,6 +381,7 @@ const Header = ({ route, go, topOffset = 0 }) => {
   const nav = [
     { id:'circuits',    label: t('nav.circuits') },
     { id:'excursions',  label: t('nav.excursions') },
+    { id:'ateliers',    label: t('nav.ateliers') },
     { id:'croisieres',  label: t('nav.croisieres') },
     { id:'custom',      label: t('nav.bespoke') },
     { id:'about',       label: t('nav.about') },
@@ -660,5 +731,5 @@ const PageHero = ({ kicker, title, intro, tone='terre', mood='horizon', bgImg, c
 
 Object.assign(window, {
   buildWaURL, Logo, StarRow, Pill, Btn, Price,
-  PromoBanner, CookieConsent, Header, WhatsAppFloat, Section, Footer, CircuitCard, PageHero,
+  PromoBanner, CookieConsent, UpdateNotifier, Header, WhatsAppFloat, Section, Footer, CircuitCard, PageHero,
 });

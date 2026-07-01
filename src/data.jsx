@@ -160,6 +160,15 @@ const CIRCUITS = [
     types:['diaspora','culture','evenement'], tier:'premium', start:'dakar',
     destIds:['goree','dakar','saint-louis','saloum'], popularity:94,
     img: IMG('Ile de gorée', 5) },
+
+  // ---- Circuit spécial fourni par ACT (juillet 2026) ----
+  { id:'dakart-decouverte-10j', title:"Dak'Art & Découverte du Sénégal", subtitle:'Biennale + tour complet · 10 jours',
+    days:10, nights:9, priceXOF:null, tone:'terre', mood:'city',
+    badges:["Biennale Dak'Art",'Hôtels 4★','Diaspora','Cours cuisine'], rating:5.0, reviews:3,
+    short:"Circuit signature d'ACT combinant la Biennale d'art contemporain Dak'Art à Dakar avec un tour complet du Sénégal : Gorée, Thiès, désert de Lompoul (Okai Lodge), Touba, Kaolack, Saly (Lamantin Beach Mövenpick), orphelinat de Mbour et cours de cuisine sénégalaise. Hôtellerie 4 étoiles tout au long du séjour.",
+    types:['culture','diaspora','famille'], tier:'premium', start:'dakar',
+    destIds:['dakar','goree','lompoul','saloum'], popularity:98,
+    img:'images_du_senegal/photos_act_book/dakar/renaissance-01.jpg' },
 ];
 
 // === EXCURSIONS (page dédiée) ==============================================
@@ -170,42 +179,42 @@ const CIRCUITS = [
 const EXCURSIONS = [
   // ---- HALF-DAY (6) ----
   { id:'dakar-halfday', title:'Dakar — Demi-journée', subtitle:'Marchés, mosquée, monument',
-    kind:'half', days:1, nights:0, priceXOF:null, tone:'dusk', mood:'city',
+    kind:'half', start:'dakar', days:1, nights:0, priceXOF:null, tone:'dusk', mood:'city',
     schedule:'9h00 → 14h30',
     short:"Tour des incontournables de Dakar : marchés Kermel, Sandaga, Soumbédioune, marché Tilen ; Grande Mosquée face à l'Atlantique ; Palais présidentiel ; Université Cheikh Anta Diop ; quartier de la Médina ; Monument de la Renaissance Africaine et Musée des Civilisations Noires.",
     types:['culture'], destIds:['dakar'], popularity:90,
     img:'images_du_senegal/photos_act_book/dakar/renaissance-01.jpg' },
 
   { id:'goree-halfday', title:'Île de Gorée — Demi-journée', subtitle:'Mémoire de la traite',
-    kind:'half', days:1, nights:0, priceXOF:null, tone:'terre', mood:'horizon',
+    kind:'half', start:'dakar', days:1, nights:0, priceXOF:null, tone:'terre', mood:'horizon',
     schedule:'9h00 → 12h30  ou  14h00 → 17h00',
     short:"Traversée en ferry depuis le Port de Dakar. Inscrite au patrimoine mondial UNESCO en 1978, Gorée porte la mémoire de 300 ans de traite. Visite de la Maison des Esclaves avec conférence du conservateur, Porte du Sans-Retour, Mémorial aux Martyrs, fort et musée. Rencontre avec les habitants et soutien aux artisans.",
     types:['culture','diaspora'], destIds:['goree'], popularity:98,
     img:'images_du_senegal/photos_act_book/goree/porte-retour-01.jpg' },
 
   { id:'keur-moussa-halfday', title:'Keur Moussa — Demi-journée', subtitle:'Messe aux koras (dimanches)',
-    kind:'half', days:1, nights:0, priceXOF:null, tone:'sand', mood:'horizon',
+    kind:'half', start:'dakar', days:1, nights:0, priceXOF:null, tone:'sand', mood:'horizon',
     schedule:'Dimanches uniquement · 9h00 → 12h00',
     short:"Trajet de 25 km depuis Dakar à travers les Niayes, ceinture maraîchère. Messe dominicale au monastère bénédictin de Keur Moussa accompagnée d'instruments traditionnels africains — koras, balafons, tam-tams doux. Moment de communion intense.",
     types:['culture'], destIds:['dakar'], popularity:75,
     img:'images_du_senegal/photos_act_book/culture/ceremonie-01.jpg' },
 
   { id:'arts-halfday', title:'Arts d\'Afrique de l\'Ouest — Demi-journée', subtitle:'Musée IFAN et galeries',
-    kind:'half', days:1, nights:0, priceXOF:null, tone:'ocre', mood:'portrait',
+    kind:'half', start:'dakar', days:1, nights:0, priceXOF:null, tone:'ocre', mood:'portrait',
     schedule:'9h00 → 13h00',
     short:"Avec un spécialiste sénégalais des arts : visite approfondie du Musée IFAN et de sa collection d'arts d'Afrique de l'Ouest, Galerie Nationale des Arts (peintures modernes sénégalaises), peintres sous verre dans la rue, galeries de peinture sur sable, et Village des Arts à la rencontre des artistes dans leurs ateliers.",
     types:['culture'], destIds:['dakar'], popularity:78,
     img:'images_du_senegal/photos_act_book/artisanat/peintures-01.jpg' },
 
   { id:'cayar-halfday', title:'Cayar — Demi-journée', subtitle:'Village de pêcheurs',
-    kind:'half', days:1, nights:0, priceXOF:null, tone:'atlant', mood:'water',
+    kind:'half', start:'dakar', days:1, nights:0, priceXOF:null, tone:'atlant', mood:'water',
     schedule:'14h30 → 18h00',
     short:"À 65 km de Dakar, le village de pêche de Cayar : observation de la grande pêche, des centaines de pêcheurs déchargeant leurs pirogues colorées. Spectacle du marché qui se forme sur la plage entre pêcheurs et revendeuses — festival de sons et de couleurs.",
     types:['nature','culture'], destIds:['dakar'], popularity:80,
     img:'images_du_senegal/photos_act_book/saint-louis/pirogues-01.jpg' },
 
   { id:'lac-rose-halfday', title:'Lac Rose — Demi-journée', subtitle:'Sel et dunes blanches',
-    kind:'half', days:1, nights:0, priceXOF:null, tone:'rose', mood:'water',
+    kind:'half', start:'dakar', days:1, nights:0, priceXOF:null, tone:'rose', mood:'water',
     schedule:'9h00 → 12h30  ou  14h00 → 18h00',
     short:"Le Lac Rose (Retba), un des phénomènes naturels les plus rares au monde. Reflets roses du lac dus aux micro-organismes et à la forte salinité, sur fond de dunes de sable blanc. Rencontre avec les ramasseurs de sel et les villages peuls environnants.",
     types:['nature','famille'], destIds:['lac-rose'], popularity:96,
@@ -213,59 +222,183 @@ const EXCURSIONS = [
 
   // ---- FULL-DAY (7) — déjeuner inclus ----
   { id:'ethnicity-fullday', title:'Ethnies du Sénégal — Journée', subtitle:'Rufisque, Thiès, Saly',
-    kind:'full', days:1, nights:0, priceXOF:null, tone:'terre', mood:'portrait',
+    kind:'full', start:'dakar', days:1, nights:0, priceXOF:null, tone:'terre', mood:'portrait',
     schedule:'9h00 → 17h00  (déjeuner inclus)',
     short:"Vieille ville de Rufisque, ruelles bordées de maisons à balcons en fer forgé. Villages des différentes ethnies du Sénégal, mosaïque de cultures. Troupeaux de bovins à longues cornes gardés par les bergers peuls semi-nomades. Marché coloré de Thiès, Manufacture des Tapisseries d'Art, déjeuner sur la plage de Saly.",
     types:['culture','nature'], destIds:['dakar'], popularity:82,
     img:'images_du_senegal/photos_act_book/portrait/bassari-femme-01.jpg' },
 
   { id:'lac-rose-cayar-fullday', title:'Lac Rose & Cayar — Journée', subtitle:'Sel, pêcheurs, marchés',
-    kind:'full', days:1, nights:0, priceXOF:null, tone:'rose', mood:'water',
+    kind:'full', start:'dakar', days:1, nights:0, priceXOF:null, tone:'rose', mood:'water',
     schedule:'9h00 → 17h00  (déjeuner inclus)',
     short:"Journée complète Lac Rose puis village de pêche de Cayar. Visite des villages peuls et rencontre avec la communauté locale. Déjeuner dans un restaurant local. Arrivée animée des bateaux de pêche au gros à Cayar, négociation entre pêcheurs et revendeuses sur la plage transformée en marché.",
     types:['nature','culture','famille'], destIds:['lac-rose','dakar'], popularity:88,
     img:'images_du_senegal/photos_act_book/lac-rose/tas-sel-01.jpg' },
 
   { id:'dakar-goree-fullday', title:'Dakar & Gorée — Journée', subtitle:'Capitale + île mémoire',
-    kind:'full', days:1, nights:0, priceXOF:null, tone:'terre', mood:'horizon',
+    kind:'full', start:'dakar', days:1, nights:0, priceXOF:null, tone:'terre', mood:'horizon',
     schedule:'9h00 → 17h00  (déjeuner inclus)',
     short:"Matinée consacrée à la visite de la capitale Dakar, déjeuner, puis traversée et visite de Gorée — la combinaison des deux demi-journées en une journée pleine.",
     types:['culture','diaspora','famille'], destIds:['dakar','goree'], popularity:95,
     img:'images_du_senegal/photos_act_book/goree/maisons-01.jpg' },
 
   { id:'saloum-joal-fullday', title:'Saloum & Joal — Journée', subtitle:'Îles UNESCO + cimetière des coquillages',
-    kind:'full', days:1, nights:0, priceXOF:null, tone:'atlant', mood:'water',
+    kind:'full', start:'dakar', days:1, nights:0, priceXOF:null, tone:'atlant', mood:'water',
     schedule:'7h00 → 18h00  (déjeuner inclus)',
     short:"Départ matinal de Dakar pour les Îles du Saloum (UNESCO 2011). Palmeraie de Fumela, villages sérères traditionnels. À Ndangane, pirogues à moteur dans le delta — ornithologie, villages de pêcheurs, bolongs. Déjeuner à Ndangane, puis Joal-Fadiouth (cimetière marin sérère et greniers sur pilotis) et marché animé de Mbour.",
     types:['nature','culture','famille'], destIds:['saloum','dakar'], popularity:90,
     img:'images_du_senegal/photos_act_book/saloum/cases-pilotis-01.jpg' },
 
   { id:'saloum-islands-fullday', title:'Îles du Saloum — Journée', subtitle:'Mar Lodj, Dionewar, Niominka',
-    kind:'full', days:1, nights:0, priceXOF:null, tone:'forest', mood:'water',
+    kind:'full', start:'dakar', days:1, nights:0, priceXOF:null, tone:'forest', mood:'water',
     schedule:'7h00 → 18h00  (déjeuner inclus)',
     short:"Forêt de baobabs de Sindia, villages wolof et peuls. Pirogues à moteur depuis Ndangane vers la réserve naturelle — village de pêche Niominka, île de Dionewar et sa mosquée pittoresque, rencontre avec le chef et l'imam. Village de Mar Lodj (1500 habitants), tolérance religieuse exemplaire, ancien tambour sacré.",
     types:['nature','culture'], destIds:['saloum'], popularity:86,
     img:'images_du_senegal/photos_act_book/saloum/ile-palmiers-01.jpg' },
 
   { id:'touba-fullday', title:'Touba — Journée', subtitle:'Pèlerinage mouride',
-    kind:'full', days:1, nights:0, priceXOF:null, tone:'sand', mood:'horizon',
+    kind:'full', start:'dakar', days:1, nights:0, priceXOF:null, tone:'sand', mood:'horizon',
     schedule:'8h00 → 19h00  (déjeuner inclus)',
     short:"Touba, la plus célèbre destination de pèlerinage musulman d'Afrique de l'Ouest. Fondée par Cheikh Ahmadou Bamba, elle est devenue en 25 ans plus prospère que toute autre région. Mosquée somptueuse décorée d'or, d'argent et de cristal. Accueil par un Serigne (guide spirituel), déjeuner traditionnel chez un leader mouride, rencontre avec les Baye Fall.",
     types:['culture'], destIds:['dakar'], popularity:78,
     img:'images_du_senegal/photos_act_book/touba/mosquee-01.jpg' },
 
   { id:'arts-fullday', title:'Arts d\'Afrique de l\'Ouest — Journée', subtitle:'IFAN + Thiès + tapisseries',
-    kind:'full', days:1, nights:0, priceXOF:null, tone:'ocre', mood:'portrait',
+    kind:'full', start:'dakar', days:1, nights:0, priceXOF:null, tone:'ocre', mood:'portrait',
     schedule:'9h00 → 17h00  (déjeuner inclus)',
     short:"Expérience complète avec un Professeur sénégalais spécialiste des arts africains. Musée IFAN — collections de Guinée-Bissau, Mali, Guinée-Conakry, Nigeria, Bénin, Sénégal. Galerie Nationale des Arts (peintures contemporaines), galerie privée Kenboury. Déjeuner sénégalais à Thiès puis Manufacture Nationale des Tapisseries d'Art.",
     types:['culture'], destIds:['dakar'], popularity:75,
     img:'images_du_senegal/photos_act_book/artisanat/tissus-01.jpg' },
+
+  // ---- EXCURSIONS AU DEPART DE SALY (10) reçues de ACT le 1er juillet 2026 ----
+  { id:'saly-guerisseurs-halfday', title:'Guérisseurs & pharmacopée traditionnelle', subtitle:'Médecine grand-mère',
+    kind:'half', start:'saly', days:1, nights:0, priceXOF:null, tone:'forest', mood:'leaves',
+    schedule:'9h00 → 12h30',
+    short:"Départ de l'hôtel, visite de marchés exclusivement réservés à la pharmacopée traditionnelle (médecine grand-mère). Avec l'assistance de tradipraticien(nes) renommés, découverte des variétés de plantes utilisées en phytothérapie.",
+    types:['culture'], destIds:['dakar'], popularity:70,
+    img:'images_du_senegal/photos_act_book/village/case-01.jpg' },
+
+  { id:'saly-bandia-halfday', title:'Réserve de Bandia — Safari', subtitle:'Antilopes, buffles, rhinocéros blanc',
+    kind:'half', start:'saly', days:1, nights:0, priceXOF:null, tone:'ocre', mood:'horizon',
+    schedule:'Matinée · safari 1h30',
+    short:"Départ après petit-déjeuner à travers la forêt de baobabs de Sindia jusqu'à la réserve de Bandia. Safari en véhicule 4x4 avec guide spécialiste de la faune : antilopes-chevaux, buffles, crocodiles, phacochères, singes, girafes, rhinocéros blanc, gazelles, oiseaux.",
+    types:['nature','famille'], destIds:['saloum'], popularity:92,
+    img:'images_du_senegal/photos_act_book/bandia/girafe-zebres-01.jpg' },
+
+  { id:'saly-brousse-cayar-fullday', title:'Brousse & Cayar', subtitle:'Thiès, tapisseries, pêcheurs',
+    kind:'full', start:'saly', days:1, nights:0, priceXOF:null, tone:'atlant', mood:'water',
+    schedule:'Journée complète  (déjeuner inclus)',
+    short:"Traversée de la forêt de Bandia jusqu'à Thiès. Visite de la Manufacture Nationale des Arts Décoratifs (tapisseries d'art), du marché de Thiès (herbes médicinales, tissus). Déjeuner typique. Après-midi à Cayar : arrivée des pirogues multicolores, marché animé sur la plage.",
+    types:['culture','nature'], destIds:['dakar','saloum'], popularity:85,
+    img:'images_du_senegal/photos_act_book/artisanat/tissus-01.jpg' },
+
+  { id:'saly-lac-rose-fullday', title:'Lac Rose — Journée', subtitle:'4x4, Paris-Dakar, village peulh',
+    kind:'full', start:'saly', days:1, nights:0, priceXOF:null, tone:'rose', mood:'water',
+    schedule:'Départ 9h00  (déjeuner inclus)',
+    short:"Traversée de Sindia, Diamniadio et de plusieurs villages wolof et sérères. Arrivée au Lac Rose, excursion en tout-terrain sur les traces du Rallye Paris-Dakar. Randonnée sur les dunes, ramassage du sel avec les exploitants, village peulh, plage sauvage. Déjeuner au campement du Lac.",
+    types:['nature','famille','culture'], destIds:['lac-rose'], popularity:90,
+    img:'images_du_senegal/photos_act_book/lac-rose/pirogue-rose-01.jpg' },
+
+  { id:'saly-lac-rose-halfday', title:'Lac Rose — Demi-journée', subtitle:'4x4 et rafraîchissement',
+    kind:'half', start:'saly', days:1, nights:0, priceXOF:null, tone:'rose', mood:'water',
+    schedule:'Matinée',
+    short:"Traversée de Sindia, Nguekhokh, Diamniadio, villages wolof et sérères. Arrivée au Lac Rose, excursion en tout-terrain sur les traces du Rallye Paris-Dakar. Boisson rafraîchissante autour du Lac avant retour à l'hôtel.",
+    types:['nature','famille'], destIds:['lac-rose'], popularity:83,
+    img:'images_du_senegal/photos_act_book/lac-rose/sel-femmes-01.jpg' },
+
+  { id:'saly-keur-moussa-halfday', title:'Messe à Keur Moussa', subtitle:'Bénédictins et kora',
+    kind:'half', start:'saly', days:1, nights:0, priceXOF:null, tone:'sand', mood:'horizon',
+    schedule:'Dimanches · 9h00 → 12h00',
+    short:"Départ vers le village sérère de Keur Moussa dans les Niayes. Messe dominicale à l'africaine au couvent bénédictin : cantiques africains au lieu des chants grégoriens, prêtres en parements africains, rythmes de kora, balafon et djembés accompagnant les chœurs. Moment de communion intense.",
+    types:['culture'], destIds:['dakar'], popularity:77,
+    img:'images_du_senegal/photos_act_book/culture/ceremonie-01.jpg' },
+
+  { id:'saly-somone-halfday', title:'Lagune de Somone', subtitle:'Écologie, ostréiculture, oiseaux',
+    kind:'half', start:'saly', days:1, nights:0, priceXOF:null, tone:'atlant', mood:'water',
+    schedule:'8h30 → 12h30',
+    short:"Départ de l'hôtel vers le village lébou de la Somone (15 km). Trekking de 2 km à travers le chantier écologique au cœur de la réserve naturelle (oiseaux aquatiques). Balade en pirogue : mulets, tilapias, crabes, carpes. Rencontre avec une coopérative féminine active dans l'ostréiculture.",
+    types:['nature'], destIds:['saloum'], popularity:87,
+    img:'images_du_senegal/photos_act_book/saloum/mangrove-01.jpg' },
+
+  { id:'saly-dakar-goree-fullday', title:'Dakar & Gorée depuis Saly', subtitle:'Renaissance + Maison des Esclaves',
+    kind:'full', start:'saly', days:1, nights:0, priceXOF:null, tone:'terre', mood:'city',
+    schedule:'7h30 → 18h30  (déjeuner inclus)',
+    short:"Route par Sindia et Diamniadio jusqu'à Dakar. Monument de la Renaissance Africaine, Almadies, Corniche Ouest, Université Cheikh Anta Diop, Porte du Millénaire, Médina, centre administratif (Assemblée, Palais présidentiel, place de l'Indépendance), Soumbédioune, marché Kermel. 12h30 ferry pour Gorée : Maison des Esclaves, IFAN, église Saint-Charles Borromée, fort du Castel. Musée des Civilisations Noires au retour.",
+    types:['culture','diaspora'], destIds:['dakar','goree'], popularity:95,
+    img:'images_du_senegal/photos_act_book/goree/porte-retour-01.jpg' },
+
+  { id:'saly-cuisine-halfday', title:'Cours de cuisine sénégalaise', subtitle:'Yassa poulet ou poisson',
+    kind:'half', start:'saly', days:1, nights:0, priceXOF:null, tone:'terre', mood:'portrait',
+    schedule:'9h00 → 13h00  (déjeuner inclus)',
+    short:"Cours de préparation d'un plat emblématique : Yassa Poulet ou Yassa Poisson. Rencontre avec le chef sénégalais et ses assistants, présentation des ingrédients, processus de préparation. Dégustation du plat préparé (jus locaux et softs inclus).",
+    types:['culture','famille'], destIds:['dakar'], popularity:80,
+    img:'images_du_senegal/photos_act_book/gastronomie/thieboudienne-01.jpg' },
+
+  { id:'saly-saloum-joal-fullday', title:'Îles du Saloum & Joal-Fadiouth', subtitle:'Pirogue, mangrove, coquillages',
+    kind:'full', start:'saly', days:1, nights:0, priceXOF:null, tone:'atlant', mood:'water',
+    schedule:'Départ matinal  (déjeuner inclus)',
+    short:"Traversée des villages sérères de la Petite Côte. À Ndangane, embarquement en pirogue motorisée : îles aux oiseaux, mangrove, bancs d'huîtres, pêcheurs niominka. Apéro sur une île déserte. Après-midi à Joal-Fadiouth : île aux coquillages, greniers à mil sur pilotis, cimetière aux coquillages, séchoirs à poissons.",
+    types:['nature','culture'], destIds:['saloum'], popularity:91,
+    img:'images_du_senegal/photos_act_book/saloum/cases-pilotis-01.jpg' },
 ];
 
-// === CROISIÈRES (page dédiée — contenu à venir) =============================
-// L'agence prépare une présentation des croisières. Le tableau est vide
-// volontairement : la page Croisières s'affiche en mode "bientôt disponible"
-// avec un CTA WhatsApp pour les demandes de renseignements.
+// === ATELIERS (page dédiée) ================================================
+// Ateliers d'artisanat, d'art, de musique et de danse proposés par ACT.
+// Source : Nos ateliers.docx (juillet 2026). Tous d'une journée.
+// Structure minimale : id, title, subtitle, category, short, img, tone, mood.
+const ATELIERS = [
+  { id:'tableaux-sable', title:'Tableaux de sable', subtitle:"Journée d'initiation",
+    category:'artisanat', priceXOF:null, tone:'ocre', mood:'horizon',
+    short:"Initiation à l'art traditionnel sénégalais du tableau de sable coloré. Apprentissage des techniques auprès d'un artiste local — composition, choix des sables, application. Chaque participant repart avec son œuvre.",
+    img:'images_du_senegal/photos_act_book/artisanat/peintures-01.jpg' },
+
+  { id:'batik', title:'Réalisation de Batik', subtitle:'Teinture traditionnelle sur tissu',
+    category:'artisanat', priceXOF:null, tone:'terre', mood:'horizon',
+    short:"Découverte du batik sénégalais : technique de teinture à la cire sur tissu. Motifs traditionnels, colorants naturels, application progressive. Chaque participant repart avec sa création.",
+    img:'images_du_senegal/photos_act_book/artisanat/tissus-01.jpg' },
+
+  { id:'vannerie', title:'Vannerie', subtitle:'Tressage de fibres végétales',
+    category:'artisanat', priceXOF:null, tone:'sand', mood:'horizon',
+    short:"Journée dédiée au tressage traditionnel : fibres de palmier, jonc, raphia. Apprentissage des motifs et des techniques de vannerie ouest-africaine avec un maître artisan.",
+    img:'images_du_senegal/photos_act_book/village/cases-01.jpg' },
+
+  { id:'poterie', title:'Poterie', subtitle:'Modelage et cuisson traditionnels',
+    category:'artisanat', priceXOF:null, tone:'terre', mood:'portrait',
+    short:"Découverte de la poterie sénégalaise : préparation de l'argile, modelage à la main, décoration au colombin, cuisson traditionnelle. Chaque participant réalise sa pièce.",
+    img:'images_du_senegal/photos_act_book/village/case-01.jpg' },
+
+  { id:'tableaux-sous-verre', title:'Tableaux sous verre', subtitle:'Art populaire sénégalais',
+    category:'artisanat', priceXOF:null, tone:'dusk', mood:'portrait',
+    short:"Technique emblématique de l'art populaire sénégalais : peinture inversée sur verre. Composition, dessin, colorisation. Œuvre finale à emporter.",
+    img:'images_du_senegal/photos_act_book/artisanat/peintures-01.jpg' },
+
+  { id:'djembe', title:'Percussion Djembé', subtitle:"Rythmes d'Afrique de l'Ouest",
+    category:'musique', priceXOF:null, tone:'ocre', mood:'portrait',
+    short:"Initiation au djembé, tambour emblématique. Apprentissage des rythmes de base et des rythmes traditionnels sénégalais avec un maître percussionniste. Séance collective en fin de journée.",
+    img:'images_du_senegal/photos_act_book/culture/dignitaire-01.jpg' },
+
+  { id:'balafon', title:'Balafon', subtitle:'Xylophone traditionnel mandingue',
+    category:'musique', priceXOF:null, tone:'sand', mood:'portrait',
+    short:"Découverte du balafon, xylophone en bois et calebasses. Fabrication, accordage, techniques de jeu. Apprentissage de mélodies traditionnelles mandingues.",
+    img:'images_du_senegal/photos_act_book/portrait/homme-age-01.jpg' },
+
+  { id:'kora', title:'Kora', subtitle:'Harpe-luth des griots',
+    category:'musique', priceXOF:null, tone:'terre', mood:'portrait',
+    short:"Instrument mythique des griots d'Afrique de l'Ouest, la kora possède 21 cordes. Initiation aux techniques de base, découverte du répertoire traditionnel avec un maître musicien.",
+    img:'images_du_senegal/photos_act_book/dakar/statue-kora-01.jpg' },
+
+  { id:'danse', title:'Danses du Sénégal', subtitle:'Sabar, Yela, danses traditionnelles',
+    category:'danse', priceXOF:null, tone:'terre', mood:'portrait',
+    short:"Initiation aux danses traditionnelles sénégalaises : sabar wolof, yela peul, mouvements diola. Cours avec un maître-danseur, accompagnement percussions live.",
+    img:'images_du_senegal/photos_act_book/culture/femmes-traditionnelles-01.jpg' },
+];
+
+// === CROISIÈRES (page dédiée — texte reçu d'ACT le 1er juillet 2026) =========
+// ACT met à disposition des compagnies de croisière des excursions dédiées,
+// des tours Pre/Post croisière, des guides multilingues expérimentés, une
+// assistance PMR, et un parc de transport aux normes de confort et sécurité.
+// Le tableau CROISIERES reste vide : la page affiche le texte descriptif
+// (via i18n) + un CTA WhatsApp pour les demandes.
 const CROISIERES = [];
 
 // === TESTIMONIALS (home) ====================================================

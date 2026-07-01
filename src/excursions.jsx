@@ -8,6 +8,14 @@ const EXC_KIND_OPTIONS = [
   { id:'full', fallback:'Journée complète' },
 ];
 
+// Points de départ possibles pour les excursions (Dakar, Saly, à terme
+// Saint-Louis / Casamance). Extraction dynamique depuis EXCURSIONS pour
+// n'afficher que les départs réellement disponibles.
+const EXC_START_OPTIONS = [
+  { id:'dakar', fallback:'Dakar' },
+  { id:'saly',  fallback:'Saly'  },
+];
+
 const EXC_TYPE_OPTIONS = [
   { id:'culture',   fallback:'Culture & Histoire'    },
   { id:'nature',    fallback:'Nature & Faune'        },
@@ -22,6 +30,7 @@ const EXC_SORTS = [
 
 const excDefaultFilters = () => ({
   kinds: [],
+  starts: [],
   types: [],
   destIds: [],
   sort: 'pertinence',
@@ -29,8 +38,9 @@ const excDefaultFilters = () => ({
 
 const filterExcursions = (filters) => {
   let list = EXCURSIONS.slice();
-  if (filters.kinds.length) list = list.filter(e => filters.kinds.includes(e.kind));
-  if (filters.types.length) list = list.filter(e => filters.types.some(t => e.types.includes(t)));
+  if (filters.kinds.length)  list = list.filter(e => filters.kinds.includes(e.kind));
+  if (filters.starts.length) list = list.filter(e => filters.starts.includes(e.start));
+  if (filters.types.length)  list = list.filter(e => filters.types.some(t => e.types.includes(t)));
   if (filters.destIds.length) list = list.filter(e => filters.destIds.some(d => e.destIds.includes(d)));
   switch (filters.sort) {
     case 'popularity': list.sort((a,b)=>b.popularity-a.popularity); break;
@@ -55,6 +65,16 @@ const ExcFiltersBody = ({ f, set }) => {
           {EXC_KIND_OPTIONS.map(opt => (
             <Chip key={opt.id} active={f.kinds.includes(opt.id)} onClick={()=>toggle('kinds', opt.id)}>
               {t(`excursions.kind.${opt.id}`, opt.fallback)}
+            </Chip>
+          ))}
+        </div>
+      </FilterGroup>
+
+      <FilterGroup title={t('excursions.filters.start')}>
+        <div className="flex flex-wrap gap-2">
+          {EXC_START_OPTIONS.map(opt => (
+            <Chip key={opt.id} active={f.starts.includes(opt.id)} onClick={()=>toggle('starts', opt.id)}>
+              {t(`excursions.start.${opt.id}`, opt.fallback)}
             </Chip>
           ))}
         </div>
@@ -122,7 +142,7 @@ const Excursions = ({ go, onOpenTour }) => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const reset = () => setF(excDefaultFilters());
   const list = filterExcursions(f);
-  const activeCount = f.kinds.length + f.types.length + f.destIds.length;
+  const activeCount = f.kinds.length + f.starts.length + f.types.length + f.destIds.length;
 
   return (
     <main className="bg-sand-50">

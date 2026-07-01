@@ -77,6 +77,7 @@ const AppShell = () => {
       case 'circuits':   return <Catalog go={navigate} onOpenTour={openTour} initialFilter={catalogFilter}/>;
       case 'excursions': return <Excursions go={navigate} onOpenTour={openTour}/>;
       case 'croisieres': return <Croisieres go={navigate}/>;
+      case 'ateliers':   return <Ateliers   go={navigate}/>;
       case 'custom':     return <Custom go={navigate} onOpenTour={openTour}/>;
       case 'blog':
         return params.id
@@ -108,6 +109,7 @@ const AppShell = () => {
       <div id="main-content">{showPage()}</div>
       <WhatsAppFloat message={waMessage} bottomOffset={bottomOffset}/>
       <CookieConsent/>
+      <UpdateNotifier/>
       {/* Tweaks panel — visible en dev (localhost) et à la demande en prod via ?tweaks=1 */}
       {(['localhost','127.0.0.1'].includes(window.location.hostname)
         || window.location.search.includes('tweaks=1')) && <SiteTweaks/>}
