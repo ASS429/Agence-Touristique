@@ -9,6 +9,9 @@
 --   * Les requêtes de contact (contact_requests) sont écrites par `anon`
 --     (n'importe qui peut soumettre un devis via le site public) mais
 --     lues UNIQUEMENT par `authenticated`.
+--
+-- Compatible avec les clés Supabase publishable (sb_publishable_*) et
+-- avec les anciennes anon keys JWT.
 -- =====================================================================
 
 -- Activer RLS partout

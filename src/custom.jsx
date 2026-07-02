@@ -301,7 +301,7 @@ const Field = ({ label, value, onChange, type='text', placeholder }) => (
 
 // --- Page wrapper -----------------------------------------------------------
 const Custom = ({ go, onOpenTour }) => {
-  const { t, richT } = useI18n();
+  const { t, richT, lang } = useI18n();
   const [stepIdx, setStepIdx] = React.useState(0);
   const [submitted, setSubmitted] = React.useState(false);
   const [freeForm, setFreeForm] = React.useState(false);
@@ -374,9 +374,44 @@ const Custom = ({ go, onOpenTour }) => {
     return `mailto:${SITE.email}?subject=${encodeURIComponent(p._subject)}&body=${encodeURIComponent(body)}`;
   };
 
+  // Enregistrement Supabase — capture toutes les demandes sur mesure dans
+  // le tableau de bord admin, indépendamment du succès de Formspree/mailto.
+  // Fire-and-forget : n'attend pas la réponse.
+  const saveToSupabase = () => {
+    const dur = DURATION_CARDS.find(d => d.id === form.duration);
+    const pace = PACE_OPTIONS.find(p => p.id === form.pace);
+    const budgetMap = { low:'< 400 000 FCFA / pers', mid:'400 000 – 800 000 FCFA / pers', high:'> 800 000 FCFA / pers' };
+    return window.actSaveContactRequest?.({
+      kind: 'custom',
+      full_name: form.name || null,
+      email: form.email || null,
+      phone: form.phone || null,
+      language: lang,
+      circuit_slug: picked ? picked.id : null,
+      travelers: (form.travelers.adults || 0) + (form.travelers.children || 0) || null,
+      budget: budgetMap[form.travelers.budget] || null,
+      message: form.message || null,
+      extra: {
+        source: 'formulaire-sur-mesure',
+        duration_id: form.duration,
+        duration_days: dur?.days || null,
+        interests: form.interests,
+        pace: form.pace,
+        pace_tone: pace?.tone || null,
+        travelers_detail: { adults: form.travelers.adults, children: form.travelers.children },
+        dates_wanted: form.dates || null,
+        circuit_picked_id: picked?.id || null,
+        circuit_picked_title: picked?.title || null,
+        free_form: freeForm
+      }
+    }).catch(() => {});
+  };
+
   const submit = async () => {
     setError('');
     const payload = buildPayload();
+    // Enregistrement Supabase (fire-and-forget)
+    saveToSupabase();
     // Tracking analytics — déclenché quoi qu'il arrive ensuite.
     (window.dataLayer = window.dataLayer || []).push({
       event:           'custom_quote_submitted',

@@ -109,6 +109,34 @@
     }
   };
 
+  // -------------------------------------------------------------------
+  // actSaveContactRequest(payload)
+  //
+  // Enregistre une demande de contact/devis/custom dans la table
+  // contact_requests. Fonctionne sans authentification (policy RLS
+  // "contact_insert" autorise INSERT au rôle anon).
+  //
+  // Retourne { ok: true } si sauvegardé, { skipped: true } si Supabase
+  // n'est pas configuré, ou { error: msg } en cas d'échec (auquel cas
+  // le formulaire continue son flow mailto/formspree existant).
+  // -------------------------------------------------------------------
+  window.actSaveContactRequest = async function(payload) {
+    if (!configured) return { skipped: true };
+    try {
+      await ensureSupabaseClient();
+      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false }
+      });
+      const { error } = await sb.from('contact_requests').insert(payload);
+      if (error) throw error;
+      if (window.console) console.log('[ACT] Demande enregistrée en base');
+      return { ok: true };
+    } catch (e) {
+      if (window.console) console.warn('[ACT] Sauvegarde demande impossible:', e.message);
+      return { error: e.message };
+    }
+  };
+
   // Auto-lancement au load (les composants React sont déjà en train
   // de monter avec les données statiques ; le loader écrasera après).
   if (document.readyState === 'complete' || document.readyState === 'interactive') {

@@ -4,7 +4,7 @@
 // CONTACT
 // ============================================================================
 const Contact = ({ go }) => {
-  const { t, richT } = useI18n();
+  const { t, richT, lang } = useI18n();
   const [form, setForm] = React.useState({ name:'', email:'', phone:'', subject:'devis', message:'' });
   const [sent, setSent] = React.useState(false);
   const [sending, setSending] = React.useState(false);
@@ -26,9 +26,26 @@ const Contact = ({ go }) => {
     return `mailto:${SITE.email}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
   };
 
+  // Enregistre la demande dans Supabase (contact_requests). Tolérant à l'échec :
+  // si la BDD n'est pas configurée ou renvoie une erreur, on continue avec
+  // Formspree / mailto — la demande n'est jamais perdue.
+  const saveToSupabase = () => window.actSaveContactRequest?.({
+    kind: form.subject === 'devis' ? 'devis' : 'contact',
+    full_name: form.name || null,
+    email: form.email || null,
+    phone: form.phone || null,
+    language: lang,
+    message: form.message || null,
+    extra: { subject: form.subject, source: 'page-contact' }
+  }).catch(() => {});
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    // Enregistrement Supabase en parallèle (n'attend pas le résultat pour le
+    // flow utilisateur — la demande est capturée même si Formspree échoue).
+    saveToSupabase();
+
     // No Formspree endpoint configured → open mail client directly.
     if (!SITE.formspree) {
       window.location.href = mailtoHref();
