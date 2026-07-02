@@ -12,8 +12,8 @@
 //   La sécurité est garantie par RLS côté serveur, pas par le secret.
 // =====================================================================
 
-const SUPABASE_URL      = window.__ACT_SUPABASE_URL__      || 'https://REPLACE-ME.supabase.co';
-const SUPABASE_ANON_KEY = window.__ACT_SUPABASE_ANON_KEY__ || 'REPLACE-ME';
+const SUPABASE_URL      = window.__ACT_SUPABASE_URL__      || 'https://divcmjwqgsdkdsdrjwbg.supabase.co';
+const SUPABASE_ANON_KEY = window.__ACT_SUPABASE_ANON_KEY__ || 'sb_publishable_TzKuydg2b8QXUJSztNiW9A_NVAY6pD7';
 
 // Le client Supabase v2 UMD expose `window.supabase.createClient`.
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -120,4 +120,4 @@ window.sbSignIn = sbSignIn;
 window.sbSignOut = sbSignOut;
 window.sbGetUser = sbGetUser;
 window.sbOnAuthChange = sbOnAuthChange;
-window.SUPABASE_CONFIGURED = !SUPABASE_URL.includes('REPLACE-ME') && !SUPABASE_ANON_KEY.includes('REPLACE-ME');
+window.SUPABASE_CONFIGURED = !SUPABASE_URL.includes('REPLACE-ME') && SUPABASE_ANON_KEY !== 'REPLACE-ME';

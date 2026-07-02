@@ -21,10 +21,10 @@
 // =====================================================================
 
 (function() {
-  const SUPABASE_URL      = 'https://REPLACE-ME.supabase.co';
-  const SUPABASE_ANON_KEY = 'REPLACE-ME';
+  const SUPABASE_URL      = 'https://divcmjwqgsdkdsdrjwbg.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_TzKuydg2b8QXUJSztNiW9A_NVAY6pD7';
 
-  const configured = !SUPABASE_URL.includes('REPLACE-ME') && !SUPABASE_ANON_KEY.includes('REPLACE-ME');
+  const configured = !SUPABASE_URL.includes('REPLACE-ME') && SUPABASE_ANON_KEY !== 'REPLACE-ME';
   window.__ACT_DB_CONFIGURED__ = configured;
 
   if (!configured) {
