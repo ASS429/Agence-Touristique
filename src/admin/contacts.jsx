@@ -157,6 +157,15 @@ function ContactsPage() {
             </Select>
             <div className="flex gap-2">
               <Btn variant="ghost" onClick={() => setViewing(null)}>Fermer</Btn>
+              <Btn variant="outline" onClick={async () => {
+                try {
+                  window.toast('Génération du PDF…', 'info');
+                  const fname = await window.generateDevisPDF(viewing);
+                  if (fname) window.toast(`PDF téléchargé : ${fname}`, 'success');
+                } catch (e) {
+                  window.toast('Erreur PDF : ' + e.message, 'error');
+                }
+              }}>📄 Devis PDF</Btn>
               <Btn onClick={async () => {
                 await window.SB.from('contact_requests').update({ notes: viewing.notes, status: viewing.status }).eq('id', viewing.id);
                 setItems(list => list.map(x => x.id === viewing.id ? { ...x, notes: viewing.notes, status: viewing.status } : x));
