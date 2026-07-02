@@ -83,6 +83,8 @@ const AppShell = () => {
         return params.id
           ? <BlogArticle id={articleId} go={navigate} onOpenArticle={openArticle} onOpenTour={openTour}/>
           : <BlogList go={navigate} onOpenArticle={openArticle} onOpenTour={openTour}/>;
+      case 'carnet':   return <CarnetVoyage slug={params.id} go={navigate}/>;
+      case 'monespace': return <ClientSpace go={navigate}/>;
       case 'contact':  return <Contact go={navigate}/>;
       case 'about':    return <About   go={navigate}/>;
       case 'faq':      return <Faq     go={navigate}/>;

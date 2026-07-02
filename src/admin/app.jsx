@@ -50,10 +50,12 @@ function AdminApp() {
   const routes = {
     dashboard:    <DashboardPage/>,
     circuits:     <CircuitsPage/>,
+    departures:   <DeparturesPage/>,
     excursions:   <ExcursionsPage/>,
     ateliers:     <AteliersPage/>,
     blog:         <BlogPage/>,
     testimonials: <TestimonialsPage/>,
+    newsletter:   <NewsletterPage/>,
     team:         <TeamPage/>,
     partners:     <PartnersPage/>,
     faq:          <FAQPage/>,

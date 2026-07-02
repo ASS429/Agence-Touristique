@@ -595,6 +595,100 @@ const CircuitCard = ({ c, onOpen, size = 'md' }) => {
 // ============================================================================
 // Footer
 // ============================================================================
+// --- Newsletter subscription (petit composant réutilisable dans le footer) --
+const NewsletterForm = () => {
+  const { t, lang } = useI18n();
+  const [email, setEmail] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [status, setStatus] = React.useState('idle'); // idle | sending | success | error
+  const [errorMsg, setErrorMsg] = React.useState('');
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setErrorMsg('');
+    if (!/.+@.+\..+/.test(email)) {
+      setStatus('error');
+      setErrorMsg(t('newsletter.error.email', 'Adresse email invalide.'));
+      return;
+    }
+    setStatus('sending');
+    try {
+      const r = await window.actSubscribeNewsletter?.({
+        email: email.trim(),
+        full_name: name.trim() || null,
+        language: lang,
+        source: 'footer'
+      });
+      if (r?.error) {
+        setStatus('error');
+        setErrorMsg(r.error.includes('duplicate') || r.error.includes('unique')
+          ? t('newsletter.error.exists', 'Vous êtes déjà abonné à cette newsletter.')
+          : t('newsletter.error.generic', 'Envoi impossible. Réessayez plus tard.'));
+      } else {
+        setStatus('success');
+        setEmail(''); setName('');
+      }
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(t('newsletter.error.generic', 'Envoi impossible. Réessayez plus tard.'));
+    }
+  };
+
+  if (status === 'success') {
+    return (
+      <div className="rounded-2xl bg-sand-50/10 border border-sand-50/20 p-5">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-full bg-terre-600 text-sand-50 inline-flex items-center justify-center"><Icons.Check size={16}/></div>
+          <div>
+            <div className="font-display text-[20px] text-sand-50 leading-none">{t('newsletter.success.title', 'Merci !')}</div>
+            <div className="text-sand-200 text-[13px] mt-1">{t('newsletter.success.body', 'Vous recevrez nos prochaines actualités par email.')}</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="space-y-3">
+      <div className="grid sm:grid-cols-2 gap-3">
+        <input
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          placeholder={t('newsletter.field.name', 'Votre prénom (optionnel)')}
+          className="h-11 rounded-full bg-sand-50/10 border border-sand-100/20 text-sand-50 placeholder-sand-300/70 px-4 text-[14px] outline-none focus:border-terre-300 focus:bg-sand-50/15"
+        />
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder={t('newsletter.field.email', 'Votre email')}
+          className="h-11 rounded-full bg-sand-50/10 border border-sand-100/20 text-sand-50 placeholder-sand-300/70 px-4 text-[14px] outline-none focus:border-terre-300 focus:bg-sand-50/15"
+        />
+      </div>
+      {errorMsg && (
+        <div className="rounded-2xl bg-terre-800/40 border border-terre-300/40 px-4 py-2 text-[12.5px] text-sand-100">
+          {errorMsg}
+        </div>
+      )}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <span className="text-[11.5px] text-sand-300/80 max-w-xs">
+          {t('newsletter.legal', 'Nous respectons votre vie privée. Désabonnement en un clic à tout moment.')}
+        </span>
+        <button
+          type="submit"
+          disabled={status === 'sending'}
+          className="h-11 px-6 rounded-full bg-sand-50 text-ink hover:bg-sand-100 font-medium text-[14px] inline-flex items-center gap-2 disabled:opacity-60"
+        >
+          {status === 'sending' ? t('newsletter.sending', 'Envoi…') : t('newsletter.submit', 'S\'abonner')}
+          <Icons.ArrowRight size={14}/>
+        </button>
+      </div>
+    </form>
+  );
+};
+
 const Footer = ({ go }) => {
   const { t } = useI18n();
   // Fallback robuste : si go n'est pas passé (cache stale d'un ancien composant
@@ -620,6 +714,20 @@ const Footer = ({ go }) => {
             </Btn>
             <span className="text-sand-100/80 text-sm">{t('footer.bespokeNote')}</span>
           </div>
+        </div>
+
+        {/* Newsletter — capture email en base Supabase (newsletter_subscribers) */}
+        <div className="mb-14 rounded-3xl bg-ink-800/80 border border-sand-100/10 p-6 md:p-10 grid md:grid-cols-[1fr,1.4fr] gap-8 items-center">
+          <div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre-300 mb-3">— {t('newsletter.kicker', 'Newsletter')}</div>
+            <h3 className="font-display text-[28px] md:text-[36px] leading-[1.05] text-sand-50">
+              {t('newsletter.title', 'Nos idées de voyage, une fois par mois.')}
+            </h3>
+            <p className="mt-3 text-sand-200 text-[14px] max-w-md leading-relaxed">
+              {t('newsletter.intro', 'Nouveaux itinéraires, coups de cœur culturels, conseils pratiques : nos meilleurs contenus, sans spam.')}
+            </p>
+          </div>
+          <NewsletterForm/>
         </div>
 
         <div className="grid md:grid-cols-12 gap-10 md:gap-8">
@@ -659,6 +767,7 @@ const Footer = ({ go }) => {
               {link('about',   t('nav.about'))}
               {link('about',   t('footer.guides'))}
               {link('contact', t('nav.contact'))}
+              {link('monespace', t('nav.clientArea', 'Espace client'))}
               <li><a href="#" className="hover:text-sand-50">{t('footer.localEngagement')}</a></li>
             </ul>
           </div>

@@ -354,6 +354,9 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
         </div>
       </Section>
 
+      {/* Widget calendrier des départs (si des dates sont enregistrées) */}
+      <DeparturesWidget circuitSlug={tourId} circuitTitle={cat?.title || tourId} go={go}/>
+
       <Footer go={go}/>
 
       {/* Mobile sticky bar — décision ACT : pas de prix, CTA "Devis" plein largeur */}

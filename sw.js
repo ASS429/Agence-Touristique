@@ -4,15 +4,15 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v23';
+const VERSION = 'act-v24';
 // Note de version — affichée aux utilisateurs PWA via la notification
 // "nouvelle version disponible" (voir NotifyUpdate dans shared.jsx).
 // Format : { fr, en, it, de }. Mise à jour à chaque nouvelle version.
 const RELEASE_NOTES = {
-  fr: 'Nouveau : carte interactive des destinations sur l\'accueil, formulaires de contact enregistrés en base pour un suivi centralisé.',
-  en: 'New: interactive destination map on the homepage, contact forms saved to the database for centralized tracking.',
-  it: 'Novità: mappa interattiva delle destinazioni in home, moduli di contatto salvati nel database per un monitoraggio centralizzato.',
-  de: 'Neu: interaktive Karte der Reiseziele auf der Startseite, Kontaktformulare in der Datenbank für zentralisierte Nachverfolgung gespeichert.',
+  fr: 'Nouveau : newsletter mensuelle, carnet de voyage partageable pour chaque circuit, calendrier des départs, espace client sécurisé.',
+  en: 'New: monthly newsletter, shareable travel journal per tour, departures calendar, secure client area.',
+  it: 'Novità: newsletter mensile, diario di viaggio condivisibile per ogni tour, calendario delle partenze, area cliente sicura.',
+  de: 'Neu: monatlicher Newsletter, teilbares Reisetagebuch pro Tour, Abfahrtskalender, sicherer Kundenbereich.',
 };
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
@@ -53,6 +53,9 @@ const CORE = [
   '/src/croisieres.jsx',
   '/src/ateliers.jsx',
   '/src/map.jsx',
+  '/src/departures-widget.jsx',
+  '/src/carnet.jsx',
+  '/src/monespace.jsx',
   '/src/custom.jsx',
   '/src/blog.jsx',
   '/src/pages.jsx',

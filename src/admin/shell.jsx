@@ -6,10 +6,12 @@
 const ADMIN_SECTIONS = [
   { id: 'dashboard',    label: 'Vue d\'ensemble', icon: '📊', group: 'Général' },
   { id: 'circuits',     label: 'Circuits',        icon: '🗺️', group: 'Catalogue' },
+  { id: 'departures',   label: 'Dates de départ', icon: '📅', group: 'Catalogue' },
   { id: 'excursions',   label: 'Excursions',      icon: '☀️', group: 'Catalogue' },
   { id: 'ateliers',     label: 'Ateliers',        icon: '🎨', group: 'Catalogue' },
   { id: 'blog',         label: 'Blog',            icon: '✍️', group: 'Contenus' },
   { id: 'testimonials', label: 'Témoignages',     icon: '⭐', group: 'Contenus' },
+  { id: 'newsletter',   label: 'Newsletter',      icon: '📧', group: 'Contenus' },
   { id: 'team',         label: 'Équipe',          icon: '👥', group: 'À propos' },
   { id: 'partners',     label: 'Partenaires',     icon: '🤝', group: 'À propos' },
   { id: 'faq',          label: 'FAQ',             icon: '❓', group: 'À propos' },

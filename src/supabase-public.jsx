@@ -137,6 +137,31 @@
     }
   };
 
+  // -------------------------------------------------------------------
+  // actSubscribeNewsletter(payload)
+  //
+  // Ajoute un abonné à la newsletter (table newsletter_subscribers).
+  // Policy RLS "newsletter_insert" autorise INSERT au rôle anon.
+  // Détecte les doublons (contrainte UNIQUE sur email) et remonte
+  // l'info via le champ error du retour.
+  // -------------------------------------------------------------------
+  window.actSubscribeNewsletter = async function(payload) {
+    if (!configured) return { skipped: true };
+    try {
+      await ensureSupabaseClient();
+      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false }
+      });
+      const { error } = await sb.from('newsletter_subscribers').insert(payload);
+      if (error) throw error;
+      if (window.console) console.log('[ACT] Abonnement newsletter enregistré');
+      return { ok: true };
+    } catch (e) {
+      if (window.console) console.warn('[ACT] Abonnement newsletter impossible:', e.message);
+      return { error: e.message };
+    }
+  };
+
   // Auto-lancement au load (les composants React sont déjà en train
   // de monter avec les données statiques ; le loader écrasera après).
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
