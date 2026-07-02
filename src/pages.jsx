@@ -341,10 +341,14 @@ const About = ({ go }) => {
 
       {/* Notre réseau — présentation catégorisée par nature et géographie,
           sans nommer les partenaires (directive ACT du 18 juin 2026 :
-          confidentialité commerciale, mention par pays/type uniquement). */}
+          confidentialité commerciale, mention par pays/type uniquement).
+          Texte d'introduction officiel ACT (fichier "Nos Partenaires.docx"). */}
       <Section label={t('about.network.label')} title={richT(t('about.network.title'))}
                kicker={t('about.network.kicker')}
                className="py-16 md:py-24">
+        <p className="max-w-3xl text-[15px] md:text-[16px] text-ink-800 leading-relaxed mb-8 md:mb-10">
+          {t('about.network.intro')}
+        </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {[
             { I:Icons.MapPin,   tKey:'about.network.cat1.t', dKey:'about.network.cat1.d' },

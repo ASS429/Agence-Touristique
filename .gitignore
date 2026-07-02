@@ -32,3 +32,10 @@ multilingue-*.md
 # (Pattern ancré à la racine pour ne pas exclure images_du_senegal/photos_act_book/
 # qui contient les versions optimisées et catégorisées, à versionner.)
 /photos_act_book/
+
+# Seed Supabase généré (contient les data insérées, régénérable via export_data_jsx.py)
+supabase/seed/seed_content.sql
+
+# Config Supabase locale (URLs staging, service_role key, jamais côté client)
+supabase/.env
+supabase/config.local.js

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ACT — Administration</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#C8593B" />
+
+<link rel="icon" type="image/png" href="../assets/logo-act.png" />
+
+<!-- Tailwind CDN (identique au site public pour cohérence graphique) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          sand:  { 50:'#FBF8F3', 100:'#F5EFE4', 200:'#E9DDC5', 300:'#D9C9A7' },
+          terra: { 500:'#D46B4C', 600:'#C8593B', 700:'#A64729', 800:'#8A3A21' },
+          ink:   { 800:'#1B1D1E', 900:'#0E0F10' },
+          ocean: { 600:'#2F6B7F', 700:'#255868' }
+        },
+        fontFamily: {
+          display: ['Instrument Serif', 'serif'],
+          body:    ['Manrope', 'system-ui', 'sans-serif']
+        }
+      }
+    }
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  html, body { background: #FBF8F3; font-family: 'Manrope', system-ui, sans-serif; }
+  .font-display { font-family: 'Instrument Serif', serif; letter-spacing: -0.01em; }
+  /* Scrollbar discret sur les listes */
+  .admin-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+  .admin-scroll::-webkit-scrollbar-thumb { background: #D9C9A7; border-radius: 4px; }
+  .admin-scroll::-webkit-scrollbar-track { background: transparent; }
+  /* Loading spinner générique */
+  @keyframes act-spin { to { transform: rotate(360deg); } }
+  .act-spin { animation: act-spin .8s linear infinite; }
+</style>
+</head>
+<body>
+<div id="admin-root">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="w-8 h-8 border-2 border-terra-600 border-t-transparent rounded-full act-spin"></div>
+  </div>
+</div>
+
+<!-- React (mêmes versions que le site public pour partager le cache CDN) -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Supabase JS client v2 -->
+<script src="https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+
+<!-- Sources admin -->
+<script type="text/babel" src="../src/admin/supabase.jsx"></script>
+<script type="text/babel" src="../src/admin/ui.jsx"></script>
+<script type="text/babel" src="../src/admin/auth.jsx"></script>
+<script type="text/babel" src="../src/admin/shell.jsx"></script>
+<script type="text/babel" src="../src/admin/dashboard.jsx"></script>
+<script type="text/babel" src="../src/admin/lang.jsx"></script>
+<script type="text/babel" src="../src/admin/list-editor.jsx"></script>
+<script type="text/babel" src="../src/admin/circuits.jsx"></script>
+<script type="text/babel" src="../src/admin/excursions.jsx"></script>
+<script type="text/babel" src="../src/admin/ateliers.jsx"></script>
+<script type="text/babel" src="../src/admin/blog.jsx"></script>
+<script type="text/babel" src="../src/admin/testimonials.jsx"></script>
+<script type="text/babel" src="../src/admin/team.jsx"></script>
+<script type="text/babel" src="../src/admin/partners.jsx"></script>
+<script type="text/babel" src="../src/admin/faq.jsx"></script>
+<script type="text/babel" src="../src/admin/media.jsx"></script>
+<script type="text/babel" src="../src/admin/settings.jsx"></script>
+<script type="text/babel" src="../src/admin/contacts.jsx"></script>
+<script type="text/babel" src="../src/admin/app.jsx"></script>
+</body>
+</html>
