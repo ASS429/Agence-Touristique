@@ -493,6 +493,7 @@ const Home = ({ onOpenTour, go }) => (
     <ProfilACT go={go}/>
     <ProduitsCircuits onOpenTour={onOpenTour} go={go}/>
     <Destinations go={go}/>
+    <DestinationsMap go={go}/>
     <Pourquoi/>
     <RetourSources go={go}/>
     <PackDakar/>
