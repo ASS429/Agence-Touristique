@@ -1,106 +1,193 @@
 // =====================================================================
-// src/admin/list-editor.jsx — pattern liste+éditeur générique
+// src/admin/list-editor.jsx — Patterns liste + éditeur (design refondu)
 //
-// Les modules CRUD (Circuits, Excursions, etc.) partagent tous la même
-// structure : liste sur la gauche, éditeur sur la droite, publier/
-// dépublier, dupliquer, supprimer. Ce fichier fournit les briques.
+// - ListToolbar : search + filtres pills + right (compteur, actions) + CTA
+// - FiltersPills : pills à sélection unique
+// - ItemsTable : grid table pattern du design (header sable mono uppercase,
+//     lignes hover, actions inline en fin de ligne, cover 52x64 rounded-xl)
+// - ItemsCards : grille de cards
+// - useCollection : hook générique CRUD Supabase
+// - EditorLayout : cadre modal avec tabs soulignés + footer sticky
 // =====================================================================
 
 // -----------------------------------------------------------
-// ListToolbar : recherche + bouton créer
+// ListToolbar
 // -----------------------------------------------------------
-function ListToolbar({ query, onQuery, onCreate, createLabel = 'Nouveau', right }) {
+function ListToolbar({
+  query, onQuery, onCreate, createLabel = 'Nouveau',
+  filters, activeFilter, onFilter, right, count
+}) {
   return (
-    <div className="flex flex-wrap items-center gap-3 mb-4">
-      <Input
-        value={query}
-        onChange={e => onQuery(e.target.value)}
-        placeholder="Rechercher…"
-        className="max-w-sm"
-      />
-      {right}
+    <div className="flex items-center gap-3 flex-wrap mb-5">
+      {typeof onQuery === 'function' && (
+        <div className="relative">
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-mute-400 flex">
+            <Icon name="search" size={17}/>
+          </span>
+          <input
+            value={query || ''}
+            onChange={e => onQuery(e.target.value)}
+            placeholder="Rechercher…"
+            className="w-[260px] h-10 pl-10 pr-3.5 rounded-full border border-bone-400 bg-white text-[13.5px] outline-none focus:border-terra-600 focus:ring-[3px] focus:ring-terra-600/12 transition"
+          />
+        </div>
+      )}
+      {filters && (
+        <FiltersPills filters={filters} active={activeFilter} onSelect={onFilter}/>
+      )}
       <div className="flex-1"/>
-      {onCreate && <Btn onClick={onCreate}>+ {createLabel}</Btn>}
+      {count != null && (
+        <div className="font-mono text-[11px] text-mute-500">{count}</div>
+      )}
+      {right}
+      {onCreate && (
+        <Btn onClick={onCreate} icon={<Icon name="plus" size={16} stroke={2}/>}>
+          {createLabel}
+        </Btn>
+      )}
     </div>
   );
 }
 
 // -----------------------------------------------------------
-// ItemsTable : tableau générique
-// columns: [{ key, label, render? (row) => ReactNode, width? }]
+// FiltersPills : filtres single-select
 // -----------------------------------------------------------
-function ItemsTable({ items, columns, onRowClick, onDuplicate, onDelete, onTogglePublish, loading }) {
+function FiltersPills({ filters, active, onSelect }) {
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {filters.map(f => {
+        const on = active === f.id;
+        return (
+          <button
+            key={f.id}
+            onClick={() => onSelect?.(f.id)}
+            className={`inline-flex items-center gap-2 h-9 px-4 rounded-full border font-semibold text-[13px] transition ${
+              on
+                ? 'bg-ink-800 text-white border-ink-800'
+                : 'bg-white text-mute-700 border-bone-400 hover:bg-sand-100'
+            }`}
+          >
+            {f.label}
+            {f.count != null && (
+              <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10.5px] font-bold ${
+                on ? 'bg-white/20 text-white' : 'bg-bone-100 text-mute-500'
+              }`}>{f.count}</span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// -----------------------------------------------------------
+// ItemsTable : tableau grid pattern
+// columns : [{ key, label, width, render?, className? }]
+// -----------------------------------------------------------
+function ItemsTable({ items, columns, onRowClick, onDuplicate, onDelete, onTogglePublish, loading, emptyIcon, emptyTitle = 'Aucun élément', emptyMessage }) {
   if (loading) {
     return <div className="py-16 flex justify-center"><Spinner size="lg"/></div>;
   }
   if (!items.length) {
     return (
       <EmptyState
-        title="Aucun élément"
-        message="Cliquez sur « + Nouveau » pour créer votre premier contenu."
+        icon={emptyIcon}
+        title={emptyTitle}
+        message={emptyMessage || 'Cliquez sur « + Nouveau » pour créer votre premier contenu.'}
+      />
+    );
+  }
+
+  // Grille CSS calculée depuis les widths des colonnes
+  const gridCols = columns.map(c => c.width || 'minmax(0,1fr)').join(' ') + ' 100px';
+
+  return (
+    <div className="bg-white border border-bone-200 rounded-2xl overflow-hidden shadow-act-table">
+      {/* Header */}
+      <div
+        className="grid gap-3.5 px-5 py-3 border-b border-bone-200 bg-sand-75 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-mute-400"
+        style={{ gridTemplateColumns: gridCols }}
+      >
+        {columns.map(c => (<div key={c.key}>{c.label}</div>))}
+        <div className="text-right">Actions</div>
+      </div>
+
+      {/* Rows */}
+      {items.map(row => (
+        <div
+          key={row.id}
+          onClick={() => onRowClick?.(row)}
+          className={`grid gap-3.5 px-5 py-3 border-b border-bone-100 items-center act-table-row ${onRowClick ? 'cursor-pointer' : ''}`}
+          style={{ gridTemplateColumns: gridCols }}
+        >
+          {columns.map(c => (
+            <div key={c.key} className={`min-w-0 text-[13.5px] text-mute-700 ${c.className || ''}`}>
+              {c.render ? c.render(row) : (row[c.key] ?? '—')}
+            </div>
+          ))}
+          <div className="flex items-center gap-1.5 justify-end" onClick={e => e.stopPropagation()}>
+            {onTogglePublish && (
+              <ActionBtn
+                variant="success"
+                onClick={() => onTogglePublish(row)}
+                title={row.published ? 'Dépublier' : 'Publier'}
+              ><Icon name="eye" size={15}/></ActionBtn>
+            )}
+            {onDuplicate && (
+              <ActionBtn
+                variant="info"
+                onClick={() => onDuplicate(row)}
+                title="Dupliquer"
+              ><Icon name="copy" size={15}/></ActionBtn>
+            )}
+            {onDelete && (
+              <ActionBtn
+                variant="danger"
+                onClick={() => onDelete(row)}
+                title="Supprimer"
+              ><Icon name="trash" size={15}/></ActionBtn>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// -----------------------------------------------------------
+// Thumbnail — mini-placeholder 52×64 rounded-xl (design handoff)
+// -----------------------------------------------------------
+function Thumb({ src, alt, ratio = 'act-thumb-a', size = 'md' }) {
+  const sizes = {
+    sm: { w: 40, h: 50 },
+    md: { w: 52, h: 64 },
+    lg: { w: 68, h: 82 }
+  };
+  const s = sizes[size] || sizes.md;
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt={alt || ''}
+        className="rounded-xl border border-bone-300 object-cover flex-shrink-0"
+        style={{ width: s.w, height: s.h }}
       />
     );
   }
   return (
-    <div className="bg-white rounded-2xl border border-sand-200 overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="bg-sand-50 text-xs uppercase text-ink-800/60 tracking-wider">
-            <tr>
-              {columns.map(c => (
-                <th key={c.key} className="px-4 py-3 text-left" style={c.width ? { width: c.width } : undefined}>
-                  {c.label}
-                </th>
-              ))}
-              <th className="px-4 py-3 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map(row => (
-              <tr key={row.id} className="border-t border-sand-100 hover:bg-sand-50/50 cursor-pointer"
-                  onClick={() => onRowClick?.(row)}>
-                {columns.map(c => (
-                  <td key={c.key} className="px-4 py-3 text-ink-800">
-                    {c.render ? c.render(row) : (row[c.key] ?? '—')}
-                  </td>
-                ))}
-                <td className="px-4 py-3 text-right" onClick={e => e.stopPropagation()}>
-                  <div className="inline-flex gap-1">
-                    {onTogglePublish && (
-                      <button
-                        onClick={() => onTogglePublish(row)}
-                        className="px-2 py-1 text-xs rounded hover:bg-sand-100 text-ink-800/70"
-                        title={row.published ? 'Dépublier' : 'Publier'}
-                      >{row.published ? '👁️‍🗨️' : '👁️'}</button>
-                    )}
-                    {onDuplicate && (
-                      <button
-                        onClick={() => onDuplicate(row)}
-                        className="px-2 py-1 text-xs rounded hover:bg-sand-100 text-ink-800/70"
-                        title="Dupliquer"
-                      >⎘</button>
-                    )}
-                    {onDelete && (
-                      <button
-                        onClick={() => onDelete(row)}
-                        className="px-2 py-1 text-xs rounded hover:bg-red-50 text-red-700"
-                        title="Supprimer"
-                      >🗑</button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div
+      className={`rounded-xl border border-bone-300 flex-shrink-0 relative ${ratio}`}
+      style={{ width: s.w, height: s.h }}
+    >
+      <span className="absolute left-1.5 bottom-1 font-mono text-[7.5px] text-mute-600/60">
+        {size === 'lg' ? '4:5' : ''}
+      </span>
     </div>
   );
 }
 
 // -----------------------------------------------------------
 // Hook générique : useCollection(table)
-// Charge, cherche, CRUD sur une table donnée.
 // -----------------------------------------------------------
 function useCollection(table, opts = {}) {
   const [items, setItems] = useState([]);
@@ -160,26 +247,109 @@ function useCollection(table, opts = {}) {
 }
 
 // -----------------------------------------------------------
-// EditorLayout : cadre standard pour un formulaire d'édition
+// EditorTabs : tabs soulignés (design handoff)
 // -----------------------------------------------------------
-function EditorLayout({ open, onClose, title, onSave, saving, canSave = true, children, footer, size = 'lg' }) {
+function EditorTabs({ tabs, active, onSelect }) {
   return (
-    <Modal open={open} onClose={onClose} title={title} size={size}>
+    <div className="flex gap-1 border-b border-bone-200 overflow-x-auto -mx-1 px-1">
+      {tabs.map(t => {
+        const on = active === t.id;
+        return (
+          <button
+            key={t.id}
+            onClick={() => onSelect(t.id)}
+            className={`relative h-10 px-4 border-b-[2px] -mb-px whitespace-nowrap font-semibold text-[14px] transition ${
+              on
+                ? 'border-terra-600 text-terra-700'
+                : 'border-transparent text-mute-500 hover:text-ink-800'
+            }`}
+          >
+            {t.label}
+            {t.count != null && (
+              <span className={`ml-1.5 text-[11px] font-mono ${on ? 'text-terra-600' : 'text-mute-400'}`}>
+                ({t.count})
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// -----------------------------------------------------------
+// EditorLayout : cadre modal avec tabs + footer sticky
+// -----------------------------------------------------------
+function EditorLayout({
+  open, onClose, title, kicker, statusPill,
+  tabs, activeTab, onSelectTab,
+  onSave, onSaveDraft, saving, canSave = true,
+  publishLabel = 'Publier',
+  saveLabel,
+  children, footer, footerLeft, size = 'xl'
+}) {
+  const defaultFooter = (
+    <div className="flex items-center justify-between">
+      <div className="text-[12.5px] text-mute-500 flex items-center gap-2">
+        {footerLeft}
+      </div>
+      <div className="flex gap-2.5">
+        <Btn variant="secondary" onClick={onClose} disabled={saving}>Fermer</Btn>
+        {onSaveDraft && (
+          <Btn variant="secondary" onClick={onSaveDraft} disabled={saving}>
+            Enregistrer le brouillon
+          </Btn>
+        )}
+        {onSave && (
+          <Btn
+            variant={onSaveDraft ? 'success' : 'primary'}
+            onClick={onSave}
+            loading={saving}
+            disabled={!canSave}
+          >{saveLabel || (onSaveDraft ? publishLabel : 'Enregistrer')}</Btn>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={title}
+      kicker={kicker}
+      statusPill={statusPill}
+      size={size}
+      footer={footer !== undefined ? footer : defaultFooter}
+    >
+      {tabs && (
+        <div className="-mx-6 -mt-6 mb-6 px-6 pt-4 bg-white border-b border-bone-200 sticky top-0 z-10">
+          <EditorTabs tabs={tabs} active={activeTab} onSelect={onSelectTab}/>
+        </div>
+      )}
       <div className="space-y-6">
         {children}
-      </div>
-      <div className="mt-8 pt-4 border-t border-sand-200 flex items-center justify-between gap-2">
-        <div>{footer}</div>
-        <div className="flex gap-2">
-          <Btn variant="ghost" onClick={onClose} disabled={saving}>Annuler</Btn>
-          <Btn onClick={onSave} loading={saving} disabled={!canSave}>Enregistrer</Btn>
-        </div>
       </div>
     </Modal>
   );
 }
 
+// -----------------------------------------------------------
+// PagePad : conteneur standard des pages admin
+// -----------------------------------------------------------
+function PagePad({ children, className = '', maxWidth = 'max-w-[1180px]' }) {
+  return (
+    <div className={`${maxWidth} mx-auto px-6 md:px-7 py-6 md:py-7 pb-14 ${className}`}>
+      {children}
+    </div>
+  );
+}
+
 window.ListToolbar = ListToolbar;
+window.FiltersPills = FiltersPills;
 window.ItemsTable = ItemsTable;
+window.Thumb = Thumb;
 window.useCollection = useCollection;
+window.EditorTabs = EditorTabs;
 window.EditorLayout = EditorLayout;
+window.PagePad = PagePad;
