@@ -384,6 +384,7 @@ const Header = ({ route, go, topOffset = 0 }) => {
     { id:'ateliers',    label: t('nav.ateliers') },
     { id:'croisieres',  label: t('nav.croisieres') },
     { id:'custom',      label: t('nav.bespoke') },
+    { id:'mice',        label: t('nav.mice', 'MICE') },
     { id:'about',       label: t('nav.about') },
     { id:'contact',     label: t('nav.contact') },
   ];
@@ -756,6 +757,7 @@ const Footer = ({ go }) => {
               {link('excursions', t('nav.excursions'))}
               {link('croisieres', t('nav.croisieres'))}
               {link('custom',     t('footer.bespokeTrip'))}
+              {link('mice',       t('nav.mice', 'MICE'))}
               {link('blog',       t('footer.blogAdvice'))}
               {link('faq',        t('nav.faq'))}
             </ul>

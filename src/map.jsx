@@ -34,7 +34,7 @@ const MARKER_SVG = `
 `;
 
 const DestinationsMap = ({ go }) => {
-  const { t } = useI18n();
+  const { t, richT } = useI18n();
   const containerRef = React.useRef(null);
   const mapRef = React.useRef(null);
 
@@ -119,7 +119,7 @@ const DestinationsMap = ({ go }) => {
           — {t('map.kicker', 'Où on vous emmène')}
         </div>
         <h2 className="font-display text-[32px] md:text-[44px] leading-tight">
-          {t('map.title', 'Toutes nos destinations sur une carte.')}
+          {richT(t('map.title', 'Toutes nos destinations sur {em}une carte{/em}.'))}
         </h2>
         <p className="mt-3 text-ink-600">
           {t('map.intro', 'Du bord de mer aux paysages du sud, chaque destination a été choisie pour ce qu\'elle raconte.')}

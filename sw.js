@@ -4,15 +4,15 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v24';
+const VERSION = 'act-v25';
 // Note de version — affichée aux utilisateurs PWA via la notification
 // "nouvelle version disponible" (voir NotifyUpdate dans shared.jsx).
 // Format : { fr, en, it, de }. Mise à jour à chaque nouvelle version.
 const RELEASE_NOTES = {
-  fr: 'Nouveau : newsletter mensuelle, carnet de voyage partageable pour chaque circuit, calendrier des départs, espace client sécurisé.',
-  en: 'New: monthly newsletter, shareable travel journal per tour, departures calendar, secure client area.',
-  it: 'Novità: newsletter mensile, diario di viaggio condivisibile per ogni tour, calendario delle partenze, area cliente sicura.',
-  de: 'Neu: monatlicher Newsletter, teilbares Reisetagebuch pro Tour, Abfahrtskalender, sicherer Kundenbereich.',
+  fr: 'Nouveau : page MICE (tourisme d\'affaires) pour incentives, séminaires et congrès. Petits ajustements typographiques.',
+  en: 'New: MICE page (business tourism) for incentives, seminars and conferences. Small typographic tweaks.',
+  it: 'Novità: pagina MICE (turismo d\'affari) per incentive, seminari e congressi. Piccoli aggiustamenti tipografici.',
+  de: 'Neu: MICE-Seite (Geschäftstourismus) für Incentives, Seminare und Kongresse. Kleine typografische Anpassungen.',
 };
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
@@ -56,6 +56,7 @@ const CORE = [
   '/src/departures-widget.jsx',
   '/src/carnet.jsx',
   '/src/monespace.jsx',
+  '/src/mice.jsx',
   '/src/custom.jsx',
   '/src/blog.jsx',
   '/src/pages.jsx',

@@ -86,6 +86,7 @@ const AppShell = () => {
       case 'carnet':   return <CarnetVoyage slug={params.id} go={navigate}/>;
       case 'monespace': return <ClientSpace go={navigate}/>;
       case 'contact':  return <Contact go={navigate}/>;
+      case 'mice':     return <Mice    go={navigate}/>;
       case 'about':    return <About   go={navigate}/>;
       case 'faq':      return <Faq     go={navigate}/>;
       case 'mentions': return <Mentions go={navigate}/>;

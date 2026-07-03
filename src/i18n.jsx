@@ -55,6 +55,7 @@ const DICT = {
     'nav.ateliers':'Workshops',
     'nav.croisieres':'Cruises',
     'nav.bespoke':'Bespoke',
+    'nav.mice':'MICE',
     'nav.blog':'Journal',
     'nav.about':'About',
     'nav.contact':'Contact',
@@ -1047,6 +1048,57 @@ const DICT = {
     'monespace.req.kind.contact':'Message',
     'monespace.req.kind.custom':'Bespoke journey',
     'monespace.err.email':'Invalid email address.',
+
+    // ============================================================
+    // MICE — business tourism page
+    // ============================================================
+    'mice.kicker':'MICE · Business tourism',
+    'mice.title':'Your events, {em}at ACT\'s standard{/em}.',
+    'mice.intro':'Africa Connection Tours has a highly specialised unit dedicated to the design and management of corporate events.',
+
+    'mice.what.kicker':'What MICE stands for',
+    'mice.what.title':'Meetings · Incentives · {em}Conferences{/em} · Events.',
+    'mice.what.p1':'From Dakar, we craft tailored experiences for companies, agencies and associations: executive seminars, incentive travel, annual conventions, professional congresses and brand events.',
+    'mice.what.p2':'Our approach: a single point of contact, proven logistics, a strong cultural backdrop, and the ACT signature — Senegalese téranga applied to corporate expectations.',
+
+    'mice.audience.label':'Who it\'s for',
+    'mice.audience.item1':'Executive committees and management teams',
+    'mice.audience.item2':'HR directors and event managers',
+    'mice.audience.item3':'Event and communication agencies',
+    'mice.audience.item4':'Federations and professional associations',
+    'mice.audience.item5':'Brands and sponsors running local activations',
+
+    'mice.services.label':'Our offer',
+    'mice.services.title':'End-to-end {em}support{/em}.',
+    'mice.services.kicker':'From the first brief to post-event reporting, a dedicated unit runs every step.',
+    'mice.item1.t':'Rapid brief review',
+    'mice.item1.d':'Express analysis of any incentive, congress or event request to confirm our capacity and understand your goals from the first conversation.',
+    'mice.item2.t':'Personalised, exclusive programme',
+    'mice.item2.d':'Design of a tailor-made proposal — each event is unique, no generic packages. A Senegalese cultural signature guaranteed.',
+    'mice.item3.t':'Logistics and on-site team',
+    'mice.item3.d':'Quality logistics — transport, accommodation, venues, catering — orchestrated by a capable and available team.',
+    'mice.item4.t':'Advice for lasting impact',
+    'mice.item4.d':'Recommendations to turn your event into a memorable moment, aligned with your objectives and audience.',
+
+    'mice.method.kicker':'How we work',
+    'mice.method.title':'From brief to debrief: {em}four clear steps{/em}.',
+    'mice.method.s1.t':'Brief & assessment',
+    'mice.method.s1.d':'You describe your project. We come back within 24-48h with an initial reading and a budget frame.',
+    'mice.method.s2.t':'Proposal',
+    'mice.method.s2.d':'Programme design, venue and partner selection, detailed costing, collaborative validation.',
+    'mice.method.s3.t':'Production',
+    'mice.method.s3.d':'Logistics, provider coordination, team briefings, rehearsals if needed, quality control.',
+    'mice.method.s4.t':'Event & debrief',
+    'mice.method.s4.d':'Real-time on-site management, contingency handling, cold debrief and feedback report.',
+
+    'mice.cta.kicker':'Consult us',
+    'mice.cta.title':'Let\'s talk about your {em}next event{/em}.',
+    'mice.cta.intro':'Tell us about your project — nature of the event, expected dates, number of participants — and we\'ll come back within 24 business hours with a personalised proposal.',
+    'mice.cta.brief':'Brief your project',
+    'mice.cta.wa':'Reach us on WhatsApp',
+    'mice.cta.contact':'Contact us',
+    'mice.cta.note':'— Confidentiality guaranteed. Briefs are shared only with the ACT MICE team.',
+    'mice.wa.msg':'Hello ACT, I would like advice for a MICE event (incentive/congress/seminar).',
   },
   FR: {
     'nav.circuits':'Circuits',
@@ -1054,6 +1106,7 @@ const DICT = {
     'nav.ateliers':'Ateliers',
     'nav.croisieres':'Croisières',
     'nav.bespoke':'Sur mesure',
+    'nav.mice':'MICE',
     'nav.blog':'Blog',
     'nav.about':'À propos',
     'nav.contact':'Contact',
@@ -2046,6 +2099,57 @@ const DICT = {
     'monespace.req.kind.contact':'Message',
     'monespace.req.kind.custom':'Voyage sur mesure',
     'monespace.err.email':'Adresse email invalide.',
+
+    // ============================================================
+    // MICE — page tourisme d'affaires (contenu ACT du 2026-07-03)
+    // ============================================================
+    'mice.kicker':'MICE · Tourisme d\'affaires',
+    'mice.title':'Vos événements, {em}à hauteur d\'ACT{/em}.',
+    'mice.intro':'Africa Connection Tours dispose d\'une cellule hautement spécialisée en élaboration et gestion d\'événementiels.',
+
+    'mice.what.kicker':'Ce que MICE veut dire',
+    'mice.what.title':'Meetings · Incentives · {em}Conferences{/em} · Events.',
+    'mice.what.p1':'Depuis Dakar, nous concevons pour les entreprises, agences et associations des expériences sur mesure : séminaires de direction, voyages d\'incentive, conventions annuelles, congrès professionnels et événements de marque.',
+    'mice.what.p2':'Notre approche : un interlocuteur unique, une logistique éprouvée, un cadre culturel fort, et cette signature ACT — la téranga sénégalaise appliquée à l\'exigence corporate.',
+
+    'mice.audience.label':'Pour qui',
+    'mice.audience.item1':'Directions et comités exécutifs',
+    'mice.audience.item2':'DRH et responsables événementiels',
+    'mice.audience.item3':'Agences d\'événementiel et de communication',
+    'mice.audience.item4':'Fédérations et associations professionnelles',
+    'mice.audience.item5':'Marques et sponsors en activation locale',
+
+    'mice.services.label':'Notre offre',
+    'mice.services.title':'Un accompagnement {em}de bout en bout{/em}.',
+    'mice.services.kicker':'De la première étude à la gestion post-événement, une cellule dédiée pilote chaque étape.',
+    'mice.item1.t':'Étude rapide de votre demande',
+    'mice.item1.d':'Analyse express de tout incentive, congrès ou événement pour vous confirmer notre capacité et cerner vos enjeux dès la première conversation.',
+    'mice.item2.t':'Programme personnalisé et exclusif',
+    'mice.item2.d':'Design d\'une proposition sur mesure — chaque événement est unique, aucune fiche générique. Signature culturelle sénégalaise garantie.',
+    'mice.item3.t':'Logistique et encadrement humain',
+    'mice.item3.d':'Mise en place d\'une logistique de qualité — transport, hébergement, salles, restauration — pilotée par une équipe compétente et disponible.',
+    'mice.item4.t':'Conseil pour un impact fort',
+    'mice.item4.d':'Recommandations pour transformer votre événement en moment mémorable, aligné avec vos objectifs et vos cibles.',
+
+    'mice.method.kicker':'Comment on travaille',
+    'mice.method.title':'De la demande à l\'après-événement : {em}quatre étapes claires{/em}.',
+    'mice.method.s1.t':'Brief & étude',
+    'mice.method.s1.d':'Vous nous décrivez votre projet. Nous revenons sous 24-48h avec une première lecture et un cadrage budgétaire.',
+    'mice.method.s2.t':'Proposition',
+    'mice.method.s2.d':'Design du programme, sélection des lieux et partenaires, chiffrage détaillé, validation collaborative.',
+    'mice.method.s3.t':'Production',
+    'mice.method.s3.d':'Logistique, coordination des prestataires, briefings équipe, répétitions si besoin, contrôle qualité.',
+    'mice.method.s4.t':'Événement & bilan',
+    'mice.method.s4.d':'Pilotage terrain en temps réel, gestion des aléas, débriefing à froid et livrable de retour d\'expérience.',
+
+    'mice.cta.kicker':'Consultez-nous',
+    'mice.cta.title':'Parlons de votre {em}prochain événement{/em}.',
+    'mice.cta.intro':'Décrivez-nous votre projet — nature de l\'événement, dates envisagées, nombre de participants — et nous revenons vers vous sous 24h ouvrées avec une proposition personnalisée.',
+    'mice.cta.brief':'Décrire mon projet',
+    'mice.cta.wa':'Nous joindre sur WhatsApp',
+    'mice.cta.contact':'Nous contacter',
+    'mice.cta.note':'— Confidentialité assurée. Les briefs reçus ne sont partagés qu\'avec l\'équipe MICE d\'ACT.',
+    'mice.wa.msg':'Bonjour ACT, je souhaite être conseillé pour un événement MICE (incentive/congrès/séminaire).',
   },
   IT: {
     'nav.circuits':'Tour',
@@ -2053,6 +2157,7 @@ const DICT = {
     'nav.ateliers':'Laboratori',
     'nav.croisieres':'Crociere',
     'nav.bespoke':'Su misura',
+    'nav.mice':'MICE',
     'nav.blog':'Blog',
     'nav.about':'Chi siamo',
     'nav.contact':'Contatti',
@@ -3045,6 +3150,57 @@ const DICT = {
     'monespace.req.kind.contact':'Messaggio',
     'monespace.req.kind.custom':'Viaggio su misura',
     'monespace.err.email':'Indirizzo email non valido.',
+
+    // ============================================================
+    // MICE — pagina turismo d'affari
+    // ============================================================
+    'mice.kicker':'MICE · Turismo d\'affari',
+    'mice.title':'I vostri eventi, {em}all\'altezza di ACT{/em}.',
+    'mice.intro':'Africa Connection Tours dispone di una cellula altamente specializzata nell\'ideazione e gestione di eventi.',
+
+    'mice.what.kicker':'Cosa significa MICE',
+    'mice.what.title':'Meeting · Incentive · {em}Congressi{/em} · Eventi.',
+    'mice.what.p1':'Da Dakar, progettiamo per aziende, agenzie e associazioni esperienze su misura: seminari direzionali, viaggi incentive, convention annuali, congressi professionali ed eventi di marca.',
+    'mice.what.p2':'Il nostro approccio: un interlocutore unico, una logistica collaudata, una cornice culturale forte, e questa firma ACT — la téranga senegalese applicata all\'esigenza corporate.',
+
+    'mice.audience.label':'Per chi',
+    'mice.audience.item1':'Direzioni e comitati esecutivi',
+    'mice.audience.item2':'HR e responsabili eventi',
+    'mice.audience.item3':'Agenzie di eventi e comunicazione',
+    'mice.audience.item4':'Federazioni e associazioni professionali',
+    'mice.audience.item5':'Marchi e sponsor in attivazione locale',
+
+    'mice.services.label':'La nostra offerta',
+    'mice.services.title':'Un accompagnamento {em}da capo a fondo{/em}.',
+    'mice.services.kicker':'Dal primo studio alla gestione post-evento, una cellula dedicata pilota ogni fase.',
+    'mice.item1.t':'Studio rapido della richiesta',
+    'mice.item1.d':'Analisi express di ogni incentive, congresso o evento per confermare la nostra capacità e comprendere i vostri obiettivi fin dalla prima conversazione.',
+    'mice.item2.t':'Programma personalizzato ed esclusivo',
+    'mice.item2.d':'Design di una proposta su misura — ogni evento è unico, nessun pacchetto generico. Firma culturale senegalese garantita.',
+    'mice.item3.t':'Logistica e team sul posto',
+    'mice.item3.d':'Logistica di qualità — trasporto, alloggio, sale, ristorazione — orchestrata da un team competente e disponibile.',
+    'mice.item4.t':'Consulenza per un impatto forte',
+    'mice.item4.d':'Raccomandazioni per trasformare il vostro evento in un momento memorabile, allineato con obiettivi e target.',
+
+    'mice.method.kicker':'Come lavoriamo',
+    'mice.method.title':'Dalla richiesta al post-evento: {em}quattro fasi chiare{/em}.',
+    'mice.method.s1.t':'Brief & studio',
+    'mice.method.s1.d':'Ci descrivete il progetto. Torniamo entro 24-48h con una prima lettura e una cornice di budget.',
+    'mice.method.s2.t':'Proposta',
+    'mice.method.s2.d':'Design del programma, selezione dei luoghi e partner, budgeting dettagliato, validazione collaborativa.',
+    'mice.method.s3.t':'Produzione',
+    'mice.method.s3.d':'Logistica, coordinamento dei fornitori, briefing team, prove se necessario, controllo qualità.',
+    'mice.method.s4.t':'Evento & bilancio',
+    'mice.method.s4.d':'Pilotaggio sul campo in tempo reale, gestione degli imprevisti, debriefing a freddo e report di ritorno d\'esperienza.',
+
+    'mice.cta.kicker':'Consultateci',
+    'mice.cta.title':'Parliamo del vostro {em}prossimo evento{/em}.',
+    'mice.cta.intro':'Descriveteci il progetto — natura dell\'evento, date previste, numero di partecipanti — e vi rispondiamo entro 24 ore lavorative con una proposta personalizzata.',
+    'mice.cta.brief':'Descrivi il tuo progetto',
+    'mice.cta.wa':'Contattaci su WhatsApp',
+    'mice.cta.contact':'Contattaci',
+    'mice.cta.note':'— Riservatezza assicurata. I brief ricevuti sono condivisi solo con il team MICE di ACT.',
+    'mice.wa.msg':'Buongiorno ACT, desidero essere consigliato per un evento MICE (incentive/congresso/seminario).',
   },
   DE: {
     'nav.circuits':'Touren',
@@ -3052,6 +3208,7 @@ const DICT = {
     'nav.ateliers':'Workshops',
     'nav.croisieres':'Kreuzfahrten',
     'nav.bespoke':'Maßgeschneidert',
+    'nav.mice':'MICE',
     'nav.blog':'Blog',
     'nav.about':'Über uns',
     'nav.contact':'Kontakt',
@@ -4044,6 +4201,57 @@ const DICT = {
     'monespace.req.kind.contact':'Nachricht',
     'monespace.req.kind.custom':'Individuelle Reise',
     'monespace.err.email':'Ungültige E-Mail-Adresse.',
+
+    // ============================================================
+    // MICE — Geschäftstourismus-Seite
+    // ============================================================
+    'mice.kicker':'MICE · Geschäftstourismus',
+    'mice.title':'Ihre Veranstaltungen, {em}auf ACT-Niveau{/em}.',
+    'mice.intro':'Africa Connection Tours verfügt über eine hochspezialisierte Einheit für die Konzeption und das Management von Veranstaltungen.',
+
+    'mice.what.kicker':'Was MICE bedeutet',
+    'mice.what.title':'Meetings · Incentives · {em}Konferenzen{/em} · Events.',
+    'mice.what.p1':'Von Dakar aus konzipieren wir für Unternehmen, Agenturen und Verbände maßgeschneiderte Erlebnisse: Führungskräfteseminare, Incentive-Reisen, Jahrestagungen, Fachkongresse und Markenveranstaltungen.',
+    'mice.what.p2':'Unser Ansatz: ein einziger Ansprechpartner, bewährte Logistik, ein starker kultureller Rahmen und diese ACT-Signatur — die senegalesische Téranga für die Corporate-Ansprüche.',
+
+    'mice.audience.label':'Für wen',
+    'mice.audience.item1':'Geschäftsleitungen und Vorstände',
+    'mice.audience.item2':'HR-Verantwortliche und Event-Manager',
+    'mice.audience.item3':'Event- und Kommunikationsagenturen',
+    'mice.audience.item4':'Verbände und Berufsvereinigungen',
+    'mice.audience.item5':'Marken und Sponsoren bei lokalen Aktivierungen',
+
+    'mice.services.label':'Unser Angebot',
+    'mice.services.title':'Eine {em}End-to-End-Begleitung{/em}.',
+    'mice.services.kicker':'Von der ersten Studie bis zum Post-Event-Bericht steuert eine dedizierte Einheit jeden Schritt.',
+    'mice.item1.t':'Schnelle Prüfung Ihrer Anfrage',
+    'mice.item1.d':'Express-Analyse jeder Incentive-, Kongress- oder Event-Anfrage, um unsere Kapazität zu bestätigen und Ihre Ziele bereits im ersten Gespräch zu verstehen.',
+    'mice.item2.t':'Individuelles, exklusives Programm',
+    'mice.item2.d':'Design eines maßgeschneiderten Vorschlags — jedes Event ist einzigartig, keine Standardpakete. Senegalesische Kultursignatur garantiert.',
+    'mice.item3.t':'Logistik und Vor-Ort-Team',
+    'mice.item3.d':'Qualitätslogistik — Transport, Unterkunft, Räume, Verpflegung — orchestriert von einem kompetenten und verfügbaren Team.',
+    'mice.item4.t':'Beratung für nachhaltige Wirkung',
+    'mice.item4.d':'Empfehlungen, um Ihre Veranstaltung in einen unvergesslichen Moment zu verwandeln, ausgerichtet auf Ihre Ziele und Zielgruppen.',
+
+    'mice.method.kicker':'Wie wir arbeiten',
+    'mice.method.title':'Von der Anfrage bis zum Debriefing: {em}vier klare Phasen{/em}.',
+    'mice.method.s1.t':'Briefing & Studie',
+    'mice.method.s1.d':'Sie beschreiben Ihr Projekt. Wir melden uns innerhalb von 24-48 h mit einer ersten Einschätzung und einem Budgetrahmen zurück.',
+    'mice.method.s2.t':'Vorschlag',
+    'mice.method.s2.d':'Programmdesign, Auswahl der Locations und Partner, detaillierte Kalkulation, gemeinsame Validierung.',
+    'mice.method.s3.t':'Produktion',
+    'mice.method.s3.d':'Logistik, Koordination der Dienstleister, Team-Briefings, Proben bei Bedarf, Qualitätskontrolle.',
+    'mice.method.s4.t':'Event & Debriefing',
+    'mice.method.s4.d':'Echtzeit-Management vor Ort, Notfallmanagement, Debriefing mit Feedback-Bericht.',
+
+    'mice.cta.kicker':'Konsultieren Sie uns',
+    'mice.cta.title':'Sprechen wir über Ihre {em}nächste Veranstaltung{/em}.',
+    'mice.cta.intro':'Beschreiben Sie uns Ihr Projekt — Art der Veranstaltung, geplante Termine, Teilnehmerzahl — und wir melden uns innerhalb von 24 Werkstunden mit einem persönlichen Vorschlag.',
+    'mice.cta.brief':'Projekt beschreiben',
+    'mice.cta.wa':'Über WhatsApp erreichen',
+    'mice.cta.contact':'Kontaktieren Sie uns',
+    'mice.cta.note':'— Vertraulichkeit gewährleistet. Erhaltene Briefings werden nur mit dem ACT-MICE-Team geteilt.',
+    'mice.wa.msg':'Guten Tag ACT, ich möchte für eine MICE-Veranstaltung (Incentive/Kongress/Seminar) beraten werden.',
   },
 };;;;
 
@@ -4158,6 +4366,7 @@ const parseHash = () => {
   if (route === 'carnet'      && parts[1]) params.id = parts[1];
   // #/monespace/token/xxx pour magic link callback (optionnel)
   if (route === 'monespace'   && parts[1]) params.action = parts[1];
+  // #/mice — page tourisme d'affaires (pas de sous-route)
   return { route, params };
 };
 
