@@ -4,15 +4,15 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v25';
+const VERSION = 'act-v26';
 // Note de version — affichée aux utilisateurs PWA via la notification
 // "nouvelle version disponible" (voir NotifyUpdate dans shared.jsx).
 // Format : { fr, en, it, de }. Mise à jour à chaque nouvelle version.
 const RELEASE_NOTES = {
-  fr: 'Nouveau : page MICE (tourisme d\'affaires) pour incentives, séminaires et congrès. Petits ajustements typographiques.',
-  en: 'New: MICE page (business tourism) for incentives, seminars and conferences. Small typographic tweaks.',
-  it: 'Novità: pagina MICE (turismo d\'affari) per incentive, seminari e congressi. Piccoli aggiustamenti tipografici.',
-  de: 'Neu: MICE-Seite (Geschäftstourismus) für Incentives, Seminare und Kongresse. Kleine typografische Anpassungen.',
+  fr: 'Nouveau : page Croisières illustrée avec 6 photos officielles ACT (escales, équipage, embarquements) + lightbox.',
+  en: 'New: Cruises page illustrated with 6 official ACT photos (port calls, crew, boardings) + lightbox.',
+  it: 'Novità: pagina Crociere illustrata con 6 foto ufficiali ACT (scali, equipaggio, imbarchi) + lightbox.',
+  de: 'Neu: Kreuzfahrten-Seite mit 6 offiziellen ACT-Fotos (Hafenanläufe, Besatzung, Einschiffungen) + Lightbox.',
 };
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
