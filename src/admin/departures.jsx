@@ -1,18 +1,13 @@
 // =====================================================================
-// src/admin/departures.jsx — CRUD Dates de départ (circuit_departures)
-//
-// Permet d'ajouter, éditer, supprimer les dates de départ programmées
-// pour chaque circuit. Sert de source aux widgets calendriers du site
-// public (page fiche circuit).
+// src/admin/departures.jsx — CRUD Dates de départ (groupes mois, refondu)
 // =====================================================================
 
 function DeparturesPage() {
-  const [items, setItems]         = useState([]);
-  const [circuits, setCircuits]   = useState([]);
-  const [loading, setLoading]     = useState(true);
-  const [editing, setEditing]     = useState(null);
-  const [circuitFilter, setCircuitFilter] = useState('');
-  const [timeFilter, setTimeFilter]       = useState('upcoming'); // upcoming | past | all
+  const [items, setItems]   = useState([]);
+  const [circuits, setCircuits] = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [editing, setEditing]   = useState(null);
+  const [timeFilter, setTimeFilter] = useState('upcoming');
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -23,28 +18,14 @@ function DeparturesPage() {
       ]);
       setItems(deps);
       setCircuits(circs);
-    } catch (e) {
-      window.toast('Erreur : ' + e.message, 'error');
-    } finally {
-      setLoading(false);
-    }
+    } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
+    finally { setLoading(false); }
   }, []);
 
   useEffect(() => { reload(); }, [reload]);
 
-  const circuitMap = useMemo(() => Object.fromEntries(circuits.map(c => [c.id, c])), [circuits]);
-
-  const filtered = useMemo(() => {
-    let f = items;
-    const today = new Date().toISOString().slice(0, 10);
-    if (timeFilter === 'upcoming') f = f.filter(d => d.start_date >= today);
-    if (timeFilter === 'past')     f = f.filter(d => d.start_date <  today);
-    if (circuitFilter) f = f.filter(d => d.circuit_id === circuitFilter);
-    return f;
-  }, [items, circuitFilter, timeFilter]);
-
   const openCreate = () => setEditing({
-    circuit_id: circuitFilter || (circuits[0]?.id || ''),
+    circuit_id: circuits[0]?.id || '',
     start_date: '',
     end_date: '',
     capacity: null,
@@ -55,9 +36,39 @@ function DeparturesPage() {
     published: true
   });
 
+  useEffect(() => {
+    const cb = (e) => e.detail.section === 'departures' && openCreate();
+    window.addEventListener('act-admin-cta', cb);
+    return () => window.removeEventListener('act-admin-cta', cb);
+  }, [circuits]);
+
+  const circuitMap = useMemo(() => Object.fromEntries(circuits.map(c => [c.id, c])), [circuits]);
+
+  const filtered = useMemo(() => {
+    let f = items;
+    const today = new Date().toISOString().slice(0, 10);
+    if (timeFilter === 'upcoming') f = f.filter(d => d.start_date >= today);
+    if (timeFilter === 'past')     f = f.filter(d => d.start_date <  today);
+    return f;
+  }, [items, timeFilter]);
+
+  // Groupe par mois (label français)
+  const groups = useMemo(() => {
+    const g = {};
+    for (const d of filtered) {
+      const date = new Date(d.start_date);
+      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      const label = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+      if (!g[key]) g[key] = { label, count: 0, rows: [] };
+      g[key].rows.push(d);
+      g[key].count++;
+    }
+    return Object.entries(g).sort(([a], [b]) => a.localeCompare(b));
+  }, [filtered]);
+
   const onDelete = async (row) => {
     const c = circuitMap[row.circuit_id];
-    if (!(await window.askConfirm(`Supprimer le départ du ${row.start_date} (${c?.title_fr || '?'}) ?`, 'Supprimer'))) return;
+    if (!(await window.askConfirm(`Supprimer le départ du ${formatDate(row.start_date)} (${c?.title_fr || '?'}) ?`, 'Supprimer'))) return;
     try {
       await window.sbDelete('circuit_departures', row.id);
       setItems(list => list.filter(x => x.id !== row.id));
@@ -65,58 +76,145 @@ function DeparturesPage() {
     } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
   };
 
-  const statusVar = { open: 'success', confirmed: 'info', full: 'warning', cancelled: 'danger' };
-  const statusLabel = { open: 'Ouvert', confirmed: 'Confirmé', full: 'Complet', cancelled: 'Annulé' };
-
-  const columns = [
-    { key: 'start_date', label: 'Départ', width: '130px', render: r => formatDate(r.start_date) },
-    { key: 'end_date',   label: 'Retour', width: '130px', render: r => r.end_date ? formatDate(r.end_date) : '—' },
-    { key: 'circuit',    label: 'Circuit', render: r => {
-        const c = circuitMap[r.circuit_id];
-        return <div>
-          <div className="font-medium text-ink-900">{c?.title_fr || <span className="text-red-600">Circuit supprimé</span>}</div>
-          <div className="text-xs text-ink-800/50">{c?.slug || '—'}</div>
-        </div>;
-    } },
-    { key: 'capacity',   label: 'Places', width: '110px', render: r => r.capacity ? `${r.booked || 0}/${r.capacity}` : `${r.booked || 0}/∞` },
-    { key: 'status',     label: 'Statut', width: '130px', render: r => <Badge variant={statusVar[r.status]}>{statusLabel[r.status] || r.status}</Badge> },
-    { key: 'published',  label: 'Publié', width: '110px', render: r => <StatusPill published={r.published}/> }
+  const timeFilters = [
+    { id: 'upcoming', label: 'À venir', count: items.filter(d => d.start_date >= new Date().toISOString().slice(0, 10)).length },
+    { id: 'past',     label: 'Passés',  count: items.filter(d => d.start_date <  new Date().toISOString().slice(0, 10)).length },
+    { id: 'all',      label: 'Tous',    count: items.length }
   ];
 
   return (
-    <div className="p-6 lg:p-10 max-w-7xl mx-auto">
-      <PageHeader
-        title="Dates de départ"
-        subtitle={`${filtered.length} départ${filtered.length > 1 ? 's' : ''} (${timeFilter === 'upcoming' ? 'à venir' : timeFilter === 'past' ? 'passés' : 'tous'})`}
-        actions={<Btn onClick={openCreate}>+ Nouveau départ</Btn>}
+    <PagePad>
+      <ListToolbar
+        filters={timeFilters}
+        activeFilter={timeFilter}
+        onFilter={setTimeFilter}
+        count={`${filtered.length} départ${filtered.length > 1 ? 's' : ''}`}
+        onCreate={openCreate}
+        createLabel="Nouvelle date"
       />
 
-      <div className="flex flex-wrap items-center gap-3 mb-6">
-        <Select value={timeFilter} onChange={e => setTimeFilter(e.target.value)} className="max-w-xs">
-          <option value="upcoming">À venir uniquement</option>
-          <option value="past">Passés</option>
-          <option value="all">Tous</option>
-        </Select>
-        <Select value={circuitFilter} onChange={e => setCircuitFilter(e.target.value)} className="max-w-xs">
-          <option value="">Tous les circuits</option>
-          {circuits.map(c => <option key={c.id} value={c.id}>{c.title_fr}</option>)}
-        </Select>
-      </div>
-
-      <ItemsTable
-        items={filtered}
-        columns={columns}
-        onRowClick={setEditing}
-        onDelete={onDelete}
-        onTogglePublish={async row => {
-          const updated = await window.sbUpdate('circuit_departures', row.id, { published: !row.published });
-          setItems(list => list.map(r => r.id === row.id ? updated : r));
-          window.toast(row.published ? 'Dépublié' : 'Publié', 'success');
-        }}
-        loading={loading}
-      />
+      {loading ? (
+        <div className="py-16 flex justify-center"><Spinner size="lg"/></div>
+      ) : groups.length === 0 ? (
+        <EmptyState icon={<Icon name="calendar" size={28}/>} title="Aucun départ programmé"/>
+      ) : (
+        groups.map(([key, g]) => (
+          <div key={key} className="mb-6">
+            <div className="flex items-center gap-3.5 mb-3">
+              <div className="font-display text-[21px] text-ink-800">
+                {g.label.charAt(0).toUpperCase() + g.label.slice(1)}
+              </div>
+              <div className="flex-1 h-px bg-bone-300"/>
+              <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-mute-400">
+                {g.count} départ{g.count > 1 ? 's' : ''}
+              </div>
+            </div>
+            <div className="bg-white border border-bone-200 rounded-2xl overflow-hidden shadow-act-card">
+              {g.rows.map(dep => (
+                <DepartureRow
+                  key={dep.id}
+                  dep={dep}
+                  circuit={circuitMap[dep.circuit_id]}
+                  onEdit={() => setEditing(dep)}
+                  onDelete={() => onDelete(dep)}
+                  onTogglePublish={async () => {
+                    const updated = await window.sbUpdate('circuit_departures', dep.id, { published: !dep.published });
+                    setItems(list => list.map(x => x.id === dep.id ? updated : x));
+                    window.toast(dep.published ? 'Dépublié' : 'Publié', 'success');
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        ))
+      )}
 
       {editing && <DepartureEditor dep={editing} circuits={circuits} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); reload(); }}/>}
+    </PagePad>
+  );
+}
+
+function DepartureRow({ dep, circuit, onEdit, onDelete, onTogglePublish }) {
+  const d = new Date(dep.start_date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const dow = d.toLocaleDateString('fr-FR', { weekday: 'short' }).replace('.', '');
+
+  const capacity = dep.capacity;
+  const booked = dep.booked || 0;
+  const pct = capacity ? Math.min(100, Math.round((booked / capacity) * 100)) : 0;
+  const barColor = pct >= 100 ? '#C0392B' : pct >= 70 ? '#B8801F' : '#2E7D5B';
+
+  const statusMap = {
+    open:      { label: 'Ouvert',    color: '#2E7D5B', bg: '#E7F1EB' },
+    confirmed: { label: 'Confirmé',  color: '#2F6B7F', bg: '#E6EEF1' },
+    full:      { label: 'Complet',   color: '#C0392B', bg: '#FBEDE9' },
+    cancelled: { label: 'Annulé',    color: '#7A6F60', bg: '#F5EFE4' }
+  };
+  const s = statusMap[dep.status] || statusMap.open;
+
+  return (
+    <div
+      onClick={onEdit}
+      className="grid gap-4 px-5 py-3.5 border-b border-bone-100 items-center cursor-pointer act-table-row"
+      style={{ gridTemplateColumns: '58px minmax(0,1.7fr) 1fr 1.35fr auto 100px' }}
+    >
+      {/* Jour + dow */}
+      <div className="text-center flex-shrink-0">
+        <div className="font-display text-[25px] leading-none text-terra-600">{day}</div>
+        <div className="font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-mute-400">{dow}</div>
+      </div>
+
+      {/* Circuit + durée retour */}
+      <div className="min-w-0">
+        <div className="font-bold text-[14.5px] text-ink-800 truncate">
+          {circuit?.title_fr || <span className="text-danger-600">Circuit supprimé</span>}
+        </div>
+        <div className="text-[12px] text-mute-500 truncate">
+          {circuit?.duration_days ? `${circuit.duration_days} j` : ''}
+          {dep.end_date ? ` · retour ${formatDate(dep.end_date).replace(/\s\d{4}/, '')}` : ''}
+        </div>
+      </div>
+
+      {/* Statut pill */}
+      <div>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11.5px] font-bold whitespace-nowrap"
+              style={{ color: s.color, background: s.bg }}>
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: s.color }}/>
+          {s.label}
+        </span>
+      </div>
+
+      {/* Occupancy bar */}
+      <div className="min-w-0">
+        {capacity ? (
+          <>
+            <div className="flex items-center justify-between gap-2 text-[11px] mb-1">
+              <span className="text-mute-600 font-semibold">{booked}/{capacity} pers.</span>
+              <span className="font-bold" style={{ color: barColor }}>{pct}%</span>
+            </div>
+            <div className="h-1.5 rounded-full bg-bone-100 overflow-hidden">
+              <div className="h-full transition-all" style={{ width: `${pct}%`, background: barColor }}/>
+            </div>
+          </>
+        ) : (
+          <div className="text-[12px] text-mute-500 italic">Capacité illimitée</div>
+        )}
+      </div>
+
+      {/* Prix */}
+      <div className="text-right font-display text-[18px] text-ink-800 whitespace-nowrap">
+        {dep.price_override || <span className="text-[13px] text-mute-500 italic">Sur devis</span>}
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-1.5 justify-end" onClick={e => e.stopPropagation()}>
+        <ActionBtn variant="success" onClick={onTogglePublish} title={dep.published ? 'Dépublier' : 'Publier'}>
+          <Icon name="eye" size={13}/>
+        </ActionBtn>
+        <ActionBtn variant="danger" onClick={onDelete} title="Supprimer">
+          <Icon name="trash" size={13}/>
+        </ActionBtn>
+      </div>
     </div>
   );
 }
@@ -127,7 +225,6 @@ function DepartureEditor({ dep, circuits, onClose, onSaved }) {
   const isNew = !dep.id;
   const set = (patch) => setForm(f => ({ ...f, ...patch }));
 
-  // Auto-calcule la date de retour si un circuit avec duration_days est sélectionné
   useEffect(() => {
     if (!form.end_date && form.start_date && form.circuit_id) {
       const c = circuits.find(x => x.id === form.circuit_id);
@@ -147,14 +244,8 @@ function DepartureEditor({ dep, circuits, onClose, onSaved }) {
       const payload = { ...form };
       delete payload.created_at;
       delete payload.updated_at;
-      if (isNew) {
-        delete payload.id;
-        await window.sbInsert('circuit_departures', payload);
-        window.toast('Départ créé', 'success');
-      } else {
-        await window.sbUpdate('circuit_departures', dep.id, payload);
-        window.toast('Enregistré', 'success');
-      }
+      if (isNew) { delete payload.id; await window.sbInsert('circuit_departures', payload); window.toast('Départ créé', 'success'); }
+      else { await window.sbUpdate('circuit_departures', dep.id, payload); window.toast('Enregistré', 'success'); }
       onSaved();
     } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
     finally { setSaving(false); }
@@ -164,11 +255,14 @@ function DepartureEditor({ dep, circuits, onClose, onSaved }) {
     <EditorLayout
       open={true}
       onClose={onClose}
-      title={isNew ? 'Nouveau départ programmé' : 'Éditer un départ'}
+      kicker="Date de départ"
+      title={isNew ? 'Nouveau départ programmé' : `Départ du ${formatDate(dep.start_date)}`}
+      statusPill={<StatusPill published={form.published}/>}
+      size="lg"
       onSave={save}
       saving={saving}
-      size="lg"
-      footer={<Toggle checked={form.published} onChange={v => set({ published: v })} label={form.published ? 'Publié' : 'Brouillon'}/>}
+      saveLabel="Enregistrer"
+      footerLeft={<Toggle checked={form.published} onChange={v => set({ published: v })} label={form.published ? 'Publié' : 'Brouillon'}/>}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Circuit" required className="sm:col-span-2">
@@ -183,7 +277,7 @@ function DepartureEditor({ dep, circuits, onClose, onSaved }) {
         <Field label="Date de départ" required>
           <Input type="date" value={form.start_date || ''} onChange={e => set({ start_date: e.target.value })}/>
         </Field>
-        <Field label="Date de retour" hint="Calculée automatiquement depuis la durée du circuit">
+        <Field label="Date de retour" hint="Calculée automatiquement">
           <Input type="date" value={form.end_date || ''} onChange={e => set({ end_date: e.target.value })}/>
         </Field>
 
@@ -202,8 +296,8 @@ function DepartureEditor({ dep, circuits, onClose, onSaved }) {
             <option value="cancelled">Annulé</option>
           </Select>
         </Field>
-        <Field label="Prix indicatif" hint="Vide = 'Sur devis' (recommandé par ACT)">
-          <Input value={form.price_override || ''} onChange={e => set({ price_override: e.target.value })} placeholder="ex : 180 000 FCFA / pers"/>
+        <Field label="Prix indicatif" hint="Vide = 'Sur devis' (recommandé ACT)">
+          <Input value={form.price_override || ''} onChange={e => set({ price_override: e.target.value })} placeholder="ex : 1 850 €"/>
         </Field>
 
         <Field label="Notes internes" className="sm:col-span-2" hint="Non visible côté public">

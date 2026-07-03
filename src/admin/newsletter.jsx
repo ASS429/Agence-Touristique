@@ -1,13 +1,17 @@
 // =====================================================================
-// src/admin/newsletter.jsx — Gestion des abonnés à la newsletter
+// src/admin/newsletter.jsx — Newsletter (4 stats + liste, design refondu)
+//
+// Phase 2 : gestion des abonnés. Les vraies campagnes (envoi email)
+// arriveront en Phase 3 avec Brevo/Mailchimp. En attendant, l'admin
+// exporte les abonnés en CSV pour les importer dans l'outil d'emailing.
 // =====================================================================
 
 function NewsletterPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
-  const [langFilter, setLangFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('active'); // 'active' | 'unsubscribed' | 'all'
+  const [langFilter, setLangFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('active');
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -27,7 +31,7 @@ function NewsletterPage() {
     let f = items;
     if (statusFilter === 'active')       f = f.filter(r => !r.unsubscribed);
     if (statusFilter === 'unsubscribed') f = f.filter(r =>  r.unsubscribed);
-    if (langFilter) f = f.filter(r => r.language === langFilter);
+    if (langFilter !== 'all') f = f.filter(r => r.language === langFilter);
     if (query.trim()) {
       const q = query.toLowerCase();
       f = f.filter(r =>
@@ -46,20 +50,16 @@ function NewsletterPage() {
       const updated = await window.sbUpdate('newsletter_subscribers', row.id, patch);
       setItems(list => list.map(r => r.id === row.id ? updated : r));
       window.toast(row.unsubscribed ? 'Réabonné' : 'Désabonné', 'success');
-    } catch (e) {
-      window.toast('Erreur : ' + e.message, 'error');
-    }
+    } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
   };
 
   const onDelete = async (row) => {
-    if (!(await window.askConfirm(`Supprimer définitivement l'abonné "${row.email}" ?`, 'Supprimer'))) return;
+    if (!(await window.askConfirm(`Supprimer définitivement "${row.email}" ?`, 'Supprimer'))) return;
     try {
       await window.sbDelete('newsletter_subscribers', row.id);
       setItems(list => list.filter(r => r.id !== row.id));
       window.toast('Supprimé', 'success');
-    } catch (e) {
-      window.toast('Erreur : ' + e.message, 'error');
-    }
+    } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
   };
 
   const exportCSV = () => {
@@ -86,65 +86,114 @@ function NewsletterPage() {
     window.toast(`${filtered.length} abonné(s) exporté(s)`, 'success');
   };
 
+  // Stats
+  const activeSubs = items.filter(r => !r.unsubscribed).length;
+  const unsubs = items.length - activeSubs;
+  const monthAgo = Date.now() - 30 * 24 * 3600 * 1000;
+  const newThisMonth = items.filter(r => new Date(r.created_at).getTime() > monthAgo).length;
+  const rateUnsub = items.length ? Math.round((unsubs / items.length) * 100) / 10 : 0;
+
+  const stats = [
+    { icon: <Icon name="mail" size={16}/>, label: 'Abonnés actifs',   value: activeSubs, sub: 'total' },
+    { icon: <Icon name="arrow" size={16}/>, label: 'Nouveaux (30 j)', value: newThisMonth, delta: newThisMonth > 0 ? `+${newThisMonth}` : '0', deltaVariant: 'up', sub: 'ce mois' },
+    { icon: <Icon name="star" size={16}/>, label: 'Taux ouverture',   value: '—', sub: 'à venir Phase 3' },
+    { icon: <Icon name="star" size={16}/>, label: 'Désabonnés',       value: `${rateUnsub}%`, sub: `${unsubs} personne${unsubs > 1 ? 's' : ''}` }
+  ];
+
   const langLabel = { fr: '🇫🇷 Français', en: '🇬🇧 English', it: '🇮🇹 Italiano', de: '🇩🇪 Deutsch' };
   const sourceLabel = { footer: 'Footer', popup: 'Popup', contact: 'Contact', manual: 'Manuel' };
 
-  const activeCount = items.filter(r => !r.unsubscribed).length;
-  const unsubCount  = items.length - activeCount;
-
-  const columns = [
-    { key: 'email', label: 'Email', render: r => (
-      <div>
-        <div className="font-medium text-ink-900">{r.email}</div>
-        <div className="text-xs text-ink-800/50">{r.full_name || '—'}</div>
-      </div>
-    ) },
-    { key: 'language', label: 'Langue', width: '140px', render: r => langLabel[r.language] || r.language },
-    { key: 'source', label: 'Source', width: '110px', render: r => <Badge>{sourceLabel[r.source] || r.source}</Badge> },
-    { key: 'created_at', label: 'Abonné le', width: '140px', render: r => formatDate(r.created_at) },
-    { key: 'unsubscribed', label: 'Statut', width: '130px', render: r =>
-        r.unsubscribed
-          ? <Badge variant="danger">Désabonné</Badge>
-          : <Badge variant="success">Actif</Badge>
-    }
+  const statusFilters = [
+    { id: 'active',       label: 'Actifs',     count: activeSubs },
+    { id: 'unsubscribed', label: 'Désabonnés', count: unsubs },
+    { id: 'all',          label: 'Tous',       count: items.length }
   ];
 
   return (
-    <div className="p-6 lg:p-10 max-w-7xl mx-auto">
-      <PageHeader
-        title="Newsletter"
-        subtitle={`${activeCount} abonné${activeCount > 1 ? 's' : ''} actif${activeCount > 1 ? 's' : ''} · ${unsubCount} désabonné${unsubCount > 1 ? 's' : ''}`}
-        actions={<Btn variant="secondary" onClick={exportCSV}>📥 Exporter CSV</Btn>}
-      />
+    <PagePad maxWidth="max-w-[1120px]">
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6">
+        {stats.map((s, i) => <KpiCard key={i} {...s}/>)}
+      </div>
 
-      <div className="flex flex-wrap items-center gap-3 mb-6">
-        <Input value={query} onChange={e => setQuery(e.target.value)} placeholder="Rechercher…" className="max-w-sm"/>
-        <Select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="max-w-xs">
-          <option value="active">Actifs uniquement</option>
-          <option value="unsubscribed">Désabonnés</option>
-          <option value="all">Tous</option>
-        </Select>
-        <Select value={langFilter} onChange={e => setLangFilter(e.target.value)} className="max-w-xs">
-          <option value="">Toutes les langues</option>
-          <option value="fr">Français</option>
-          <option value="en">English</option>
-          <option value="it">Italiano</option>
-          <option value="de">Deutsch</option>
+      {/* Toolbar */}
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-3">
+        <div>
+          <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-mute-400">Abonnés</div>
+          <div className="mt-1 font-display text-[23px] text-ink-800">Liste des inscrits</div>
+        </div>
+        <div className="flex gap-2 items-center flex-wrap">
+          <Btn variant="secondary" onClick={exportCSV} icon={<Icon name="download" size={14}/>}>Exporter CSV</Btn>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3 flex-wrap mb-4">
+        <div className="relative">
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-mute-400 flex"><Icon name="search" size={17}/></span>
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Rechercher un email ou nom…"
+            className="w-[260px] h-10 pl-10 pr-3.5 rounded-full border border-bone-400 bg-white text-[13.5px] outline-none focus:border-terra-600 focus:ring-[3px] focus:ring-terra-600/12 transition"
+          />
+        </div>
+        <FiltersPills filters={statusFilters} active={statusFilter} onSelect={setStatusFilter}/>
+        <Select value={langFilter} onChange={e => setLangFilter(e.target.value)} className="max-w-[180px]">
+          <option value="all">Toutes langues</option>
+          <option value="fr">🇫🇷 Français</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="it">🇮🇹 Italiano</option>
+          <option value="de">🇩🇪 Deutsch</option>
         </Select>
       </div>
 
-      <ItemsTable
-        items={filtered}
-        columns={columns}
-        onDelete={onDelete}
-        onTogglePublish={toggleUnsub}
-        loading={loading}
-      />
+      {/* Table */}
+      {loading ? (
+        <div className="py-16 flex justify-center"><Spinner size="lg"/></div>
+      ) : filtered.length === 0 ? (
+        <EmptyState icon={<Icon name="send" size={28}/>} title="Aucun abonné"/>
+      ) : (
+        <div className="bg-white border border-bone-200 rounded-2xl overflow-hidden shadow-act-table">
+          <div className="grid gap-3.5 px-5 py-3 border-b border-bone-200 bg-sand-75 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-mute-400"
+               style={{ gridTemplateColumns: 'minmax(0,2.4fr) 1fr 1fr 1fr 100px' }}>
+            <div>Email</div>
+            <div>Langue</div>
+            <div>Source</div>
+            <div>Abonné le</div>
+            <div className="text-right">Actions</div>
+          </div>
+          {filtered.map(row => (
+            <div
+              key={row.id}
+              className="grid gap-3.5 px-5 py-3 border-b border-bone-100 items-center act-table-row"
+              style={{ gridTemplateColumns: 'minmax(0,2.4fr) 1fr 1fr 1fr 100px' }}
+            >
+              <div className="min-w-0">
+                <div className="font-semibold text-[14px] text-ink-800 truncate">{row.email}</div>
+                <div className="text-[12px] text-mute-500 truncate">{row.full_name || '—'}</div>
+              </div>
+              <div className="text-[13px] text-mute-700">{langLabel[row.language] || row.language}</div>
+              <div><Badge>{sourceLabel[row.source] || row.source}</Badge></div>
+              <div className="text-[13px] text-mute-700">{formatDate(row.created_at)}</div>
+              <div className="flex items-center gap-1.5 justify-end">
+                {row.unsubscribed
+                  ? <StatusPill published={false} publishedLabel="Actif" draftLabel="Désabonné"/>
+                  : <StatusPill published={true}  publishedLabel="Actif" draftLabel="Désabonné"/>
+                }
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
-      <div className="mt-6 p-4 rounded-2xl bg-sand-50 border border-sand-200 text-sm text-ink-800/70">
-        <b>Note :</b> pour envoyer une newsletter, exportez le CSV et importez-le dans votre outil d'emailing (Brevo, Mailchimp, Sendinblue…). L'intégration email directe pourra être ajoutée en Phase 3.
+      {/* Info Phase 3 */}
+      <div className="mt-6 p-4 rounded-2xl bg-info-100 border border-info-600/20 text-[13.5px] text-info-600 flex gap-3">
+        <span className="flex-shrink-0"><Icon name="sparkle" size={18}/></span>
+        <div>
+          <b>Envoi de campagnes</b> — pour envoyer une newsletter, exportez le CSV et importez-le dans votre outil d'emailing (Brevo, Mailchimp, Sendinblue…). L'intégration email directe pourra être ajoutée en Phase 3.
+        </div>
       </div>
-    </div>
+    </PagePad>
   );
 }
 

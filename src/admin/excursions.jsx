@@ -1,5 +1,5 @@
 // =====================================================================
-// src/admin/excursions.jsx — CRUD Excursions
+// src/admin/excursions.jsx — CRUD Excursions (design refondu)
 // =====================================================================
 
 function ExcursionsPage() {
@@ -14,6 +14,12 @@ function ExcursionsPage() {
     published: false, sort_order: 100
   });
 
+  useEffect(() => {
+    const cb = (e) => e.detail.section === 'excursions' && openCreate();
+    window.addEventListener('act-admin-cta', cb);
+    return () => window.removeEventListener('act-admin-cta', cb);
+  }, []);
+
   const onDelete = async (row) => {
     if (!(await window.askConfirm(`Supprimer l'excursion "${row.title_fr}" ?`, 'Supprimer'))) return;
     await col.remove(row.id);
@@ -26,31 +32,35 @@ function ExcursionsPage() {
     setEditing(copy);
   };
 
-  const formatLabel = { halfday: 'Demi-journée', fullday: 'Journée' };
+  const formatLabel = { halfday: '½ journée', fullday: 'Journée' };
   const startLabel = { dakar: 'Dakar', saly: 'Saly', 'saint-louis': 'Saint-Louis' };
 
   const columns = [
-    { key: 'title_fr', label: 'Titre', render: r => (
-      <div>
-        <div className="font-medium text-ink-900">{truncate(r.title_fr, 60)}</div>
-        <div className="text-xs text-ink-800/50">{r.slug}</div>
+    { key: 'title', label: 'Excursion', width: 'minmax(0,2.4fr)', render: r => (
+      <div className="flex items-center gap-3.5 min-w-0">
+        <Thumb src={r.hero_photo} alt={r.title_fr}/>
+        <div className="min-w-0">
+          <div className="font-bold text-[14.5px] text-ink-800 truncate">{r.title_fr}</div>
+          <div className="text-[12px] text-mute-500 truncate">{r.short_fr}</div>
+        </div>
       </div>
     ) },
-    { key: 'start_point', label: 'Départ', width: '120px', render: r => startLabel[r.start_point] || r.start_point },
-    { key: 'format', label: 'Format', width: '120px', render: r => formatLabel[r.format] || r.format },
-    { key: 'published', label: 'Statut', width: '110px', render: r => <StatusPill published={r.published}/> },
-    { key: 'updated_at', label: 'Modifié', width: '140px', render: r => formatDate(r.updated_at) }
+    { key: 'start_point', label: 'Départ', width: '1fr', render: r => (
+      <div className="flex items-center gap-1.5 text-mute-700">
+        <Icon name="pin" size={14}/>{startLabel[r.start_point] || r.start_point}
+      </div>
+    ) },
+    { key: 'format', label: 'Format', width: '.85fr', render: r => formatLabel[r.format] || r.format },
+    { key: 'langs', label: 'Langues', width: '.9fr', render: r => <LangDots row={r} field="title"/> },
+    { key: 'status', label: 'Statut', width: '1fr', render: r => <StatusPill published={r.published}/> }
   ];
 
   return (
-    <div className="p-6 lg:p-10 max-w-7xl mx-auto">
-      <PageHeader
-        title="Excursions"
-        subtitle={`${col.items.length} excursion${col.items.length > 1 ? 's' : ''} au catalogue`}
-      />
+    <PagePad>
       <ListToolbar
         query={col.query}
         onQuery={col.setQuery}
+        count={`${col.items.length} excursion${col.items.length > 1 ? 's' : ''}`}
         onCreate={openCreate}
         createLabel="Nouvelle excursion"
       />
@@ -62,9 +72,11 @@ function ExcursionsPage() {
         onDelete={onDelete}
         onTogglePublish={async row => { await col.togglePublish(row); window.toast(row.published ? 'Dépubliée' : 'Publiée', 'success'); }}
         loading={col.loading}
+        emptyIcon={<Icon name="sun" size={28}/>}
+        emptyTitle="Aucune excursion"
       />
       {editing && <ExcursionEditor excursion={editing} onClose={() => setEditing(null)} col={col}/>}
-    </div>
+    </PagePad>
   );
 }
 
@@ -79,47 +91,48 @@ function ExcursionEditor({ excursion, onClose, col }) {
     if (isNew && form.title_fr && !form.slug) set({ slug: window.slugify(form.title_fr) });
   }, [form.title_fr]);
 
-  const save = async () => {
+  const doSave = async (publish) => {
     if (!form.title_fr?.trim()) { window.toast('Le titre FR est obligatoire', 'error'); return; }
     setSaving(true);
     try {
       const payload = { ...form };
+      if (publish !== undefined) payload.published = publish;
       delete payload.created_at;
       delete payload.updated_at;
       if (isNew) { delete payload.id; await col.create(payload); window.toast('Excursion créée', 'success'); }
-      else       { await col.update(excursion.id, payload); window.toast('Modifications enregistrées', 'success'); }
+      else       { await col.update(excursion.id, payload); window.toast('Enregistré', 'success'); }
       onClose();
     } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
     finally { setSaving(false); }
   };
 
-  const TabButton = ({ id, label, count }) => (
-    <button onClick={() => setTab(id)}
-      className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition ${tab === id ? 'border-terra-600 text-terra-700' : 'border-transparent text-ink-800/60 hover:text-ink-800'}`}>
-      {label}{count != null && <span className="ml-1.5 text-xs text-ink-800/40">({count})</span>}
-    </button>
-  );
+  const tabs = [
+    { id: 'general', label: 'Général' },
+    { id: 'contenu', label: 'Contenu' },
+    { id: 'points',  label: 'Points forts', count: form.highlights?.length },
+    { id: 'inclus',  label: 'Inclus',       count: form.includes?.length },
+    { id: 'galerie', label: 'Galerie',      count: form.gallery?.length }
+  ];
 
   return (
     <EditorLayout
       open={true}
       onClose={onClose}
-      title={isNew ? 'Nouvelle excursion' : `Éditer : ${excursion.title_fr}`}
-      onSave={save}
+      kicker={`Édition excursion · /${form.slug || 'nouvelle'}`}
+      title={isNew ? 'Nouvelle excursion' : form.title_fr}
+      statusPill={<StatusPill published={form.published}/>}
+      size="full"
+      tabs={tabs}
+      activeTab={tab}
+      onSelectTab={setTab}
+      onSave={() => doSave(true)}
+      onSaveDraft={() => doSave(false)}
       saving={saving}
-      size="xl"
-      footer={<Toggle checked={form.published} onChange={v => set({ published: v })} label={form.published ? 'Publiée' : 'Brouillon'}/>}
+      publishLabel="Publier l'excursion"
+      footerLeft={excursion.updated_at && <><Icon name="clock" size={13}/> {timeAgo(excursion.updated_at)}</>}
     >
-      <div className="flex gap-1 border-b border-sand-200">
-        <TabButton id="general" label="Général"/>
-        <TabButton id="content" label="Contenu"/>
-        <TabButton id="highlights" label="Points forts" count={form.highlights?.length}/>
-        <TabButton id="includes" label="Inclus" count={form.includes?.length}/>
-        <TabButton id="gallery" label="Galerie" count={form.gallery?.length}/>
-      </div>
-
       {tab === 'general' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Slug (URL)" required>
             <Input value={form.slug} onChange={e => set({ slug: e.target.value })}/>
           </Field>
@@ -142,29 +155,29 @@ function ExcursionEditor({ excursion, onClose, col }) {
           <Field label="Région / zone">
             <Input value={form.region || ''} onChange={e => set({ region: e.target.value })} placeholder="Petite Côte, Sine Saloum…"/>
           </Field>
-          <Field label="Photo de couverture (URL)">
+          <Field label="Photo (URL)">
             <Input value={form.hero_photo || ''} onChange={e => set({ hero_photo: e.target.value })}/>
           </Field>
         </div>
       )}
 
-      {tab === 'content' && (
-        <div className="space-y-6 pt-4">
+      {tab === 'contenu' && (
+        <div className="space-y-6">
           <MultilangField label="Titre" required values={pickLangValues(form, 'title')} onChange={v => set(spreadLangValues('title', v))}/>
-          <MultilangField label="Description courte (pour les cartes)" type="textarea" rows={2} values={pickLangValues(form, 'short')} onChange={v => set(spreadLangValues('short', v))}/>
+          <MultilangField label="Description courte (cartes)" type="textarea" rows={2} values={pickLangValues(form, 'short')} onChange={v => set(spreadLangValues('short', v))}/>
           <MultilangField label="Description complète" type="textarea" rows={6} values={pickLangValues(form, 'description')} onChange={v => set(spreadLangValues('description', v))}/>
         </div>
       )}
 
-      {tab === 'highlights' && (
-        <MultilangListEditor value={form.highlights || []} onChange={v => set({ highlights: v })} singular="point fort" plural="points forts"/>
+      {tab === 'points' && (
+        <MultilangListEditor value={form.highlights || []} onChange={v => set({ highlights: v })} singular="point fort"/>
       )}
 
-      {tab === 'includes' && (
-        <MultilangListEditor value={form.includes || []} onChange={v => set({ includes: v })} singular="inclus" plural="inclus"/>
+      {tab === 'inclus' && (
+        <MultilangListEditor value={form.includes || []} onChange={v => set({ includes: v })} singular="élément inclus"/>
       )}
 
-      {tab === 'gallery' && (
+      {tab === 'galerie' && (
         <GalleryEditor value={form.gallery || []} onChange={v => set({ gallery: v })}/>
       )}
     </EditorLayout>

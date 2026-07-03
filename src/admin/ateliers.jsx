@@ -1,5 +1,5 @@
 // =====================================================================
-// src/admin/ateliers.jsx — CRUD Ateliers
+// src/admin/ateliers.jsx — CRUD Ateliers (cards grid, design refondu)
 // =====================================================================
 
 function AteliersPage() {
@@ -13,6 +13,12 @@ function AteliersPage() {
     published: false, sort_order: 100
   });
 
+  useEffect(() => {
+    const cb = (e) => e.detail.section === 'ateliers' && openCreate();
+    window.addEventListener('act-admin-cta', cb);
+    return () => window.removeEventListener('act-admin-cta', cb);
+  }, []);
+
   const onDelete = async (row) => {
     if (!(await window.askConfirm(`Supprimer l'atelier "${row.title_fr}" ?`, 'Supprimer'))) return;
     await col.remove(row.id);
@@ -20,33 +26,62 @@ function AteliersPage() {
   };
 
   const catLabel = { artisanat: 'Artisanat', musique: 'Musique', danse: 'Danse' };
-
-  const columns = [
-    { key: 'title_fr', label: 'Titre', render: r => (
-      <div>
-        <div className="font-medium text-ink-900">{r.title_fr}</div>
-        <div className="text-xs text-ink-800/50">{r.slug}</div>
-      </div>
-    ) },
-    { key: 'category', label: 'Catégorie', width: '140px', render: r => <Badge>{catLabel[r.category] || r.category}</Badge> },
-    { key: 'published', label: 'Statut', width: '110px', render: r => <StatusPill published={r.published}/> },
-    { key: 'updated_at', label: 'Modifié', width: '140px', render: r => formatDate(r.updated_at) }
-  ];
+  const catTone = {
+    artisanat: 'bg-brand-100 text-terra-700',
+    musique:   'bg-info-100  text-info-600',
+    danse:     'bg-success-100 text-success-600'
+  };
 
   return (
-    <div className="p-6 lg:p-10 max-w-7xl mx-auto">
-      <PageHeader title="Ateliers" subtitle={`${col.items.length} atelier${col.items.length > 1 ? 's' : ''}`}/>
-      <ListToolbar query={col.query} onQuery={col.setQuery} onCreate={openCreate} createLabel="Nouvel atelier"/>
-      <ItemsTable
-        items={col.filtered}
-        columns={columns}
-        onRowClick={setEditing}
-        onDelete={onDelete}
-        onTogglePublish={async row => { await col.togglePublish(row); window.toast(row.published ? 'Dépublié' : 'Publié', 'success'); }}
-        loading={col.loading}
+    <PagePad>
+      <ListToolbar
+        query={col.query}
+        onQuery={col.setQuery}
+        count={`${col.items.length} atelier${col.items.length > 1 ? 's' : ''}`}
+        onCreate={openCreate}
+        createLabel="Nouvel atelier"
       />
+
+      {col.loading ? (
+        <div className="py-16 flex justify-center"><Spinner size="lg"/></div>
+      ) : col.filtered.length === 0 ? (
+        <EmptyState
+          icon={<Icon name="palette" size={28}/>}
+          title="Aucun atelier"
+          message="Cliquez sur « + Nouvel atelier » pour créer votre premier contenu."
+        />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {col.filtered.map((a, i) => (
+            <div
+              key={a.id}
+              onClick={() => setEditing(a)}
+              className="bg-white border border-bone-200 rounded-2xl overflow-hidden cursor-pointer shadow-act-card hover:shadow-act-card-hover hover:border-bone-500 transition"
+            >
+              <div className={`relative h-[150px] act-thumb-${['a','b','c'][i % 3]}`}>
+                {a.hero_photo && <img src={a.hero_photo} alt={a.title_fr} className="absolute inset-0 w-full h-full object-cover"/>}
+                <div className={`absolute left-3 top-3 px-2.5 py-1 rounded-full font-mono text-[10px] font-semibold uppercase tracking-[0.08em] ${catTone[a.category] || ''}`}>
+                  {catLabel[a.category] || a.category}
+                </div>
+                <div className="absolute right-3 top-3"><StatusPill published={a.published}/></div>
+              </div>
+              <div className="p-4">
+                <div className="font-display text-[20px] leading-tight text-ink-800">{a.title_fr}</div>
+                {a.subtitle_fr && <div className="mt-1 text-[13px] text-mute-500">{a.subtitle_fr}</div>}
+                <div className="mt-3 pt-3 border-t border-bone-100 flex items-center justify-between gap-3">
+                  <LangDots row={a} field="title"/>
+                  <div className="flex gap-1" onClick={e => e.stopPropagation()}>
+                    <ActionBtn variant="danger" onClick={() => onDelete(a)} title="Supprimer"><Icon name="trash" size={13}/></ActionBtn>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       {editing && <AtelierEditor atelier={editing} onClose={() => setEditing(null)} col={col}/>}
-    </div>
+    </PagePad>
   );
 }
 
@@ -60,11 +95,12 @@ function AtelierEditor({ atelier, onClose, col }) {
     if (isNew && form.title_fr && !form.slug) set({ slug: window.slugify(form.title_fr) });
   }, [form.title_fr]);
 
-  const save = async () => {
+  const doSave = async (publish) => {
     if (!form.title_fr?.trim()) { window.toast('Le titre FR est obligatoire', 'error'); return; }
     setSaving(true);
     try {
       const payload = { ...form };
+      if (publish !== undefined) payload.published = publish;
       delete payload.created_at;
       delete payload.updated_at;
       if (isNew) { delete payload.id; await col.create(payload); window.toast('Atelier créé', 'success'); }
@@ -78,14 +114,18 @@ function AtelierEditor({ atelier, onClose, col }) {
     <EditorLayout
       open={true}
       onClose={onClose}
-      title={isNew ? 'Nouvel atelier' : `Éditer : ${atelier.title_fr}`}
-      onSave={save}
-      saving={saving}
+      kicker={`Édition atelier · /${form.slug || 'nouveau'}`}
+      title={isNew ? 'Nouvel atelier' : form.title_fr}
+      statusPill={<StatusPill published={form.published}/>}
       size="lg"
-      footer={<Toggle checked={form.published} onChange={v => set({ published: v })} label={form.published ? 'Publié' : 'Brouillon'}/>}
+      onSave={() => doSave(true)}
+      onSaveDraft={() => doSave(false)}
+      saving={saving}
+      publishLabel="Publier l'atelier"
+      footerLeft={atelier.updated_at && <><Icon name="clock" size={13}/> {timeAgo(atelier.updated_at)}</>}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Field label="Slug" required>
+        <Field label="Slug (URL)" required>
           <Input value={form.slug} onChange={e => set({ slug: e.target.value })}/>
         </Field>
         <Field label="Catégorie" required>
