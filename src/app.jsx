@@ -120,10 +120,16 @@ const AppShell = () => {
   );
 };
 
-const App = () => (
-  <I18nProvider>
-    <AppShell/>
-  </I18nProvider>
-);
+const App = () => {
+  // Remonte l'arbre quand le contenu Supabase diffère du statique
+  // (ACT a modifié une fiche dans l'admin). Ne bump jamais tant que la
+  // base est un miroir du statique → aucun flash au chargement normal.
+  const contentV = window.useContentVersion ? window.useContentVersion() : 0;
+  return (
+    <I18nProvider>
+      <AppShell key={contentV}/>
+    </I18nProvider>
+  );
+};
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);

@@ -4,15 +4,15 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v28';
+const VERSION = 'act-v29';
 // Note de version — affichée aux utilisateurs PWA via la notification
 // "nouvelle version disponible" (voir NotifyUpdate dans shared.jsx).
 // Format : { fr, en, it, de }. Mise à jour à chaque nouvelle version.
 const RELEASE_NOTES = {
-  fr: 'Nouvelle excursion : une journée à Saint-Louis (cité UNESCO, Gandiole, calèche).',
-  en: 'New excursion: a day in Saint-Louis (UNESCO city, Gandiole, horse-drawn carriage).',
-  it: 'Nuova escursione: una giornata a Saint-Louis (città UNESCO, Gandiole, calesse).',
-  de: 'Neuer Ausflug: ein Tag in Saint-Louis (UNESCO-Stadt, Gandiole, Pferdekutsche).',
+  fr: 'Le site reflète désormais en direct les contenus gérés depuis l\'espace d\'administration.',
+  en: 'The site now reflects content managed from the admin dashboard in real time.',
+  it: 'Il sito riflette ora in tempo reale i contenuti gestiti dal pannello di amministrazione.',
+  de: 'Die Website spiegelt nun die im Admin-Bereich verwalteten Inhalte in Echtzeit wider.',
 };
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
@@ -44,6 +44,7 @@ const CORE = [
   '/src/photo.jsx',
   '/src/data.jsx',
   '/src/i18n.jsx',
+  '/src/content.jsx',
   '/src/shared.jsx',
   '/src/home.jsx',
   '/src/tour.jsx',
