@@ -83,17 +83,28 @@ Ces valeurs vont dans `src/admin/supabase.jsx` (voir le fichier pour l'emplaceme
 (elle contourne RLS). Elle sert uniquement pour les scripts de seed
 exécutés en local ou depuis un serveur.
 
-### 5. Charger les contenus initiaux
+### 5. Charger les contenus initiaux (multilingue)
 
 Depuis le poste de développement :
 
 ```bash
-python supabase/seed/export_data_jsx.py
+python supabase/seed/export_content.py
 ```
 
-Ce script lit `src/data.jsx` (CIRCUITS + EXCURSIONS + ATELIERS) et
-génère un fichier `supabase/seed/seed_content.sql` qu'on colle ensuite
-dans le SQL editor Supabase.
+Ce script lit `src/data.jsx` **et** `src/i18n.jsx` et génère
+`supabase/seed/seed_content_full.sql` — un seed **idempotent** (upsert
+par slug + nettoyage des lignes parasites) couvrant circuits, excursions
+et ateliers **dans les 4 langues** (FR/EN/IT/DE). On colle ensuite le
+fichier dans le SQL editor Supabase.
+
+> L'ancien script `export_data_jsx.py` (FR uniquement, `on conflict do
+> nothing`) est conservé pour référence mais **ne plus l'utiliser** : il
+> produit une base sans traductions et ne rafraîchit pas les lignes
+> existantes. Toujours passer par `export_content.py`.
+
+Ré-exécutable à volonté : après chaque évolution des contenus dans
+`data.jsx` / `i18n.jsx`, relancer le script et re-coller le SQL met la
+base à jour sans doublon.
 
 ## Accès admin
 

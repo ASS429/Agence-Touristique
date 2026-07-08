@@ -44,8 +44,9 @@ strategie_*.md
 # qui contient les versions optimisées et catégorisées, à versionner.)
 /photos_act_book/
 
-# Seed Supabase généré (contient les data insérées, régénérable via export_data_jsx.py)
+# Seed Supabase généré (régénérable via les scripts export_*.py)
 supabase/seed/seed_content.sql
+supabase/seed/seed_content_full.sql
 
 # Config Supabase locale (URLs staging, service_role key, jamais côté client)
 supabase/.env
