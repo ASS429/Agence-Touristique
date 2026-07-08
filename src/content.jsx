@@ -50,7 +50,7 @@
   // mapper(row) → { id, ...champsStructurels }  (les libellés passent par
   // le dictionnaire, pas par l'objet). defaults = champs requis pour un
   // item créé uniquement en base (absent du statique).
-  function mergeInPlace(staticArr, dbRows, mapper, defaults) {
+  function mergeInPlace(staticArr, dbRows, mapper, defaults, labelsFor) {
     if (!Array.isArray(staticArr) || !Array.isArray(dbRows)) return;
     const indexById = new Map(staticArr.map((it, i) => [it.id, i]));
 
@@ -76,8 +76,8 @@
           if (existing[k] !== mapped[k]) { existing[k] = mapped[k]; markChanged(); }
         });
       } else {
-        // Nouvel item créé en base
-        staticArr.push({ ...defaults, ...clean(mapped) });
+        // Nouvel item créé en base : défauts + libellés fallback + structurel
+        staticArr.push({ ...defaults, ...(labelsFor ? labelsFor(row) : {}), ...clean(mapped) });
         markChanged();
       }
     });
@@ -91,20 +91,21 @@
     return out;
   }
 
-  // --- Mappers DB → shape statique (champs structurels uniquement) -----
+  // --- Mappers DB → shape statique -------------------------------------
+  // IMPORTANT : les libellés (title/subtitle/short) NE sont PAS fusionnés
+  // ici. Ils sont rendus via t(`circuit.<id>.title`, …) donc pilotés par
+  // le dictionnaire (superposé par overlayTranslations). Les inclure ici
+  // provoquerait un faux « changed » (littéral data.jsx ≠ valeur i18n) et
+  // un remount inutile à chaque chargement. On ne fusionne donc que les
+  // champs réellement lus en direct par les composants.
   const mapCircuit = (row) => ({
     id: row.slug,
-    title: row.title_fr,          // fallback si DICT indispo
-    subtitle: row.subtitle_fr,
     days: row.duration_days,
-    region: row.region,
     img: row.hero_photo,
   });
 
   const mapExcursion = (row) => ({
     id: row.slug,
-    title: row.title_fr,
-    short: row.short_fr,
     kind: row.format === 'halfday' ? 'half' : 'full',
     start: row.start_point,
     img: row.hero_photo,
@@ -112,11 +113,14 @@
 
   const mapAtelier = (row) => ({
     id: row.slug,
-    title: row.title_fr,
-    subtitle: row.subtitle_fr,
-    short: row.short_fr,
     category: row.category,
     img: row.hero_photo,
+  });
+
+  // Libellés pour un item créé UNIQUEMENT en base (fallback si le
+  // dictionnaire ne couvre pas encore ce slug — l'overlay l'ajoute aussi).
+  const newItemLabels = (row) => clean({
+    title: row.title_fr, subtitle: row.subtitle_fr, short: row.short_fr,
   });
 
   // Défauts pour un item créé uniquement en base (champs requis par les
@@ -133,15 +137,15 @@
 
       if (Array.isArray(C)) {
         overlayTranslations('circuit', C, ['title', 'subtitle']);
-        mergeInPlace(window.CIRCUITS, C, mapCircuit, CIRCUIT_DEFAULTS);
+        mergeInPlace(window.CIRCUITS, C, mapCircuit, CIRCUIT_DEFAULTS, newItemLabels);
       }
       if (Array.isArray(E)) {
         overlayTranslations('excursion', E, ['title', 'short']);
-        mergeInPlace(window.EXCURSIONS, E, mapExcursion, EXCURSION_DEFAULTS);
+        mergeInPlace(window.EXCURSIONS, E, mapExcursion, EXCURSION_DEFAULTS, newItemLabels);
       }
       if (Array.isArray(A)) {
         overlayTranslations('atelier', A, ['title', 'subtitle', 'short']);
-        mergeInPlace(window.ATELIERS, A, mapAtelier, ATELIER_DEFAULTS);
+        mergeInPlace(window.ATELIERS, A, mapAtelier, ATELIER_DEFAULTS, newItemLabels);
       }
 
       if (window.console) {
