@@ -340,6 +340,14 @@ const EXCURSIONS = [
     short:"Traversée des villages sérères de la Petite Côte. À Ndangane, embarquement en pirogue motorisée : îles aux oiseaux, mangrove, bancs d'huîtres, pêcheurs niominka. Apéro sur une île déserte. Après-midi à Joal-Fadiouth : île aux coquillages, greniers à mil sur pilotis, cimetière aux coquillages, séchoirs à poissons.",
     types:['nature','culture'], destIds:['saloum'], popularity:91,
     img:'images_du_senegal/photos_act_book/saloum/cases-pilotis-01.jpg' },
+
+  // ---- Journée à Saint-Louis (doc ACT « 1 JOURNEE A SAINT LOUIS », juillet 2026) ----
+  { id:'saint-louis-fullday', title:'1 journée à Saint-Louis', subtitle:'Cité classée UNESCO, Gandiole & calèche',
+    kind:'full', start:'saly', days:1, nights:0, priceXOF:null, tone:'terre', mood:'city',
+    schedule:'8h00 → 19h00  (déjeuner inclus)',
+    short:"Départ matinal par la route côtière panoramique et ses marchés maraîchers. Arrivée à Gandiole : tour en pirogue à l'embouchure du fleuve Sénégal, sites d'oiseaux. Déjeuner de gastronomie saint-louisienne. Après-midi en calèche : maisons coloniales aux balcons en fer forgé, quartier pittoresque des pêcheurs de Guet Ndar. Retour vers Saly avec halte artisanale à Mékhé.",
+    types:['culture','nature'], destIds:['saint-louis'], popularity:89,
+    img: IMG('Saint-Louis', 3) },
 ];
 
 // === ATELIERS (page dédiée) ================================================
