@@ -356,7 +356,11 @@
 <script type="text/babel" src="src/icons.jsx"></script>
 <script type="text/babel" src="src/photo.jsx"></script>
 <!-- Loader Supabase (mode dégradé si non configuré : le site reste 100% statique) -->
-<script src="src/supabase-public.jsx"></script>
+<!-- Chargé via Babel (type="text/babel") : le serveur statique sert les
+     .jsx avec un MIME non-exécutable, donc un <script> classique serait
+     refusé par le navigateur. Babel les récupère par fetch et contourne
+     le MIME. (Fichier sans JSX, mais on garde le même mécanisme.) -->
+<script type="text/babel" src="src/supabase-public.jsx"></script>
 <script type="text/babel" src="src/data.jsx"></script>
 <script type="text/babel" src="src/i18n.jsx"></script>
 <script type="text/babel" src="src/content.jsx"></script>
