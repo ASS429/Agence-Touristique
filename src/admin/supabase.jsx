@@ -103,6 +103,24 @@ async function sbGetUser() {
   return data.user;
 }
 
+// Vérifie que l'utilisateur connecté est bien un administrateur autorisé
+// (membre de la table admin_users, via la fonction SQL is_admin()).
+// Défense en profondeur : même si un compte client (magic link espace
+// client) parvient jusqu'ici, il n'est pas dans admin_users → refusé.
+// La sécurité réelle est portée par les policies RLS ; ce check évite
+// juste d'afficher une coquille d'admin vide/erreurs à un non-admin.
+async function sbIsAdmin() {
+  try {
+    const { data, error } = await sb.rpc('is_admin');
+    if (error) throw error;
+    return data === true;
+  } catch (e) {
+    // En cas d'échec réseau, on refuse par défaut (fail-closed).
+    if (window.console) console.warn('[ACT admin] Vérification is_admin échouée:', e.message);
+    return false;
+  }
+}
+
 function sbOnAuthChange(cb) {
   return sb.auth.onAuthStateChange((_event, session) => cb(session?.user || null));
 }
@@ -119,5 +137,6 @@ window.sbRemoveStorage = sbRemoveStorage;
 window.sbSignIn = sbSignIn;
 window.sbSignOut = sbSignOut;
 window.sbGetUser = sbGetUser;
+window.sbIsAdmin = sbIsAdmin;
 window.sbOnAuthChange = sbOnAuthChange;
 window.SUPABASE_CONFIGURED = !SUPABASE_URL.includes('REPLACE-ME') && SUPABASE_ANON_KEY !== 'REPLACE-ME';

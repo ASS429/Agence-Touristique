@@ -20,6 +20,15 @@ function LoginScreen({ onSuccess }) {
     setLoading(true);
     try {
       const user = await window.sbSignIn(email.trim(), password);
+      // Défense en profondeur : vérifier l'appartenance à admin_users.
+      // Un compte non-admin (ex. client espace-client) est déconnecté
+      // immédiatement plutôt que de voir une interface d'admin cassée.
+      const isAdmin = await window.sbIsAdmin();
+      if (!isAdmin) {
+        await window.sbSignOut();
+        setError("Ce compte n'a pas les droits d'administration.");
+        return;
+      }
       onSuccess(user);
     } catch (e) {
       setError(e.message || 'Identifiants invalides');

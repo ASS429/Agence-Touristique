@@ -33,14 +33,42 @@ Depuis le **SQL Editor** du dashboard Supabase, exécuter dans l'ordre :
 3. Créer le bucket : **Storage** → **New bucket** → nom `media`, coché
    *Public bucket* → **Save**
 4. `migrations/003_storage_bucket.sql` — policies du bucket
+5. `migrations/004_phase2_extensions.sql` — newsletter, départs, espace client
+6. `migrations/005_admin_authorization.sql` — **⚠️ CORRECTIF SÉCURITÉ
+   OBLIGATOIRE** : restreint le CRUD aux membres de `admin_users`
+   (voir §3 ci-dessous). Sans ce fichier, tout compte authentifié
+   (y compris un client créé via l'espace client magic link) a les
+   droits d'administrateur.
 
-### 3. Créer le premier utilisateur admin
+### 3. Créer le premier utilisateur admin **et l'enrôler**
 
 **Authentication** → **Users** → **Add user** → **Create new user**
 
 - Email : `admin@act-senegal.com` (ou l'email de M. Badiane)
 - Password : à générer et communiquer de façon sécurisée
 - **Auto Confirm User** : coché
+
+Puis **copier l'UID** du compte créé (colonne `UID` dans la liste des
+users) et l'enrôler comme administrateur via le **SQL Editor** :
+
+```sql
+insert into public.admin_users (user_id, email, role)
+values ('<uuid-du-compte>', 'admin@act-senegal.com', 'owner');
+```
+
+> **Important** : tant qu'aucune ligne n'existe dans `admin_users`,
+> PERSONNE n'a de droits d'écriture (c'est volontaire : la migration 005
+> ferme d'abord, on ouvre ensuite au compte légitime). Le login admin
+> (`/admin`) refuse d'ailleurs tout compte absent de `admin_users`.
+
+**MFA (recommandé)** : Dashboard → **Authentication** → **Providers**
+→ activer **MFA (TOTP)** et enrôler une app d'authentification pour
+chaque compte admin.
+
+**Signup public à désactiver** : Dashboard → **Authentication** →
+**Providers** → **Email** → décocher *Enable Sign-ups*. Les comptes
+admin sont créés manuellement ; l'espace client utilise le magic link
+(OTP) qui reste autorisé indépendamment de ce réglage.
 
 ### 4. Récupérer les clés d'accès pour le site
 
@@ -120,11 +148,30 @@ pg_dump "postgresql://postgres.[ref]:[password]@[host]:6543/postgres" > backup.s
 
 ## Sécurité
 
-- Toutes les requêtes du site public passent par la **`anon` key** et
-  sont filtrées par RLS. Aucun risque de fuite de données non publiées.
-- Le formulaire de contact utilise `insert` autorisé aux `anon` mais
-  **aucun `select`** — les données envoyées ne sont visibles qu'une fois
-  connecté à l'admin.
+- **Autorisation admin par `admin_users`** (migration 005) : le CRUD
+  n'est ouvert qu'aux comptes présents dans `admin_users`, via la
+  fonction `is_admin()`. Le simple statut `authenticated` (obtenu par
+  n'importe quel visiteur via l'espace client magic link) ne donne
+  AUCUN droit d'écriture ni de lecture des demandes d'autres clients.
+- Toutes les requêtes du site public passent par la **publishable key**
+  et sont filtrées par RLS. Aucun risque de fuite de données non publiées.
+- Le formulaire de contact utilise `insert` autorisé aux `anon` mais le
+  `select` est réservé à l'admin (`is_admin()`) ou au client propriétaire
+  de la demande (match sur l'email du JWT).
 - Les sessions admin utilisent JWT avec expiration à **1 heure**
-  (paramétrable).
-- Le rate-limiting Supabase (30 req/s par IP) protège contre le spam.
+  (paramétrable). Le login `/admin` revalide `is_admin()` à chaque
+  connexion et à chaque restauration de session (fail-closed).
+- **À durcir (voir AUDIT)** : les formulaires publics n'ont pas encore
+  de captcha/rate-limit applicatif — prévu via Cloudflare Turnstile +
+  Edge Function. Storage : upload réservé aux admins depuis la 005.
+
+### Enrôler / retirer un administrateur
+
+```sql
+-- Ajouter un admin (après création du compte dans Auth → Users)
+insert into public.admin_users (user_id, email, role)
+values ('<uuid>', 'personne@act-senegal.com', 'owner');
+
+-- Retirer un admin
+delete from public.admin_users where email = 'personne@act-senegal.com';
+```

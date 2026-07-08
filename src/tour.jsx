@@ -305,7 +305,9 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
                     {r.name[0]}
                   </div>
                   <div>
-                    <div className="font-medium text-[14px]">{r.name}</div>
+                    <div className="font-medium text-[14px]">
+                      {r.name}{r.lang && <span className="ml-1.5" aria-hidden="true">{({ it:'🇮🇹', en:'🇬🇧', fr:'🇫🇷', de:'🇩🇪' })[r.lang]}</span>}
+                    </div>
                     <div className="text-[11.5px] font-mono uppercase tracking-wider text-ink-500">{r.date}</div>
                   </div>
                 </div>

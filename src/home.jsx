@@ -407,10 +407,15 @@ const Temoignages = () => {
     <Section id="avis" label={t('home.testimonials.label')} title={richT(t('home.testimonials.title'))}
              className="py-20 md:py-28" screenLabel="08 Témoignages">
       <div className="grid md:grid-cols-3 gap-5 md:gap-6">
-        {TESTIMONIALS.map((tt,i)=>(
+        {TESTIMONIALS.map((tt,i)=>{
+          const flag = { it:'🇮🇹', en:'🇬🇧', fr:'🇫🇷', de:'🇩🇪' }[tt.lang] || '';
+          return (
           <figure key={i} className="bg-sand-100 rounded-3xl p-6 md:p-7 flex flex-col h-full">
-            <Icons.Quote size={22} className="text-terre mb-3"/>
-            <blockquote className="font-display text-[22px] md:text-[24px] leading-snug text-ink">"{tt.text}"</blockquote>
+            <div className="flex items-center justify-between mb-3">
+              <Icons.Quote size={22} className="text-terre"/>
+              {flag && <span className="text-[18px] leading-none" aria-hidden="true">{flag}</span>}
+            </div>
+            <blockquote className="font-display text-[18px] md:text-[20px] leading-snug text-ink">"{tt.text}"</blockquote>
             <div className="mt-auto pt-6 flex items-center gap-3">
               <div className="h-12 w-12 rounded-full overflow-hidden shrink-0">
                 <Photo tone={tt.tone} mood={tt.mood} rounded="rounded-full" showLabel={false} className="h-12 w-12"/>
@@ -422,7 +427,8 @@ const Temoignages = () => {
               <StarRow value={tt.stars} size={12}/>
             </div>
           </figure>
-        ))}
+          );
+        })}
       </div>
     </Section>
   );

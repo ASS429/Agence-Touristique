@@ -8,10 +8,20 @@
 <meta property="og:title" content="Africa Connection Tours — Agence touristique Dakar" />
 <meta property="og:description" content="Tour-opérateur basé à Dakar depuis 1996. Circuits, excursions, sur-mesure au Sénégal." />
 <meta property="og:type" content="website" />
+<meta property="og:site_name" content="Africa Connection Tours" />
+<meta property="og:url" content="https://act-senegal.com/" />
+<meta property="og:image" content="https://act-senegal.com/assets/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Africa Connection Tours — Le Sénégal, autrement." />
 <meta property="og:locale" content="fr_SN" />
 <meta property="og:locale:alternate" content="en_US" />
 <meta property="og:locale:alternate" content="it_IT" />
 <meta property="og:locale:alternate" content="de_DE" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Africa Connection Tours — Le Sénégal, autrement." />
+<meta name="twitter:description" content="Tour-opérateur basé à Dakar depuis 1996. Circuits, excursions, ateliers, croisières et voyages sur mesure au Sénégal." />
+<meta name="twitter:image" content="https://act-senegal.com/assets/og-image.jpg" />
 
 <!-- Canonical + hreflang. Tant que le site utilise un hash router et que toutes
      les langues partagent la même URL racine (basculement côté client via le
@@ -340,8 +350,8 @@
 </head>
 <body>
 <div id="root"></div>
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script type="text/babel" src="src/icons.jsx"></script>
 <script type="text/babel" src="src/photo.jsx"></script>
@@ -364,8 +374,25 @@
 <script type="text/babel" src="src/monespace.jsx"></script>
 <script type="text/babel" src="src/mice.jsx"></script>
 <script type="text/babel" src="src/pages.jsx"></script>
-<script type="text/babel" src="tweaks-panel.jsx"></script>
-<script type="text/babel" src="src/tweaks.jsx"></script>
+<!-- Panneau de personnalisation : OUTIL DE DÉVELOPPEMENT.
+     Chargé uniquement en local ou avec ?tweaks=1 — jamais servi aux
+     visiteurs en production (cf. AUDIT §3.6). L'injection a lieu pendant
+     le parse (avant DOMContentLoaded), donc Babel Standalone les compile
+     normalement avec les autres scripts text/babel. app.jsx ne rend
+     <SiteTweaks/> que sous la même condition (court-circuit JSX sinon). -->
+<script>
+  (function () {
+    var host = location.hostname;
+    var enabled = host === 'localhost' || host === '127.0.0.1'
+      || location.search.indexOf('tweaks=1') !== -1;
+    if (enabled) {
+      document.write(
+        '<scr' + 'ipt type="text/babel" src="tweaks-panel.jsx"></scr' + 'ipt>' +
+        '<scr' + 'ipt type="text/babel" src="src/tweaks.jsx"></scr' + 'ipt>'
+      );
+    }
+  })();
+</script>
 <script type="text/babel" src="src/app.jsx"></script>
 
 <!-- PWA : enregistrement du service worker. Ignoré en file:// ou http://

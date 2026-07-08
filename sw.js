@@ -4,15 +4,15 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v26';
+const VERSION = 'act-v27';
 // Note de version — affichée aux utilisateurs PWA via la notification
 // "nouvelle version disponible" (voir NotifyUpdate dans shared.jsx).
 // Format : { fr, en, it, de }. Mise à jour à chaque nouvelle version.
 const RELEASE_NOTES = {
-  fr: 'Nouveau : page Croisières illustrée avec 6 photos officielles ACT (escales, équipage, embarquements) + lightbox.',
-  en: 'New: Cruises page illustrated with 6 official ACT photos (port calls, crew, boardings) + lightbox.',
-  it: 'Novità: pagina Crociere illustrata con 6 foto ufficiali ACT (scali, equipaggio, imbarchi) + lightbox.',
-  de: 'Neu: Kreuzfahrten-Seite mit 6 offiziellen ACT-Fotos (Hafenanläufe, Besatzung, Einschiffungen) + Lightbox.',
+  fr: 'Témoignages authentiques de nos voyageurs + optimisations techniques (chargement plus rapide, sécurité renforcée).',
+  en: 'Authentic reviews from our travellers + technical improvements (faster loading, hardened security).',
+  it: 'Recensioni autentiche dei nostri viaggiatori + miglioramenti tecnici (caricamento più rapido, sicurezza rafforzata).',
+  de: 'Authentische Bewertungen unserer Reisenden + technische Verbesserungen (schnelleres Laden, verstärkte Sicherheit).',
 };
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
@@ -40,7 +40,6 @@ const CORE = [
   '/index.html',
   '/assets/logo-act.png',
   '/manifest.webmanifest',
-  '/tweaks-panel.jsx',
   '/src/icons.jsx',
   '/src/photo.jsx',
   '/src/data.jsx',
@@ -60,7 +59,6 @@ const CORE = [
   '/src/custom.jsx',
   '/src/blog.jsx',
   '/src/pages.jsx',
-  '/src/tweaks.jsx',
   '/src/app.jsx',
 ];
 

@@ -402,24 +402,38 @@ const ATELIERS = [
 const CROISIERES = [];
 
 // === TESTIMONIALS (home) ====================================================
+// === Témoignages RÉELS de clients ACT ======================================
+// Retours authentiques transmis par l'agence (2026). Présentés dans leur
+// langue d'origine — l'italien domine car il reflète la clientèle réelle
+// d'ACT. Ne PAS traduire : ce sont les mots exacts des voyageurs, garants
+// d'authenticité. `lang` pilote le drapeau affiché.
 const TESTIMONIALS = [
-  { name:'Aïssatou D.', from:'Brooklyn, NY', circuit:'Gorée · Lac Rose · Saloum', stars:5,
-    text:'Le retour à Gorée avec Mamadou comme guide — j’ai pleuré, ri, mangé du poisson grillé sur la plage. Un voyage qui change quelque chose en vous.',
+  { name:'Voyageuse de Salerne', from:'Salerne, Italie', lang:'it', circuit:'Tour du Sénégal', stars:5,
+    text:'Non ho mai incontrato tutte insieme affidabilità, preparazione, gentilezza, garbo e disponibilità 24 ore su 24. Tornerò in Senegal, perché mi ha fatto amare questa terra come non mi era mai successo in nessuna parte del mondo.',
     tone:'terre', mood:'portrait' },
-  { name:'Julien & Claire', from:'Lyon, France', circuit:'Lompoul & Saint-Louis', stars:5,
-    text:'Tout était organisé sans que ça sente le "pack touriste". On a vraiment l’impression d’avoir voyagé avec un ami sénégalais.',
+  { name:'Famille Sarti', from:'Italie', lang:'it', circuit:'Tour du Sénégal', stars:5,
+    text:'Viaggio interessante. Guida eccezionale. Ottima conoscenza della lingua italiana, spiegazioni eccellenti. Guida nettamente superiore alla media, 10 e Lode. Molto bravo ed attento anche l’autista.',
     tone:'ocre', mood:'portrait' },
-  { name:'Mor Talla S.', from:'Dakar, week-end', circuit:'Excursion Lac Rose', stars:5,
-    text:'Réservé un samedi matin sur WhatsApp, partis à 9h. Prix clair en FCFA, paiement Wave, zéro mauvaise surprise. À refaire.',
+  { name:'Mother & daughter', from:'États-Unis', lang:'en', circuit:'Sénégal · séjour LaMantin', stars:5,
+    text:'Our guide was fantastic! Patient and knowledgeable — we could not have had a better guide. We also loved our driver Moussa, and all the hotels were great, especially LaMantin. My daughter and I had a wonderful time and did not have to worry about anything. I will certainly recommend your company to anyone planning a trip to Africa!',
+    tone:'sand', mood:'portrait' },
+  { name:'Groupe d’amis', from:'Italie', lang:'it', circuit:'Tour + séjour à Saly', stars:5,
+    text:'Un particolare grazie alla guida, all’autista, a chi ci è venuto a prendere all’hotel e a chi ci ha accolto all’arrivo a Dakar. Siete stati perfetti, gentili, disponibili ed accoglienti. Un’esperienza che non mancherò di segnalare ad altri amici.',
+    tone:'ocre', mood:'portrait' },
+  { name:'Famille Landolo', from:'Italie', lang:'it', circuit:'Séjour au Sénégal', stars:5,
+    text:'Il viaggio gli è piaciuto molto e sono stati super contenti. Mi hanno detto che anche Mr Salif è andato a salutarli, ed hanno apprezzato molto il gesto. Grazie di cuore!',
+    tone:'terre', mood:'portrait' },
+  { name:'Famille Russo', from:'Italie', lang:'it', circuit:'Tour du Sénégal', stars:5,
+    text:'I clienti hanno apprezzato moltissimo il lavoro fatto per loro, sia durante il viaggio sia durante l’emergenza della malattia della signora. Autista e guida hanno assistito i clienti in tutto, accompagnandoli al posto sanitario e provvedendo ai medicinali.',
     tone:'sand', mood:'portrait' },
 ];
 
-// === Tour-specific reviews ==================================================
+// === Tour-specific reviews (retours RÉELS transmis par ACT, 2026) ==========
 const TOUR_REVIEWS = [
-  { name:'Aïssatou D.',     stars:5, date:'mars 2026', text:'Mamadou nous a accueillis à l’aéroport à 23h, sans broncher. Le lendemain à Gorée, il a marché avec ma mère à son rythme. Le delta du Saloum en pirogue au coucher du soleil — inoubliable.' },
-  { name:'Hannah & Tom',    stars:5, date:'janvier 2026', text:'We loved that nothing felt scripted. Local lunch in a Saloum village, real conversations, real people. Worth every CFA.' },
-  { name:'Famille Ndiaye',  stars:5, date:'décembre 2025', text:'Nos enfants (8 et 11 ans) ont adoré. Tout était pensé pour eux aussi — pause baignade au Lac Rose, jeu de carte à l’hôtel.' },
-  { name:'Sofia M.',        stars:4, date:'novembre 2025', text:'Excellent dans l’ensemble. La route Dakar-Saloum est longue, prévoyez audio-livres. Le reste : parfait.' },
+  { name:'Voyageuse de Salerne', lang:'it', stars:5, date:'2026', text:'La presenza della nostra guida ci ha reso un soggiorno indimenticabile. Mai incontrato tutte insieme affidabilità, preparazione, gentilezza e disponibilità 24 ore su 24.' },
+  { name:'Mother & daughter', lang:'en', stars:5, date:'2026', text:'Our guide was fantastic — patient and knowledgeable. We loved our driver Moussa, and LaMantin was truly amazing. We did not have to worry about anything.' },
+  { name:'Clients Sarti', lang:'it', stars:5, date:'2026', text:'Guida eccezionale, ottima conoscenza dell’italiano, spiegazioni eccellenti. Nettamente superiore alla media, 10 e Lode. Molto attento anche l’autista.' },
+  { name:'Groupe d’amis', lang:'it', stars:5, date:'2026', text:'Siete stati perfetti, gentili, disponibili ed accoglienti. Un’esperienza che non mancherò di segnalare ad altri amici.' },
 ];
 
 // === BLOG ===================================================================
