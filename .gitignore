@@ -23,9 +23,19 @@ contrat-*.md
 budget-*.md
 guide-*.md
 multilingue-*.md
+# Audits & plan : contiennent le détail de la faille de sécurité —
+# NE JAMAIS publier tant que le correctif n'est pas appliqué côté ACT.
+AUDIT-*.md
+PLAN-ACTION.md
+informations-act-en-attente.md
+strategie_*.md
 .docx_inspect/
 *.docx
 *.xlsx
+
+# Bundle handoff design (référence locale)
+*handoff.zip
+"Tableau de bord admin ACT-handoff.zip"
 
 # Photos brutes extraites du book ACT — à trier/renommer/optimiser avant
 # intégration dans /images_du_senegal/. Conservées en local uniquement.
