@@ -109,6 +109,28 @@
      (voir src/shared.jsx) puisse pusher dès le premier clic, même avant
      l'installation de GA4/GTM côté agence. -->
 <script>window.dataLayer = window.dataLayer || [];</script>
+
+<!-- Sentry — monitoring des erreurs JS. INACTIF tant que le DSN est vide.
+     Créer un projet sur sentry.io (gratuit), copier le DSN du projet
+     (Settings → Client Keys) et le coller dans ACT_SENTRY_DSN ci-dessous.
+     Tant qu'il est vide, aucun script externe n'est chargé. -->
+<script>window.ACT_SENTRY_DSN = "";</script>
+<script>
+  (function () {
+    if (!window.ACT_SENTRY_DSN) return;
+    var s = document.createElement('script');
+    s.src = 'https://browser.sentry-cdn.com/7.120.0/bundle.min.js';
+    s.crossOrigin = 'anonymous';
+    s.onload = function () {
+      if (window.Sentry) window.Sentry.init({
+        dsn: window.ACT_SENTRY_DSN,
+        environment: /localhost|127\.0\.0\.1/.test(location.hostname) ? 'dev' : 'prod',
+        tracesSampleRate: 0
+      });
+    };
+    document.head.appendChild(s);
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
