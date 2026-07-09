@@ -130,6 +130,12 @@
       const { error } = await sb.from('contact_requests').insert(payload);
       if (error) throw error;
       if (window.console) console.log('[ACT] Demande enregistrée en base');
+      // Notification email (fire-and-forget) via l'Edge Function notify-contact.
+      // N'échoue jamais le flux : si la fonction n'est pas déployée, on ignore.
+      try {
+        sb.functions.invoke('notify-contact', { body: payload })
+          .catch(() => { /* fonction non déployée / erreur : demande déjà en base */ });
+      } catch (_) { /* pas de .functions : on ignore */ }
       return { ok: true };
     } catch (e) {
       if (window.console) console.warn('[ACT] Sauvegarde demande impossible:', e.message);

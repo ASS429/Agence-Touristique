@@ -2,93 +2,92 @@
 
 ## `notify-contact` — envoi d'un email à chaque nouvelle demande
 
-À chaque insertion dans `contact_requests` (formulaire contact, devis,
-sur-mesure), envoie automatiquement :
+À chaque envoi d'un formulaire (contact, devis, sur-mesure), le site
+appelle **directement** cette fonction juste après avoir enregistré la
+demande en base. Elle envoie via **Resend** :
 1. **À ACT** : une notification avec le détail de la demande.
 2. **Au client** : un accusé de réception localisé (FR/EN/IT/DE).
 
-Utilise **Resend** (service d'envoi d'emails transactionnels).
+> **Pas de webhook nécessaire** : le site invoque la fonction lui-même
+> (`sb.functions.invoke('notify-contact', …)` dans `supabase-public.jsx`).
+> Rien à configurer côté Render.
 
 ---
 
-## Étape 1 — Créer un compte Resend (gratuit)
+## Étape 1 — Compte Resend
 
-1. Va sur https://resend.com → **Sign up** (gratuit : 3 000 emails/mois, 100/jour).
-2. **API Keys** → **Create API Key** → copie la clé (`re_...`).
-3. *(Recommandé, plus tard)* **Domains** → **Add Domain** → `act-senegal.com`,
-   puis ajoute les enregistrements DNS chez Render/ton registrar. Cela permet
-   d'envoyer depuis `notifications@act-senegal.com` (plus pro et meilleure
-   délivrabilité). **En attendant**, on utilise l'expéditeur de test
-   `onboarding@resend.dev` qui fonctionne immédiatement.
-
-Donne-moi la clé API (ou saisis-la toi-même à l'étape 3) et je finalise.
+Déjà fait : compte créé + clé API `re_...` générée. **Cette clé est un
+secret** — elle ne va QUE dans les secrets Supabase (étape 3), jamais
+dans le code.
 
 ---
 
-## Étape 2 — Créer l'Edge Function dans Supabase
+## Étape 2 — Créer la fonction dans Supabase
 
 **Dashboard Supabase** → **Edge Functions** → **Create a function**
-- Nom : `notify-contact`
-- Colle le contenu de `supabase/functions/notify-contact/index.ts`
+- **Nom : `notify-contact`** (⚠️ ce nom exact — c'est celui que le site
+  appelle. Si tu as créé une fonction d'exemple `hyper-task`, tu peux la
+  supprimer, ou en créer une nouvelle nommée `notify-contact`.)
+- Efface le code d'exemple et colle **tout** le contenu de
+  `supabase/functions/notify-contact/index.ts`
 - **Deploy**
-
-*(Alternative en ligne de commande, si tu as le CLI Supabase :*
-```bash
-supabase functions deploy notify-contact --no-verify-jwt
-```
-*)*
-
-> `--no-verify-jwt` : la fonction est appelée par le webhook DB, pas par un
-> utilisateur connecté. On la protège via `WEBHOOK_SECRET` à la place.
 
 ---
 
 ## Étape 3 — Renseigner les secrets
 
-**Dashboard** → **Edge Functions** → **Manage secrets** → ajoute :
+**Dashboard** → **Edge Functions** → (ta fonction) → **Secrets**
+(ou **Manage secrets**) → ajoute :
 
-| Secret | Valeur |
-|---|---|
-| `RESEND_API_KEY` | ta clé `re_...` |
-| `NOTIFY_TO` | `act@orange.sn` (ou l'adresse de réception souhaitée) |
-| `NOTIFY_FROM` | `onboarding@resend.dev` (puis `ACT <notifications@act-senegal.com>` une fois le domaine vérifié) |
-| `WEBHOOK_SECRET` | une chaîne aléatoire de ton choix (ex. générée sur un gestionnaire de mots de passe) |
+| Secret | Valeur | À quoi ça sert |
+|---|---|---|
+| `RESEND_API_KEY` | ta clé `re_...` | autorise l'envoi via Resend |
+| `NOTIFY_TO` | `act@orange.sn` | l'adresse qui reçoit les notifications |
+| `NOTIFY_FROM` | `onboarding@resend.dev` | l'adresse d'**expéditeur** (voir note ci-dessous) |
+
+> **Ne mets PAS `WEBHOOK_SECRET`** (on n'utilise pas de webhook).
+
+### 💡 C'est quoi `NOTIFY_FROM` et « vérifier le domaine » ?
+
+Resend doit savoir de **quelle adresse** partent les emails (le « De : »).
+
+- **Maintenant, simple** : `onboarding@resend.dev` — c'est une adresse de
+  test que Resend te prête. Ça marche **immédiatement**, sans rien
+  configurer. Seul inconvénient : les emails peuvent parfois tomber en
+  spam, et le destinataire voit « resend.dev » comme expéditeur.
+
+- **Plus tard, pro** : dans Resend → **Domains** → **Add Domain** →
+  `act-senegal.com`. Resend te donne 2-3 lignes DNS (SPF, DKIM) à ajouter
+  là où sont gérés les DNS du domaine (chez ton registrar / Render). Une
+  fois « Verified », tu changes `NOTIFY_FROM` en
+  `ACT <notifications@act-senegal.com>`.
+  → `ACT <…>` c'est juste le **nom affiché** + l'adresse : le destinataire
+  verra « **ACT** » comme expéditeur au lieu de l'adresse brute. Meilleure
+  image + les emails n'arrivent plus en spam.
+
+**En résumé : commence avec `onboarding@resend.dev`, ça suffit pour
+tester et démarrer. Le domaine vérifié, c'est une amélioration pour plus
+tard.**
 
 ---
 
-## Étape 4 — Brancher le webhook sur contact_requests
-
-**Dashboard** → **Database** → **Webhooks** → **Create a new hook**
-- Name : `on-contact-request`
-- Table : `public.contact_requests`
-- Events : **Insert** uniquement
-- Type : **HTTP Request** → **POST**
-- URL : `https://<ref>.supabase.co/functions/v1/notify-contact`
-  (remplace `<ref>` par `divcmjwqgsdkdsdrjwbg`)
-- HTTP Headers : ajoute
-  - `Content-Type` : `application/json`
-  - `x-webhook-secret` : **la même valeur que `WEBHOOK_SECRET`**
-- **Create**
-
----
-
-## Étape 5 — Tester
+## Étape 4 — Tester
 
 1. Remplis le formulaire de contact sur https://act-senegal.com
+   (attends ~3 s avant d'envoyer, sinon l'anti-bot bloque 😉)
 2. Vérifie que :
    - `act@orange.sn` reçoit la notification
-   - l'email de test saisi reçoit l'accusé de réception
-3. En cas de souci : **Edge Functions** → `notify-contact` → **Logs**.
+   - l'email que tu as saisi reçoit l'accusé de réception
+3. En cas de souci : **Edge Functions** → `notify-contact` → **Logs**
+   (les erreurs Resend y apparaissent).
 
 ---
 
 ## Notes
 
-- **Délivrabilité** : tant qu'on envoie depuis `onboarding@resend.dev`, les
-  emails peuvent arriver en spam. Vérifier le domaine `act-senegal.com` dans
-  Resend règle ça (SPF/DKIM). À faire quand tu veux passer en production
-  sérieuse.
-- **Double opt-in newsletter** : la même fonction pourra être étendue plus
-  tard pour l'email de confirmation d'abonnement (RGPD, exigé en Allemagne).
-- **Coût** : gratuit jusqu'à 3 000 emails/mois — largement suffisant pour le
-  volume de demandes d'ACT.
+- **Sécurité** : la fonction est appelée avec la clé publishable (publique).
+  Elle n'expose aucun secret (la clé Resend reste côté serveur Supabase).
+  L'anti-bot des formulaires (honeypot + timing) limite déjà les abus.
+- **Coût** : gratuit jusqu'à 3 000 emails/mois — largement suffisant.
+- **Newsletter double opt-in** : la même infrastructure pourra servir plus
+  tard à l'email de confirmation d'abonnement (RGPD, exigé en Allemagne).
