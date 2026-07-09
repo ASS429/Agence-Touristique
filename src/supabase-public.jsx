@@ -130,11 +130,14 @@
       const { error } = await sb.from('contact_requests').insert(payload);
       if (error) throw error;
       if (window.console) console.log('[ACT] Demande enregistrée en base');
-      // Notification email (fire-and-forget) via l'Edge Function notify-contact.
-      // N'échoue jamais le flux : si la fonction n'est pas déployée, on ignore.
+      // Notification email (fire-and-forget) via l'Edge Function Resend.
+      // NB : le slug réel de la fonction déployée chez ACT est 'hyper-task'
+      // (auto-généré par Supabase). Changer ici si la fonction est recréée
+      // sous un autre nom.
+      const NOTIFY_FN = 'hyper-task';
       try {
-        sb.functions.invoke('notify-contact', { body: payload })
-          .catch(() => { /* fonction non déployée / erreur : demande déjà en base */ });
+        sb.functions.invoke(NOTIFY_FN, { body: payload })
+          .catch(() => { /* fonction indisponible : demande déjà en base */ });
       } catch (_) { /* pas de .functions : on ignore */ }
       return { ok: true };
     } catch (e) {
