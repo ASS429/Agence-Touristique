@@ -188,7 +188,8 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
                    variant="wa" size="lg" className="w-full" icon={<Icons.Whatsapp size={18}/>}>
                 {t('cta.quoteWhatsApp')}
               </Btn>
-              <Btn variant="outline" size="lg" className="w-full" icon={<Icons.Mail size={16}/>}>
+              <Btn variant="outline" size="lg" className="w-full" icon={<Icons.Mail size={16}/>}
+                   onClick={()=> go && go('contact')}>
                 {t('cta.quoteEmail')}
               </Btn>
             </div>
