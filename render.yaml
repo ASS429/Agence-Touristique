@@ -56,3 +56,19 @@ services:
       - path: /*
         name: Referrer-Policy
         value: strict-origin-when-cross-origin
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=(), interest-cohort=()
+      - path: /*
+        name: Cross-Origin-Opener-Policy
+        value: same-origin
+      # CSP partielle et SÛRE : ne restreint que le framing, les plugins et
+      # base-uri (clickjacking + base-hijacking). Ne touche PAS script/style/
+      # img/connect, donc compatible avec Babel Standalone + Tailwind CDN.
+      # La CSP stricte viendra avec la migration Vite (audit Sprint 2).
+      - path: /*
+        name: Content-Security-Policy
+        value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'"
