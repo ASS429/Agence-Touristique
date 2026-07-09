@@ -422,7 +422,7 @@ const Temoignages = () => {
               </div>
               <div className="flex-1">
                 <div className="font-medium text-[14px]">{tt.name}</div>
-                <div className="text-[12px] text-ink-500">{tt.from} · <span className="text-ink-700">{tt.circuit}</span></div>
+                <div className="text-[12px] text-ink-500">{tt.from}{tt.circuit ? <> · <span className="text-ink-700">{tt.circuit}</span></> : null}</div>
               </div>
               <StarRow value={tt.stars} size={12}/>
             </div>

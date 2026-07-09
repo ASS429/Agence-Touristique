@@ -26,6 +26,17 @@
   let changed = false;
   const markChanged = () => { changed = true; };
 
+  // Déduit la langue d'un témoignage depuis le pays (pour le drapeau).
+  function countryToLang(country) {
+    const c = (country || '').toLowerCase();
+    if (c.includes('ital')) return 'it';
+    if (c.includes('allem') || c.includes('german') || c.includes('deutsch')) return 'de';
+    if (c.includes('franc') || c.includes('france')) return 'fr';
+    if (c.includes('unis') || c.includes('states') || c.includes('uk') ||
+        c.includes('angl') || c.includes('kingdom')) return 'en';
+    return 'fr';
+  }
+
   // --- Superposition des traductions dans le dictionnaire i18n ---------
   function overlayTranslations(prefix, rows, fields) {
     const DICT = window.DICT;
@@ -146,6 +157,33 @@
       if (Array.isArray(A)) {
         overlayTranslations('atelier', A, ['title', 'subtitle', 'short']);
         mergeInPlace(window.ATELIERS, A, mapAtelier, ATELIER_DEFAULTS, newItemLabels);
+      }
+
+      // Témoignages : liste curée gérée en bloc par ACT. Rendus dans leur
+      // langue d'origine (text_fr), le drapeau est déduit du pays. On
+      // remplace intégralement la liste statique par celle de la base
+      // (si non vide), sinon on garde le statique.
+      const T = window.TESTIMONIALS_DB;
+      if (Array.isArray(T) && T.length && Array.isArray(window.TESTIMONIALS)) {
+        const mapped = T.map((row, i) => ({
+          name: row.author_name,
+          from: row.author_country || '',
+          lang: countryToLang(row.author_country),
+          circuit: '',
+          stars: row.rating || 5,
+          text: row.text_fr || row.text_en || row.text_it || row.text_de || '',
+          tone: ['terre', 'ocre', 'sand'][i % 3],
+          mood: 'portrait',
+        }));
+        // On ne remplace que si le fond diffère réellement (nom + texte +
+        // note) — ignore les champs présentationnels (circuit/tone/mood)
+        // absents de la base, pour éviter un remount à chaque chargement.
+        const sig = arr => JSON.stringify(arr.map(x => [x.name, x.text, x.stars]));
+        if (sig(window.TESTIMONIALS) !== sig(mapped)) {
+          window.TESTIMONIALS.length = 0;
+          mapped.forEach(m => window.TESTIMONIALS.push(m));
+          markChanged();
+        }
       }
 
       if (window.console) {

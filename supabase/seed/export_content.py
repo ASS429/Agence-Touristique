@@ -343,13 +343,38 @@ def main():
     counts['ateliers'] = n
     out.append('')
 
+    # ---- TESTIMONIALS ----
+    # Retours réels (langue d'origine dans text_fr). author_country pilote
+    # le drapeau côté site. Remplacement complet : on vide puis on réinsère.
+    items = split_array_items(find_const_value(src, 'TESTIMONIALS'))
+    n = 0
+    out.append('-- ===================== TÉMOIGNAGES =====================')
+    out.append('delete from public.testimonials where source = \'internal\';')
+    for it in items:
+        f = extract_object_fields(it)
+        name = js_str(f.get('name'))
+        if not name:
+            continue
+        country = js_str(f.get('from'))
+        text = js_str(f.get('text'))
+        rating = js_num(f.get('stars')) or 5
+        out.append(
+            'insert into public.testimonials '
+            '(author_name, author_country, source, text_fr, rating, published, sort_order) values ('
+            f"{sql(name)}, {sql(country)}, 'internal', {sql(text)}, {sql(rating)}, true, {100 + n});"
+        )
+        n += 1
+    counts['testimonials'] = n
+    out.append('')
+
     with open(OUT_SQL, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(out))
 
     print(f'OK → {OUT_SQL}')
-    print(f'  circuits   : {counts["circuits"]}')
-    print(f'  excursions : {counts["excursions"]}')
-    print(f'  ateliers   : {counts["ateliers"]}')
+    print(f'  circuits     : {counts["circuits"]}')
+    print(f'  excursions   : {counts["excursions"]}')
+    print(f'  ateliers     : {counts["ateliers"]}')
+    print(f'  testimonials : {counts.get("testimonials", 0)}')
     # Contrôle couverture traduction
     miss = 0
     for lang in ['en', 'it', 'de']:
