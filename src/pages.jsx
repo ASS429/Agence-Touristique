@@ -9,6 +9,8 @@ const Contact = ({ go }) => {
   const [sent, setSent] = React.useState(false);
   const [sending, setSending] = React.useState(false);
   const [error, setError] = React.useState('');
+  const [hp, setHp] = React.useState('');            // honeypot anti-bot
+  const startedAt = React.useRef(Date.now());        // timing anti-bot
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
   // mailto: fallback (always available — opens the user's mail client with
@@ -42,6 +44,9 @@ const Contact = ({ go }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    // Anti-bot : si honeypot rempli ou soumission trop rapide, on simule un
+    // succès sans rien enregistrer (ne pas informer le bot).
+    if (window.actIsLikelyBot?.(hp, startedAt.current)) { setSent(true); return; }
     // Enregistrement Supabase en parallèle (n'attend pas le résultat pour le
     // flow utilisateur — la demande est capturée même si Formspree échoue).
     saveToSupabase();
@@ -112,6 +117,11 @@ const Contact = ({ go }) => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="mt-8 grid md:grid-cols-2 gap-4">
+              {/* Honeypot anti-bot : invisible et hors tabulation pour les humains */}
+              <input type="text" name="company" tabIndex={-1} autoComplete="off"
+                     value={hp} onChange={(e)=>setHp(e.target.value)}
+                     aria-hidden="true"
+                     style={{ position:'absolute', left:'-9999px', width:1, height:1, opacity:0 }}/>
               <ContactField label={t('contact.form.field.name')}  value={form.name}  onChange={(v)=>set('name', v)}  required/>
               <ContactField label={t('contact.form.field.email')} type="email" value={form.email} onChange={(v)=>set('email', v)} required/>
               <ContactField label={t('contact.form.field.phone')} value={form.phone} onChange={(v)=>set('phone', v)} placeholder={t('contact.form.field.phonePlaceholder')}/>

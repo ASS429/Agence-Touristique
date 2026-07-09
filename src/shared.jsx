@@ -603,10 +603,14 @@ const NewsletterForm = () => {
   const [name, setName] = React.useState('');
   const [status, setStatus] = React.useState('idle'); // idle | sending | success | error
   const [errorMsg, setErrorMsg] = React.useState('');
+  const [hp, setHp] = React.useState('');             // honeypot anti-bot
+  const startedAt = React.useRef(Date.now());         // timing anti-bot
 
   const submit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+    // Anti-bot : honeypot rempli ou soumission trop rapide → succès simulé.
+    if (window.actIsLikelyBot?.(hp, startedAt.current)) { setStatus('success'); return; }
     if (!/.+@.+\..+/.test(email)) {
       setStatus('error');
       setErrorMsg(t('newsletter.error.email', 'Adresse email invalide.'));
@@ -651,6 +655,10 @@ const NewsletterForm = () => {
 
   return (
     <form onSubmit={submit} className="space-y-3">
+      {/* Honeypot anti-bot : invisible et hors tabulation */}
+      <input type="text" name="company" tabIndex={-1} autoComplete="off"
+             value={hp} onChange={(e)=>setHp(e.target.value)} aria-hidden="true"
+             style={{ position:'absolute', left:'-9999px', width:1, height:1, opacity:0 }}/>
       <div className="grid sm:grid-cols-2 gap-3">
         <input
           type="text"

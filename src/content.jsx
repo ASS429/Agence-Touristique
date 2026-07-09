@@ -207,6 +207,22 @@
   }
   window.addEventListener('act-db-loaded', applyDbContent);
 
+  // -------------------------------------------------------------------
+  // Anti-abus formulaires (honeypot + timing) — première ligne de défense
+  // contre les bots avant une solution captcha (Turnstile) côté serveur.
+  //   * honeypot : un champ caché que les humains ne remplissent jamais ;
+  //     s'il est rempli → bot.
+  //   * timing : une soumission en moins de ~2,5 s après l'affichage du
+  //     formulaire est quasi certainement automatisée.
+  // Retourne true si la soumission est probablement un bot (à ignorer
+  // silencieusement, en simulant un succès pour ne pas informer le bot).
+  // -------------------------------------------------------------------
+  window.actIsLikelyBot = function (honeypotValue, startedAt) {
+    if (honeypotValue && String(honeypotValue).trim() !== '') return true;
+    if (startedAt && (Date.now() - startedAt) < 2500) return true;
+    return false;
+  };
+
   // Hook React : remonte l'arbre (via changement de clé) quand le contenu
   // DB diffère du statique. Utilisé par app.jsx sur le conteneur racine.
   window.useContentVersion = function () {

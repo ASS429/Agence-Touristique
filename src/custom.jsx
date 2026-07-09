@@ -316,6 +316,8 @@ const Custom = ({ go, onOpenTour }) => {
     name:'', email:'', phone:'', dates:'', message:''
   });
   const setField = (k, v) => setForm(prev => ({...prev, [k]: v }));
+  const [hp, setHp] = React.useState('');            // honeypot anti-bot
+  const startedAt = React.useRef(Date.now());        // timing anti-bot
   const step = STEPS[stepIdx];
 
   // Validation par étape : l'utilisateur ne peut pas avancer tant que la
@@ -409,6 +411,8 @@ const Custom = ({ go, onOpenTour }) => {
 
   const submit = async () => {
     setError('');
+    // Anti-bot : honeypot rempli ou soumission trop rapide → succès simulé.
+    if (window.actIsLikelyBot?.(hp, startedAt.current)) { setSubmitted(true); return; }
     const payload = buildPayload();
     // Enregistrement Supabase (fire-and-forget)
     saveToSupabase();
@@ -450,6 +454,10 @@ const Custom = ({ go, onOpenTour }) => {
         intro={t('page.custom.intro')}/>
 
       <section className="max-w-3xl mx-auto px-4 md:px-8 py-12 md:py-20">
+        {/* Honeypot anti-bot : invisible et hors tabulation */}
+        <input type="text" name="company" tabIndex={-1} autoComplete="off"
+               value={hp} onChange={(e)=>setHp(e.target.value)} aria-hidden="true"
+               style={{ position:'absolute', left:'-9999px', width:1, height:1, opacity:0 }}/>
         <div className="mb-10 md:mb-14">
           <Stepper stepIdx={stepIdx}/>
         </div>
