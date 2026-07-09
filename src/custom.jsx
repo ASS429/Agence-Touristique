@@ -424,8 +424,9 @@ const Custom = ({ go, onOpenTour }) => {
       circuit_picked:  payload.circuit_choisi,
       travelers:       payload.voyageurs,
     });
+    // Formspree désactivé : demande en base + email Resend vers ACT.
+    // Confirmation sans ouvrir la messagerie (mailto reste en secours manuel).
     if (!SITE.formspree) {
-      window.location.href = mailtoHref();
       setSubmitted(true);
       return;
     }

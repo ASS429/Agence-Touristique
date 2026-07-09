@@ -27,9 +27,11 @@ const SITE = {
   facebook:        'https://www.facebook.com/AfricaConnectionTours',
   twitter:         'https://twitter.com/actours_senegal',
   instagram:       '',                     // pas encore fourni par l'agence
-  // Endpoint Formspree (ou équivalent : Web3Forms, Formsubmit, etc.).
-  // Tant qu'elle vaut "" le formulaire bascule automatiquement sur mailto:.
-  formspree:       'https://formspree.io/f/xgoqnlaz',
+  // Formspree DÉSACTIVÉ (2026-07) : les demandes sont enregistrées en base
+  // Supabase (admin « Demandes reçues ») et notifiées à ACT par email via
+  // l'Edge Function Resend. Plus de transit par Formspree (service US).
+  // Le bouton « Ouvrir mon mail » (mailto) reste dispo en secours manuel.
+  formspree:       '',
   // ID Google Analytics 4 (G-XXXXXXXXXX). Tant que vide, gtag.js ne charge pas
   // et aucun event n'est envoyé — les pushes dataLayer restent inertes.
   gaId:            '',

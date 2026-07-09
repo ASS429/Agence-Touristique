@@ -47,13 +47,13 @@ const Contact = ({ go }) => {
     // Anti-bot : si honeypot rempli ou soumission trop rapide, on simule un
     // succès sans rien enregistrer (ne pas informer le bot).
     if (window.actIsLikelyBot?.(hp, startedAt.current)) { setSent(true); return; }
-    // Enregistrement Supabase en parallèle (n'attend pas le résultat pour le
-    // flow utilisateur — la demande est capturée même si Formspree échoue).
+    // Enregistrement Supabase (base « Demandes reçues » + email Resend vers ACT).
     saveToSupabase();
 
-    // No Formspree endpoint configured → open mail client directly.
+    // Formspree désactivé : la demande est en base + notifiée par email.
+    // On affiche la confirmation sans ouvrir la messagerie (le bouton
+    // « Ouvrir mon mail » reste dispo pour un envoi manuel volontaire).
     if (!SITE.formspree) {
-      window.location.href = mailtoHref();
       setSent(true);
       return;
     }
