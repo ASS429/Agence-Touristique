@@ -325,7 +325,8 @@ function ToastContainer() {
     warning: '#B8801F'
   };
   return (
-    <div className="fixed bottom-6 right-6 z-[90] flex flex-col gap-2 max-w-sm">
+    <div className="fixed bottom-6 right-6 z-[90] flex flex-col gap-2 max-w-sm"
+         role="status" aria-live="polite" aria-atomic="true">
       {toasts.map(t => (
         <div key={t.id}
           className="flex items-center gap-3 bg-ink-800 text-sand-50 px-4 py-3.5 rounded-2xl shadow-2xl"

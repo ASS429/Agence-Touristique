@@ -109,7 +109,7 @@ const AppShell = () => {
       </a>
       <PromoBanner go={navigate} onHeightChange={setPromoHeight}/>
       <Header route={route} go={navigate} topOffset={promoHeight}/>
-      <div id="main-content">{showPage()}</div>
+      <div id="main-content" role="main">{showPage()}</div>
       <WhatsAppFloat message={waMessage} bottomOffset={bottomOffset}/>
       <CookieConsent/>
       <UpdateNotifier/>
