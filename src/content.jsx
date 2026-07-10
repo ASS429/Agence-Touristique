@@ -26,6 +26,48 @@
   let changed = false;
   const markChanged = () => { changed = true; };
 
+  // Lecture d'un champ multilingue avec repli : obj.field_<lang> →
+  // obj.field_fr → obj.field. Utilisé par blog.jsx et la FAQ (pages.jsx)
+  // pour un rendu qui suit la langue courante.
+  window.pickLang = function (obj, field, lang) {
+    if (!obj) return '';
+    const l = (lang || 'fr').toLowerCase();
+    return obj[`${field}_${l}`] || obj[`${field}_fr`] || obj[field] || '';
+  };
+
+  // Corrige le bug « FR-only » de Blog et FAQ : leur rendu lit les champs
+  // bruts (b.title, it.q) alors que les traductions existent dans le
+  // dictionnaire i18n (clés blog.<slug>.title/excerpt et faq.<gi>.<ii>.q/a,
+  // jamais appliquées). On enrichit ici chaque objet AVEC des champs
+  // title_fr/en/it/de (etc.) puisés dans le dictionnaire. Exécuté de façon
+  // SYNCHRONE au chargement (avant le 1er rendu) → pas de remount.
+  function enrichBlogFaqFromDict() {
+    const DICT = window.DICT;
+    if (!DICT) return;
+    // Blog : clés par slug
+    if (Array.isArray(window.BLOG)) {
+      window.BLOG.forEach(b => {
+        LANGS.forEach(lang => {
+          const D = DICT[LANG_KEYS[lang]]; if (!D) return;
+          b[`title_${lang}`]   = D[`blog.${b.id}.title`]   || (lang === 'fr' ? b.title   : b[`title_${lang}`]);
+          b[`excerpt_${lang}`] = D[`blog.${b.id}.excerpt`] || (lang === 'fr' ? b.excerpt : b[`excerpt_${lang}`]);
+        });
+      });
+    }
+    // FAQ : clés par index de groupe/item
+    if (Array.isArray(window.FAQ)) {
+      window.FAQ.forEach((g, gi) => {
+        (g.items || []).forEach((it, ii) => {
+          LANGS.forEach(lang => {
+            const D = DICT[LANG_KEYS[lang]]; if (!D) return;
+            it[`question_${lang}`] = D[`faq.${gi}.${ii}.q`] || (lang === 'fr' ? it.q : it[`question_${lang}`]);
+            it[`answer_${lang}`]   = D[`faq.${gi}.${ii}.a`] || (lang === 'fr' ? it.a : it[`answer_${lang}`]);
+          });
+        });
+      });
+    }
+  }
+
   // Déduit la langue d'un témoignage depuis le pays (pour le drapeau).
   function countryToLang(country) {
     const c = (country || '').toLowerCase();
@@ -186,6 +228,70 @@
         }
       }
 
+      // Blog : superpose les traductions titre/extrait + fusionne la photo,
+      // et ajoute les articles créés uniquement en base (corps = content_<lang>).
+      const B = window.BLOG_DB;
+      if (Array.isArray(B) && Array.isArray(window.BLOG)) {
+        const bySlug = new Map(window.BLOG.map(x => [x.id, x]));
+        B.forEach(row => {
+          if (!row.slug || row.published === false) return;
+          const existing = bySlug.get(row.slug);
+          const langs = {};
+          LANGS.forEach(l => {
+            langs[`title_${l}`]   = row[`title_${l}`]   || undefined;
+            langs[`excerpt_${l}`] = row[`excerpt_${l}`] || undefined;
+          });
+          if (existing) {
+            Object.keys(langs).forEach(k => { if (langs[k] && existing[k] !== langs[k]) { existing[k] = langs[k]; markChanged(); } });
+            if (row.hero_photo && existing.img !== row.hero_photo) { existing.img = row.hero_photo; markChanged(); }
+          } else {
+            // Article créé en base : corps depuis content_<lang> (paragraphes)
+            const bodyByLang = {};
+            LANGS.forEach(l => {
+              const c = row[`content_${l}`];
+              if (c) bodyByLang[l] = c.split(/\n{2,}/).map(p => ({ type: 'p', text: p.trim() })).filter(x => x.text);
+            });
+            window.BLOG.push({
+              id: row.slug, title: row.title_fr, excerpt: row.excerpt_fr || '',
+              ...langs,
+              cat: row.category || 'destinations', tag: 'Article',
+              tone: 'sand', mood: 'horizon', readTime: '',
+              date: row.published_at ? String(row.published_at).slice(0, 10) : '',
+              author: { name: row.author || 'Africa Connection Tours', role: '' },
+              img: row.hero_photo || null,
+              body: bodyByLang.fr || [],
+              bodyByLang,
+            });
+            markChanged();
+          }
+        });
+      }
+
+      // FAQ : remplacement complet depuis la base (groupé par catégorie),
+      // chaque item portant question/answer en 4 langues.
+      const F = window.FAQ_DB;
+      if (Array.isArray(F) && F.length && Array.isArray(window.FAQ)) {
+        const byCat = new Map();
+        F.forEach(row => {
+          if (row.published === false) return;
+          const cat = row.category || 'Général';
+          if (!byCat.has(cat)) byCat.set(cat, []);
+          const it = { q: row.question_fr, a: row.answer_fr };
+          LANGS.forEach(l => {
+            it[`question_${l}`] = row[`question_${l}`] || (l === 'fr' ? row.question_fr : undefined);
+            it[`answer_${l}`]   = row[`answer_${l}`]   || (l === 'fr' ? row.answer_fr   : undefined);
+          });
+          byCat.get(cat).push(it);
+        });
+        const rebuilt = [...byCat.entries()].map(([cat, items]) => ({ cat, items }));
+        const sig = a => JSON.stringify(a.map(g => [g.cat, g.items.map(i => [i.q, i.a])]));
+        if (rebuilt.length && sig(window.FAQ) !== sig(rebuilt)) {
+          window.FAQ.length = 0;
+          rebuilt.forEach(g => window.FAQ.push(g));
+          markChanged();
+        }
+      }
+
       if (window.console) {
         console.log('[ACT] Contenu Supabase appliqué au site public',
           { changed, circuits: C?.length, excursions: E?.length, ateliers: A?.length });
@@ -199,6 +305,9 @@
       if (window.console) console.warn('[ACT] Fusion contenu DB ignorée (fallback statique) :', err.message);
     }
   }
+
+  // Correction du bug FR-only Blog/FAQ — SYNCHRONE, avant le 1er rendu.
+  try { enrichBlogFaqFromDict(); } catch (e) { if (window.console) console.warn('[ACT] enrichBlogFaq:', e.message); }
 
   // Si la base est déjà chargée (course), appliquer maintenant ; sinon
   // attendre l'événement.

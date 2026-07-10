@@ -27,6 +27,7 @@ multilingue-*.md
 # NE JAMAIS publier tant que le correctif n'est pas appliqué côté ACT.
 AUDIT-*.md
 PLAN-ACTION.md
+ETAT-PROJET-ACT.md
 informations-act-en-attente.md
 email-*.md
 strategie_*.md

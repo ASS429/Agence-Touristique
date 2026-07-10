@@ -432,6 +432,8 @@ const About = ({ go }) => {
 // FAQ
 // ============================================================================
 const FaqAccordion = ({ items }) => {
+  const { lang } = useI18n();
+  const L = (it, f) => window.pickLang ? window.pickLang(it, f, lang) : (it[f === 'question' ? 'q' : 'a'] || '');
   const [open, setOpen] = React.useState(null);
   return (
     <ul className="divide-y divide-ink/10 border-y border-ink/10">
@@ -441,14 +443,14 @@ const FaqAccordion = ({ items }) => {
           <li key={i}>
             <button onClick={()=>setOpen(isOpen ? null : i)}
               className="w-full text-left py-4 md:py-5 flex items-start justify-between gap-6 group">
-              <span className="font-display text-[18px] md:text-[20px] leading-snug group-hover:text-terre transition-colors pr-4">{it.q}</span>
+              <span className="font-display text-[18px] md:text-[20px] leading-snug group-hover:text-terre transition-colors pr-4">{L(it,'question')}</span>
               <span className={`h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center shrink-0 transition-transform ${isOpen ? 'rotate-45 bg-ink text-sand-50' : 'text-ink-700'}`}>
                 <Icons.Plus size={16}/>
               </span>
             </button>
             <div className={`grid transition-all duration-300 ${isOpen ? 'grid-rows-[1fr] opacity-100 pb-5' : 'grid-rows-[0fr] opacity-0'}`}>
               <div className="overflow-hidden">
-                <p className="text-[14.5px] text-ink-700 leading-relaxed max-w-3xl pr-10">{it.a}</p>
+                <p className="text-[14.5px] text-ink-700 leading-relaxed max-w-3xl pr-10">{L(it,'answer')}</p>
               </div>
             </div>
           </li>
@@ -459,13 +461,14 @@ const FaqAccordion = ({ items }) => {
 };
 
 const Faq = ({ go }) => {
-  const { t, richT } = useI18n();
+  const { t, richT, lang } = useI18n();
+  const L = (it, f) => window.pickLang ? window.pickLang(it, f, lang) : (it[f === 'question' ? 'q' : 'a'] || '');
   const [query, setQuery] = React.useState('');
   const filtered = FAQ
     .map(g => ({ ...g, items: g.items.filter(it => {
       if (!query) return true;
       const q = query.toLowerCase();
-      return it.q.toLowerCase().includes(q) || it.a.toLowerCase().includes(q);
+      return L(it,'question').toLowerCase().includes(q) || L(it,'answer').toLowerCase().includes(q);
     })}))
     .filter(g => g.items.length > 0);
 

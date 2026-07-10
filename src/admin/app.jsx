@@ -66,8 +66,6 @@ function AdminApp() {
     blog:         <BlogPage/>,
     testimonials: <TestimonialsPage/>,
     newsletter:   <NewsletterPage/>,
-    team:         <TeamPage/>,
-    partners:     <PartnersPage/>,
     faq:          <FAQPage/>,
     media:        <MediaPage/>,
     settings:     <SettingsPage/>,

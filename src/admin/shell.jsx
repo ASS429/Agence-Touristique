@@ -20,8 +20,6 @@ const ADMIN_SECTIONS = [
   { id: 'testimonials', label: 'Témoignages',         icon: 'star',        group: 'Contenus' },
   { id: 'newsletter',   label: 'Newsletter',          icon: 'send',        group: 'Contenus' },
 
-  { id: 'team',         label: 'Équipe',              icon: 'users',       group: 'À propos' },
-  { id: 'partners',     label: 'Partenaires',         icon: 'handshake',   group: 'À propos' },
   { id: 'faq',          label: 'FAQ',                 icon: 'help',        group: 'À propos' },
 
   { id: 'media',        label: 'Médiathèque',         icon: 'image',       group: 'Ressources' },
@@ -39,8 +37,6 @@ const SECTION_TITLES = {
   blog:         ['Contenus',   'Blog'],
   testimonials: ['Contenus',   'Témoignages'],
   newsletter:   ['Contenus',   'Newsletter'],
-  team:         ['À propos',   'Équipe'],
-  partners:     ['À propos',   'Partenaires'],
   faq:          ['À propos',   'FAQ'],
   media:        ['Ressources', 'Médiathèque'],
   settings:     ['Ressources', 'Réglages site']
@@ -56,8 +52,6 @@ const CTA_LABELS = {
   blog:         'Nouvel article',
   testimonials: 'Nouveau témoignage',
   newsletter:   'Composer une campagne',
-  team:         'Ajouter un membre',
-  partners:     'Nouveau partenaire',
   faq:          'Nouvelle question'
 };
 

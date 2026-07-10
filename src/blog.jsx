@@ -2,7 +2,8 @@
 
 // =============== List page ==================================================
 const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
-  const { t, richT } = useI18n();
+  const { t, richT, lang } = useI18n();
+  const L = (b, f) => window.pickLang ? window.pickLang(b, f, lang) : (b[f] || '');
   const [cat, setCat]     = React.useState('all');
   const [query, setQuery] = React.useState('');
   const [page, setPage]   = React.useState(1);
@@ -17,7 +18,7 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
     if (cat !== 'all' && b.cat !== cat) return false;
     if (query) {
       const q = query.toLowerCase();
-      return b.title.toLowerCase().includes(q) || b.excerpt.toLowerCase().includes(q) || b.tag.toLowerCase().includes(q);
+      return L(b,'title').toLowerCase().includes(q) || L(b,'excerpt').toLowerCase().includes(q) || (b.tag||'').toLowerCase().includes(q);
     }
     return true;
   });
@@ -41,11 +42,11 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
       <Section label="À la une" title={null} className="pt-16 md:pt-20 pb-10">
         <button onClick={()=>onOpenArticle(featured.id)} className="group block w-full text-left">
           <div className="grid md:grid-cols-[1.1fr,1fr] gap-6 md:gap-10 items-stretch">
-            <Photo tone={featured.tone} mood={featured.mood} label={featured.tag} ratio="aspect-[5/4] md:aspect-[5/3]" rounded="rounded-3xl" src={featured.img} alt={featured.title}/>
+            <Photo tone={featured.tone} mood={featured.mood} label={featured.tag} ratio="aspect-[5/4] md:aspect-[5/3]" rounded="rounded-3xl" src={featured.img} alt={L(featured,'title')}/>
             <div className="flex flex-col justify-center">
               <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-terre mb-3">À la une · {featured.tag}</div>
-              <h2 className="font-display text-[34px] md:text-[48px] leading-[1.02] group-hover:text-terre transition-colors">{featured.title}</h2>
-              <p className="mt-4 text-ink-600 text-[15px] leading-relaxed max-w-xl">{featured.excerpt}</p>
+              <h2 className="font-display text-[34px] md:text-[48px] leading-[1.02] group-hover:text-terre transition-colors">{L(featured,'title')}</h2>
+              <p className="mt-4 text-ink-600 text-[15px] leading-relaxed max-w-xl">{L(featured,'excerpt')}</p>
               <div className="mt-5 flex items-center gap-4 text-[12.5px] text-ink-500">
                 <span>{featured.author.name}</span>
                 <span className="h-1 w-1 rounded-full bg-ink-400"/>
@@ -84,11 +85,11 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
             {view.map(b => (
               <button key={b.id} onClick={()=>onOpenArticle(b.id)}
                 className="group flex flex-col text-left bg-sand-50 rounded-3xl overflow-hidden border border-ink/5 hover:shadow-xl transition-shadow">
-                <Photo tone={b.tone} mood={b.mood} label={b.tag} ratio="aspect-[5/4]" rounded="" src={b.img} alt={b.title}/>
+                <Photo tone={b.tone} mood={b.mood} label={b.tag} ratio="aspect-[5/4]" rounded="" src={b.img} alt={L(b,'title')}/>
                 <div className="p-5 md:p-6 flex flex-col flex-1">
                   <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-ink-500">{b.tag} · {b.readTime}</div>
-                  <h3 className="font-display text-[22px] md:text-[24px] leading-tight mt-2 group-hover:text-terre transition-colors">{b.title}</h3>
-                  <p className="text-[13.5px] text-ink-600 leading-relaxed mt-2.5 line-clamp-3">{b.excerpt}</p>
+                  <h3 className="font-display text-[22px] md:text-[24px] leading-tight mt-2 group-hover:text-terre transition-colors">{L(b,'title')}</h3>
+                  <p className="text-[13.5px] text-ink-600 leading-relaxed mt-2.5 line-clamp-3">{L(b,'excerpt')}</p>
                   <div className="mt-auto pt-4 flex items-center justify-between text-[12px] text-ink-500">
                     <span>{b.date}</span>
                     <span className="inline-flex items-center gap-1 text-ink-700 group-hover:text-terre">Lire <Icons.ArrowRight size={12}/></span>
@@ -136,6 +137,8 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
 
 // =============== Article page ===============================================
 const BlogArticle = ({ id, go, onOpenArticle, onOpenTour }) => {
+  const { lang } = useI18n();
+  const L = (b, f) => window.pickLang ? window.pickLang(b, f, lang) : (b[f] || '');
   const article = BLOG.find(b => b.id === id) || BLOG[0];
   const similar = BLOG.filter(b => b.id !== article.id && b.cat === article.cat).slice(0,3);
   const fallback = BLOG.filter(b => b.id !== article.id).slice(0,3);
@@ -152,8 +155,8 @@ const BlogArticle = ({ id, go, onOpenArticle, onOpenTour }) => {
               <button onClick={()=>go('blog')} className="hover:text-ink">← Blog</button>
               <span className="opacity-50 mx-3">·</span>{article.tag}
             </div>
-            <h1 className="font-display text-[40px] sm:text-[56px] md:text-[72px] leading-[1.0]">{article.title}</h1>
-            <p className="mt-5 text-ink-600 text-[17px] md:text-[19px] leading-relaxed">{article.excerpt}</p>
+            <h1 className="font-display text-[40px] sm:text-[56px] md:text-[72px] leading-[1.0]">{L(article,'title')}</h1>
+            <p className="mt-5 text-ink-600 text-[17px] md:text-[19px] leading-relaxed">{L(article,'excerpt')}</p>
             <div className="mt-7 flex items-center gap-4 text-[13px] text-ink-500">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full overflow-hidden">
@@ -174,13 +177,13 @@ const BlogArticle = ({ id, go, onOpenArticle, onOpenTour }) => {
 
         {/* Cover */}
         <div className="max-w-[1100px] mx-auto px-4 md:px-8">
-          <Photo tone={article.tone} mood={article.mood} label={`couverture · ${article.tag}`} ratio="aspect-[16/9]" rounded="rounded-3xl" className="shadow-2xl" src={article.img} alt={article.title}/>
+          <Photo tone={article.tone} mood={article.mood} label={`couverture · ${article.tag}`} ratio="aspect-[16/9]" rounded="rounded-3xl" className="shadow-2xl" src={article.img} alt={L(article,'title')}/>
         </div>
 
         {/* Body */}
         <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-12 md:py-16 grid md:grid-cols-[1fr,300px] gap-12 lg:gap-16">
           <div className="prose-article">
-            <ArticleBody article={article}/>
+            <ArticleBody article={article} lang={lang}/>
 
             {/* Share row */}
             <div className="mt-12 pt-6 border-t border-ink/10 flex flex-wrap items-center gap-3">
@@ -239,10 +242,10 @@ const BlogArticle = ({ id, go, onOpenArticle, onOpenTour }) => {
           {relatedArticles.map(b => (
             <button key={b.id} onClick={()=>onOpenArticle(b.id)}
               className="group flex flex-col text-left bg-sand-100 rounded-3xl overflow-hidden hover:shadow-xl transition-shadow">
-              <Photo tone={b.tone} mood={b.mood} label={b.tag} ratio="aspect-[5/4]" rounded="" src={b.img} alt={b.title}/>
+              <Photo tone={b.tone} mood={b.mood} label={b.tag} ratio="aspect-[5/4]" rounded="" src={b.img} alt={L(b,'title')}/>
               <div className="p-5">
                 <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-ink-500">{b.tag}</div>
-                <h3 className="font-display text-[22px] leading-tight mt-2 group-hover:text-terre">{b.title}</h3>
+                <h3 className="font-display text-[22px] leading-tight mt-2 group-hover:text-terre">{L(b,'title')}</h3>
                 <div className="text-[12px] text-ink-500 mt-2">{b.date} · {b.readTime}</div>
               </div>
             </button>
@@ -284,14 +287,17 @@ const ShareBtn = ({ I, label }) => (
 //   { type:'ul',          items }  — bulleted list (items can contain HTML)
 //   { type:'quote',       text }   — pull quote
 //   { type:'callout',     title, html } — tinted info block
-const ArticleBody = ({ article }) => {
-  const blocks = article.body && article.body.length ? article.body : [
-    { type:'p', html:'<em>Cet article est en cours de rédaction.</em>' },
-  ];
+const ArticleBody = ({ article, lang }) => {
+  // Corps par langue si l'article vient de la base (bodyByLang), sinon
+  // le corps statique riche (data.jsx).
+  const langBody = article.bodyByLang && lang && article.bodyByLang[lang.toLowerCase()];
+  const blocks = (langBody && langBody.length) ? langBody
+    : (article.body && article.body.length ? article.body
+    : [{ type:'p', html:'<em>Cet article est en cours de rédaction.</em>' }]);
   const renderBlock = (b, i) => {
     switch (b.type) {
       case 'lead':    return <p key={i} dangerouslySetInnerHTML={{__html: b.html }}/>;
-      case 'p':       return <p key={i} dangerouslySetInnerHTML={{__html: b.html }}/>;
+      case 'p':       return b.html ? <p key={i} dangerouslySetInnerHTML={{__html: b.html }}/> : <p key={i}>{b.text}</p>;
       case 'h2':      return <h2 key={i}>{b.text}</h2>;
       case 'h3':      return <h3 key={i}>{b.text}</h3>;
       case 'ul':      return <ul key={i}>{b.items.map((it, j) => <li key={j} dangerouslySetInnerHTML={{__html: it }}/>)}</ul>;

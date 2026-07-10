@@ -367,6 +367,69 @@ def main():
     counts['testimonials'] = n
     out.append('')
 
+    # ---- BLOG ----
+    # Métadonnées + titre/extrait en 4 langues (clés blog.<slug>.title/excerpt).
+    # Le corps (body HTML riche) reste statique côté site ; content_* n'est
+    # rempli que pour les nouveaux articles créés dans l'admin.
+    items = split_array_items(find_const_value(src, 'BLOG'))
+    n = 0
+    out.append('-- ===================== BLOG =====================')
+    for it in items:
+        f = extract_object_fields(it)
+        slug = js_str(f.get('id'))
+        if not slug:
+            continue
+        title = tr(i18n, f'blog.{slug}.title',   js_str(f.get('title')))
+        exc   = tr(i18n, f'blog.{slug}.excerpt', js_str(f.get('excerpt')))
+        cat   = js_str(f.get('cat')) or 'destinations'
+        tag   = js_str(f.get('tag'))
+        am = re.search(r"name\s*:\s*'((?:[^'\\]|\\.)*)'", f.get('author', '') or '')
+        author = am.group(1) if am else 'Africa Connection Tours'
+        cols = ('slug, title_fr, title_en, title_it, title_de, '
+                'excerpt_fr, excerpt_en, excerpt_it, excerpt_de, '
+                'author, category, tags, published, sort_order')
+        tags_sql = "ARRAY[" + (sql(tag) if tag else "") + "]::text[]" if tag else "'{}'::text[]"
+        vals = (f"{sql(slug)}, {sql(title['fr'])}, {sql(title['en'])}, {sql(title['it'])}, {sql(title['de'])}, "
+                f"{sql(exc['fr'])}, {sql(exc['en'])}, {sql(exc['it'])}, {sql(exc['de'])}, "
+                f"{sql(author)}, {sql(cat)}, {tags_sql}, true, {100 + n}")
+        upd = ('title_fr=excluded.title_fr, title_en=excluded.title_en, title_it=excluded.title_it, title_de=excluded.title_de, '
+               'excerpt_fr=excluded.excerpt_fr, excerpt_en=excluded.excerpt_en, excerpt_it=excluded.excerpt_it, excerpt_de=excluded.excerpt_de, '
+               'author=excluded.author, category=excluded.category')
+        out.append(f'insert into public.blog_posts ({cols}) values ({vals}) '
+                   f'on conflict (slug) do update set {upd};')
+        n += 1
+    counts['blog'] = n
+    out.append('')
+
+    # ---- FAQ ----
+    # Groupes + items ; q/a en 4 langues (clés faq.<gi>.<ii>.q/a).
+    # Remplacement complet (delete puis insert) car pas de clé unique naturelle.
+    faq_src = find_const_value(src, 'FAQ')
+    groups = split_array_items(faq_src)
+    n = 0
+    out.append('-- ===================== FAQ =====================')
+    out.append('delete from public.faq_items;')
+    for gi, g in enumerate(groups):
+        gf = extract_object_fields(g)
+        cat = js_str(gf.get('cat')) or 'Général'
+        items_raw = gf.get('items')
+        if not items_raw:
+            continue
+        for ii, itm in enumerate(split_array_items(items_raw)):
+            fi = extract_object_fields(itm)
+            q = tr(i18n, f'faq.{gi}.{ii}.q', js_str(fi.get('q')))
+            a = tr(i18n, f'faq.{gi}.{ii}.a', js_str(fi.get('a')))
+            if not q['fr']:
+                continue
+            cols = ('category, question_fr, question_en, question_it, question_de, '
+                    'answer_fr, answer_en, answer_it, answer_de, published, sort_order')
+            vals = (f"{sql(cat)}, {sql(q['fr'])}, {sql(q['en'])}, {sql(q['it'])}, {sql(q['de'])}, "
+                    f"{sql(a['fr'])}, {sql(a['en'])}, {sql(a['it'])}, {sql(a['de'])}, true, {100 + n}")
+            out.append(f'insert into public.faq_items ({cols}) values ({vals});')
+            n += 1
+    counts['faq'] = n
+    out.append('')
+
     with open(OUT_SQL, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(out))
 
@@ -375,6 +438,8 @@ def main():
     print(f'  excursions   : {counts["excursions"]}')
     print(f'  ateliers     : {counts["ateliers"]}')
     print(f'  testimonials : {counts.get("testimonials", 0)}')
+    print(f'  blog         : {counts.get("blog", 0)}')
+    print(f'  faq          : {counts.get("faq", 0)}')
     # Contrôle couverture traduction
     miss = 0
     for lang in ['en', 'it', 'de']:
