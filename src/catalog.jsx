@@ -292,5 +292,5 @@ const Catalog = ({ go, onOpenTour, initialFilter }) => {
   );
 };
 
-if (typeof window !== 'undefined') Object.assign(window, { Catalog });
-export { Catalog };
+if (typeof window !== 'undefined') Object.assign(window, { Catalog, Chip, FilterGroup });
+export { Catalog, Chip, FilterGroup };
