@@ -16,7 +16,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        // admin: resolve(__dirname, 'admin/index.html'),  // TODO Phase D : après conversion de l'admin
+        admin: resolve(__dirname, 'admin/index.html'),
       },
     },
     // Noms hashés pour un cache immuable (le SW devra être régénéré au build).

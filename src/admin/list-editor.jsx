@@ -1,3 +1,7 @@
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Icon } from './icons.jsx';
+import { ActionBtn, Btn, EmptyState, Modal, Spinner } from './ui.jsx';
+
 // =====================================================================
 // src/admin/list-editor.jsx — Patterns liste + éditeur (design refondu)
 //
@@ -353,3 +357,5 @@ window.useCollection = useCollection;
 window.EditorTabs = EditorTabs;
 window.EditorLayout = EditorLayout;
 window.PagePad = PagePad;
+
+export { EditorLayout, EditorTabs, FiltersPills, ItemsTable, ListToolbar, PagePad, Thumb, useCollection };

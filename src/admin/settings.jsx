@@ -1,3 +1,9 @@
+import React, { useState, useEffect } from 'react';
+import { Icon } from './icons.jsx';
+import { LangPills } from './lang.jsx';
+import { PagePad } from './list-editor.jsx';
+import { Btn, Field, Input, Spinner, Textarea } from './ui.jsx';
+
 // =====================================================================
 // src/admin/settings.jsx — Réglages site (design refondu)
 // =====================================================================
@@ -245,3 +251,5 @@ function SettingsPage() {
 
 window.SettingsPage = SettingsPage;
 window.SETTINGS_SECTIONS = SETTINGS_SECTIONS;
+
+export { SETTINGS_SECTIONS, SettingsPage };

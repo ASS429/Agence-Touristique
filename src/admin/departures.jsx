@@ -1,3 +1,8 @@
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Icon } from './icons.jsx';
+import { EditorLayout, ListToolbar, PagePad } from './list-editor.jsx';
+import { ActionBtn, EmptyState, Field, Input, Select, Spinner, StatusPill, Textarea, Toggle, formatDate, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/departures.jsx — CRUD Dates de départ (groupes mois, refondu)
 // =====================================================================
@@ -309,3 +314,5 @@ function DepartureEditor({ dep, circuits, onClose, onSaved }) {
 }
 
 window.DeparturesPage = DeparturesPage;
+
+export { DeparturesPage };

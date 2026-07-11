@@ -1,3 +1,10 @@
+import React, { useState, useEffect } from 'react';
+import { GalleryEditor, MultilangListEditor } from './circuits.jsx';
+import { Icon } from './icons.jsx';
+import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
+import { EditorLayout, ItemsTable, ListToolbar, PagePad, Thumb, useCollection } from './list-editor.jsx';
+import { Field, Input, LangDots, Select, StatusPill, timeAgo, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/excursions.jsx — CRUD Excursions (design refondu)
 // =====================================================================
@@ -185,3 +192,5 @@ function ExcursionEditor({ excursion, onClose, col }) {
 }
 
 window.ExcursionsPage = ExcursionsPage;
+
+export { ExcursionsPage };

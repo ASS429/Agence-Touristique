@@ -1,3 +1,9 @@
+import React, { useState, useEffect } from 'react';
+import { Icon } from './icons.jsx';
+import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
+import { EditorLayout, ListToolbar, PagePad, useCollection } from './list-editor.jsx';
+import { ActionBtn, EmptyState, Field, Input, LangDots, Select, Spinner, StatusPill, timeAgo } from './ui.jsx';
+
 // =====================================================================
 // src/admin/ateliers.jsx — CRUD Ateliers (cards grid, design refondu)
 // =====================================================================
@@ -152,3 +158,5 @@ function AtelierEditor({ atelier, onClose, col }) {
 }
 
 window.AteliersPage = AteliersPage;
+
+export { AteliersPage };

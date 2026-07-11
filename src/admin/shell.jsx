@@ -1,3 +1,7 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Icon } from './icons.jsx';
+import { Avatar, Btn, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/shell.jsx — Layout général : sidebar sombre + header sticky
 //
@@ -365,3 +369,5 @@ window.ADMIN_SECTIONS = ADMIN_SECTIONS;
 window.SECTION_TITLES = SECTION_TITLES;
 window.CTA_LABELS = CTA_LABELS;
 window.useHashRoute = useHashRoute;
+
+export { ADMIN_SECTIONS, AdminShell, CTA_LABELS, PageHeader, SECTION_TITLES, useHashRoute };

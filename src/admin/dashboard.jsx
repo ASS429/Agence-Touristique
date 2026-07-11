@@ -1,3 +1,8 @@
+import React, { useState, useEffect } from 'react';
+import { Icon } from './icons.jsx';
+import { PagePad } from './list-editor.jsx';
+import { Avatar, Btn, KpiCard, Spinner, formatDate, timeAgo, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/dashboard.jsx — Vue d'ensemble (design refondu)
 //
@@ -431,3 +436,5 @@ function buildChartData(total) {
 }
 
 window.DashboardPage = DashboardPage;
+
+export { DashboardPage };

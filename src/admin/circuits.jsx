@@ -1,3 +1,9 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Icon } from './icons.jsx';
+import { LangPills, MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
+import { EditorLayout, ItemsTable, ListToolbar, PagePad, Thumb, useCollection } from './list-editor.jsx';
+import { ActionBtn, Field, Input, LangDots, Select, StatusPill, timeAgo, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/circuits.jsx — CRUD Circuits (design refondu)
 // =====================================================================
@@ -520,3 +526,5 @@ window.ItineraryEditor = ItineraryEditor;
 window.MultilangListEditor = MultilangListEditor;
 window.BadgesEditor = BadgesEditor;
 window.GalleryEditor = GalleryEditor;
+
+export { BadgesEditor, CircuitsPage, GalleryEditor, ItineraryEditor, MultilangListEditor };

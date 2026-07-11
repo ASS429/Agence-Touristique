@@ -1,3 +1,9 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Icon } from './icons.jsx';
+import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
+import { EditorLayout, PagePad, useCollection } from './list-editor.jsx';
+import { ActionBtn, Btn, EmptyState, Field, Input, LangDots, Select, Spinner, StatusPill, timeAgo, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/faq.jsx — CRUD FAQ (accordion groupé, design refondu)
 // =====================================================================
@@ -174,3 +180,5 @@ function FAQEditor({ faq, onClose, col }) {
 }
 
 window.FAQPage = FAQPage;
+
+export { FAQPage };

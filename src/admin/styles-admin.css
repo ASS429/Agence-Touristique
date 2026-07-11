@@ -1,0 +1,72 @@
+/* =====================================================================
+   src/admin/styles-admin.css — feuille de style de l'admin (Vite)
+   Remplace le Tailwind CDN + la config inline + le <style> de admin/index.html.
+   Importée par src/admin/app.jsx.
+   ===================================================================== */
+
+/* Polices self-hostées (RGPD-friendly, plus de requête Google Fonts) */
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource/manrope/400.css';
+@import '@fontsource/manrope/500.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/700.css';
+@import '@fontsource/manrope/800.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/600.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Base --- */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #FBF8F3; font-family: 'Manrope', system-ui, sans-serif; color: #1B1D1E; -webkit-font-smoothing: antialiased; }
+::selection { background: #E9DDC5; }
+.font-display { font-family: 'Instrument Serif', serif; letter-spacing: -0.01em; }
+.font-mono    { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+/* --- Grain subtil global --- */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: .045;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- Scrollbars discrètes --- */
+.act-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+.act-scroll::-webkit-scrollbar-thumb {
+  background: #E9DDC5;
+  border-radius: 20px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+.act-scroll::-webkit-scrollbar-thumb:hover {
+  background: #D9C9A7;
+  background-clip: content-box;
+}
+.act-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* --- Animations (fallback CSS, indépendant de Tailwind) --- */
+@keyframes act-spin  { to   { transform: rotate(360deg); } }
+@keyframes act-toast { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes act-pop   { from { opacity: 0; transform: scale(.97); }      to { opacity: 1; transform: scale(1); } }
+@keyframes act-fade  { from { opacity: 0; }                             to { opacity: 1; } }
+@keyframes act-rise  { from { opacity: 0; transform: translateY(14px);} to { opacity: 1; transform: translateY(0); } }
+.act-spin { animation: act-spin .8s linear infinite; }
+
+/* --- Motif zebra pour les placeholders photo --- */
+.act-thumb-a  { background: repeating-linear-gradient(125deg,#E4D6BC 0,#E4D6BC 8px,#EFE4CC 8px,#EFE4CC 16px); }
+.act-thumb-b  { background: repeating-linear-gradient(125deg,#D9C9A7 0,#D9C9A7 8px,#E4D6BC 8px,#E4D6BC 16px); }
+.act-thumb-c  { background: repeating-linear-gradient(125deg,#DEC9B4 0,#DEC9B4 8px,#EBDBC6 8px,#EBDBC6 16px); }
+.act-hero-ph  { background: repeating-linear-gradient(125deg,#EFE7D6 0,#EFE7D6 11px,#F5EFE4 11px,#F5EFE4 22px); }
+
+/* --- Grid dense pour les tables admin --- */
+.act-table-row { transition: background .12s ease; }
+.act-table-row:hover { background: #FCFAF5; }
