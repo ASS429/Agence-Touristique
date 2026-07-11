@@ -1,3 +1,7 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Btn, Footer, PageHero, buildWaURL } from './shared.jsx';
 // =====================================================================
 // src/croisieres.jsx — Page Croisières (photos ACT reçues 2026-07-03)
 //
@@ -153,4 +157,5 @@ const Croisieres = ({ go }) => {
   );
 };
 
-Object.assign(window, { Croisieres });
+if (typeof window !== 'undefined') Object.assign(window, { Croisieres });
+export { Croisieres };

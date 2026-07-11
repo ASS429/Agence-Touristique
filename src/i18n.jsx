@@ -1,3 +1,4 @@
+import React from 'react';
 // I18n + currency context, plus tiny route hook.
 // Loaded before everything else so all components can `useI18n()`.
 //
@@ -4485,4 +4486,5 @@ const useRouter = () => {
 // Aucune modification de composant requise.
 // ============================================================================
 
-Object.assign(window, { I18nProvider, useI18n, useRouter, RATES, CCY_SYM, DICT, LANGS, LOCALE });
+if (typeof window !== 'undefined') Object.assign(window, { I18nProvider, useI18n, useRouter, RATES, CCY_SYM, DICT, LANGS, LOCALE });
+export { I18nProvider, useI18n, useRouter, RATES, CCY_SYM, DICT, LANGS, LOCALE };

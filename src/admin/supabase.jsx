@@ -1,5 +1,6 @@
+import { createClient } from '@supabase/supabase-js';
 // =====================================================================
-// src/admin/supabase.jsx — client Supabase (v2, UMD)
+// src/admin/supabase.jsx — client Supabase (v2)
 //
 // Ce fichier initialise le client Supabase utilisé par l'admin
 // et par le loader public. Il expose aussi des helpers CRUD génériques.
@@ -15,8 +16,7 @@
 const SUPABASE_URL      = window.__ACT_SUPABASE_URL__      || 'https://divcmjwqgsdkdsdrjwbg.supabase.co';
 const SUPABASE_ANON_KEY = window.__ACT_SUPABASE_ANON_KEY__ || 'sb_publishable_TzKuydg2b8QXUJSztNiW9A_NVAY6pD7';
 
-// Le client Supabase v2 UMD expose `window.supabase.createClient`.
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -125,18 +125,13 @@ function sbOnAuthChange(cb) {
   return sb.auth.onAuthStateChange((_event, session) => cb(session?.user || null));
 }
 
-// Exports globaux (pas de modules ES via Babel Standalone)
-window.SB = sb;
-window.sbList = sbList;
-window.sbGet = sbGet;
-window.sbInsert = sbInsert;
-window.sbUpdate = sbUpdate;
-window.sbDelete = sbDelete;
-window.sbUpload = sbUpload;
-window.sbRemoveStorage = sbRemoveStorage;
-window.sbSignIn = sbSignIn;
-window.sbSignOut = sbSignOut;
-window.sbGetUser = sbGetUser;
-window.sbIsAdmin = sbIsAdmin;
-window.sbOnAuthChange = sbOnAuthChange;
-window.SUPABASE_CONFIGURED = !SUPABASE_URL.includes('REPLACE-ME') && SUPABASE_ANON_KEY !== 'REPLACE-ME';
+// Interop window + exports ES.
+const SUPABASE_CONFIGURED = !SUPABASE_URL.includes('REPLACE-ME') && SUPABASE_ANON_KEY !== 'REPLACE-ME';
+if (typeof window !== 'undefined') Object.assign(window, {
+  SB: sb, sbList, sbGet, sbInsert, sbUpdate, sbDelete, sbUpload, sbRemoveStorage,
+  sbSignIn, sbSignOut, sbGetUser, sbIsAdmin, sbOnAuthChange, SUPABASE_CONFIGURED,
+});
+export {
+  sb as SB, sbList, sbGet, sbInsert, sbUpdate, sbDelete, sbUpload, sbRemoveStorage,
+  sbSignIn, sbSignOut, sbGetUser, sbIsAdmin, sbOnAuthChange, SUPABASE_CONFIGURED,
+};

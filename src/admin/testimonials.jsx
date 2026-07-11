@@ -1,3 +1,9 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Icon } from './icons.jsx';
+import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
+import { EditorLayout, ListToolbar, PagePad, useCollection } from './list-editor.jsx';
+import { ActionBtn, EmptyState, Field, Input, Select, Spinner, StatusPill, timeAgo, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/testimonials.jsx — CRUD Témoignages (cards, design refondu)
 // =====================================================================
@@ -191,3 +197,5 @@ function TestimonialEditor({ tm, onClose, col }) {
 }
 
 window.TestimonialsPage = TestimonialsPage;
+
+export { TestimonialsPage };

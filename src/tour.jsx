@@ -1,3 +1,10 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Photo } from './photo.jsx';
+import { Btn, Footer, Pill, Price, Section, StarRow, buildWaURL } from './shared.jsx';
+import { CIRCUITS, CIRCUIT_DETAIL, FAQ, TOUR_REVIEWS, MAP_STOPS, SENEGAL_PATH, CASAMANCE_PATH } from './data.jsx';
+import { DeparturesWidget } from './departures-widget.jsx';
 // Tour detail — fiche circuit type "Gorée · Lac Rose · Saloum"
 
 const TourGallery = ({ gallery }) => {
@@ -373,4 +380,5 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
   );
 };
 
-Object.assign(window, { Tour });
+if (typeof window !== 'undefined') Object.assign(window, { Tour });
+export { Tour };

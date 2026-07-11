@@ -1,3 +1,9 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Icon } from './icons.jsx';
+import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
+import { EditorLayout, ListToolbar, PagePad, useCollection } from './list-editor.jsx';
+import { ActionBtn, EmptyState, Field, Input, LangDots, Spinner, StatusPill, formatDate, timeAgo, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/blog.jsx — CRUD Blog (cards horizontales, design refondu)
 // =====================================================================
@@ -188,3 +194,5 @@ function BlogEditor({ post, onClose, col }) {
 }
 
 window.BlogPage = BlogPage;
+
+export { BlogPage };

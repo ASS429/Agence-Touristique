@@ -1,3 +1,6 @@
+import React, { useState, useMemo } from 'react';
+import { Input, Textarea } from './ui.jsx';
+
 // =====================================================================
 // src/admin/lang.jsx — Éditeur multilingue (design refondu)
 //
@@ -107,3 +110,5 @@ window.spreadLangValues = spreadLangValues;
 window.LangPills = LangPills;
 window.LangTabs = LangTabs;
 window.MultilangField = MultilangField;
+
+export { LANGS, LangPills, LangTabs, MultilangField, pickLangValues, spreadLangValues };

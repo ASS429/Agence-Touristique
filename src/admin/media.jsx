@@ -1,3 +1,9 @@
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { Icon } from './icons.jsx';
+import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
+import { EditorLayout, FiltersPills, PagePad } from './list-editor.jsx';
+import { Btn, EmptyState, Field, Input, Select, Spinner, timeAgo, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/media.jsx — Médiathèque (dropzone + grid + lightbox, refondu)
 // =====================================================================
@@ -325,3 +331,5 @@ function humanSize(bytes) {
 }
 
 window.MediaPage = MediaPage;
+
+export { MediaPage };

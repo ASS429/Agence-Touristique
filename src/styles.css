@@ -1,0 +1,35 @@
+/* Phase D — feuille de style principale (remplace Tailwind CDN + le <style>
+   inline de index.html). Importée par le point d'entrée JS. */
+
+/* Polices self-hostées (RGPD-friendly, plus de requête Google Fonts) */
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource/manrope/400.css';
+@import '@fontsource/manrope/500.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/700.css';
+@import '@fontsource/manrope/800.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Reprendre ici le CSS inline actuel de index.html ---
+   (à migrer depuis le bloc <style> : .font-display, reduced-motion,
+   :focus-visible, scrollbars, keyframes act-*, grain, etc.)
+   TODO Phase D étape 0 : copier le contenu du <style> de index.html. */
+
+.font-display { font-family: 'Instrument Serif', Georgia, serif; letter-spacing: -0.01em; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible { outline: 2px solid #C8593B; outline-offset: 3px; border-radius: 2px; }

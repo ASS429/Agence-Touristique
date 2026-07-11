@@ -131,30 +131,10 @@
     document.head.appendChild(s);
   })();
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          sand:    { 50: '#FBF7F0', 100: '#F5ECDD', 200: '#ECDDC4', 300: '#DCC9A8', 400: '#B8A284', 500: '#8C7A60' },
-          ink:     { DEFAULT: '#1A1612', 900: '#1A1612', 800: '#26211B', 700: '#3A332A', 600: '#5A5142', 500: '#7C7159', 400: '#A39884' },
-          terre:   { DEFAULT: '#C8593B', 600: '#A8462C', 700: '#8B3A24', 300: '#E6987F', 100: '#F4DACA' },
-          atlantique:{ DEFAULT: '#1F5E5A', 700: '#16443F', 300: '#7BAAA5', 100: '#D5E5E2' },
-          ocre:    { DEFAULT: '#D89A3D', 300: '#EAC380', 100: '#F6E6C4' },
-        },
-        fontFamily: {
-          display: ['"Instrument Serif"', 'Georgia', 'serif'],
-          sans: ['Manrope', 'system-ui', 'sans-serif'],
-          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-        },
-      }
-    }
-  };
-</script>
+<!-- Phase D : polices self-hostées + Tailwind compilé sont bundlés par Vite
+     (src/styles.css importé depuis app.jsx). Plus de Google Fonts CDN ni de
+     Tailwind CDN. Le bloc <style> ci-dessous (vars/grain/font-display) reste
+     inline. -->
 <style>
   :root {
     /* Defaults — overridden by Tweaks panel at runtime */
@@ -372,55 +352,10 @@
 </head>
 <body>
 <div id="root"></div>
-<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="src/icons.jsx"></script>
-<script type="text/babel" src="src/photo.jsx"></script>
-<!-- Loader Supabase (mode dégradé si non configuré : le site reste 100% statique) -->
-<!-- Chargé via Babel (type="text/babel") : le serveur statique sert les
-     .jsx avec un MIME non-exécutable, donc un <script> classique serait
-     refusé par le navigateur. Babel les récupère par fetch et contourne
-     le MIME. (Fichier sans JSX, mais on garde le même mécanisme.) -->
-<script type="text/babel" src="src/supabase-public.jsx"></script>
-<script type="text/babel" src="src/data.jsx"></script>
-<script type="text/babel" src="src/i18n.jsx"></script>
-<script type="text/babel" src="src/content.jsx"></script>
-<script type="text/babel" src="src/shared.jsx"></script>
-<script type="text/babel" src="src/map.jsx"></script>
-<script type="text/babel" src="src/departures-widget.jsx"></script>
-<script type="text/babel" src="src/home.jsx"></script>
-<script type="text/babel" src="src/tour.jsx"></script>
-<script type="text/babel" src="src/catalog.jsx"></script>
-<script type="text/babel" src="src/excursions.jsx"></script>
-<script type="text/babel" src="src/croisieres.jsx"></script>
-<script type="text/babel" src="src/ateliers.jsx"></script>
-<script type="text/babel" src="src/custom.jsx"></script>
-<script type="text/babel" src="src/blog.jsx"></script>
-<script type="text/babel" src="src/carnet.jsx"></script>
-<script type="text/babel" src="src/monespace.jsx"></script>
-<script type="text/babel" src="src/mice.jsx"></script>
-<script type="text/babel" src="src/pages.jsx"></script>
-<!-- Panneau de personnalisation : OUTIL DE DÉVELOPPEMENT.
-     Chargé uniquement en local ou avec ?tweaks=1 — jamais servi aux
-     visiteurs en production (cf. AUDIT §3.6). L'injection a lieu pendant
-     le parse (avant DOMContentLoaded), donc Babel Standalone les compile
-     normalement avec les autres scripts text/babel. app.jsx ne rend
-     <SiteTweaks/> que sous la même condition (court-circuit JSX sinon). -->
-<script>
-  (function () {
-    var host = location.hostname;
-    var enabled = host === 'localhost' || host === '127.0.0.1'
-      || location.search.indexOf('tweaks=1') !== -1;
-    if (enabled) {
-      document.write(
-        '<scr' + 'ipt type="text/babel" src="tweaks-panel.jsx"></scr' + 'ipt>' +
-        '<scr' + 'ipt type="text/babel" src="src/tweaks.jsx"></scr' + 'ipt>'
-      );
-    }
-  })();
-</script>
-<script type="text/babel" src="src/app.jsx"></script>
+<!-- Phase D : entrée module Vite unique. Tout le graphe (React, pages,
+     styles Tailwind compilés, polices self-hostées) est bundlé à partir
+     de src/app.jsx. Fini Babel Standalone + Tailwind CDN. -->
+<script type="module" src="/src/app.jsx"></script>
 
 <!-- PWA : enregistrement du service worker. Ignoré en file:// ou http://
      (les SW exigent HTTPS, sauf localhost). Erreurs silencieuses. -->

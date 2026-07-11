@@ -1,3 +1,9 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Photo } from './photo.jsx';
+import { Btn, Footer, PageHero, buildWaURL } from './shared.jsx';
+import { ATELIERS, IMG } from './data.jsx';
 // Ateliers — page catalogue des ateliers d'artisanat, musique et danse.
 // Source : Nos ateliers.docx (juillet 2026). 9 ateliers d'une journée
 // répartis en 3 catégories : artisanat, musique, danse.
@@ -116,4 +122,5 @@ const Ateliers = ({ go }) => {
   );
 };
 
-Object.assign(window, { Ateliers });
+if (typeof window !== 'undefined') Object.assign(window, { Ateliers });
+export { Ateliers };

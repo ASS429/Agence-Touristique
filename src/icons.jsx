@@ -47,4 +47,7 @@ const Icons = {
   Languages: (p) => <Ic {...p}><path d="M3 5h7M6.5 5v3M4 11s1.5-3 2.5-3 2.5 3 2.5 3M3.5 9H9"/><path d="M14 19l3-8 3 8M15 16h4"/></Ic>,
 };
 
-Object.assign(window, { Icons });
+// Interop pendant la migration Vite : window.Icons conservé tant que tous
+// les consommateurs ne sont pas convertis en imports ES.
+if (typeof window !== 'undefined') Object.assign(window, { Icons });
+export { Icons };

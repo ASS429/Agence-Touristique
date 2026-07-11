@@ -1,3 +1,9 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Photo } from './photo.jsx';
+import { Btn, CircuitCard, Footer, Price, Section, StarRow, buildWaURL } from './shared.jsx';
+import { CIRCUITS, DESTINATIONS, BLOG, INSTA, TESTIMONIALS, IMG } from './data.jsx';
 // Home page — uses shared CircuitCard, Price, and go() for in-app navigation.
 
 const Hero = ({ go }) => {
@@ -510,4 +516,5 @@ const Home = ({ onOpenTour, go }) => (
   </main>
 );
 
-Object.assign(window, { Home });
+if (typeof window !== 'undefined') Object.assign(window, { Home });
+export { Home };

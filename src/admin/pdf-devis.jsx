@@ -1,3 +1,6 @@
+import React from 'react';
+import { jsPDF } from 'jspdf';
+
 // =====================================================================
 // src/admin/pdf-devis.jsx — Générateur de devis PDF
 //
@@ -70,12 +73,7 @@ function refNumber(req) {
 // =====================================================================
 // generateDevis(request, opts) — produit un PDF prêt à télécharger.
 // =====================================================================
-window.generateDevisPDF = async function(request, opts = {}) {
-  if (!window.jspdf) {
-    window.toast('jsPDF non chargé — recharge la page', 'error');
-    return;
-  }
-  const { jsPDF } = window.jspdf;
+async function generateDevisPDF(request, opts = {}) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
   const W = doc.internal.pageSize.getWidth();  // 210
   const H = doc.internal.pageSize.getHeight(); // 297
@@ -301,4 +299,7 @@ window.generateDevisPDF = async function(request, opts = {}) {
   const fname = `ACT-devis-${refNumber(request)}-${(request.full_name || 'client').replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.pdf`;
   doc.save(fname);
   return fname;
-};
+}
+
+if (typeof window !== 'undefined') window.generateDevisPDF = generateDevisPDF;
+export { generateDevisPDF };

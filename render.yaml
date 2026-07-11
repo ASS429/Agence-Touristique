@@ -1,34 +1,44 @@
-# Africa Connection Tours — config Render Static Site
-# Site statique sans build : on publie directement la racine du repo.
+# Africa Connection Tours — config Render Static Site (Phase D — build Vite)
+# Le site est désormais compilé par Vite : Render installe les dépendances,
+# lance `npm run build`, et publie le dossier `dist/`.
 # Render lit ce fichier automatiquement quand on connecte le dépôt GitHub.
 
 services:
   - type: web
     name: act-senegal-site
     runtime: static
-    buildCommand: ""
-    staticPublishPath: ./
+    buildCommand: "npm ci && npm run build"
+    staticPublishPath: ./dist
     pullRequestPreviewsEnabled: false
 
-    # Headers — équivalents à la config netlify.toml.
+    # --- Routing ---
+    # Le site public utilise un routeur par hash (#/...), donc le chemin réel
+    # est toujours "/". L'admin est une seconde page (/admin/). On ajoute
+    # malgré tout un fallback SPA pour les chemins inconnus.
+    routes:
+      - type: rewrite
+        source: /admin
+        destination: /admin/index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+    # --- Headers ---
     headers:
-      # Cache long sur les assets immuables (photos, vidéo)
+      # Assets Vite content-hashés (JS/CSS/fonts) → cache long.
+      # Un nouveau déploiement référence de nouveaux noms de fichiers,
+      # donc aucun cache périmé n'est jamais servi pour un fichier modifié.
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=604800
+
+      # Médias lourds (photos, vidéo) : stables → cache long immuable.
       - path: /images_du_senegal/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
       - path: /vidéo/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
-
-      # Cache moyen sur les sources JSX (mises à jour fréquentes)
-      - path: /src/*
-        name: Cache-Control
-        value: public, max-age=3600
-
-      # Logo officiel ACT (sert aussi de favicon et d'apple-touch-icon)
-      - path: /assets/*
-        name: Cache-Control
-        value: public, max-age=604800
 
       # SEO files : pas de cache long pour que les crawlers voient les MAJ
       - path: /robots.txt
@@ -65,10 +75,27 @@ services:
       - path: /*
         name: Cross-Origin-Opener-Policy
         value: same-origin
-      # CSP partielle et SÛRE : ne restreint que le framing, les plugins et
-      # base-uri (clickjacking + base-hijacking). Ne touche PAS script/style/
-      # img/connect, donc compatible avec Babel Standalone + Tailwind CDN.
-      # La CSP stricte viendra avec la migration Vite (audit Sprint 2).
+
+      # CSP ACTIVE — partielle et SÛRE (clickjacking + base-hijacking).
+      # Depuis la migration Vite, plus aucun CDN pour Babel/Tailwind/polices
+      # (tout est self-hosté), mais Sentry, GA4, Supabase et Formspree
+      # restent des origines externes. Durcir script-src/connect-src À
+      # L'AVEUGLE casserait ces intégrations → voir la CSP stricte proposée
+      # ci-dessous, à activer et TESTER sur une préversion Render avant prod.
       - path: /*
         name: Content-Security-Policy
         value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'"
+
+      # --- CSP STRICTE PROPOSÉE (à tester sur préversion puis remplacer ci-dessus) ---
+      # NB : la carte (Leaflet) reste chargée via unpkg.com et tire ses tuiles
+      # depuis openstreetmap.org — d'où les origines correspondantes ci-dessous.
+      # value: >-
+      #   default-src 'self';
+      #   script-src 'self' 'unsafe-inline' https://browser.sentry-cdn.com
+      #     https://www.googletagmanager.com https://unpkg.com;
+      #   style-src 'self' 'unsafe-inline' https://unpkg.com;
+      #   font-src 'self';
+      #   img-src 'self' data: https: https://*.tile.openstreetmap.org;
+      #   connect-src 'self' https://*.supabase.co https://*.ingest.de.sentry.io https://formspree.io
+      #     https://www.google-analytics.com https://region1.google-analytics.com;
+      #   frame-ancestors 'none'; object-src 'none'; base-uri 'self'

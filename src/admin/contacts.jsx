@@ -1,3 +1,8 @@
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Icon } from './icons.jsx';
+import { FiltersPills, PagePad } from './list-editor.jsx';
+import { ActionBtn, Avatar, Btn, EmptyState, Modal, ReqPill, Spinner, Textarea, Toggle, formatDate, timeAgo, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/contacts.jsx — Demandes reçues (liste + kanban, design refondu)
 // =====================================================================
@@ -367,3 +372,5 @@ function RequestDetailModal({ request, onClose, onStatusChange, onDelete, onGene
 }
 
 window.ContactsPage = ContactsPage;
+
+export { ContactsPage };

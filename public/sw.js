@@ -4,15 +4,15 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v41';
+const VERSION = 'act-v42';
 // Note de version — affichée aux utilisateurs PWA via la notification
 // "nouvelle version disponible" (voir NotifyUpdate dans shared.jsx).
 // Format : { fr, en, it, de }. Mise à jour à chaque nouvelle version.
 const RELEASE_NOTES = {
-  fr: 'Le site reflète désormais en direct les contenus gérés depuis l\'espace d\'administration.',
-  en: 'The site now reflects content managed from the admin dashboard in real time.',
-  it: 'Il sito riflette ora in tempo reale i contenuti gestiti dal pannello di amministrazione.',
-  de: 'Die Website spiegelt nun die im Admin-Bereich verwalteten Inhalte in Echtzeit wider.',
+  fr: 'Site plus rapide et plus léger : chargement optimisé, polices intégrées, meilleure fluidité.',
+  en: 'Faster, lighter site: optimized loading, bundled fonts, smoother experience.',
+  it: 'Sito più veloce e leggero: caricamento ottimizzato, font integrati, maggiore fluidità.',
+  de: 'Schnellere, leichtere Website: optimiertes Laden, integrierte Schriften, flüssiger.',
 };
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
@@ -33,34 +33,15 @@ const trimMediaCache = async () => {
   } catch {}
 };
 
-// Pré-cache uniquement le squelette critique. Les photos et la vidéo
-// (~20 Mo total) sont mises en cache à la volée, pas pré-téléchargées.
+// Pré-cache uniquement le squelette critique. Depuis la migration Vite, le
+// JS/CSS applicatif est content-hashé (noms imprévisibles à l'écriture) :
+// on ne le pré-cache donc plus nommément. Il est mis en cache à la volée
+// (cache-first sur /assets/* immuables), tout comme les photos et la vidéo.
 const CORE = [
   '/',
   '/index.html',
   '/assets/logo-act.png',
   '/manifest.webmanifest',
-  '/src/icons.jsx',
-  '/src/photo.jsx',
-  '/src/data.jsx',
-  '/src/i18n.jsx',
-  '/src/content.jsx',
-  '/src/shared.jsx',
-  '/src/home.jsx',
-  '/src/tour.jsx',
-  '/src/catalog.jsx',
-  '/src/excursions.jsx',
-  '/src/croisieres.jsx',
-  '/src/ateliers.jsx',
-  '/src/map.jsx',
-  '/src/departures-widget.jsx',
-  '/src/carnet.jsx',
-  '/src/monespace.jsx',
-  '/src/mice.jsx',
-  '/src/custom.jsx',
-  '/src/blog.jsx',
-  '/src/pages.jsx',
-  '/src/app.jsx',
 ];
 
 self.addEventListener('install', (e) => {
@@ -101,8 +82,9 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
 
-  // Cross-origin (CDN React/Babel/Tailwind, Google Fonts, Formspree, GA4) :
-  // on laisse passer sans intercepter — le navigateur s'en charge.
+  // Cross-origin (Sentry, Supabase, Formspree, GA4) : on laisse passer
+  // sans intercepter — le navigateur s'en charge. (Plus aucun CDN pour
+  // React/Babel/Tailwind/polices depuis la migration Vite : tout est self-hosté.)
   if (url.origin !== self.location.origin) return;
 
   // Navigation HTML : network-first, fallback cache.

@@ -1,3 +1,7 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Footer, SITE } from './shared.jsx';
 // =====================================================================
 // src/carnet.jsx — Carnet de voyage partageable
 //
@@ -244,4 +248,5 @@ const CarnetVoyage = ({ slug, go }) => {
   );
 };
 
-window.CarnetVoyage = CarnetVoyage;
+if (typeof window !== 'undefined') window.CarnetVoyage = CarnetVoyage;
+export { CarnetVoyage };

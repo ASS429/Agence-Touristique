@@ -1,3 +1,7 @@
+import React, { useState } from 'react';
+import { Icon } from './icons.jsx';
+import { Btn, Field, Input } from './ui.jsx';
+
 // =====================================================================
 // src/admin/auth.jsx — Page de connexion admin
 // Design handoff : split-screen bandeau photo Sénégal + form à droite
@@ -142,3 +146,5 @@ function LoginScreen({ onSuccess }) {
 }
 
 window.LoginScreen = LoginScreen;
+
+export { LoginScreen };

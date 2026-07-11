@@ -1,3 +1,8 @@
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Icon } from './icons.jsx';
+import { FiltersPills, PagePad } from './list-editor.jsx';
+import { Badge, Btn, EmptyState, KpiCard, Select, Spinner, StatusPill, formatDate, truncate } from './ui.jsx';
+
 // =====================================================================
 // src/admin/newsletter.jsx — Newsletter (4 stats + liste, design refondu)
 //
@@ -198,3 +203,5 @@ function NewsletterPage() {
 }
 
 window.NewsletterPage = NewsletterPage;
+
+export { NewsletterPage };
