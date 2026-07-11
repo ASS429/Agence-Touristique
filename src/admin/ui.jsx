@@ -14,6 +14,8 @@
 //  - ActionButton (Eye/Copy/Trash 30×30)
 // =====================================================================
 
+import React from 'react';
+import { Icon } from './icons.jsx';
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
 // ---------------------------------------------------------------------
@@ -495,31 +497,17 @@ function KpiCard({ icon, label, value, delta, deltaVariant = 'up', sub, href, on
   );
 }
 
-// Exports globaux
-window.slugify = slugify;
-window.truncate = truncate;
-window.formatDate = formatDate;
-window.formatDateTime = formatDateTime;
-window.timeAgo = timeAgo;
-window.initials = initials;
-window.Btn = Btn;
-window.Field = Field;
-window.Input = Input;
-window.Textarea = Textarea;
-window.Select = Select;
-window.Toggle = Toggle;
-window.Badge = Badge;
-window.StatusPill = StatusPill;
-window.ReqPill = ReqPill;
-window.LangDots = LangDots;
-window.LangCompletion = LangCompletion;
-window.ActionBtn = ActionBtn;
-window.Avatar = Avatar;
-window.Modal = Modal;
-window.toast = toast;
-window.ToastContainer = ToastContainer;
-window.askConfirm = askConfirm;
-window.ConfirmHost = ConfirmHost;
-window.EmptyState = EmptyState;
-window.Spinner = Spinner;
-window.KpiCard = KpiCard;
+// Interop window + exports ES.
+const _uiExports = {
+  slugify, truncate, formatDate, formatDateTime, timeAgo, initials,
+  Btn, Field, Input, Textarea, Select, Toggle, Badge, StatusPill, ReqPill,
+  LangDots, LangCompletion, ActionBtn, Avatar, Modal, toast, ToastContainer,
+  askConfirm, ConfirmHost, EmptyState, Spinner, KpiCard,
+};
+if (typeof window !== 'undefined') Object.assign(window, _uiExports);
+export {
+  slugify, truncate, formatDate, formatDateTime, timeAgo, initials,
+  Btn, Field, Input, Textarea, Select, Toggle, Badge, StatusPill, ReqPill,
+  LangDots, LangCompletion, ActionBtn, Avatar, Modal, toast, ToastContainer,
+  askConfirm, ConfirmHost, EmptyState, Spinner, KpiCard,
+};

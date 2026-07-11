@@ -1,3 +1,4 @@
+import React from 'react';
 // =====================================================================
 // src/admin/icons.jsx — Icônes SVG (Lucide-style, stroke 1.7)
 //
@@ -203,5 +204,5 @@ function Icon({ name, size = 20, stroke = 1.7, className = '', style = {} }) {
   );
 }
 
-window.Icon = Icon;
-window.ICON_PATHS = ICON_PATHS;
+if (typeof window !== 'undefined') { window.Icon = Icon; window.ICON_PATHS = ICON_PATHS; }
+export { Icon, ICON_PATHS };
