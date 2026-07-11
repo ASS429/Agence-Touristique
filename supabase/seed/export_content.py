@@ -385,16 +385,19 @@ def main():
         tag   = js_str(f.get('tag'))
         am = re.search(r"name\s*:\s*'((?:[^'\\]|\\.)*)'", f.get('author', '') or '')
         author = am.group(1) if am else 'Africa Connection Tours'
+        # NB : blog_posts n'a PAS de colonne category (seulement tags text[]).
+        # On stocke [catégorie, tag] dans tags pour ne pas perdre l'info.
+        tag_list = [x for x in (cat, tag) if x]
+        tags_sql = ("ARRAY[" + ", ".join(sql(x) for x in tag_list) + "]::text[]") if tag_list else "'{}'::text[]"
         cols = ('slug, title_fr, title_en, title_it, title_de, '
                 'excerpt_fr, excerpt_en, excerpt_it, excerpt_de, '
-                'author, category, tags, published, sort_order')
-        tags_sql = "ARRAY[" + (sql(tag) if tag else "") + "]::text[]" if tag else "'{}'::text[]"
+                'author, tags, published, sort_order')
         vals = (f"{sql(slug)}, {sql(title['fr'])}, {sql(title['en'])}, {sql(title['it'])}, {sql(title['de'])}, "
                 f"{sql(exc['fr'])}, {sql(exc['en'])}, {sql(exc['it'])}, {sql(exc['de'])}, "
-                f"{sql(author)}, {sql(cat)}, {tags_sql}, true, {100 + n}")
+                f"{sql(author)}, {tags_sql}, true, {100 + n}")
         upd = ('title_fr=excluded.title_fr, title_en=excluded.title_en, title_it=excluded.title_it, title_de=excluded.title_de, '
                'excerpt_fr=excluded.excerpt_fr, excerpt_en=excluded.excerpt_en, excerpt_it=excluded.excerpt_it, excerpt_de=excluded.excerpt_de, '
-               'author=excluded.author, category=excluded.category')
+               'author=excluded.author, tags=excluded.tags')
         out.append(f'insert into public.blog_posts ({cols}) values ({vals}) '
                    f'on conflict (slug) do update set {upd};')
         n += 1
