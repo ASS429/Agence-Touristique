@@ -47,22 +47,59 @@ FCP mobile estimé ~2,5 s → < 1 s. Bundle initial ÷ ~4.
 - [ ] `src/styles.css` (directives Tailwind + le CSS inline actuel de index.html)
 - [ ] `.nvmrc` (Node 20)
 
-### 1. Convertir les fichiers "feuilles" (sans dépendances internes)
-Ordre par dépendances croissantes. Pour chaque fichier : retirer `window.X = …`,
-ajouter `export`, ajouter les `import` nécessaires (React, et les symboles utilisés).
-- [ ] `src/icons.jsx` (Icons) — feuille
-- [ ] `src/data.jsx` (CIRCUITS, SITE… ) — dépend de IMG (interne)
-- [ ] `src/i18n.jsx` (I18nProvider, useI18n, DICT, useRouter) — feuille React
-- [ ] `src/photo.jsx`, `src/content.jsx`
+### 1. Fichiers "feuilles" — ✅ FAIT
+- [x] `src/icons.jsx` → `export { Icons }`
+- [x] `src/data.jsx` → export de toutes les données (0 React)
+- [x] `src/i18n.jsx` → `import React` + export (I18nProvider, useI18n, DICT, useRouter, RATES, CCY_SYM, LANGS, LOCALE)
+- [x] `src/photo.jsx` → `import React` + export (Photo, PALETTES)
+- [x] `src/content.jsx` → `import React` (IIFE side-effect, lit window.*)
 
-### 2. Convertir les composants partagés
-- [ ] `src/shared.jsx` (Header, Footer, Btn, SITE-dépendances, NewsletterForm…)
-- [ ] `src/map.jsx`, `src/departures-widget.jsx`
+### 2. Composant partagé — ✅ FAIT
+- [x] `src/shared.jsx` → imports (React, Icons, useI18n, Photo) + exports
+  (SITE, buildWaURL, trackWa, Logo, StarRow, Pill, Btn, Price, PromoBanner,
+  CookieConsent, UpdateNotifier, Header, WhatsAppFloat, Section, Footer,
+  CircuitCard, PageHero)
 
-### 3. Convertir les pages publiques
-- [ ] home, tour, catalog, excursions, croisieres, ateliers, custom, blog,
-  carnet, monespace, mice, pages, app
-- [ ] `src/tweaks.jsx` (garder dev-only)
+### 3. Pages publiques — ⬜ À FAIRE (mécanique, spec ci-dessous)
+
+**Règles** : ajouter en tête `import React from 'react';` (si `React.*`) puis
+les imports listés ; `richT` vient de `useI18n()` (PAS un import) ; `pickLang`
+est accédé via `window.pickLang` (PAS un import). En bas : garder l'interop
+`if (typeof window!=='undefined') window.X = X` ET ajouter `export { X }`.
+
+Imports par module source :
+- `./i18n.jsx` : useI18n, useRouter
+- `./icons.jsx` : Icons
+- `./photo.jsx` : Photo
+- `./data.jsx` : CIRCUITS, EXCURSIONS, ATELIERS, DESTINATIONS, BLOG,
+  BLOG_CATEGORIES, TESTIMONIALS, TOUR_REVIEWS, INSTA, CIRCUIT_DETAIL, FAQ,
+  VALUES, FIGURES, MAP_STOPS, SENEGAL_PATH, CASAMANCE_PATH, IMG
+- `./shared.jsx` : Btn, Footer, PageHero, Section, Header, StarRow, Pill,
+  Price, CircuitCard, PromoBanner, CookieConsent, UpdateNotifier,
+  WhatsAppFloat, SITE, buildWaURL, trackWa
+
+**Spec par fichier** (deps externes → export) :
+| Fichier | Imports data/shared/… (hors React) | Exporte |
+|---|---|---|
+| `home.jsx` | useI18n; Icons; Photo; Btn,CircuitCard,Footer,Price,Section,StarRow,buildWaURL; CIRCUITS,DESTINATIONS,BLOG,INSTA,TESTIMONIALS,IMG | `Home` |
+| `tour.jsx` | useI18n; Icons; Photo; Btn,Footer,Pill,Price,Section,StarRow,buildWaURL; CIRCUITS,CIRCUIT_DETAIL,FAQ,TOUR_REVIEWS,MAP_STOPS,SENEGAL_PATH,CASAMANCE_PATH; DeparturesWidget(./departures-widget.jsx) | `Tour` |
+| `catalog.jsx` | useI18n; Icons; Btn,CircuitCard,Footer,PageHero; CIRCUITS,DESTINATIONS,IMG | `Catalog` |
+| `excursions.jsx` | useI18n; Icons; Photo; Btn,CircuitCard,Footer,PageHero; EXCURSIONS,DESTINATIONS,IMG | `Excursions` |
+| `croisieres.jsx` | useI18n; Icons; Btn,Footer,PageHero,buildWaURL | `Croisieres` |
+| `ateliers.jsx` | useI18n; Icons; Photo; Btn,Footer,PageHero,buildWaURL; ATELIERS,IMG | `Ateliers` |
+| `custom.jsx` | useI18n; Icons; Photo; Btn,CircuitCard,Footer,PageHero,Price,Section,buildWaURL,SITE; CIRCUITS,DESTINATIONS,IMG | `Custom` |
+| `blog.jsx` | useI18n; Icons; Photo; Btn,Footer,Header,PageHero,Section,buildWaURL; BLOG,BLOG_CATEGORIES,CIRCUITS,IMG | `BlogList, BlogArticle` |
+| `carnet.jsx` | useI18n; Icons; Footer,SITE; CIRCUITS | `CarnetVoyage` (window.CarnetVoyage) |
+| `monespace.jsx` | useI18n; Icons; Footer | `ClientSpace` (window.ClientSpace) |
+| `mice.jsx` | useI18n; Icons; Btn,Footer,PageHero,Section,SITE; IMG | `Mice` (window.Mice) |
+| `pages.jsx` | useI18n; Icons; Photo; Btn,Footer,PageHero,Section,buildWaURL,SITE; FAQ,VALUES,FIGURES,IMG; DestinationsMap(./map.jsx) | `Contact, About, Faq, Mentions, Privacy, Cgv, NotFound` |
+| `map.jsx` | useI18n; DESTINATIONS | `DestinationsMap` (window.DestinationsMap) |
+| `departures-widget.jsx` | useI18n; Icons; SITE | `DeparturesWidget` (window.DeparturesWidget) |
+| `app.jsx` | useRouter; trackWa,Header,PromoBanner,CookieConsent,UpdateNotifier,WhatsAppFloat; CIRCUITS,BLOG,CIRCUIT_DETAIL; **toutes les pages** : Home,Tour(./tour),Catalog,Excursions,Croisieres,Ateliers,Custom,BlogList,BlogArticle,Contact,About,Faq,Mentions,Privacy,Cgv,NotFound(./pages),CarnetVoyage,ClientSpace,Mice,DestinationsMap | monte le root React |
+| `tweaks.jsx` | (dev-only) | garder chargement conditionnel |
+
+Attention interop : `carnet/monespace/mice/map/departures-widget` utilisent
+`window.X = X` (simple) → ajouter `export { X }` en plus.
 
 ### 4. Convertir l'admin (21 fichiers)
 - [ ] `src/admin/*` — même logique. `admin/index.html` comme 2e entrée.

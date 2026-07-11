@@ -1,3 +1,7 @@
+import React from 'react';
+import { Icons } from './icons.jsx';
+import { useI18n } from './i18n.jsx';
+import { Photo } from './photo.jsx';
 // Shared components: Logo, Header (router + i18n aware), WhatsAppFloat,
 // Footer, StarRow, Pills/Buttons, Section, Price (currency aware).
 
@@ -77,7 +81,8 @@ const trackWa = (source, message) => {
   }
 };
 
-Object.assign(window, { SITE, buildWaURL, trackWa });
+if (typeof window !== 'undefined') Object.assign(window, { SITE, buildWaURL, trackWa });
+export { SITE, buildWaURL, trackWa };
 
 // ============================================================================
 // Logo — clickable home
@@ -850,7 +855,11 @@ const PageHero = ({ kicker, title, intro, tone='terre', mood='horizon', bgImg, c
   </section>
 );
 
-Object.assign(window, {
+if (typeof window !== 'undefined') Object.assign(window, {
   buildWaURL, Logo, StarRow, Pill, Btn, Price,
   PromoBanner, CookieConsent, UpdateNotifier, Header, WhatsAppFloat, Section, Footer, CircuitCard, PageHero,
 });
+export {
+  Logo, StarRow, Pill, Btn, Price,
+  PromoBanner, CookieConsent, UpdateNotifier, Header, WhatsAppFloat, Section, Footer, CircuitCard, PageHero,
+};
