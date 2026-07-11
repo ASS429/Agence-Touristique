@@ -271,6 +271,59 @@ function useCollection(table, opts = {}) {
 }
 
 // -----------------------------------------------------------
+// Autosave brouillon (localStorage) — évite la perte de saisie au refresh.
+//   readDraft(table, id)         → lit un brouillon éventuel au montage
+//   useAutosave(table,id,form,original) → persiste le diff (débounce 700 ms),
+//                                  efface le brouillon si form == original
+//   <DraftRestoreBar .../>        → bandeau « restaurer / ignorer »
+// -----------------------------------------------------------
+const draftKey = (table, id) => `act_draft_${table}_${id || 'new'}`;
+
+function readDraft(table, id) {
+  try {
+    const raw = localStorage.getItem(draftKey(table, id));
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    return d && d.form ? d.form : null;
+  } catch { return null; }
+}
+
+function useAutosave(table, id, form, original) {
+  const key = draftKey(table, id);
+  useEffect(() => {
+    const h = setTimeout(() => {
+      try {
+        // On persiste dès que le formulaire diffère de l'original. On NE
+        // supprime PAS quand ils sont égaux : sinon le brouillon retrouvé à
+        // l'ouverture (form = original) serait effacé avant restauration.
+        // Le nettoyage se fait à l'enregistrement (clearDraft) ou via « Ignorer ».
+        if (JSON.stringify(form) !== JSON.stringify(original)) {
+          localStorage.setItem(key, JSON.stringify({ at: Date.now(), form }));
+        }
+      } catch { /* quota / mode privé : on ignore */ }
+    }, 700);
+    return () => clearTimeout(h);
+  }, [key, form, original]);
+  const clearDraft = useCallback(() => {
+    try { localStorage.removeItem(key); } catch { /* ignore */ }
+  }, [key]);
+  return { clearDraft };
+}
+
+function DraftRestoreBar({ onRestore, onDismiss }) {
+  return (
+    <div className="mb-4 flex items-center gap-3 rounded-2xl bg-warn-100 border border-warn-600/25 px-4 py-3">
+      <Icon name="clock" size={16}/>
+      <div className="text-[13px] text-ink-800 flex-1">
+        Un brouillon non enregistré a été retrouvé pour ce contenu.
+      </div>
+      <button onClick={onRestore} className="text-[13px] font-semibold text-terra-700 hover:text-terra-800 underline underline-offset-2">Restaurer</button>
+      <button onClick={onDismiss} className="text-[13px] text-mute-500 hover:text-ink-800">Ignorer</button>
+    </div>
+  );
+}
+
+// -----------------------------------------------------------
 // EditorTabs : tabs soulignés (design handoff)
 // -----------------------------------------------------------
 function EditorTabs({ tabs, active, onSelect }) {
@@ -377,5 +430,8 @@ window.useCollection = useCollection;
 window.EditorTabs = EditorTabs;
 window.EditorLayout = EditorLayout;
 window.PagePad = PagePad;
+window.useAutosave = useAutosave;
+window.readDraft = readDraft;
+window.DraftRestoreBar = DraftRestoreBar;
 
-export { EditorLayout, EditorTabs, FiltersPills, ItemsTable, ListToolbar, PagePad, Thumb, useCollection };
+export { EditorLayout, EditorTabs, FiltersPills, ItemsTable, ListToolbar, PagePad, Thumb, useCollection, useAutosave, readDraft, DraftRestoreBar };

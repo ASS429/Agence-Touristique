@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Icon } from './icons.jsx';
 import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
-import { EditorLayout, ListToolbar, PagePad, useCollection } from './list-editor.jsx';
+import { DraftRestoreBar, EditorLayout, ListToolbar, PagePad, readDraft, useAutosave, useCollection } from './list-editor.jsx';
 import { ActionBtn, EmptyState, Field, Input, LangDots, Spinner, StatusPill, formatDate, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
@@ -111,6 +111,9 @@ function BlogEditor({ post, onClose, col }) {
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState('contenu');
   const isNew = !post.id;
+  const initialDraft = React.useRef(readDraft('blog_posts', post.id)).current;
+  const [showRestore, setShowRestore] = useState(!!initialDraft);
+  const { clearDraft } = useAutosave('blog_posts', post.id, form, post);
   const set = (patch) => setForm(f => ({ ...f, ...patch }));
 
   useEffect(() => {
@@ -128,6 +131,7 @@ function BlogEditor({ post, onClose, col }) {
       if (payload.published && !payload.published_at) payload.published_at = new Date().toISOString();
       if (isNew) { delete payload.id; await col.create(payload); window.toast('Article créé', 'success'); }
       else { await col.update(post.id, payload); window.toast('Enregistré', 'success'); }
+      clearDraft();
       onClose();
     } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
     finally { setSaving(false); }
@@ -155,6 +159,7 @@ function BlogEditor({ post, onClose, col }) {
       publishLabel="Publier l'article"
       footerLeft={post.updated_at && <><Icon name="clock" size={13}/> {timeAgo(post.updated_at)}</>}
     >
+      {showRestore && <DraftRestoreBar onRestore={() => { setForm(initialDraft); setShowRestore(false); }} onDismiss={() => { setShowRestore(false); clearDraft(); }}/>}
       {tab === 'meta' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Slug (URL)" required>

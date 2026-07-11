@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Icon } from './icons.jsx';
 import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
-import { EditorLayout, PagePad, useCollection } from './list-editor.jsx';
+import { DraftRestoreBar, EditorLayout, PagePad, readDraft, useAutosave, useCollection } from './list-editor.jsx';
 import { ActionBtn, Btn, EmptyState, Field, Input, LangDots, Select, Spinner, StatusPill, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
@@ -129,6 +129,9 @@ function FAQEditor({ faq, onClose, col }) {
   const [form, setForm] = useState(faq);
   const [saving, setSaving] = useState(false);
   const isNew = !faq.id;
+  const initialDraft = React.useRef(readDraft('faq_items', faq.id)).current;
+  const [showRestore, setShowRestore] = useState(!!initialDraft);
+  const { clearDraft } = useAutosave('faq_items', faq.id, form, faq);
   const set = (patch) => setForm(f => ({ ...f, ...patch }));
 
   const doSave = async (publish) => {
@@ -142,6 +145,7 @@ function FAQEditor({ faq, onClose, col }) {
       delete payload.updated_at;
       if (isNew) { delete payload.id; await col.create(payload); window.toast('Question créée', 'success'); }
       else { await col.update(faq.id, payload); window.toast('Enregistré', 'success'); }
+      clearDraft();
       onClose();
     } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
     finally { setSaving(false); }
@@ -161,6 +165,7 @@ function FAQEditor({ faq, onClose, col }) {
       publishLabel="Publier"
       footerLeft={faq.updated_at && <><Icon name="clock" size={13}/> {timeAgo(faq.updated_at)}</>}
     >
+      {showRestore && <DraftRestoreBar onRestore={() => { setForm(initialDraft); setShowRestore(false); }} onDismiss={() => { setShowRestore(false); clearDraft(); }}/>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Catégorie" required>
           <Select value={form.category} onChange={e => set({ category: e.target.value })}>

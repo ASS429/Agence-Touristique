@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from './icons.jsx';
 import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
-import { EditorLayout, ListToolbar, PagePad, useCollection } from './list-editor.jsx';
+import { DraftRestoreBar, EditorLayout, ListToolbar, PagePad, readDraft, useAutosave, useCollection } from './list-editor.jsx';
 import { ActionBtn, EmptyState, Field, Input, LangDots, Select, Spinner, StatusPill, timeAgo } from './ui.jsx';
 
 // =====================================================================
@@ -96,6 +96,10 @@ function AtelierEditor({ atelier, onClose, col }) {
   const isNew = !atelier.id;
   const set = (patch) => setForm(f => ({ ...f, ...patch }));
 
+  const initialDraft = React.useRef(readDraft('ateliers', atelier.id)).current;
+  const [showRestore, setShowRestore] = useState(!!initialDraft);
+  const { clearDraft } = useAutosave('ateliers', atelier.id, form, atelier);
+
   useEffect(() => {
     if (isNew && form.title_fr && !form.slug) set({ slug: window.slugify(form.title_fr) });
   }, [form.title_fr]);
@@ -110,6 +114,7 @@ function AtelierEditor({ atelier, onClose, col }) {
       delete payload.updated_at;
       if (isNew) { delete payload.id; await col.create(payload); window.toast('Atelier créé', 'success'); }
       else { await col.update(atelier.id, payload); window.toast('Enregistré', 'success'); }
+      clearDraft();
       onClose();
     } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
     finally { setSaving(false); }
@@ -129,6 +134,7 @@ function AtelierEditor({ atelier, onClose, col }) {
       publishLabel="Publier l'atelier"
       footerLeft={atelier.updated_at && <><Icon name="clock" size={13}/> {timeAgo(atelier.updated_at)}</>}
     >
+      {showRestore && <DraftRestoreBar onRestore={() => { setForm(initialDraft); setShowRestore(false); }} onDismiss={() => { setShowRestore(false); clearDraft(); }}/>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Slug (URL)" required>
           <Input value={form.slug} onChange={e => set({ slug: e.target.value })}/>

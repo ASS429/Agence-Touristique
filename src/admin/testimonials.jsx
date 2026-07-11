@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Icon } from './icons.jsx';
 import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
-import { EditorLayout, ListToolbar, PagePad, useCollection } from './list-editor.jsx';
+import { DraftRestoreBar, EditorLayout, ListToolbar, PagePad, readDraft, useAutosave, useCollection } from './list-editor.jsx';
 import { ActionBtn, EmptyState, Field, Input, Select, Spinner, StatusPill, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
@@ -131,6 +131,9 @@ function TestimonialEditor({ tm, onClose, col }) {
   const [form, setForm] = useState(tm);
   const [saving, setSaving] = useState(false);
   const isNew = !tm.id;
+  const initialDraft = React.useRef(readDraft('testimonials', tm.id)).current;
+  const [showRestore, setShowRestore] = useState(!!initialDraft);
+  const { clearDraft } = useAutosave('testimonials', tm.id, form, tm);
   const set = (patch) => setForm(f => ({ ...f, ...patch }));
 
   const doSave = async (publish) => {
@@ -144,6 +147,7 @@ function TestimonialEditor({ tm, onClose, col }) {
       delete payload.updated_at;
       if (isNew) { delete payload.id; await col.create(payload); window.toast('Témoignage créé', 'success'); }
       else { await col.update(tm.id, payload); window.toast('Enregistré', 'success'); }
+      clearDraft();
       onClose();
     } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
     finally { setSaving(false); }
@@ -163,6 +167,7 @@ function TestimonialEditor({ tm, onClose, col }) {
       publishLabel="Publier le témoignage"
       footerLeft={tm.updated_at && <><Icon name="clock" size={13}/> {timeAgo(tm.updated_at)}</>}
     >
+      {showRestore && <DraftRestoreBar onRestore={() => { setForm(initialDraft); setShowRestore(false); }} onDismiss={() => { setShowRestore(false); clearDraft(); }}/>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Nom du client" required>
           <Input value={form.author_name} onChange={e => set({ author_name: e.target.value })} placeholder="Marie D."/>
