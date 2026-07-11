@@ -1,3 +1,4 @@
+import React from 'react';
 // Editorial duotone "photo" placeholders.
 // Each placeholder is a stylised gradient with optional silhouette shapes
 // and a small monospace label that says what should be slotted in.
@@ -200,4 +201,5 @@ const Photo = ({
   );
 };
 
-Object.assign(window, { Photo, PALETTES });
+if (typeof window !== 'undefined') Object.assign(window, { Photo, PALETTES });
+export { Photo, PALETTES };

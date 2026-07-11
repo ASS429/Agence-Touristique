@@ -1,3 +1,4 @@
+import React from 'react';
 // =====================================================================
 // src/content.jsx — Pont contenu Supabase → site public (live CMS)
 //

@@ -904,9 +904,16 @@ const MAP_STOPS = [
   { id:'saloum',  x: 92,  y: 218, label:'Saloum' },
 ];
 
-Object.assign(window, {
+// Interop window (transitoire) + exports ES.
+if (typeof window !== 'undefined') Object.assign(window, {
   DESTINATIONS, CIRCUITS, TESTIMONIALS, TOUR_REVIEWS, BLOG, BLOG_CATEGORIES, INSTA,
   CIRCUIT_DETAIL, SENEGAL_PATH, CASAMANCE_PATH, MAP_STOPS,
   TEAM, VALUES, PARTNERS, FIGURES, FAQ,
   IMG_BASE, IMG,
 });
+export {
+  DESTINATIONS, CIRCUITS, TESTIMONIALS, TOUR_REVIEWS, BLOG, BLOG_CATEGORIES, INSTA,
+  CIRCUIT_DETAIL, SENEGAL_PATH, CASAMANCE_PATH, MAP_STOPS,
+  TEAM, VALUES, PARTNERS, FIGURES, FAQ,
+  IMG_BASE, IMG,
+};
