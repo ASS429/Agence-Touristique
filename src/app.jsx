@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './styles.css';            // Tailwind compilé + polices self-hostées
 import './supabase-public.jsx';   // side-effect : loaders Supabase (window.*)
 import { I18nProvider, useRouter } from './i18n.jsx';
 import { PromoBanner, Header, WhatsAppFloat, CookieConsent, UpdateNotifier } from './shared.jsx';

@@ -372,55 +372,10 @@
 </head>
 <body>
 <div id="root"></div>
-<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="src/icons.jsx"></script>
-<script type="text/babel" src="src/photo.jsx"></script>
-<!-- Loader Supabase (mode dégradé si non configuré : le site reste 100% statique) -->
-<!-- Chargé via Babel (type="text/babel") : le serveur statique sert les
-     .jsx avec un MIME non-exécutable, donc un <script> classique serait
-     refusé par le navigateur. Babel les récupère par fetch et contourne
-     le MIME. (Fichier sans JSX, mais on garde le même mécanisme.) -->
-<script type="text/babel" src="src/supabase-public.jsx"></script>
-<script type="text/babel" src="src/data.jsx"></script>
-<script type="text/babel" src="src/i18n.jsx"></script>
-<script type="text/babel" src="src/content.jsx"></script>
-<script type="text/babel" src="src/shared.jsx"></script>
-<script type="text/babel" src="src/map.jsx"></script>
-<script type="text/babel" src="src/departures-widget.jsx"></script>
-<script type="text/babel" src="src/home.jsx"></script>
-<script type="text/babel" src="src/tour.jsx"></script>
-<script type="text/babel" src="src/catalog.jsx"></script>
-<script type="text/babel" src="src/excursions.jsx"></script>
-<script type="text/babel" src="src/croisieres.jsx"></script>
-<script type="text/babel" src="src/ateliers.jsx"></script>
-<script type="text/babel" src="src/custom.jsx"></script>
-<script type="text/babel" src="src/blog.jsx"></script>
-<script type="text/babel" src="src/carnet.jsx"></script>
-<script type="text/babel" src="src/monespace.jsx"></script>
-<script type="text/babel" src="src/mice.jsx"></script>
-<script type="text/babel" src="src/pages.jsx"></script>
-<!-- Panneau de personnalisation : OUTIL DE DÉVELOPPEMENT.
-     Chargé uniquement en local ou avec ?tweaks=1 — jamais servi aux
-     visiteurs en production (cf. AUDIT §3.6). L'injection a lieu pendant
-     le parse (avant DOMContentLoaded), donc Babel Standalone les compile
-     normalement avec les autres scripts text/babel. app.jsx ne rend
-     <SiteTweaks/> que sous la même condition (court-circuit JSX sinon). -->
-<script>
-  (function () {
-    var host = location.hostname;
-    var enabled = host === 'localhost' || host === '127.0.0.1'
-      || location.search.indexOf('tweaks=1') !== -1;
-    if (enabled) {
-      document.write(
-        '<scr' + 'ipt type="text/babel" src="tweaks-panel.jsx"></scr' + 'ipt>' +
-        '<scr' + 'ipt type="text/babel" src="src/tweaks.jsx"></scr' + 'ipt>'
-      );
-    }
-  })();
-</script>
-<script type="text/babel" src="src/app.jsx"></script>
+<!-- Phase D : entrée module Vite unique. Tout le graphe (React, pages,
+     styles Tailwind compilés, polices self-hostées) est bundlé à partir
+     de src/app.jsx. Fini Babel Standalone + Tailwind CDN. -->
+<script type="module" src="/src/app.jsx"></script>
 
 <!-- PWA : enregistrement du service worker. Ignoré en file:// ou http://
      (les SW exigent HTTPS, sauf localhost). Erreurs silencieuses. -->
