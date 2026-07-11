@@ -991,6 +991,10 @@ const DICT = {
     'newsletter.error.exists':'You are already subscribed to this newsletter.',
     'newsletter.error.generic':'Sending failed. Please try again later.',
     'newsletter.legal':'We respect your privacy. Unsubscribe in one click, any time.',
+    'newsletter.checkInbox.title':'Check your inbox',
+    'newsletter.checkInbox.body':'A confirmation email has just been sent to you. Click the link to complete your subscription.',
+    'newsletter.already.title':'You are already subscribed',
+    'newsletter.already.body':'This address is already subscribed and confirmed. Thank you!',
 
     'carnet.kicker':'Travel journal',
     'carnet.days':'days',
@@ -2056,6 +2060,10 @@ const DICT = {
     'newsletter.error.exists':'Vous êtes déjà abonné à cette newsletter.',
     'newsletter.error.generic':'Envoi impossible. Réessayez plus tard.',
     'newsletter.legal':'Nous respectons votre vie privée. Désabonnement en un clic à tout moment.',
+    'newsletter.checkInbox.title':'Vérifiez votre boîte mail',
+    'newsletter.checkInbox.body':'Un email de confirmation vient de vous être envoyé. Cliquez sur le lien pour finaliser votre inscription.',
+    'newsletter.already.title':'Vous êtes déjà abonné',
+    'newsletter.already.body':'Cette adresse est déjà inscrite et confirmée. Merci !',
 
     'carnet.kicker':'Carnet de voyage',
     'carnet.days':'jours',
@@ -3121,6 +3129,10 @@ const DICT = {
     'newsletter.error.exists':'Sei già iscritto a questa newsletter.',
     'newsletter.error.generic':'Invio impossibile. Riprova più tardi.',
     'newsletter.legal':'Rispettiamo la tua privacy. Disiscrizione con un clic in qualsiasi momento.',
+    'newsletter.checkInbox.title':'Controlla la tua email',
+    'newsletter.checkInbox.body':'Ti abbiamo appena inviato un\'email di conferma. Clicca sul link per completare l\'iscrizione.',
+    'newsletter.already.title':'Sei già iscritto',
+    'newsletter.already.body':'Questo indirizzo è già iscritto e confermato. Grazie!',
 
     'carnet.kicker':'Diario di viaggio',
     'carnet.days':'giorni',
@@ -4186,6 +4198,10 @@ const DICT = {
     'newsletter.error.exists':'Sie sind bereits für diesen Newsletter angemeldet.',
     'newsletter.error.generic':'Senden nicht möglich. Bitte später erneut versuchen.',
     'newsletter.legal':'Wir respektieren Ihre Privatsphäre. Abmeldung jederzeit mit einem Klick.',
+    'newsletter.checkInbox.title':'Prüfen Sie Ihr Postfach',
+    'newsletter.checkInbox.body':'Wir haben Ihnen soeben eine Bestätigungs-E-Mail gesendet. Klicken Sie auf den Link, um Ihr Abonnement abzuschließen.',
+    'newsletter.already.title':'Sie sind bereits abonniert',
+    'newsletter.already.body':'Diese Adresse ist bereits abonniert und bestätigt. Danke!',
 
     'carnet.kicker':'Reisetagebuch',
     'carnet.days':'Tage',
