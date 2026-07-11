@@ -27,8 +27,7 @@ function AteliersPage() {
 
   const onDelete = async (row) => {
     if (!(await window.askConfirm(`Supprimer l'atelier "${row.title_fr}" ?`, 'Supprimer'))) return;
-    await col.remove(row.id);
-    window.toast('Atelier supprimé', 'success');
+    await col.remove(row.id, 'Atelier supprimé');
   };
 
   const catLabel = { artisanat: 'Artisanat', musique: 'Musique', danse: 'Danse' };

@@ -28,8 +28,7 @@ function BlogPage() {
 
   const onDelete = async (row) => {
     if (!(await window.askConfirm(`Supprimer l'article "${row.title_fr}" ?`, 'Supprimer'))) return;
-    await col.remove(row.id);
-    window.toast('Article supprimé', 'success');
+    await col.remove(row.id, 'Article supprimé');
   };
 
   const filtered = useMemo(() => {

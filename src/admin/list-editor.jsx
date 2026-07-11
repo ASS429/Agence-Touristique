@@ -226,9 +226,29 @@ function useCollection(table, opts = {}) {
     return row;
   };
 
-  const remove = async (id) => {
+  // Suppression avec Undo : on capture la ligne avant de la supprimer, puis
+  // on propose « Annuler » dans le toast (ré-insertion en préservant l'id).
+  const remove = async (id, label = 'Élément supprimé') => {
+    const row = items.find(r => r.id === id);
     await window.sbDelete(table, id);
     setItems(list => list.filter(r => r.id !== id));
+    window.toast(label, 'info', {
+      duration: 6500,
+      action: row ? {
+        label: 'Annuler',
+        onClick: async () => {
+          try {
+            const { updated_at, ...rest } = row; // updated_at régénéré à l'insert
+            const restored = await window.sbInsert(table, rest);
+            setItems(list => [restored, ...list.filter(r => r.id !== restored.id)]
+              .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)));
+            window.toast('Suppression annulée', 'success');
+          } catch (e) {
+            window.toast('Annulation impossible : ' + e.message, 'error');
+          }
+        }
+      } : null
+    });
   };
 
   const togglePublish = async (row) => {

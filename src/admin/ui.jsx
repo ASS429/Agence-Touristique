@@ -303,19 +303,22 @@ function Avatar({ name, size = 40, variant = 'auto' }) {
 // Toast / notifications
 // ---------------------------------------------------------------------
 const toastListeners = new Set();
-function toast(message, variant = 'success') {
+// toast(message, variant, opts?) — opts.action = { label, onClick } affiche
+// un bouton (ex. « Annuler ») ; opts.duration prolonge l'affichage.
+function toast(message, variant = 'success', opts = {}) {
   const id = Math.random().toString(36).slice(2);
-  const entry = { id, message, variant };
+  const entry = { id, message, variant, action: opts.action || null, duration: opts.duration || 3800 };
   toastListeners.forEach(cb => cb(entry));
   return id;
 }
 
 function ToastContainer() {
   const [toasts, setToasts] = useState([]);
+  const dismiss = useCallback((id) => setToasts(t => t.filter(x => x.id !== id)), []);
   useEffect(() => {
     const cb = (entry) => {
       setToasts(t => [...t, entry]);
-      setTimeout(() => setToasts(t => t.filter(x => x.id !== entry.id)), 3800);
+      setTimeout(() => setToasts(t => t.filter(x => x.id !== entry.id)), entry.duration || 3800);
     };
     toastListeners.add(cb);
     return () => toastListeners.delete(cb);
@@ -336,6 +339,14 @@ function ToastContainer() {
         >
           <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: dots[t.variant] || dots.success }}/>
           <span className="text-[13.5px] font-medium">{t.message}</span>
+          {t.action && (
+            <button
+              onClick={() => { t.action.onClick(); dismiss(t.id); }}
+              className="ml-1 text-[13px] font-semibold text-terra-300 hover:text-terra-400 underline underline-offset-2 flex-shrink-0"
+            >
+              {t.action.label}
+            </button>
+          )}
         </div>
       ))}
     </div>

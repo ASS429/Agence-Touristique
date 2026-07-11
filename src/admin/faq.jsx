@@ -35,8 +35,7 @@ function FAQPage() {
 
   const onDelete = async (row) => {
     if (!(await window.askConfirm('Supprimer cette question ?', 'Supprimer'))) return;
-    await col.remove(row.id);
-    window.toast('Question supprimée', 'success');
+    await col.remove(row.id, 'Question supprimée');
   };
 
   const grouped = useMemo(() => {

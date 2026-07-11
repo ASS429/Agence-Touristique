@@ -28,8 +28,7 @@ function TestimonialsPage() {
 
   const onDelete = async (row) => {
     if (!(await window.askConfirm(`Supprimer le témoignage de ${row.author_name} ?`, 'Supprimer'))) return;
-    await col.remove(row.id);
-    window.toast('Témoignage supprimé', 'success');
+    await col.remove(row.id, 'Témoignage supprimé');
   };
 
   const filtered = useMemo(() => {

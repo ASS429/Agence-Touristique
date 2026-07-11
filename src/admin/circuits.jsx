@@ -30,8 +30,7 @@ function CircuitsPage() {
 
   const onDelete = async (row) => {
     if (!(await window.askConfirm(`Supprimer le circuit "${row.title_fr}" ?`, 'Supprimer'))) return;
-    await col.remove(row.id);
-    window.toast('Circuit supprimé', 'success');
+    await col.remove(row.id, 'Circuit supprimé');
   };
 
   const onDuplicate = async (row) => {

@@ -29,8 +29,7 @@ function ExcursionsPage() {
 
   const onDelete = async (row) => {
     if (!(await window.askConfirm(`Supprimer l'excursion "${row.title_fr}" ?`, 'Supprimer'))) return;
-    await col.remove(row.id);
-    window.toast('Excursion supprimée', 'success');
+    await col.remove(row.id, 'Excursion supprimée');
   };
 
   const onDuplicate = async (row) => {
