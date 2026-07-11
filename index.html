@@ -131,30 +131,10 @@
     document.head.appendChild(s);
   })();
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          sand:    { 50: '#FBF7F0', 100: '#F5ECDD', 200: '#ECDDC4', 300: '#DCC9A8', 400: '#B8A284', 500: '#8C7A60' },
-          ink:     { DEFAULT: '#1A1612', 900: '#1A1612', 800: '#26211B', 700: '#3A332A', 600: '#5A5142', 500: '#7C7159', 400: '#A39884' },
-          terre:   { DEFAULT: '#C8593B', 600: '#A8462C', 700: '#8B3A24', 300: '#E6987F', 100: '#F4DACA' },
-          atlantique:{ DEFAULT: '#1F5E5A', 700: '#16443F', 300: '#7BAAA5', 100: '#D5E5E2' },
-          ocre:    { DEFAULT: '#D89A3D', 300: '#EAC380', 100: '#F6E6C4' },
-        },
-        fontFamily: {
-          display: ['"Instrument Serif"', 'Georgia', 'serif'],
-          sans: ['Manrope', 'system-ui', 'sans-serif'],
-          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-        },
-      }
-    }
-  };
-</script>
+<!-- Phase D : polices self-hostées + Tailwind compilé sont bundlés par Vite
+     (src/styles.css importé depuis app.jsx). Plus de Google Fonts CDN ni de
+     Tailwind CDN. Le bloc <style> ci-dessous (vars/grain/font-display) reste
+     inline. -->
 <style>
   :root {
     /* Defaults — overridden by Tweaks panel at runtime */
