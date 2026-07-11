@@ -22,12 +22,19 @@ function LoginScreen({ onSuccess }) {
     }
     setError(null);
     setLoading(true);
+    // Garde-fou : la connexion ne doit jamais faire tourner le bouton
+    // indéfiniment. Si un appel réseau/verrou traîne au-delà de 15 s, on
+    // remonte une erreur claire plutôt que de rester bloqué.
+    const withTimeout = (p, ms) => Promise.race([
+      p,
+      new Promise((_, rej) => setTimeout(() => rej(new Error('Connexion trop lente — vérifiez votre réseau et réessayez.')), ms)),
+    ]);
     try {
-      const user = await window.sbSignIn(email.trim(), password);
+      const user = await withTimeout(window.sbSignIn(email.trim(), password), 15000);
       // Défense en profondeur : vérifier l'appartenance à admin_users.
       // Un compte non-admin (ex. client espace-client) est déconnecté
       // immédiatement plutôt que de voir une interface d'admin cassée.
-      const isAdmin = await window.sbIsAdmin();
+      const isAdmin = await withTimeout(window.sbIsAdmin(), 15000);
       if (!isAdmin) {
         await window.sbSignOut();
         setError("Ce compte n'a pas les droits d'administration.");

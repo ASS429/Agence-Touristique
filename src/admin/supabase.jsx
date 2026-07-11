@@ -16,11 +16,35 @@ import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL      = window.__ACT_SUPABASE_URL__      || 'https://divcmjwqgsdkdsdrjwbg.supabase.co';
 const SUPABASE_ANON_KEY = window.__ACT_SUPABASE_ANON_KEY__ || 'sb_publishable_TzKuydg2b8QXUJSztNiW9A_NVAY6pD7';
 
+// Verrou résilient pour l'auth (remplace le navigator.locks par défaut).
+// Problème résolu : signInWithPassword / refresh peuvent rester bloqués
+// indéfiniment sur un verrou navigator.locks périmé (laissé par un onglet ou
+// un chargement précédent) → le bouton « Se connecter » tourne sans fin.
+// Ici, si le verrou n'est pas acquis en 5 s, on exécute l'opération SANS
+// verrou plutôt que de bloquer l'interface.
+async function resilientLock(name, acquireTimeout, fn) {
+  if (typeof navigator === 'undefined' || !navigator.locks || !navigator.locks.request) {
+    return await fn();
+  }
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), acquireTimeout > 0 ? acquireTimeout : 5000);
+  try {
+    return await navigator.locks.request(name, { signal: controller.signal }, async () => {
+      clearTimeout(timer);
+      return await fn();
+    });
+  } catch (_e) {
+    clearTimeout(timer);
+    return await fn();  // verrou indisponible/périmé : on n'attend pas indéfiniment
+  }
+}
+
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    storageKey: 'act-admin-session'
+    storageKey: 'act-admin-session',
+    lock: resilientLock
   }
 });
 
