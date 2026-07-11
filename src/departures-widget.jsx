@@ -1,3 +1,7 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { SITE } from './shared.jsx';
 // =====================================================================
 // src/departures-widget.jsx — Widget calendrier des départs
 //
@@ -158,4 +162,5 @@ const DeparturesWidget = ({ circuitSlug, circuitTitle, go }) => {
   );
 };
 
-window.DeparturesWidget = DeparturesWidget;
+if (typeof window !== 'undefined') window.DeparturesWidget = DeparturesWidget;
+export { DeparturesWidget };

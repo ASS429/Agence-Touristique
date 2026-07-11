@@ -1,3 +1,7 @@
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Btn, Footer, PageHero, Section, SITE } from './shared.jsx';
+import { IMG } from './data.jsx';
 // =====================================================================
 // src/mice.jsx — Page MICE (Meetings, Incentives, Conferences, Events)
 //
@@ -157,4 +161,5 @@ const Mice = ({ go }) => {
   );
 };
 
-window.Mice = Mice;
+if (typeof window !== 'undefined') window.Mice = Mice;
+export { Mice };

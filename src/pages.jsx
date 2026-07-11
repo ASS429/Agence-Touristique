@@ -1,3 +1,10 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Photo } from './photo.jsx';
+import { Btn, Footer, PageHero, Section, buildWaURL, SITE } from './shared.jsx';
+import { FAQ, VALUES, FIGURES, IMG } from './data.jsx';
+import { DestinationsMap } from './map.jsx';
 // Contact + À propos + FAQ pages — grouped to keep file count tight.
 
 // ============================================================================
@@ -710,4 +717,5 @@ const NotFound = ({ go, route }) => {
   );
 };
 
-Object.assign(window, { Contact, About, Faq, Mentions, Privacy, Cgv, NotFound });
+if (typeof window !== 'undefined') Object.assign(window, { Contact, About, Faq, Mentions, Privacy, Cgv, NotFound });
+export { Contact, About, Faq, Mentions, Privacy, Cgv, NotFound };

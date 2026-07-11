@@ -1,3 +1,6 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { DESTINATIONS } from './data.jsx';
 // =====================================================================
 // src/map.jsx — Carte interactive des destinations ACT
 //
@@ -139,5 +142,6 @@ const DestinationsMap = ({ go }) => {
 };
 
 // Export global (pas de modules ES)
-window.DestinationsMap = DestinationsMap;
+if (typeof window !== 'undefined') window.DestinationsMap = DestinationsMap;
+export { DestinationsMap };
 window.DEST_COORDS = DEST_COORDS;

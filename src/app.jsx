@@ -1,6 +1,28 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './supabase-public.jsx';   // side-effect : loaders Supabase (window.*)
+import { I18nProvider, useRouter } from './i18n.jsx';
+import { PromoBanner, Header, WhatsAppFloat, CookieConsent, UpdateNotifier } from './shared.jsx';
+import { CIRCUITS, BLOG } from './data.jsx';
+import { Home } from './home.jsx';
+import { Tour } from './tour.jsx';
+import { Catalog } from './catalog.jsx';
+import { Excursions } from './excursions.jsx';
+import { Croisieres } from './croisieres.jsx';
+import { Ateliers } from './ateliers.jsx';
+import { Custom } from './custom.jsx';
+import { BlogList, BlogArticle } from './blog.jsx';
+import { CarnetVoyage } from './carnet.jsx';
+import { ClientSpace } from './monespace.jsx';
+import { Contact, About, Faq, Mentions, Privacy, Cgv, NotFound } from './pages.jsx';
+import { Mice } from './mice.jsx';
+// content.jsx APRÈS data/i18n : son enrichissement synchrone lit window.DICT/
+// BLOG/FAQ (peuplés par l'interop de data.jsx et i18n.jsx).
+import './content.jsx';            // side-effect : window.useContentVersion, pickLang
 // App: router + i18n provider + page switching.
 
 const AppShell = () => {
+  const Tweaks = (typeof window !== 'undefined' && window.SiteTweaks) || null;
   const { route, params, go } = useRouter();
   const [tourId, setTourId] = React.useState(params.id || 'goree-lac-saloum');
   const [articleId, setArticleId] = React.useState(params.id || BLOG[0].id);
@@ -113,9 +135,9 @@ const AppShell = () => {
       <WhatsAppFloat message={waMessage} bottomOffset={bottomOffset}/>
       <CookieConsent/>
       <UpdateNotifier/>
-      {/* Tweaks panel — visible en dev (localhost) et à la demande en prod via ?tweaks=1 */}
+      {/* Tweaks panel — dev-only, chargé séparément (window.SiteTweaks) */}
       {(['localhost','127.0.0.1'].includes(window.location.hostname)
-        || window.location.search.includes('tweaks=1')) && <SiteTweaks/>}
+        || window.location.search.includes('tweaks=1')) && Tweaks && <Tweaks/>}
     </div>
   );
 };

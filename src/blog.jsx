@@ -1,3 +1,9 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Photo } from './photo.jsx';
+import { Btn, Footer, Header, PageHero, Section, buildWaURL } from './shared.jsx';
+import { BLOG, BLOG_CATEGORIES, CIRCUITS, IMG } from './data.jsx';
 // Blog — list page + article detail page.
 
 // =============== List page ==================================================
@@ -340,4 +346,5 @@ const ArticleBody = ({ article, lang }) => {
   );
 };
 
-Object.assign(window, { BlogList, BlogArticle });
+if (typeof window !== 'undefined') Object.assign(window, { BlogList, BlogArticle });
+export { BlogList, BlogArticle };

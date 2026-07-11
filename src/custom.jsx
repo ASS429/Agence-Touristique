@@ -1,3 +1,9 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Photo } from './photo.jsx';
+import { Btn, CircuitCard, Footer, PageHero, Price, Section, buildWaURL, SITE } from './shared.jsx';
+import { CIRCUITS, DESTINATIONS, IMG } from './data.jsx';
 // Voyage sur mesure — multi-step guided form with suggestions before contact step.
 // Les libellés affichés sont résolus côté JSX via t() avec fallback FR.
 // Les data lists ne portent que l'id + la logique métier (days, tone, icône).
@@ -569,4 +575,5 @@ const CustomConfirm = ({ form, picked, go, onOpenTour }) => {
   );
 };
 
-Object.assign(window, { Custom });
+if (typeof window !== 'undefined') Object.assign(window, { Custom });
+export { Custom };

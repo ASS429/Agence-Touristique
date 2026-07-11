@@ -1,3 +1,9 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Photo } from './photo.jsx';
+import { Btn, CircuitCard, Footer, PageHero } from './shared.jsx';
+import { EXCURSIONS, DESTINATIONS, IMG } from './data.jsx';
 // Excursions — page catalogue des activités courtes (demi-journée / journée).
 // Décision ACT (juin 2026) : séparer Circuits / Excursions / Croisières.
 // Réutilise CircuitCard et le pattern de filtres du catalogue principal,
@@ -247,4 +253,5 @@ const Excursions = ({ go, onOpenTour }) => {
   );
 };
 
-Object.assign(window, { Excursions });
+if (typeof window !== 'undefined') Object.assign(window, { Excursions });
+export { Excursions };

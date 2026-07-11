@@ -1,3 +1,8 @@
+import React from 'react';
+import { useI18n } from './i18n.jsx';
+import { Icons } from './icons.jsx';
+import { Btn, CircuitCard, Footer, PageHero } from './shared.jsx';
+import { CIRCUITS, DESTINATIONS, IMG } from './data.jsx';
 // Catalogue des circuits — sticky filters (desktop) + drawer (mobile)
 // + grid + pagination + empty state.
 
@@ -287,4 +292,5 @@ const Catalog = ({ go, onOpenTour, initialFilter }) => {
   );
 };
 
-Object.assign(window, { Catalog });
+if (typeof window !== 'undefined') Object.assign(window, { Catalog });
+export { Catalog };
