@@ -1,5 +1,7 @@
 import React from 'react';
-import { jsPDF } from 'jspdf';
+// jsPDF est chargé à la DEMANDE (import dynamique dans generateDevisPDF) pour
+// ne pas alourdir le bundle initial de l'admin — il n'est utile que lors de
+// la génération d'un devis PDF.
 
 // =====================================================================
 // src/admin/pdf-devis.jsx — Générateur de devis PDF
@@ -74,6 +76,7 @@ function refNumber(req) {
 // generateDevis(request, opts) — produit un PDF prêt à télécharger.
 // =====================================================================
 async function generateDevisPDF(request, opts = {}) {
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
   const W = doc.internal.pageSize.getWidth();  // 210
   const H = doc.internal.pageSize.getHeight(); // 297
