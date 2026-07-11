@@ -103,6 +103,14 @@ async function sbGetUser() {
   return data.user;
 }
 
+// Lecture RAPIDE de la session (locale, sans appel réseau au serveur auth).
+// Utilisée pour la vérification initiale au chargement de l'admin : évite
+// que le spinner tourne indéfiniment si getUser() (réseau) traîne.
+async function sbGetSession() {
+  const { data } = await sb.auth.getSession();
+  return data.session?.user || null;
+}
+
 // Vérifie que l'utilisateur connecté est bien un administrateur autorisé
 // (membre de la table admin_users, via la fonction SQL is_admin()).
 // Défense en profondeur : même si un compte client (magic link espace
@@ -129,9 +137,9 @@ function sbOnAuthChange(cb) {
 const SUPABASE_CONFIGURED = !SUPABASE_URL.includes('REPLACE-ME') && SUPABASE_ANON_KEY !== 'REPLACE-ME';
 if (typeof window !== 'undefined') Object.assign(window, {
   SB: sb, sbList, sbGet, sbInsert, sbUpdate, sbDelete, sbUpload, sbRemoveStorage,
-  sbSignIn, sbSignOut, sbGetUser, sbIsAdmin, sbOnAuthChange, SUPABASE_CONFIGURED,
+  sbSignIn, sbSignOut, sbGetUser, sbGetSession, sbIsAdmin, sbOnAuthChange, SUPABASE_CONFIGURED,
 });
 export {
   sb as SB, sbList, sbGet, sbInsert, sbUpdate, sbDelete, sbUpload, sbRemoveStorage,
-  sbSignIn, sbSignOut, sbGetUser, sbIsAdmin, sbOnAuthChange, SUPABASE_CONFIGURED,
+  sbSignIn, sbSignOut, sbGetUser, sbGetSession, sbIsAdmin, sbOnAuthChange, SUPABASE_CONFIGURED,
 };

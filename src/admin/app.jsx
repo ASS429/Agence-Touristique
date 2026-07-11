@@ -43,17 +43,24 @@ function AdminApp() {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    // Vérifie la session au chargement + l'appartenance à admin_users.
-    // Une session restaurée d'un compte non-admin est rejetée (fail-closed).
-    window.sbGetUser().then(async u => {
+    let settled = false;
+    const finishChecking = () => { if (!settled) { settled = true; setChecking(false); } };
+    // Filet de sécurité : ne JAMAIS rester bloqué sur le spinner, même si un
+    // appel réseau traîne. Au pire, on affiche l'écran de login après 8 s.
+    const safety = setTimeout(finishChecking, 8000);
+
+    // Vérif initiale via getSession (LECTURE LOCALE, instantanée) plutôt que
+    // getUser() (appel réseau au serveur auth, qui pouvait faire tourner le
+    // spinner indéfiniment sur connexion lente). is_admin() (RPC) valide
+    // ensuite l'appartenance à admin_users côté serveur.
+    window.sbGetSession().then(async u => {
       if (u && await window.sbIsAdmin()) {
         setUser(u);
       } else {
         if (u) await window.sbSignOut();  // session client résiduelle : on la ferme
         setUser(null);
       }
-      setChecking(false);
-    }).catch(() => setChecking(false));
+    }).catch(() => {}).finally(() => { clearTimeout(safety); finishChecking(); });
 
     // Écoute les changements d'auth (logout, refresh token, etc.).
     // On revalide is_admin() à chaque changement de session.
@@ -61,7 +68,7 @@ function AdminApp() {
       if (u && await window.sbIsAdmin()) setUser(u);
       else setUser(null);
     });
-    return () => sub?.subscription?.unsubscribe?.();
+    return () => { clearTimeout(safety); sub?.subscription?.unsubscribe?.(); };
   }, []);
 
   // Redirige vers #/dashboard si aucune section n'est active
