@@ -18,6 +18,8 @@ jobs:
         run: npm ci
       - name: Build (public + admin)
         run: npm run build
-      # Le build Rollup échoue si un import nommé ne résout pas.
-      # Pour les erreurs runtime (ex. composant utilisé sans import), lancer
-      # localement `npm run smoke` (headless Chrome sur les routes clés).
+      # Smoke : rend chaque route en headless (Chrome préinstallé sur les
+      # runners ubuntu) et vérifie le contenu → attrape les erreurs runtime
+      # type « composant utilisé sans import » que le build ne voit pas.
+      - name: Smoke test (routes)
+        run: npm run smoke
