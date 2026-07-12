@@ -609,6 +609,7 @@ const NewsletterForm = () => {
   const [email, setEmail] = React.useState('');
   const [name, setName] = React.useState('');
   const [status, setStatus] = React.useState('idle'); // idle | sending | success | error
+  const [okKind, setOkKind] = React.useState('pending'); // pending | already
   const [errorMsg, setErrorMsg] = React.useState('');
   const [hp, setHp] = React.useState('');             // honeypot anti-bot
   const startedAt = React.useRef(Date.now());         // timing anti-bot
@@ -637,6 +638,7 @@ const NewsletterForm = () => {
           ? t('newsletter.error.exists', 'Vous êtes déjà abonné à cette newsletter.')
           : t('newsletter.error.generic', 'Envoi impossible. Réessayez plus tard.'));
       } else {
+        setOkKind(r?.already ? 'already' : 'pending');
         setStatus('success');
         setEmail(''); setName('');
       }
@@ -647,13 +649,19 @@ const NewsletterForm = () => {
   };
 
   if (status === 'success') {
+    const title = okKind === 'already'
+      ? t('newsletter.already.title', 'Vous êtes déjà abonné')
+      : t('newsletter.checkInbox.title', 'Vérifiez votre boîte mail');
+    const body = okKind === 'already'
+      ? t('newsletter.already.body', 'Cette adresse est déjà inscrite et confirmée. Merci !')
+      : t('newsletter.checkInbox.body', 'Un email de confirmation vient de vous être envoyé. Cliquez sur le lien pour finaliser votre inscription.');
     return (
       <div className="rounded-2xl bg-sand-50/10 border border-sand-50/20 p-5">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-full bg-terre-600 text-sand-50 inline-flex items-center justify-center"><Icons.Check size={16}/></div>
           <div>
-            <div className="font-display text-[20px] text-sand-50 leading-none">{t('newsletter.success.title', 'Merci !')}</div>
-            <div className="text-sand-200 text-[13px] mt-1">{t('newsletter.success.body', 'Vous recevrez nos prochaines actualités par email.')}</div>
+            <div className="font-display text-[20px] text-sand-50 leading-none">{title}</div>
+            <div className="text-sand-200 text-[13px] mt-1">{body}</div>
           </div>
         </div>
       </div>

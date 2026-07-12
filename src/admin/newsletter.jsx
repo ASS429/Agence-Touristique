@@ -35,6 +35,7 @@ function NewsletterPage() {
   const filtered = useMemo(() => {
     let f = items;
     if (statusFilter === 'active')       f = f.filter(r => !r.unsubscribed);
+    if (statusFilter === 'pending')      f = f.filter(r => r.confirmed === false && !r.unsubscribed);
     if (statusFilter === 'unsubscribed') f = f.filter(r =>  r.unsubscribed);
     if (langFilter !== 'all') f = f.filter(r => r.language === langFilter);
     if (query.trim()) {
@@ -94,6 +95,7 @@ function NewsletterPage() {
   // Stats
   const activeSubs = items.filter(r => !r.unsubscribed).length;
   const unsubs = items.length - activeSubs;
+  const pending = items.filter(r => r.confirmed === false && !r.unsubscribed).length;
   const monthAgo = Date.now() - 30 * 24 * 3600 * 1000;
   const newThisMonth = items.filter(r => new Date(r.created_at).getTime() > monthAgo).length;
   const rateUnsub = items.length ? Math.round((unsubs / items.length) * 100) / 10 : 0;
@@ -101,7 +103,7 @@ function NewsletterPage() {
   const stats = [
     { icon: <Icon name="mail" size={16}/>, label: 'Abonnés actifs',   value: activeSubs, sub: 'total' },
     { icon: <Icon name="arrow" size={16}/>, label: 'Nouveaux (30 j)', value: newThisMonth, delta: newThisMonth > 0 ? `+${newThisMonth}` : '0', deltaVariant: 'up', sub: 'ce mois' },
-    { icon: <Icon name="star" size={16}/>, label: 'Taux ouverture',   value: '—', sub: 'à venir Phase 3' },
+    { icon: <Icon name="clock" size={16}/>, label: 'À confirmer',     value: pending, sub: 'double opt-in' },
     { icon: <Icon name="star" size={16}/>, label: 'Désabonnés',       value: `${rateUnsub}%`, sub: `${unsubs} personne${unsubs > 1 ? 's' : ''}` }
   ];
 
@@ -109,9 +111,10 @@ function NewsletterPage() {
   const sourceLabel = { footer: 'Footer', popup: 'Popup', contact: 'Contact', manual: 'Manuel' };
 
   const statusFilters = [
-    { id: 'active',       label: 'Actifs',     count: activeSubs },
-    { id: 'unsubscribed', label: 'Désabonnés', count: unsubs },
-    { id: 'all',          label: 'Tous',       count: items.length }
+    { id: 'active',       label: 'Actifs',      count: activeSubs },
+    { id: 'pending',      label: 'À confirmer', count: pending },
+    { id: 'unsubscribed', label: 'Désabonnés',  count: unsubs },
+    { id: 'all',          label: 'Tous',        count: items.length }
   ];
 
   return (
@@ -174,7 +177,14 @@ function NewsletterPage() {
               style={{ gridTemplateColumns: 'minmax(0,2.4fr) 1fr 1fr 1fr 100px' }}
             >
               <div className="min-w-0">
-                <div className="font-semibold text-[14px] text-ink-800 truncate">{row.email}</div>
+                <div className="font-semibold text-[14px] text-ink-800 truncate flex items-center gap-2">
+                  <span className="truncate">{row.email}</span>
+                  {row.confirmed === false && !row.unsubscribed && (
+                    <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-warn-100 text-warn-600 text-[10.5px] font-medium px-2 py-0.5" title="En attente de confirmation (double opt-in)">
+                      <Icon name="clock" size={11}/> à confirmer
+                    </span>
+                  )}
+                </div>
                 <div className="text-[12px] text-mute-500 truncate">{row.full_name || '—'}</div>
               </div>
               <div className="text-[13px] text-mute-700">{langLabel[row.language] || row.language}</div>

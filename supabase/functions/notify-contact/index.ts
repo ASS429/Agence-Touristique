@@ -1,10 +1,13 @@
 // =====================================================================
 // Supabase Edge Function : notify-contact
 //
-// Déclenchée par un Database Webhook sur INSERT dans contact_requests.
-// Envoie deux emails via Resend :
-//   1. À ACT   : notification d'une nouvelle demande (avec le détail)
-//   2. Au client : accusé de réception localisé (si email fourni)
+// Trois rôles selon le payload reçu :
+//   • (défaut) contact  — INSERT contact_requests → 2 emails Resend
+//        1. À ACT   : notification d'une nouvelle demande (avec le détail)
+//        2. Au client : accusé de réception localisé (si email fourni)
+//   • action:"newsletter_subscribe" — double opt-in : insère l'abonné en
+//        confirmed=false (service role) + envoie l'email de confirmation.
+//   • action:"newsletter_confirm"   — valide le token → confirmed=true.
 //
 // Secrets requis (Dashboard → Edge Functions → Manage secrets) :
 //   RESEND_API_KEY   : clé API Resend (re_...)
@@ -14,9 +17,16 @@
 //                       le domaine vérifié ; sinon "onboarding@resend.dev")
 //   WEBHOOK_SECRET   : (optionnel) jeton partagé pour authentifier l'appel
 //                      — comparé à l'en-tête x-webhook-secret du webhook.
+//                      ⚠️ NE PAS définir tant que le formulaire public appelle
+//                      la fonction sans ce header (sinon 401 sur newsletter).
+//   SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY : injectés automatiquement par
+//                      Supabase — utilisés pour l'écriture newsletter.
 //
 // Déploiement : voir supabase/functions/README.md
 // =====================================================================
+
+// Origine publique utilisée dans le lien de confirmation newsletter.
+const SITE_URL = Deno.env.get("SITE_URL") || "https://act-senegal.com";
 
 interface ContactRow {
   id?: string;
@@ -94,7 +104,148 @@ async function sendEmail(apiKey: string, payload: Record<string, unknown>): Prom
   return true;
 }
 
+// ---------------------------------------------------------------------
+// NEWSLETTER — double opt-in
+// ---------------------------------------------------------------------
+
+const NL_SUBJECT: Record<string, string> = {
+  fr: "Confirmez votre inscription à la newsletter — Africa Connection Tours",
+  en: "Confirm your newsletter subscription — Africa Connection Tours",
+  it: "Conferma l'iscrizione alla newsletter — Africa Connection Tours",
+  de: "Bestätigen Sie Ihr Newsletter-Abonnement — Africa Connection Tours",
+};
+
+const NL_TEXT: Record<string, { lead: string; btn: string; foot: string }> = {
+  fr: { lead: "Merci de votre intérêt pour Africa Connection Tours. Pour finaliser votre inscription à notre newsletter, confirmez votre adresse en cliquant sur le lien ci-dessous.", btn: "Confirmer mon inscription", foot: "Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet email." },
+  en: { lead: "Thank you for your interest in Africa Connection Tours. To complete your newsletter subscription, please confirm your address using the link below.", btn: "Confirm my subscription", foot: "If you did not request this, you can safely ignore this email." },
+  it: { lead: "Grazie per il tuo interesse per Africa Connection Tours. Per completare l'iscrizione alla newsletter, conferma il tuo indirizzo tramite il link qui sotto.", btn: "Conferma l'iscrizione", foot: "Se non hai richiesto questo, ignora semplicemente questa email." },
+  de: { lead: "Vielen Dank für Ihr Interesse an Africa Connection Tours. Um Ihr Newsletter-Abonnement abzuschließen, bestätigen Sie bitte Ihre Adresse über den untenstehenden Link.", btn: "Abonnement bestätigen", foot: "Falls Sie dies nicht angefordert haben, ignorieren Sie diese E-Mail einfach." },
+};
+
+function buildNewsletterHtml(lang: string, link: string): string {
+  const t = NL_TEXT[lang] || NL_TEXT.fr;
+  return `
+  <div style="font-family:system-ui,sans-serif;max-width:520px;margin:auto">
+    <h2 style="color:#C8593B;margin:0 0 12px">Africa Connection Tours</h2>
+    <p style="font-size:14px;line-height:1.6;color:#26211B">${t.lead}</p>
+    <p style="margin:22px 0">
+      <a href="${link}" style="display:inline-block;background:#C8593B;color:#fff;text-decoration:none;padding:12px 22px;border-radius:999px;font-size:14px;font-weight:600">${t.btn}</a>
+    </p>
+    <p style="font-size:12px;color:#9C8F79;line-height:1.5">${t.foot}<br>${link}</p>
+  </div>`;
+}
+
+// Appel PostgREST authentifié service role (écriture newsletter).
+async function pgrest(method: string, path: string, body?: unknown): Promise<Response> {
+  const url = Deno.env.get("SUPABASE_URL");
+  const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!url || !key) throw new Error("SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY manquants");
+  return await fetch(`${url}/rest/v1/${path}`, {
+    method,
+    headers: {
+      "apikey": key,
+      "Authorization": `Bearer ${key}`,
+      "Content-Type": "application/json",
+      "Prefer": "return=representation",
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+}
+
+async function handleNewsletterSubscribe(apiKey: string, from: string, body: Record<string, unknown>): Promise<Response> {
+  const email = String(body.email || "").trim().toLowerCase();
+  const lang = String(body.language || "fr").toLowerCase();
+  const name = String(body.full_name || "").trim();
+  if (!/.+@.+\..+/.test(email)) {
+    return json({ error: "invalid_email" }, 400);
+  }
+
+  // Existe déjà ?
+  const look = await pgrest("GET", `newsletter_subscribers?email=eq.${encodeURIComponent(email)}&select=id,confirmed,confirm_token,unsubscribed`);
+  const rows = await look.json().catch(() => []);
+  let token: string;
+
+  if (Array.isArray(rows) && rows.length > 0) {
+    const row = rows[0];
+    if (row.confirmed === true && row.unsubscribed !== true) {
+      return json({ ok: true, already: true }); // déjà abonné et confirmé
+    }
+    // Non confirmé ou désabonné → on réactive et on redemande confirmation.
+    token = row.confirm_token;
+    await pgrest("PATCH", `newsletter_subscribers?id=eq.${row.id}`, {
+      confirmed: false, unsubscribed: false, language: lang,
+      ...(name ? { full_name: name } : {}),
+    });
+  } else {
+    const ins = await pgrest("POST", "newsletter_subscribers", {
+      email, full_name: name || null, language: lang,
+      source: String(body.source || "footer"), confirmed: false,
+    });
+    if (!ins.ok) {
+      console.error("newsletter insert error", ins.status, await ins.text());
+      return json({ error: "insert_failed" }, 500);
+    }
+    const created = await ins.json().catch(() => []);
+    token = Array.isArray(created) ? created[0]?.confirm_token : created?.confirm_token;
+    if (!token) return json({ error: "no_token" }, 500);
+  }
+
+  const link = `${SITE_URL}/?confirm_newsletter=${token}`;
+  await sendEmail(apiKey, {
+    from,
+    to: [email],
+    subject: NL_SUBJECT[lang] || NL_SUBJECT.fr,
+    html: buildNewsletterHtml(lang, link),
+  });
+  return json({ ok: true, pending: true });
+}
+
+async function handleNewsletterConfirm(body: Record<string, unknown>): Promise<Response> {
+  const token = String(body.token || "").trim();
+  if (!/^[0-9a-f-]{36}$/i.test(token)) return json({ error: "invalid_token" }, 400);
+
+  const upd = await pgrest("PATCH",
+    `newsletter_subscribers?confirm_token=eq.${token}&confirmed=eq.false`,
+    { confirmed: true, confirmed_at: new Date().toISOString() });
+  if (!upd.ok) {
+    console.error("newsletter confirm error", upd.status, await upd.text());
+    return json({ error: "update_failed" }, 500);
+  }
+  const updated = await upd.json().catch(() => []);
+  if (Array.isArray(updated) && updated.length > 0) {
+    return json({ ok: true, confirmed: true });
+  }
+  // Rien mis à jour : soit déjà confirmé, soit token inconnu.
+  const chk = await pgrest("GET", `newsletter_subscribers?confirm_token=eq.${token}&select=confirmed`);
+  const chkRows = await chk.json().catch(() => []);
+  if (Array.isArray(chkRows) && chkRows.length > 0) {
+    return json({ ok: true, already: true }); // déjà confirmé
+  }
+  return json({ ok: false, invalid: true }, 404);
+}
+
+function json(obj: unknown, status = 200): Response {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    },
+  });
+}
+
 Deno.serve(async (req: Request) => {
+  // Préflight CORS (appel newsletter depuis le navigateur)
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+      },
+    });
+  }
   try {
     // Authentification optionnelle du webhook
     const expected = Deno.env.get("WEBHOOK_SECRET");
@@ -111,6 +262,15 @@ Deno.serve(async (req: Request) => {
 
     // Le webhook Supabase envoie { type, table, record, old_record }
     const body = await req.json().catch(() => ({}));
+
+    // Dispatch newsletter (double opt-in) selon l'action.
+    if (body.action === "newsletter_subscribe") {
+      return await handleNewsletterSubscribe(apiKey, notifyFrom, body);
+    }
+    if (body.action === "newsletter_confirm") {
+      return await handleNewsletterConfirm(body);
+    }
+
     const r: ContactRow = body.record || body;
 
     // 1) Notification interne ACT
@@ -135,11 +295,9 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return json({ ok: true });  // json() ajoute les headers CORS
   } catch (e) {
     console.error(e);
-    return new Response(JSON.stringify({ error: String(e) }), { status: 500 });
+    return json({ error: String(e) }, 500);
   }
 });
