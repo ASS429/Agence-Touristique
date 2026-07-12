@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<!-- CSP stricte (self-hosté après migration Vite). Origines externes autorisées :
+     Sentry, Supabase, Leaflet/unpkg + tuiles OSM (via https:), GA (inactif).
+     Le header render.yaml fournit en plus frame-ancestors 'none'. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://browser.sentry-cdn.com https://www.googletagmanager.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.ingest.de.sentry.io https://formspree.io https://www.google-analytics.com https://region1.google-analytics.com; object-src 'none'; base-uri 'self'" />
 <title>Africa Connection Tours — Agence touristique Dakar depuis 1996</title>
 <meta name="description" content="Africa Connection Tours (ACT) — tour-opérateur basé à Dakar depuis 1996. Circuits, excursions, sur-mesure au Sénégal et en Afrique de l'Ouest." />
 <meta property="og:title" content="Africa Connection Tours — Agence touristique Dakar" />
