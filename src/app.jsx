@@ -5,6 +5,7 @@ import './supabase-public.jsx';   // side-effect : loaders Supabase (window.*)
 import { I18nProvider, useRouter } from './i18n.jsx';
 import { PromoBanner, Header, WhatsAppFloat, CookieConsent, UpdateNotifier } from './shared.jsx';
 import { CIRCUITS, BLOG } from './data.jsx';
+import { PageJsonLd } from './seo.jsx';
 import { Home } from './home.jsx';
 import { Tour } from './tour.jsx';
 import { Catalog } from './catalog.jsx';
@@ -132,6 +133,7 @@ const AppShell = () => {
       </a>
       <PromoBanner go={navigate} onHeightChange={setPromoHeight}/>
       <Header route={route} go={navigate} topOffset={promoHeight}/>
+      <PageJsonLd route={route} params={params} tourId={tourId} articleId={articleId}/>
       <div id="main-content" role="main">{showPage()}</div>
       <WhatsAppFloat message={waMessage} bottomOffset={bottomOffset}/>
       <CookieConsent/>
