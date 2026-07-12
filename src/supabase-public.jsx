@@ -42,6 +42,21 @@
     document.head.appendChild(s);
   });
 
+  // Client Supabase UNIQUE mémoïsé. Évite de créer plusieurs instances
+  // GoTrueClient sous la même clé de stockage (avertissement console +
+  // comportement d'auth indéfini). persistSession:false car le site public
+  // ne gère pas de session.
+  let _sbClient = null;
+  const getSb = async () => {
+    await ensureSupabaseClient();
+    if (!_sbClient) {
+      _sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false }
+      });
+    }
+    return _sbClient;
+  };
+
   // Convertit les colonnes _fr/_en/_it/_de en un objet i18n consommable
   // par le site : { title: 'FR', title_en: 'EN', title_it: 'IT', title_de: 'DE' }
   // Pour compatibilité avec richT() du contexte i18n existant.
@@ -61,10 +76,7 @@
 
   window.actLoadFromSupabase = async function() {
     try {
-      await ensureSupabaseClient();
-      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: { persistSession: false }
-      });
+      const sb = await getSb();
 
       // On charge en parallèle. Les erreurs par table ne bloquent pas
       // le reste : chaque promesse échoue silencieusement en gardant
@@ -123,10 +135,7 @@
   window.actSaveContactRequest = async function(payload) {
     if (!configured) return { skipped: true };
     try {
-      await ensureSupabaseClient();
-      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: { persistSession: false }
-      });
+      const sb = await getSb();
       const { error } = await sb.from('contact_requests').insert(payload);
       if (error) throw error;
       if (window.console) console.log('[ACT] Demande enregistrée en base');
@@ -157,10 +166,7 @@
   window.actSubscribeNewsletter = async function(payload) {
     if (!configured) return { skipped: true };
     try {
-      await ensureSupabaseClient();
-      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: { persistSession: false }
-      });
+      const sb = await getSb();
       const { error } = await sb.from('newsletter_subscribers').insert(payload);
       if (error) throw error;
       if (window.console) console.log('[ACT] Abonnement newsletter enregistré');
