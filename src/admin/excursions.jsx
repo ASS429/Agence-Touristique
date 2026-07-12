@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GalleryEditor, MultilangListEditor } from './circuits.jsx';
 import { Icon } from './icons.jsx';
 import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
-import { EditorLayout, ItemsTable, ListToolbar, PagePad, Thumb, useCollection } from './list-editor.jsx';
+import { DraftRestoreBar, EditorLayout, ItemsTable, ListToolbar, PagePad, Thumb, readDraft, useAutosave, useCollection } from './list-editor.jsx';
 import { Field, Input, LangDots, Select, StatusPill, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
@@ -29,8 +29,7 @@ function ExcursionsPage() {
 
   const onDelete = async (row) => {
     if (!(await window.askConfirm(`Supprimer l'excursion "${row.title_fr}" ?`, 'Supprimer'))) return;
-    await col.remove(row.id);
-    window.toast('Excursion supprimée', 'success');
+    await col.remove(row.id, 'Excursion supprimée');
   };
 
   const onDuplicate = async (row) => {
@@ -92,6 +91,9 @@ function ExcursionEditor({ excursion, onClose, col }) {
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState('general');
   const isNew = !excursion.id;
+  const initialDraft = React.useRef(readDraft('excursions', excursion.id)).current;
+  const [showRestore, setShowRestore] = useState(!!initialDraft);
+  const { clearDraft } = useAutosave('excursions', excursion.id, form, excursion);
   const set = (patch) => setForm(f => ({ ...f, ...patch }));
 
   useEffect(() => {
@@ -108,6 +110,7 @@ function ExcursionEditor({ excursion, onClose, col }) {
       delete payload.updated_at;
       if (isNew) { delete payload.id; await col.create(payload); window.toast('Excursion créée', 'success'); }
       else       { await col.update(excursion.id, payload); window.toast('Enregistré', 'success'); }
+      clearDraft();
       onClose();
     } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
     finally { setSaving(false); }
@@ -138,6 +141,7 @@ function ExcursionEditor({ excursion, onClose, col }) {
       publishLabel="Publier l'excursion"
       footerLeft={excursion.updated_at && <><Icon name="clock" size={13}/> {timeAgo(excursion.updated_at)}</>}
     >
+      {showRestore && <DraftRestoreBar onRestore={() => { setForm(initialDraft); setShowRestore(false); }} onDismiss={() => { setShowRestore(false); clearDraft(); }}/>}
       {tab === 'general' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Slug (URL)" required>

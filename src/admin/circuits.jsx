@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Icon } from './icons.jsx';
 import { LangPills, MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
-import { EditorLayout, ItemsTable, ListToolbar, PagePad, Thumb, useCollection } from './list-editor.jsx';
+import { DraftRestoreBar, EditorLayout, ItemsTable, ListToolbar, PagePad, Thumb, readDraft, useAutosave, useCollection } from './list-editor.jsx';
 import { ActionBtn, Field, Input, LangDots, Select, StatusPill, mediaSrc, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
@@ -30,8 +30,7 @@ function CircuitsPage() {
 
   const onDelete = async (row) => {
     if (!(await window.askConfirm(`Supprimer le circuit "${row.title_fr}" ?`, 'Supprimer'))) return;
-    await col.remove(row.id);
-    window.toast('Circuit supprimé', 'success');
+    await col.remove(row.id, 'Circuit supprimé');
   };
 
   const onDuplicate = async (row) => {
@@ -112,6 +111,10 @@ function CircuitEditor({ circuit, onClose, col }) {
   const [tab, setTab] = useState('itineraire');
   const isNew = !circuit.id;
 
+  const initialDraft = React.useRef(readDraft('circuits', circuit.id)).current;
+  const [showRestore, setShowRestore] = useState(!!initialDraft);
+  const { clearDraft } = useAutosave('circuits', circuit.id, form, circuit);
+
   const set = (patch) => setForm(f => ({ ...f, ...patch }));
 
   // Auto-slug depuis le titre FR à la création
@@ -139,6 +142,7 @@ function CircuitEditor({ circuit, onClose, col }) {
         window.toast(publish === true  ? 'Circuit publié'   :
                      publish === false ? 'Circuit dépublié' : 'Modifications enregistrées', 'success');
       }
+      clearDraft();
       onClose();
     } catch (e) {
       window.toast('Erreur : ' + e.message, 'error');
@@ -173,6 +177,7 @@ function CircuitEditor({ circuit, onClose, col }) {
       publishLabel="Publier le circuit"
       footerLeft={circuit.updated_at && <><Icon name="clock" size={13}/> Dernière modif. {timeAgo(circuit.updated_at)}</>}
     >
+      {showRestore && <DraftRestoreBar onRestore={() => { setForm(initialDraft); setShowRestore(false); }} onDismiss={() => { setShowRestore(false); clearDraft(); }}/>}
       {tab === 'general' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
