@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build (public + admin)
+        run: npm run build
+      # Le build Rollup échoue si un import nommé ne résout pas.
+      # Pour les erreurs runtime (ex. composant utilisé sans import), lancer
+      # localement `npm run smoke` (headless Chrome sur les routes clés).
