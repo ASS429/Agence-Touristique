@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Icon } from './icons.jsx';
 import { LangPills, MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
 import { EditorLayout, ItemsTable, ListToolbar, PagePad, Thumb, useCollection } from './list-editor.jsx';
-import { ActionBtn, Field, Input, LangDots, Select, StatusPill, timeAgo, truncate } from './ui.jsx';
+import { ActionBtn, Field, Input, LangDots, Select, StatusPill, mediaSrc, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
 // src/admin/circuits.jsx — CRUD Circuits (design refondu)
@@ -203,7 +203,7 @@ function CircuitEditor({ circuit, onClose, col }) {
           <Field label="Photo hero (16:9)">
             {form.hero_photo ? (
               <div className="relative h-[150px] rounded-2xl overflow-hidden border border-bone-300">
-                <img src={form.hero_photo} alt="" className="w-full h-full object-cover"/>
+                <img src={mediaSrc(form.hero_photo)} alt="" className="w-full h-full object-cover"/>
                 <button onClick={() => set({ hero_photo: '' })} className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 text-danger-600 flex items-center justify-center shadow"><Icon name="trash" size={14}/></button>
               </div>
             ) : (
@@ -495,7 +495,7 @@ function GalleryEditor({ value, onChange }) {
         {value.map((p, i) => (
           <div key={i} className="flex items-start gap-3 bg-white border border-bone-200 rounded-2xl p-3">
             {p.url
-              ? <img src={p.url} alt="" className="w-24 h-24 object-cover rounded-xl flex-shrink-0"/>
+              ? <img src={mediaSrc(p.url)} alt="" className="w-24 h-24 object-cover rounded-xl flex-shrink-0"/>
               : <div className="w-24 h-24 rounded-xl flex-shrink-0 act-thumb-a"/>
             }
             <div className="flex-1 space-y-2">

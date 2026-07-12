@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Icon } from './icons.jsx';
-import { ActionBtn, Btn, EmptyState, Modal, Spinner } from './ui.jsx';
+import { ActionBtn, Btn, EmptyState, Modal, Spinner, mediaSrc } from './ui.jsx';
 
 // =====================================================================
 // src/admin/list-editor.jsx — Patterns liste + éditeur (design refondu)
@@ -171,7 +171,7 @@ function Thumb({ src, alt, ratio = 'act-thumb-a', size = 'md' }) {
   if (src) {
     return (
       <img
-        src={src}
+        src={mediaSrc(src)}
         alt={alt || ''}
         className="rounded-xl border border-bone-300 object-cover flex-shrink-0"
         style={{ width: s.w, height: s.h }}

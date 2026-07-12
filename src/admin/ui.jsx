@@ -35,6 +35,17 @@ function truncate(s, n = 80) {
   return s.length > n ? s.slice(0, n - 1) + '…' : s;
 }
 
+// Résout une source d'image pour l'affichage dans l'admin. Les contenus
+// stockent souvent des chemins RELATIFS (ex. 'images_du_senegal/…/x.jpg')
+// qui fonctionnent sur le site public (servi depuis /), mais 404 dans
+// l'admin (servi depuis /admin/). On les résout donc depuis la racine.
+// Les URLs absolues (http, //, data:, ou déjà /…) sont laissées intactes.
+function mediaSrc(path) {
+  if (!path || typeof path !== 'string') return path;
+  if (/^(https?:)?\/\//.test(path) || path.startsWith('/') || path.startsWith('data:')) return path;
+  return '/' + path.replace(/^\.?\//, '');
+}
+
 function formatDate(iso) {
   if (!iso) return '—';
   try {
@@ -499,14 +510,14 @@ function KpiCard({ icon, label, value, delta, deltaVariant = 'up', sub, href, on
 
 // Interop window + exports ES.
 const _uiExports = {
-  slugify, truncate, formatDate, formatDateTime, timeAgo, initials,
+  slugify, truncate, mediaSrc, formatDate, formatDateTime, timeAgo, initials,
   Btn, Field, Input, Textarea, Select, Toggle, Badge, StatusPill, ReqPill,
   LangDots, LangCompletion, ActionBtn, Avatar, Modal, toast, ToastContainer,
   askConfirm, ConfirmHost, EmptyState, Spinner, KpiCard,
 };
 if (typeof window !== 'undefined') Object.assign(window, _uiExports);
 export {
-  slugify, truncate, formatDate, formatDateTime, timeAgo, initials,
+  slugify, truncate, mediaSrc, formatDate, formatDateTime, timeAgo, initials,
   Btn, Field, Input, Textarea, Select, Toggle, Badge, StatusPill, ReqPill,
   LangDots, LangCompletion, ActionBtn, Avatar, Modal, toast, ToastContainer,
   askConfirm, ConfirmHost, EmptyState, Spinner, KpiCard,

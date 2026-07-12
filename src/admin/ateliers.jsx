@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from './icons.jsx';
 import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
 import { EditorLayout, ListToolbar, PagePad, useCollection } from './list-editor.jsx';
-import { ActionBtn, EmptyState, Field, Input, LangDots, Select, Spinner, StatusPill, timeAgo } from './ui.jsx';
+import { ActionBtn, EmptyState, Field, Input, LangDots, Select, Spinner, StatusPill, mediaSrc, timeAgo } from './ui.jsx';
 
 // =====================================================================
 // src/admin/ateliers.jsx — CRUD Ateliers (cards grid, design refondu)
@@ -65,7 +65,7 @@ function AteliersPage() {
               className="bg-white border border-bone-200 rounded-2xl overflow-hidden cursor-pointer shadow-act-card hover:shadow-act-card-hover hover:border-bone-500 transition"
             >
               <div className={`relative h-[150px] act-thumb-${['a','b','c'][i % 3]}`}>
-                {a.hero_photo && <img src={a.hero_photo} alt={a.title_fr} className="absolute inset-0 w-full h-full object-cover"/>}
+                {a.hero_photo && <img src={mediaSrc(a.hero_photo)} alt={a.title_fr} className="absolute inset-0 w-full h-full object-cover"/>}
                 <div className={`absolute left-3 top-3 px-2.5 py-1 rounded-full font-mono text-[10px] font-semibold uppercase tracking-[0.08em] ${catTone[a.category] || ''}`}>
                   {catLabel[a.category] || a.category}
                 </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Icon } from './icons.jsx';
 import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
 import { EditorLayout, ListToolbar, PagePad, useCollection } from './list-editor.jsx';
-import { ActionBtn, EmptyState, Field, Input, LangDots, Spinner, StatusPill, formatDate, timeAgo, truncate } from './ui.jsx';
+import { ActionBtn, EmptyState, Field, Input, LangDots, Spinner, StatusPill, formatDate, mediaSrc, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
 // src/admin/blog.jsx — CRUD Blog (cards horizontales, design refondu)
@@ -72,7 +72,7 @@ function BlogPage() {
             >
               <div className="w-[150px] h-[94px] rounded-xl flex-shrink-0 overflow-hidden border border-bone-300">
                 {post.hero_photo
-                  ? <img src={post.hero_photo} alt={post.title_fr} className="w-full h-full object-cover"/>
+                  ? <img src={mediaSrc(post.hero_photo)} alt={post.title_fr} className="w-full h-full object-cover"/>
                   : <div className="w-full h-full act-hero-ph"/>
                 }
               </div>

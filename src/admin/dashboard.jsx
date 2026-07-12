@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from './icons.jsx';
 import { PagePad } from './list-editor.jsx';
-import { Avatar, Btn, KpiCard, Spinner, formatDate, timeAgo, truncate } from './ui.jsx';
+import { Avatar, Btn, KpiCard, Spinner, formatDate, mediaSrc, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
 // src/admin/dashboard.jsx — Vue d'ensemble (design refondu)
@@ -204,7 +204,7 @@ function LastArticleCard({ article }) {
       <div className="font-display text-[20px] text-ink-800">Dernier article publié</div>
       <div className="mt-3.5 relative rounded-2xl overflow-hidden h-[130px] border border-bone-300">
         {article.hero_photo
-          ? <img src={article.hero_photo} alt={article.title_fr} className="w-full h-full object-cover"/>
+          ? <img src={mediaSrc(article.hero_photo)} alt={article.title_fr} className="w-full h-full object-cover"/>
           : <div className="w-full h-full act-hero-ph"/>
         }
       </div>
