@@ -1,0 +1,1414 @@
+{
+ "images_du_senegal/Casamance/01": {
+  "w": 452,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Casamance/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Casamance/03": {
+  "w": 533,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Casamance/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Casamance/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Casamance/06": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Dakar/01": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Dakar/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Dakar/03": {
+  "w": 667,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Dakar/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Dakar/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Dakar/06": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Dakar/07": {
+  "w": 512,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Dakar/08": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Delta du Saloum/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Delta du Saloum/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Delta du Saloum/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Delta du Saloum/04": {
+  "w": 320,
+  "sizes": []
+ },
+ "images_du_senegal/Delta du Saloum/05": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Delta du Saloum/06": {
+  "w": 236,
+  "sizes": []
+ },
+ "images_du_senegal/Delta du Saloum/07": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Désert de Lompoul/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Désert de Lompoul/02": {
+  "w": 600,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Désert de Lompoul/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Désert de Lompoul/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Désert de Lompoul/05": {
+  "w": 720,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Ile de gorée/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Ile de gorée/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Ile de gorée/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Ile de gorée/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Ile de gorée/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Ile de gorée/06": {
+  "w": 720,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Ile de gorée/07": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Ile de gorée/08": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Kédougou/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Kédougou/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Kédougou/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Kédougou/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Kédougou/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Kédougou/06": {
+  "w": 640,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Kédougou/07": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Kédougou/08": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Lac Rose/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Lac Rose/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Lac Rose/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Lac Rose/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Lac Rose/05": {
+  "w": 716,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Lac Rose/06": {
+  "w": 570,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National de Basse-Casamance/01": {
+  "w": 600,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National de Basse-Casamance/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National de la Langue de Barbarie/01": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National de la Langue de Barbarie/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National de la Langue de Barbarie/03": {
+  "w": 401,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National de la Langue de Barbarie/04": {
+  "w": 600,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National des Oiseaux du Djoudj/01": {
+  "w": 720,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National des Oiseaux du Djoudj/02": {
+  "w": 375,
+  "sizes": []
+ },
+ "images_du_senegal/Parc National des Oiseaux du Djoudj/03": {
+  "w": 564,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National des Oiseaux du Djoudj/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National des Oiseaux du Djoudj/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National des Îles de la Madeleine/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National des Îles de la Madeleine/02": {
+  "w": 474,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National des Îles de la Madeleine/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National des Îles de la Madeleine/04": {
+  "w": 480,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National des Îles de la Madeleine/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Delta du Saloum/01": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Delta du Saloum/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Delta du Saloum/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Delta du Saloum/04": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Delta du Saloum/05": {
+  "w": 427,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Niokolo-Koba/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Niokolo-Koba/02": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Niokolo-Koba/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Niokolo-Koba/04": {
+  "w": 630,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Niokolo-Koba/05": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc National du Niokolo-Koba/06": {
+  "w": 360,
+  "sizes": []
+ },
+ "images_du_senegal/Parc de Hanne/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc de Hanne/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc de Hanne/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Parc de Hanne/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Réserve Naturelle d'Intérêt Communautaire de la Somone/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Réserve Naturelle d'Intérêt Communautaire de la Somone/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Réserve Naturelle d'Intérêt Communautaire de la Somone/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Réserve Naturelle d'Intérêt Communautaire de la Somone/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Réserve Naturelle d'Intérêt Communautaire de la Somone/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Réserve de Bandia/01": {
+  "w": 360,
+  "sizes": []
+ },
+ "images_du_senegal/Réserve de Bandia/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Réserve de Bandia/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Réserve de Bandia/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saint-Louis/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saint-Louis/02": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saint-Louis/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saint-Louis/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saint-Louis/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saint-Louis/06": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saint-Louis/07": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saint-Louis/08": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saint-Louis/09": {
+  "w": 735,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saly/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saly/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saly/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saly/04": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saly/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saly/06": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saly/07": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/Saly/08": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/croisière/embarquement": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/embarquement-hero": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/equipage": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/equipage-hero": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/escale-croisiere": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/escale-croisiere-hero": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/escale-dakar": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/escale-dakar-hero": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/navire-quai": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/navire-quai-hero": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/pont-touristes": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/pont-touristes-hero": {
+  "w": 810,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/croisière/reportage-video-poster": {
+  "w": 1280,
+  "sizes": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "images_du_senegal/photos_act_book/artisanat/peintures-01": {
+  "w": 486,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/artisanat/tissus-01": {
+  "w": 591,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/bandia/crocodile-01": {
+  "w": 552,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/bandia/girafe-zebres-01": {
+  "w": 567,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/casamance/fleuve-01": {
+  "w": 632,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/casamance/lodge-01": {
+  "w": 640,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/casamance/mangrove-01": {
+  "w": 556,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/casamance/mangrove-02": {
+  "w": 550,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/casamance/pirogue-01": {
+  "w": 730,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/casamance/plage-pirogues-01": {
+  "w": 556,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/casamance/plage-rocheuse-01": {
+  "w": 680,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/culture/ceremonie-01": {
+  "w": 287,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/culture/dignitaire-01": {
+  "w": 259,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/culture/femmes-traditionnelles-01": {
+  "w": 611,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/architecture-01": {
+  "w": 622,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/architecture-02": {
+  "w": 696,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/building-01": {
+  "w": 1023,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/grand-theatre-01": {
+  "w": 1250,
+  "sizes": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/institution-01": {
+  "w": 642,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/institution-02": {
+  "w": 1200,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/monument-01": {
+  "w": 591,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/mosquee-01": {
+  "w": 579,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/musee-ifan-01": {
+  "w": 350,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/dakar/palais-01": {
+  "w": 598,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/palais-02": {
+  "w": 800,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/place-01": {
+  "w": 528,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/place-arts-01": {
+  "w": 500,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/pont-moderne-01": {
+  "w": 494,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/renaissance-01": {
+  "w": 634,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/sculpture-01": {
+  "w": 1000,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/statue-globe-01": {
+  "w": 554,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/dakar/statue-kora-01": {
+  "w": 556,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/divers/logo-01": {
+  "w": 841,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/divers/paysage-01": {
+  "w": 275,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/divers/tente-01": {
+  "w": 300,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/djoudj/oiseaux-01": {
+  "w": 708,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/djoudj/oiseaux-vol-01": {
+  "w": 469,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/djoudj/pelicans-01": {
+  "w": 589,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/djoudj/pelicans-02": {
+  "w": 508,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/djoudj/pelicans-nid-01": {
+  "w": 541,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/gambia/ferry-01": {
+  "w": 419,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/gambia/marche-01": {
+  "w": 898,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/gambia/monument-01": {
+  "w": 551,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/gambia/site-01": {
+  "w": 642,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/gastronomie/cuisson-01": {
+  "w": 518,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/gastronomie/thieboudienne-01": {
+  "w": 473,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/goree/ferry-01": {
+  "w": 605,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/goree/ferry-02": {
+  "w": 536,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/goree/fort-01": {
+  "w": 602,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/goree/maison-bleue-01": {
+  "w": 508,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/goree/maisons-01": {
+  "w": 518,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/goree/plage-01": {
+  "w": 630,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/goree/porte-retour-01": {
+  "w": 375,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/hotel/campement-01": {
+  "w": 620,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/hotel/lodge-cases-01": {
+  "w": 487,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/hotel/lounge-01": {
+  "w": 612,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/hotel/piscine-plage-01": {
+  "w": 815,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/hotel/plage-resort-01": {
+  "w": 449,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/kedougou/bassari-01": {
+  "w": 513,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/kedougou/bassari-02": {
+  "w": 706,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/kedougou/bassari-03": {
+  "w": 599,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/kedougou/bedik-01": {
+  "w": 411,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/kedougou/bedik-02": {
+  "w": 190,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/kedougou/cascade-01": {
+  "w": 400,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/kedougou/cascade-02": {
+  "w": 430,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/kedougou/cascade-large-01": {
+  "w": 435,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/kedougou/greniers-01": {
+  "w": 632,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/kedougou/greniers-02": {
+  "w": 549,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/kedougou/sechoir-01": {
+  "w": 553,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/lac-rose/pirogue-rose-01": {
+  "w": 551,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/lac-rose/sel-femmes-01": {
+  "w": 670,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/lac-rose/tas-sel-01": {
+  "w": 325,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/niokolo/antilope-01": {
+  "w": 214,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/niokolo/antilopes-01": {
+  "w": 561,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/niokolo/bubale-01": {
+  "w": 600,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/niokolo/entree-01": {
+  "w": 650,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/portrait/bassari-femme-01": {
+  "w": 335,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/portrait/homme-age-01": {
+  "w": 490,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saint-louis/cimetiere-01": {
+  "w": 590,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saint-louis/cimetiere-02": {
+  "w": 246,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/saint-louis/drapeau-01": {
+  "w": 893,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/saint-louis/maisons-01": {
+  "w": 498,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saint-louis/musee-naval-01": {
+  "w": 566,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saint-louis/pirogues-01": {
+  "w": 770,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saint-louis/pirogues-port-01": {
+  "w": 546,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saint-louis/plage-pirogues-01": {
+  "w": 880,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/saint-louis/pont-01": {
+  "w": 511,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saint-louis/pont-art-01": {
+  "w": 220,
+  "sizes": []
+ },
+ "images_du_senegal/photos_act_book/saloum/baobab-01": {
+  "w": 593,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saloum/baobabs-01": {
+  "w": 852,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/saloum/cases-pilotis-01": {
+  "w": 591,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saloum/ile-palmiers-01": {
+  "w": 540,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saloum/lodge-01": {
+  "w": 657,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saloum/lodge-fleuve-01": {
+  "w": 495,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saloum/pecheur-01": {
+  "w": 447,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/saloum/pilotis-01": {
+  "w": 933,
+  "sizes": [
+   400,
+   800
+  ]
+ },
+ "images_du_senegal/photos_act_book/touba/mosquee-01": {
+  "w": 430,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/village/animaux-01": {
+  "w": 593,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/village/baobab-case-01": {
+  "w": 480,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/village/case-01": {
+  "w": 615,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/village/case-02": {
+  "w": 500,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/village/case-03": {
+  "w": 560,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/village/cases-01": {
+  "w": 660,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/village/cases-02": {
+  "w": 617,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/photos_act_book/village/enfants-01": {
+  "w": 585,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/01": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/02": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/03": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/04": {
+  "w": 600,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/05": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/06": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/07": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/08": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/09": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/10": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/11": {
+  "w": 736,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/12": {
+  "w": 510,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/13": {
+  "w": 719,
+  "sizes": [
+   400
+  ]
+ },
+ "images_du_senegal/senegal_images/14": {
+  "w": 604,
+  "sizes": [
+   400
+  ]
+ }
+}

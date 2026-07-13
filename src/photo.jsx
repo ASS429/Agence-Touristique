@@ -1,4 +1,5 @@
 import React from 'react';
+import IMAGES_MANIFEST from './images-manifest.json';
 // Editorial duotone "photo" placeholders.
 // Each placeholder is a stylised gradient with optional silhouette shapes
 // and a small monospace label that says what should be slotted in.
@@ -158,10 +159,25 @@ const Photo = ({
   src,             // real image URL (optional)
   alt = '',
   priority = false, // true for above-the-fold images (hero) — eager loading + high fetch priority for LCP
+  sizes,           // srcset sizes (défaut : 100vw en hero, sinon grille responsive)
 }) => {
   const pal = PALETTES[tone] || PALETTES.terre;
   const [imgFailed, setImgFailed] = React.useState(false);
   const hasRealImage = src && !imgFailed;
+  // Variantes responsives : générées par scripts/gen-srcset.mjs et déclarées
+  // dans images-manifest.json — on n'émet un srcset QUE pour les variantes
+  // réellement présentes sur le disque (aucun 404 possible). Les images hors
+  // manifest (URL Supabase, nouvelles photos pas encore régénérées) gardent
+  // l'ancien comportement webp simple.
+  const srcBase = hasRealImage ? src.replace(/^\.?\//, '').replace(/\.(jpe?g|webp|png)$/i, '') : null;
+  const variants = (srcBase && IMAGES_MANIFEST[srcBase]) || null;
+  const webpSrcSet = variants
+    ? [...variants.sizes.map(w => `${encodeURI(srcBase)}-w${w}.webp ${w}w`),
+       `${encodeURI(srcBase)}.webp ${variants.w}w`].join(', ')
+    : (hasRealImage ? encodeURI(src.replace(/\.jpe?g$/i, '.webp')) : undefined);
+  const sizesAttr = variants
+    ? (sizes || (priority ? '100vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'))
+    : undefined;
   return (
     <div className={`relative overflow-hidden ${rounded} ${ratio || ''} ${className} grain photo-card`}>
       <Mood kind={mood} palette={pal} />
@@ -172,7 +188,7 @@ const Photo = ({
               Lompoul, Ile de gorée). Sans ça, srcset les interprète comme
               séparateur URL/descripteur et tombe sur le JPG (perte du gain
               WebP). Le <img src> est automatiquement encodé par le navigateur. */}
-          <source srcSet={encodeURI(src.replace(/\.jpe?g$/i, '.webp'))} type="image/webp"/>
+          <source srcSet={webpSrcSet} {...(sizesAttr ? { sizes: sizesAttr } : {})} type="image/webp"/>
           <img
             src={src}
             alt={alt || label || ''}
