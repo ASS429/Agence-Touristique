@@ -9,7 +9,7 @@ import { Footer, SITE } from './shared.jsx';
 // lien direct (WhatsApp, email, réseaux sociaux). Design plus proche
 // d'une brochure éditoriale que d'une fiche produit.
 //
-// Route : #/carnet/:slug — le slug correspond à circuits.slug (ou
+// Route : /carnet/:slug — le slug correspond à circuits.slug (ou
 // l'id des données statiques data.jsx). Utilise en priorité les
 // données Supabase (window.CIRCUITS_DB) si disponible.
 // =====================================================================
@@ -78,8 +78,9 @@ const CarnetVoyage = ({ slug, go }) => {
 
   const goDevis = () => {
     // Redirige vers le formulaire de contact avec le slug pré-rempli
-    window.location.hash = `#/contact?circuit=${encodeURIComponent(slug)}`;
+    window.history.pushState(null, '', `/contact?circuit=${encodeURIComponent(slug)}`);
     if (typeof go === 'function') go('contact');
+    else window.location.reload();
   };
 
   if (loading) {
@@ -98,7 +99,7 @@ const CarnetVoyage = ({ slug, go }) => {
         <p className="text-ink-600 mb-8 text-center max-w-md">
           {t('carnet.notFound.body', 'Ce carnet de voyage n\'existe pas ou n\'est plus disponible.')}
         </p>
-        <a href="#/circuits" className="px-6 py-3 rounded-full bg-terre-600 text-sand-50 font-medium hover:bg-terre-700">
+        <a href="/circuits" className="px-6 py-3 rounded-full bg-terre-600 text-sand-50 font-medium hover:bg-terre-700">
           {t('carnet.notFound.back', 'Voir tous nos circuits')}
         </a>
       </main>
@@ -237,7 +238,7 @@ const CarnetVoyage = ({ slug, go }) => {
 
         {/* Retour catalogue */}
         <div className="mt-10 text-center">
-          <a href="#/circuits" className="text-terre-700 hover:text-terre text-[14px] inline-flex items-center gap-1.5">
+          <a href="/circuits" className="text-terre-700 hover:text-terre text-[14px] inline-flex items-center gap-1.5">
             ← {t('carnet.back', 'Voir tous les circuits ACT')}
           </a>
         </div>

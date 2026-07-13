@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles.css';            // Tailwind compilé + polices self-hostées
 import './supabase-public.jsx';   // side-effect : loaders Supabase (window.*)
-import { I18nProvider, useRouter } from './i18n.jsx';
+import { I18nProvider, useRouter, routePath } from './i18n.jsx';
 import { PromoBanner, Header, WhatsAppFloat, CookieConsent, UpdateNotifier } from './shared.jsx';
 import { CIRCUITS, BLOG } from './data.jsx';
 import { PageJsonLd } from './seo.jsx';
@@ -52,11 +52,11 @@ const AppShell = () => {
     return () => document.removeEventListener('click', onClick);
   }, [route]);
 
-  // Page view virtuelle à chaque changement de route hash. Push dans
-  // dataLayer (toujours, même sans consent — c'est juste un tableau JS)
+  // Page view virtuelle à chaque changement de route (chemins réels). Push
+  // dans dataLayer (toujours, même sans consent — c'est juste un tableau JS)
   // ET envoi à gtag SI GA4 est chargé (donc seulement après consent).
   React.useEffect(() => {
-    const path  = '/' + (route || 'home') + (params.id ? '/' + params.id : '');
+    const path  = routePath(route, params);
     const title = `ACT — ${route || 'home'}`;
     (window.dataLayer = window.dataLayer || []).push({
       event:      'page_view',
@@ -126,8 +126,15 @@ const AppShell = () => {
   return (
     <div className="bg-sand-50 text-ink min-h-screen pb-0">
       {/* Skip-to-content : invisible jusqu'au focus clavier — permet aux
-          utilisateurs lecteurs d'écran de sauter la navigation. */}
+          utilisateurs lecteurs d'écran de sauter la navigation.
+          onClick requis : avec <base href="/">, une ancre #… se résoudrait
+          vers « /#main-content » (navigation) au lieu de l'ancre locale. */}
       <a href="#main-content"
+         onClick={(e) => {
+           e.preventDefault();
+           const el = document.getElementById('main-content');
+           if (el) { el.setAttribute('tabindex', '-1'); el.focus({ preventScroll: false }); el.scrollIntoView(); }
+         }}
          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-ink focus:text-sand-50 focus:rounded-full focus:text-[13px] focus:font-medium">
         Aller au contenu principal
       </a>

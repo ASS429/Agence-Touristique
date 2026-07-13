@@ -17,7 +17,7 @@ import { IMG } from './data.jsx';
 
 const Mice = ({ go }) => {
   const { t, richT } = useI18n();
-  const nav = typeof go === 'function' ? go : (target) => { window.location.hash = '#/' + target; };
+  const nav = typeof go === 'function' ? go : (target) => { window.location.assign(target === 'home' ? '/' : '/' + target); };
 
   const services = [
     { num: '01', tKey: 'mice.item1.t', dKey: 'mice.item1.d', icon: 'Compass' },

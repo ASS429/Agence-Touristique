@@ -3,6 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<!-- Vraies URLs (History API) : les références relatives (images, logo…)
+     doivent se résoudre depuis la racine quel que soit le chemin (/tour/x).
+     NB : les ancres intra-page (#…) se résolvent alors vers « / » — le
+     skip-link de app.jsx est intercepté en JS pour compenser. -->
+<base href="/" />
 <!-- CSP stricte (self-hosté après migration Vite). Origines externes autorisées :
      Sentry, Supabase, Leaflet/unpkg + tuiles OSM (via https:), GA (inactif),
      YouTube nocookie (reportage croisières, iframe chargée au clic).
@@ -28,12 +33,11 @@
 <meta name="twitter:description" content="Tour-opérateur basé à Dakar depuis 1996. Circuits, excursions, ateliers, croisières et voyages sur mesure au Sénégal." />
 <meta name="twitter:image" content="https://act-senegal.com/assets/og-image.jpg" />
 
-<!-- Canonical + hreflang. Tant que le site utilise un hash router et que toutes
-     les langues partagent la même URL racine (basculement côté client via le
-     contexte i18n), les balises hreflang pointent toutes vers la racine et
-     servent surtout à signaler à Google que le contenu existe en 4 langues.
-     À régénérer en URLs distinctes une fois le passage en vraies routes
-     (Vite ou Laravel) validé par l'agence. -->
+<!-- Canonical + hreflang. Valeurs par défaut (racine) : depuis la migration
+     History API, src/seo.jsx les met à jour dynamiquement à chaque route
+     (canonical/og:url/title/description par page) et le prérendu statique
+     capture ces valeurs par URL. Les 4 langues partagent la même URL
+     (basculement côté client via le contexte i18n). -->
 <link rel="canonical" href="https://act-senegal.com/" />
 <link rel="alternate" hreflang="en" href="https://act-senegal.com/" />
 <link rel="alternate" hreflang="fr" href="https://act-senegal.com/" />

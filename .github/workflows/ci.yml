@@ -23,3 +23,7 @@ jobs:
       # type « composant utilisé sans import » que le build ne voit pas.
       - name: Smoke test (routes)
         run: npm run smoke
+      # Prérendu : mêmes étapes que le build Render — échoue si une route
+      # ne rend pas (régression attrapée avant la prod).
+      - name: Prerender (SEO)
+        run: npm run prerender

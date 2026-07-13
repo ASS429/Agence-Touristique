@@ -18,21 +18,24 @@ import process from 'node:process';
 const PORT = 4173;
 const BASE = `http://localhost:${PORT}`;
 
-// Routes publiques (#/...) + marqueur attendu dans le DOM rendu.
+// Routes publiques (chemins réels depuis la migration History API)
+// + marqueur attendu dans le DOM rendu.
 const ROUTES = [
   ['/', 'Africa Connection'],
-  ['/#/circuits', 'Circuits'],
-  ['/#/excursions', 'Excursion'],
-  ['/#/ateliers', 'Atelier'],
+  ['/circuits', 'Circuits'],
+  ['/excursions', 'Excursion'],
+  ['/ateliers', 'Atelier'],
+  ['/croisieres', 'Croisi'],
+  ['/blog', 'Blog'],
+  ['/faq', 'question'],
+  ['/contact', 'Contact'],
+  ['/about', 'propos'],
+  ['/custom', 'sur-mesure'],
+  ['/mice', 'MICE'],
+  ['/tour/grand-tour-7j', 'jour'],
+  ['/blog/wave-om', 'Wave'],
+  // Compat legacy : les anciennes URLs #/… doivent être redirigées et rendre.
   ['/#/croisieres', 'Croisi'],
-  ['/#/blog', 'Blog'],
-  ['/#/faq', 'question'],
-  ['/#/contact', 'Contact'],
-  ['/#/about', 'propos'],
-  ['/#/custom', 'sur-mesure'],
-  ['/#/mice', 'MICE'],
-  ['/#/tour/grand-tour-7j', 'jour'],
-  ['/#/blog/wave-om', 'Wave'],
   ['/admin/', 'Se connecter'],
 ];
 

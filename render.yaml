@@ -7,14 +7,16 @@ services:
   - type: web
     name: act-senegal-site
     runtime: static
-    buildCommand: "npm ci && npm run build"
+    buildCommand: "npm ci && npm run build && npm run prerender"
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: false
 
     # --- Routing ---
-    # Le site public utilise un routeur par hash (#/...), donc le chemin réel
-    # est toujours "/". L'admin est une seconde page (/admin/). On ajoute
-    # malgré tout un fallback SPA pour les chemins inconnus.
+    # Vraies URLs (History API) : chaque route publique est prérendue en HTML
+    # statique (dist/<route>/index.html, voir scripts/prerender.mjs) — Render
+    # sert le fichier s'il existe, sinon le rewrite SPA ci-dessous prend le
+    # relais (routes dynamiques : /monespace, /carnet/:slug, contenus admin).
+    # L'admin est une seconde page (/admin/), routage hash interne conservé.
     routes:
       - type: rewrite
         source: /admin

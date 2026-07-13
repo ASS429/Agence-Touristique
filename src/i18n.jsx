@@ -4445,40 +4445,92 @@ const useI18n = () => {
 };
 
 // --- Route hook -------------------------------------------------------------
-// A super-simple hash router: #/circuits, #/custom, #/blog, #/blog/:id, #/tour/:id ...
+// Routeur par CHEMINS RÉELS (History API) : /circuits, /blog/:id, /tour/:id …
+// Migration SEO (juil. 2026) : remplace le routeur par hash (#/…) pour que
+// chaque page ait sa propre URL indexable. Les anciennes URLs #/… (favoris,
+// liens externes, QR codes) sont redirigées via replaceState au boot et à
+// chaque hashchange — le hash Supabase (#access_token=…) n'est jamais touché
+// car la redirection ne cible que les hash commençant par « #/ ».
 // Returns { route, params, go }
 
-const parseHash = () => {
-  const h = window.location.hash.replace(/^#\/?/, '');
-  if (!h) return { route:'home', params:{} };
-  const parts = h.split('/').filter(Boolean);
+const parsePath = () => {
+  const p = window.location.pathname.replace(/\/+$/, '').replace(/^\//, '');
+  if (!p) return { route:'home', params:{} };
+  const parts = p.split('/').filter(Boolean);
   const route = parts[0];
   const params = {};
   if (route === 'tour'        && parts[1]) params.id = parts[1];
   if (route === 'blog'        && parts[1]) params.id = parts[1];
   if (route === 'carnet'      && parts[1]) params.id = parts[1];
-  // #/monespace/token/xxx pour magic link callback (optionnel)
+  // /monespace/token/xxx pour magic link callback (optionnel)
   if (route === 'monespace'   && parts[1]) params.action = parts[1];
-  // #/mice — page tourisme d'affaires (pas de sous-route)
+  // /mice — page tourisme d'affaires (pas de sous-route)
   return { route, params };
 };
 
+// Chemin canonique d'une route — utilisé par go() et exposé aux composants
+// pour construire des href réels (crawlables).
+const routePath = (route, params = {}) => {
+  let path = (!route || route === 'home') ? '/' : '/' + route;
+  if (params.id) path += '/' + params.id;
+  return path;
+};
+
+// Redirection legacy AVANT le premier rendu : « /#/contact?x=y » → « /contact?x=y ».
+const redirectLegacyHash = () => {
+  if (!/^#\//.test(window.location.hash)) return false;
+  const legacy = window.location.hash.slice(1);          // "/contact?circuit=x"
+  const [lp, lq] = legacy.split('?');
+  const search = lq ? '?' + lq : window.location.search; // préserve les utm éventuels
+  window.history.replaceState(null, '', lp + search);
+  return true;
+};
+if (typeof window !== 'undefined') redirectLegacyHash();
+
 const useRouter = () => {
-  const [state, setState] = React.useState(parseHash);
+  const [state, setState] = React.useState(parsePath);
   React.useEffect(()=>{
-    const onHash = () => setState(parseHash());
+    const sync = () => setState(parsePath());
+    const onPop = () => sync();
+    // Compat : un vieux lien #/… cliqué après le boot (contenu injecté,
+    // e-mail, app externe) est converti en chemin réel.
+    const onHash = () => { if (redirectLegacyHash()) { sync(); window.scrollTo({ top:0, behavior:'auto' }); } };
+    // Interception globale des <a> internes : les href réels (« /circuits »,
+    // liens dans le HTML des articles de blog…) naviguent en SPA sans
+    // rechargement. Les liens externes, _blank, download, modifieurs clavier
+    // et /admin/ (seconde page) passent au navigateur.
+    const onClick = (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest('a[href]');
+      if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+      const href = a.getAttribute('href') || '';
+      if (/^#\//.test(href)) {           // ancien format resté dans un contenu
+        e.preventDefault();
+        window.history.pushState(null, '', href.slice(1));
+        sync(); window.scrollTo({ top:0, behavior:'auto' });
+        return;
+      }
+      if (!href.startsWith('/') || href.startsWith('//') || href.startsWith('/admin')) return;
+      const url = new URL(href, window.location.origin);
+      e.preventDefault();
+      if (url.pathname + url.search !== window.location.pathname + window.location.search) {
+        window.history.pushState(null, '', url.pathname + url.search + url.hash);
+      }
+      sync(); window.scrollTo({ top:0, behavior:'auto' });
+    };
+    window.addEventListener('popstate', onPop);
     window.addEventListener('hashchange', onHash);
-    return () => window.removeEventListener('hashchange', onHash);
+    document.addEventListener('click', onClick);
+    return () => {
+      window.removeEventListener('popstate', onPop);
+      window.removeEventListener('hashchange', onHash);
+      document.removeEventListener('click', onClick);
+    };
   }, []);
   const go = React.useCallback((route, params = {}, opts={}) => {
-    let hash = '#/' + route;
-    if (params.id) hash += '/' + params.id;
-    if (hash !== window.location.hash) {
-      window.location.hash = hash;
-    } else {
-      // force update if same route
-      setState({ route, params });
-    }
+    const path = routePath(route, params);
+    if (path !== window.location.pathname) window.history.pushState(null, '', path);
+    setState({ route, params });
     if (!opts.keepScroll) window.scrollTo({ top: 0, behavior:'auto' });
   }, []);
   return { ...state, go };
@@ -4522,5 +4574,5 @@ const useRouter = () => {
 // Aucune modification de composant requise.
 // ============================================================================
 
-if (typeof window !== 'undefined') Object.assign(window, { I18nProvider, useI18n, useRouter, RATES, CCY_SYM, DICT, LANGS, LOCALE });
-export { I18nProvider, useI18n, useRouter, RATES, CCY_SYM, DICT, LANGS, LOCALE };
+if (typeof window !== 'undefined') Object.assign(window, { I18nProvider, useI18n, useRouter, routePath, RATES, CCY_SYM, DICT, LANGS, LOCALE });
+export { I18nProvider, useI18n, useRouter, routePath, RATES, CCY_SYM, DICT, LANGS, LOCALE };

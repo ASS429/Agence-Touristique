@@ -65,7 +65,7 @@ const trackWa = (source, message) => {
     event: 'whatsapp_click',
     whatsapp_source: source || 'unknown',
     whatsapp_message_preview: (message || '').slice(0, 80),
-    page_route: (window.location.hash || '#/home').replace(/^#\//, '') || 'home',
+    page_route: window.location.pathname.replace(/^\//, '') || 'home',
     ts: new Date().toISOString(),
   };
   (window.dataLayer = window.dataLayer || []).push(payload);
@@ -92,7 +92,7 @@ export { SITE, buildWaURL, trackWa };
 // Un aria-label "Africa Connection Tours — Accueil" cassait label-content-name-mismatch
 // (le texte visible n'est pas inclus dans le label déclaré).
 const Logo = ({ inverted = false, className = '', onClick }) => (
-  <a href="#/home" onClick={onClick}
+  <a href="/" onClick={onClick}
      className={`inline-flex items-center gap-2.5 ${className}`}>
     <img
       src="assets/logo-act.png"
@@ -234,7 +234,7 @@ const CookieConsent = () => {
           {before}<em>{em}</em>{after}
         </div>
         <p className="mt-2 text-[13px] text-sand-200 leading-relaxed">
-          {t('cookies.body')} <a href="#/privacy" className="underline underline-offset-2 hover:text-terre-300">{t('cookies.learnMore')}</a>.
+          {t('cookies.body')} <a href="/privacy" className="underline underline-offset-2 hover:text-terre-300">{t('cookies.learnMore')}</a>.
         </p>
         <div className="mt-4 flex items-center gap-2">
           <button onClick={decline} className="px-4 h-9 rounded-full border border-sand-100/30 text-sand-100 text-[12.5px] hover:bg-sand-50/10 transition-colors">{t('cookies.decline')}</button>
@@ -419,7 +419,7 @@ const Header = ({ route, go, topOffset = 0 }) => {
           <Logo inverted={!onLight} onClick={(e)=>{e.preventDefault(); go('home');}} />
           <nav className="hidden lg:flex items-center gap-1" aria-label="Navigation principale">
             {nav.map(n => (
-              <a key={n.id} href={`#/${n.id}`} onClick={(e)=>handleNav(e, n.id)}
+              <a key={n.id} href={`/${n.id}`} onClick={(e)=>handleNav(e, n.id)}
                  aria-current={route===n.id ? 'page' : undefined}
                  className={`px-3 py-2 rounded-full text-[13.5px] transition-colors ${
                    onLight
@@ -470,14 +470,14 @@ const Header = ({ route, go, topOffset = 0 }) => {
           </div>
           <nav className="p-5 flex flex-col" aria-label="Navigation mobile">
             {nav.map(n => (
-              <a key={n.id} href={`#/${n.id}`} onClick={(e)=>handleNav(e, n.id)}
+              <a key={n.id} href={`/${n.id}`} onClick={(e)=>handleNav(e, n.id)}
                  aria-current={route===n.id ? 'page' : undefined}
                  className="py-3.5 text-2xl font-display border-b border-ink/5 flex items-center justify-between">
                 <span>{n.label}</span>
                 <Icons.ArrowUpRight size={18} className="text-ink-400" aria-hidden="true"/>
               </a>
             ))}
-            <a href="#/faq" onClick={(e)=>handleNav(e,'faq')}
+            <a href="/faq" onClick={(e)=>handleNav(e,'faq')}
                aria-current={route==='faq' ? 'page' : undefined}
                className="py-3.5 text-2xl font-display border-b border-ink/5 flex items-center justify-between">
               <span>{t('nav.faq')}</span>
@@ -716,10 +716,10 @@ const NewsletterForm = () => {
 const Footer = ({ go }) => {
   const { t } = useI18n();
   // Fallback robuste : si go n'est pas passé (cache stale d'un ancien composant
-  // parent), on retombe sur la navigation hash native, qui marche partout.
-  const nav = typeof go === 'function' ? go : (target) => { window.location.hash = '#/' + target; };
+  // parent), on retombe sur une navigation native par chemin, qui marche partout.
+  const nav = typeof go === 'function' ? go : (target) => { window.location.assign(target === 'home' ? '/' : '/' + target); };
   const link = (route, label) => (
-    <li><a href={`#/${route}`} onClick={(e)=>{e.preventDefault(); nav(route);}} className="hover:text-sand-50">{label}</a></li>
+    <li><a href={`/${route}`} onClick={(e)=>{e.preventDefault(); nav(route);}} className="hover:text-sand-50">{label}</a></li>
   );
   return (
     <footer className="bg-ink text-sand-100 pt-20 pb-10 mt-24" data-screen-label="Footer">
@@ -832,9 +832,9 @@ const Footer = ({ go }) => {
             <span>NINEA · {SITE.ninea}</span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="#/mentions" className="hover:text-sand-50">{t('footer.legal')}</a>
-            <a href="#/cgv"      className="hover:text-sand-50">{t('footer.cgv')}</a>
-            <a href="#/privacy"  className="hover:text-sand-50">{t('footer.privacy')}</a>
+            <a href="/mentions" className="hover:text-sand-50">{t('footer.legal')}</a>
+            <a href="/cgv"      className="hover:text-sand-50">{t('footer.cgv')}</a>
+            <a href="/privacy"  className="hover:text-sand-50">{t('footer.privacy')}</a>
           </div>
         </div>
       </div>

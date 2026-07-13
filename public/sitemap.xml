@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Site actuel : routes en hash (#/circuits, #/blog/...) — non indexées
-  individuellement par les crawlers. Une seule URL canonique pour l'instant.
-  À régénérer une fois la migration vers de vraies URLs (Vite / Laravel)
-  effectuée — la liste complète des routes est dans src/app.jsx.
+  Fichier de secours : au build, scripts/prerender.mjs ÉCRASE ce sitemap
+  dans dist/ avec la liste complète des routes réelles (65+ URLs :
+  sections, fiches circuits/excursions, articles de blog).
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>

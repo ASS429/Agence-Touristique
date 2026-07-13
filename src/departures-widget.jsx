@@ -153,7 +153,7 @@ const DeparturesWidget = ({ circuitSlug, circuitTitle, go }) => {
 
         <div className="mt-5 text-[12.5px] text-ink-500 flex flex-wrap items-center justify-between gap-2">
           <span>{t('departures.legend', 'Les tarifs définitifs sont établis après validation du programme.')}</span>
-          <a href={`#/carnet/${circuitSlug}`} className="text-terre hover:text-terre-700 inline-flex items-center gap-1">
+          <a href={`/carnet/${circuitSlug}`} className="text-terre hover:text-terre-700 inline-flex items-center gap-1">
             {t('departures.viewCarnet', 'Voir le carnet de voyage complet')} →
           </a>
         </div>
