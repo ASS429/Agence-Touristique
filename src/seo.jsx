@@ -210,4 +210,5 @@ function PageJsonLd({ route, params = {}, tourId, articleId }) {
 }
 
 if (typeof window !== 'undefined') window.PageJsonLd = PageJsonLd;
-export { PageJsonLd };
+// parseFrDate/buildGraph exportés pour les tests unitaires (Vitest).
+export { PageJsonLd, parseFrDate, buildGraph };

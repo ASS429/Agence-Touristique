@@ -16,6 +16,9 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
+      # Tests unitaires (helpers : routeur, SEO/JSON-LD, WhatsApp)
+      - name: Unit tests (Vitest)
+        run: npm run test
       - name: Build (public + admin)
         run: npm run build
       # Smoke : rend chaque route en headless (Chrome préinstallé sur les
@@ -23,7 +26,17 @@ jobs:
       # type « composant utilisé sans import » que le build ne voit pas.
       - name: Smoke test (routes)
         run: npm run smoke
+      # E2E : 4 parcours business (devis, contact, langue, legacy+vidéo)
+      # sur le build de prod — réseau externe intercepté (hermétique).
+      - name: Install Playwright browser
+        run: npx playwright install chromium --with-deps
+      - name: E2E tests (Playwright)
+        run: npm run test:e2e
       # Prérendu : mêmes étapes que le build Render — échoue si une route
       # ne rend pas (régression attrapée avant la prod).
       - name: Prerender (SEO)
         run: npm run prerender
+      # Lighthouse : budgets qualité (a11y ≥ 0.90, SEO ≥ 0.95, BP ≥ 0.90 ;
+      # perf en warn — le serveur statique LHCI ne compresse pas).
+      - name: Lighthouse budgets
+        run: npm run lighthouse
