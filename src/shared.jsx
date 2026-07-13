@@ -863,11 +863,53 @@ const PageHero = ({ kicker, title, intro, tone='terre', mood='horizon', bgImg, c
   </section>
 );
 
+// ============================================================================
+// TurnstileWidget — anti-bot Cloudflare sur les formulaires.
+// Ne rend RIEN tant que window.ACT_TURNSTILE_SITE_KEY est vide (voir
+// index.html pour la procédure d'activation). Quand il est actif, appelle
+// onToken(token) à la validation (et onToken(null) à l'expiration) — le
+// token est vérifié côté serveur par l'Edge Function (action contact_submit).
+// ============================================================================
+const TurnstileWidget = ({ onToken, className = '' }) => {
+  const ref = React.useRef(null);
+  const siteKey = (typeof window !== 'undefined' && window.ACT_TURNSTILE_SITE_KEY) || '';
+  React.useEffect(() => {
+    if (!siteKey || !ref.current) return;
+    let widgetId = null;
+    let cancelled = false;
+    let iv = null;
+    const render = () => {
+      if (cancelled || !window.turnstile || !ref.current) return;
+      widgetId = window.turnstile.render(ref.current, {
+        sitekey: siteKey,
+        callback: (t) => onToken?.(t),
+        'expired-callback': () => onToken?.(null),
+        'error-callback': () => onToken?.(null),
+      });
+    };
+    if (window.turnstile) render();
+    else {
+      // Le script api.js (index.html) charge en async — on attend qu'il soit là.
+      iv = setInterval(() => { if (window.turnstile) { clearInterval(iv); render(); } }, 200);
+      setTimeout(() => iv && clearInterval(iv), 15000);
+    }
+    return () => {
+      cancelled = true;
+      if (iv) clearInterval(iv);
+      if (widgetId !== null && window.turnstile) { try { window.turnstile.remove(widgetId); } catch {} }
+    };
+  }, [siteKey]);
+  if (!siteKey) return null;
+  return <div ref={ref} className={className}/>;
+};
+
 if (typeof window !== 'undefined') Object.assign(window, {
   buildWaURL, Logo, StarRow, Pill, Btn, Price,
   PromoBanner, CookieConsent, UpdateNotifier, Header, WhatsAppFloat, Section, Footer, CircuitCard, PageHero,
+  TurnstileWidget,
 });
 export {
   Logo, StarRow, Pill, Btn, Price,
   PromoBanner, CookieConsent, UpdateNotifier, Header, WhatsAppFloat, Section, Footer, CircuitCard, PageHero,
+  TurnstileWidget,
 };

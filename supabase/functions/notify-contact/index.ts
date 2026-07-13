@@ -1,10 +1,14 @@
 // =====================================================================
 // Supabase Edge Function : notify-contact
 //
-// Trois rôles selon le payload reçu :
+// Quatre rôles selon le payload reçu :
 //   • (défaut) contact  — INSERT contact_requests → 2 emails Resend
 //        1. À ACT   : notification d'une nouvelle demande (avec le détail)
 //        2. Au client : accusé de réception localisé (si email fourni)
+//   • action:"contact_submit"       — soumission protégée Turnstile : vérifie
+//        le token (siteverify) puis insère (service role) + notifie. Répond
+//        200 { ok:false, error:"turnstile_failed" } en cas de refus (le
+//        client distingue ainsi refus anti-bot et indisponibilité).
 //   • action:"newsletter_subscribe" — double opt-in : insère l'abonné en
 //        confirmed=false (service role) + envoie l'email de confirmation.
 //   • action:"newsletter_confirm"   — valide le token → confirmed=true.
@@ -15,12 +19,16 @@
 //   NOTIFY_FROM      : expéditeur vérifié Resend
 //                      (ex. "ACT <notifications@act-senegal.com>" une fois
 //                       le domaine vérifié ; sinon "onboarding@resend.dev")
+//   TURNSTILE_SECRET_KEY : (optionnel) clé secrète Cloudflare Turnstile.
+//                      Si absente, action contact_submit insère sans vérifier
+//                      (rollout sans risque : le widget côté client peut être
+//                      activé avant ou après ce secret).
 //   WEBHOOK_SECRET   : (optionnel) jeton partagé pour authentifier l'appel
 //                      — comparé à l'en-tête x-webhook-secret du webhook.
 //                      ⚠️ NE PAS définir tant que le formulaire public appelle
 //                      la fonction sans ce header (sinon 401 sur newsletter).
 //   SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY : injectés automatiquement par
-//                      Supabase — utilisés pour l'écriture newsletter.
+//                      Supabase — utilisés pour l'écriture newsletter/contact.
 //
 // Déploiement : voir supabase/functions/README.md
 // =====================================================================
@@ -224,6 +232,82 @@ async function handleNewsletterConfirm(body: Record<string, unknown>): Promise<R
   return json({ ok: false, invalid: true }, 404);
 }
 
+// ---------------------------------------------------------------------
+// TURNSTILE — vérification serveur du token anti-bot Cloudflare
+// ---------------------------------------------------------------------
+async function verifyTurnstile(token: string | null, ip: string | null): Promise<boolean> {
+  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
+  if (!secret) return true; // non configuré → pas de vérification (rollout)
+  if (!token) return false;
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ secret, response: token, ...(ip ? { remoteip: ip } : {}) }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!data.success) console.warn("turnstile refusé", data["error-codes"]);
+    return data.success === true;
+  } catch (e) {
+    console.error("turnstile siteverify injoignable", e);
+    // Panne Cloudflare : on laisse passer (le honeypot client reste actif)
+    // plutôt que de perdre des demandes légitimes.
+    return true;
+  }
+}
+
+// Soumission contact protégée : vérifie Turnstile puis insère + notifie.
+async function handleContactSubmit(
+  apiKey: string, notifyTo: string, notifyFrom: string,
+  body: Record<string, unknown>, ip: string | null,
+): Promise<Response> {
+  const token = typeof body.turnstile_token === "string" ? body.turnstile_token : null;
+  const passed = await verifyTurnstile(token, ip);
+  if (!passed) return json({ ok: false, error: "turnstile_failed" });
+
+  const r: ContactRow = (body.record && typeof body.record === "object")
+    ? body.record as ContactRow : {};
+  const ins = await pgrest("POST", "contact_requests", {
+    kind: r.kind || "contact",
+    full_name: r.full_name ?? null,
+    email: r.email ?? null,
+    phone: r.phone ?? null,
+    language: r.language ?? null,
+    message: r.message ?? null,
+    circuit_slug: r.circuit_slug ?? null,
+    travelers: r.travelers ?? null,
+    budget: r.budget ?? null,
+    extra: r.extra ?? null,
+  });
+  if (!ins.ok) {
+    console.error("contact insert error", ins.status, await ins.text());
+    return json({ error: "insert_failed" }, 500);
+  }
+  await notifyContact(apiKey, notifyTo, notifyFrom, r);
+  return json({ ok: true });
+}
+
+// Les 2 emails (notification ACT + accusé client) — partagé entre le chemin
+// historique (insert client + webhook) et contact_submit (Turnstile).
+async function notifyContact(apiKey: string, notifyTo: string, notifyFrom: string, r: ContactRow): Promise<void> {
+  await sendEmail(apiKey, {
+    from: notifyFrom,
+    to: [notifyTo],
+    reply_to: r.email || undefined,
+    subject: `Nouvelle demande (${r.kind || "contact"}) — ${r.full_name || "Visiteur"}`,
+    html: buildAdminHtml(r),
+  });
+  if (r.email) {
+    const lang = (r.language || "fr").toLowerCase();
+    await sendEmail(apiKey, {
+      from: notifyFrom,
+      to: [r.email],
+      subject: ACK_SUBJECT[lang] || ACK_SUBJECT.fr,
+      text: (ACK_BODY[lang] || ACK_BODY.fr)(r.full_name || ""),
+    });
+  }
+}
+
 function json(obj: unknown, status = 200): Response {
   return new Response(JSON.stringify(obj), {
     status,
@@ -263,37 +347,22 @@ Deno.serve(async (req: Request) => {
     // Le webhook Supabase envoie { type, table, record, old_record }
     const body = await req.json().catch(() => ({}));
 
-    // Dispatch newsletter (double opt-in) selon l'action.
+    // Dispatch selon l'action.
     if (body.action === "newsletter_subscribe") {
       return await handleNewsletterSubscribe(apiKey, notifyFrom, body);
     }
     if (body.action === "newsletter_confirm") {
       return await handleNewsletterConfirm(body);
     }
-
-    const r: ContactRow = body.record || body;
-
-    // 1) Notification interne ACT
-    await sendEmail(apiKey, {
-      from: notifyFrom,
-      to: [notifyTo],
-      reply_to: r.email || undefined,
-      subject: `Nouvelle demande (${r.kind || "contact"}) — ${r.full_name || "Visiteur"}`,
-      html: buildAdminHtml(r),
-    });
-
-    // 2) Accusé de réception client (si email fourni)
-    if (r.email) {
-      const lang = (r.language || "fr").toLowerCase();
-      const subj = ACK_SUBJECT[lang] || ACK_SUBJECT.fr;
-      const bodyText = (ACK_BODY[lang] || ACK_BODY.fr)(r.full_name || "");
-      await sendEmail(apiKey, {
-        from: notifyFrom,
-        to: [r.email],
-        subject: subj,
-        text: bodyText,
-      });
+    if (body.action === "contact_submit") {
+      const ip = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for");
+      return await handleContactSubmit(apiKey, notifyTo, notifyFrom, body, ip);
     }
+
+    // Chemin historique : la demande est DÉJÀ en base (insert client ou
+    // webhook Supabase) — on n'envoie que les notifications.
+    const r: ContactRow = body.record || body;
+    await notifyContact(apiKey, notifyTo, notifyFrom, r);
 
     return json({ ok: true });  // json() ajoute les headers CORS
   } catch (e) {

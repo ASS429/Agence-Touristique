@@ -2,7 +2,7 @@ import React from 'react';
 import { useI18n } from './i18n.jsx';
 import { Icons } from './icons.jsx';
 import { Photo } from './photo.jsx';
-import { Btn, Footer, PageHero, Section, buildWaURL, SITE } from './shared.jsx';
+import { Btn, Footer, PageHero, Section, TurnstileWidget, buildWaURL, SITE } from './shared.jsx';
 import { FAQ, VALUES, FIGURES, IMG } from './data.jsx';
 import { DestinationsMap } from './map.jsx';
 // Contact + À propos + FAQ pages — grouped to keep file count tight.
@@ -18,6 +18,7 @@ const Contact = ({ go }) => {
   const [error, setError] = React.useState('');
   const [hp, setHp] = React.useState('');            // honeypot anti-bot
   const startedAt = React.useRef(Date.now());        // timing anti-bot
+  const [tsToken, setTsToken] = React.useState(null); // token Turnstile (si actif)
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
   // mailto: fallback (always available — opens the user's mail client with
@@ -46,7 +47,7 @@ const Contact = ({ go }) => {
     language: lang,
     message: form.message || null,
     extra: { subject: form.subject, source: 'page-contact' }
-  }).catch(() => {});
+  }, tsToken).catch(() => {});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +55,11 @@ const Contact = ({ go }) => {
     // Anti-bot : si honeypot rempli ou soumission trop rapide, on simule un
     // succès sans rien enregistrer (ne pas informer le bot).
     if (window.actIsLikelyBot?.(hp, startedAt.current)) { setSent(true); return; }
+    // Turnstile actif : le token est requis avant l'envoi (vérifié serveur).
+    if (window.ACT_TURNSTILE_SITE_KEY && !tsToken) {
+      setError(t('form.turnstile.required', 'Merci de valider la vérification anti-robots avant d\'envoyer.'));
+      return;
+    }
     // Enregistrement Supabase (base « Demandes reçues » + email Resend vers ACT).
     saveToSupabase();
 
@@ -149,6 +155,8 @@ const Contact = ({ go }) => {
                   placeholder={t('contact.form.messagePlaceholder')}
                   className="w-full rounded-2xl border border-ink/15 bg-sand-50 p-4 text-[14px] outline-none focus:border-terre"/>
               </div>
+              {/* Anti-bot Cloudflare — ne rend rien tant que la clé de site est vide */}
+              <TurnstileWidget onToken={setTsToken} className="md:col-span-2"/>
               {error && (
                 <div className="md:col-span-2 rounded-2xl bg-terre/10 border border-terre/30 px-4 py-3 text-[13px] text-terre-700">
                   {error}

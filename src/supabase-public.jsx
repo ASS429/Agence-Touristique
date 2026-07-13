@@ -132,10 +132,36 @@
   // n'est pas configuré, ou { error: msg } en cas d'échec (auquel cas
   // le formulaire continue son flow mailto/formspree existant).
   // -------------------------------------------------------------------
-  window.actSaveContactRequest = async function(payload) {
+  window.actSaveContactRequest = async function(payload, turnstileToken) {
     if (!configured) return { skipped: true };
+    const NOTIFY_FN = 'hyper-task';
     try {
       const sb = await getSb();
+
+      // Turnstile actif : la soumission passe ENTIÈREMENT par l'Edge Function
+      // (action contact_submit) qui vérifie le token côté serveur puis insère
+      // (service role) et notifie. La fonction répond en 200 même en refus
+      // ({ ok:false, error:'turnstile_failed' }) pour distinguer un refus
+      // anti-bot (pas de repli) d'une indisponibilité (repli insert direct
+      // ci-dessous, protégé par le honeypot).
+      if (window.ACT_TURNSTILE_SITE_KEY) {
+        try {
+          const { data, error } = await sb.functions.invoke(NOTIFY_FN, {
+            body: { action: 'contact_submit', turnstile_token: turnstileToken || null, record: payload },
+          });
+          if (error) throw error;
+          if (data && data.error === 'turnstile_failed') {
+            if (window.console) console.warn('[ACT] Vérification anti-bot refusée');
+            return { error: 'turnstile' };
+          }
+          if (window.console) console.log('[ACT] Demande enregistrée (via Edge Function)');
+          return { ok: true };
+        } catch (fnErr) {
+          if (window.console) console.warn('[ACT] Edge Function indisponible, repli insert direct:', fnErr.message);
+          // … on continue sur le chemin direct ci-dessous (filet anti-perte de lead)
+        }
+      }
+
       const { error } = await sb.from('contact_requests').insert(payload);
       if (error) throw error;
       if (window.console) console.log('[ACT] Demande enregistrée en base');
@@ -143,7 +169,6 @@
       // NB : le slug réel de la fonction déployée chez ACT est 'hyper-task'
       // (auto-généré par Supabase). Changer ici si la fonction est recréée
       // sous un autre nom.
-      const NOTIFY_FN = 'hyper-task';
       try {
         sb.functions.invoke(NOTIFY_FN, { body: payload })
           .catch(() => { /* fonction indisponible : demande déjà en base */ });

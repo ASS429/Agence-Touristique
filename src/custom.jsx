@@ -2,7 +2,7 @@ import React from 'react';
 import { useI18n } from './i18n.jsx';
 import { Icons } from './icons.jsx';
 import { Photo } from './photo.jsx';
-import { Btn, CircuitCard, Footer, PageHero, Price, Section, buildWaURL, SITE } from './shared.jsx';
+import { Btn, CircuitCard, Footer, PageHero, Price, Section, TurnstileWidget, buildWaURL, SITE } from './shared.jsx';
 import { CIRCUITS, DESTINATIONS, IMG } from './data.jsx';
 // Voyage sur mesure — multi-step guided form with suggestions before contact step.
 // Les libellés affichés sont résolus côté JSX via t() avec fallback FR.
@@ -323,6 +323,7 @@ const Custom = ({ go, onOpenTour }) => {
   });
   const setField = (k, v) => setForm(prev => ({...prev, [k]: v }));
   const [hp, setHp] = React.useState('');            // honeypot anti-bot
+  const [tsToken, setTsToken] = React.useState(null); // token Turnstile (si actif)
   const startedAt = React.useRef(Date.now());        // timing anti-bot
   const step = STEPS[stepIdx];
 
@@ -412,13 +413,18 @@ const Custom = ({ go, onOpenTour }) => {
         circuit_picked_title: picked?.title || null,
         free_form: freeForm
       }
-    }).catch(() => {});
+    }, tsToken).catch(() => {});
   };
 
   const submit = async () => {
     setError('');
     // Anti-bot : honeypot rempli ou soumission trop rapide → succès simulé.
     if (window.actIsLikelyBot?.(hp, startedAt.current)) { setSubmitted(true); return; }
+    // Turnstile actif : le token est requis avant l'envoi (vérifié serveur).
+    if (window.ACT_TURNSTILE_SITE_KEY && !tsToken) {
+      setError(t('form.turnstile.required', 'Merci de valider la vérification anti-robots avant d\'envoyer.'));
+      return;
+    }
     const payload = buildPayload();
     // Enregistrement Supabase (fire-and-forget)
     saveToSupabase();
@@ -515,6 +521,12 @@ const Custom = ({ go, onOpenTour }) => {
           )}
         </div>
 
+        {/* Anti-bot Cloudflare — ne rend rien tant que la clé de site est vide */}
+        {step.id === 'contact' && (
+          <div className="mt-4 flex justify-end">
+            <TurnstileWidget onToken={setTsToken}/>
+          </div>
+        )}
         {step.id === 'contact' && !canAdvance && (
           <p className="mt-3 text-right text-[12px] text-ink-500">{t('custom.nav.requirement')}</p>
         )}
