@@ -19,7 +19,9 @@ jobs:
       # Tests unitaires (helpers : routeur, SEO/JSON-LD, WhatsApp)
       - name: Unit tests (Vitest)
         run: npm run test
-      - name: Build (public + admin)
+      # Le build inclut le prérendu SEO (hook postbuild → scripts/prerender.mjs),
+      # comme sur Render — un échec de prérendu casse le job avant la prod.
+      - name: Build (public + admin + prérendu)
         run: npm run build
       # Smoke : rend chaque route en headless (Chrome préinstallé sur les
       # runners ubuntu) et vérifie le contenu → attrape les erreurs runtime
@@ -32,11 +34,24 @@ jobs:
         run: npx playwright install chromium --with-deps
       - name: E2E tests (Playwright)
         run: npm run test:e2e
-      # Prérendu : mêmes étapes que le build Render — échoue si une route
-      # ne rend pas (régression attrapée avant la prod).
-      - name: Prerender (SEO)
-        run: npm run prerender
       # Lighthouse : budgets qualité (a11y ≥ 0.90, SEO ≥ 0.95, BP ≥ 0.90 ;
       # perf en warn — le serveur statique LHCI ne compresse pas).
       - name: Lighthouse budgets
         run: npm run lighthouse
+      # Diagnostic : en cas d'échec, liste les audits fautifs par catégorie
+      # (le rapport assert ne montre que le score global).
+      - name: Lighthouse failing audits (debug)
+        if: failure()
+        run: |
+          node -e "
+          const fs=require('fs');
+          for(const f of fs.readdirSync('.lighthouseci').filter(x=>x.startsWith('lhr-')&&x.endsWith('.json'))){
+            const r=JSON.parse(fs.readFileSync('.lighthouseci/'+f));
+            console.log('===', r.finalDisplayedUrl);
+            for(const [cat,c] of Object.entries(r.categories)){
+              for(const ref of c.auditRefs){
+                const a=r.audits[ref.id];
+                if(a && a.score!==null && a.score<0.9) console.log(' ', cat, '·', ref.id, '=', a.score, '·', (a.title||'').slice(0,90));
+              }
+            }
+          }"
