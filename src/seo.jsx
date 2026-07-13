@@ -97,6 +97,20 @@ function buildGraph(route, params, tourId, articleId) {
       });
     }
     crumbs.push({ name: 'FAQ', item: `${SITE_URL}/#/faq` });
+  } else if (route === 'croisieres') {
+    // Reportage YouTube intégré sur la page (façade cliquable, voir croisieres.jsx).
+    // uploadDate = date de publication réelle sur la chaîne "au senegal point com".
+    graph.push({
+      '@type': 'VideoObject',
+      name: 'Africa Connection Tours : Vivez l\'aventure avec du Sénégal',
+      description: 'Reportage consacré à Africa Connection Tours : accueil des passagers de croisière, excursions à terre et organisation des escales au Sénégal.',
+      thumbnailUrl: absUrl('images_du_senegal/croisière/reportage-video-poster.jpg'),
+      uploadDate: '2025-01-27',
+      embedUrl: 'https://www.youtube-nocookie.com/embed/VzcGdXxk9WQ',
+      contentUrl: 'https://www.youtube.com/watch?v=VzcGdXxk9WQ',
+      publisher: PUBLISHER,
+    });
+    crumbs.push({ name: 'Croisières', item: `${SITE_URL}/#/croisieres` });
   } else if (route && SECTION_LABELS[route]) {
     crumbs.push({ name: SECTION_LABELS[route], item: `${SITE_URL}/#/${route}` });
   }

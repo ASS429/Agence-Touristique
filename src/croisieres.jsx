@@ -20,10 +20,17 @@ const CRUISE_PHOTOS = [
   { src: 'images_du_senegal/croisière/navire-quai.webp',        captionKey: 'page.croisieres.gallery.p6', fallback: 'Panorama d\'escale' }
 ];
 
+// Reportage vidéo ACT (chaîne "au senegal point com"). Intégré en façade
+// cliquable : la miniature est self-hostée et l'iframe youtube-nocookie.com
+// n'est injectée qu'au clic — aucune requête vers Google avant (RGPD).
+const CRUISE_VIDEO_ID = 'VzcGdXxk9WQ';
+const CRUISE_VIDEO_POSTER = 'images_du_senegal/croisière/reportage-video-poster.jpg';
+
 const Croisieres = ({ go }) => {
   const { t, richT } = useI18n();
   const waMsg = t('croisieres.wa');
   const [lightbox, setLightbox] = React.useState(null);
+  const [videoOpen, setVideoOpen] = React.useState(false);
 
   return (
     <main className="bg-sand-50">
@@ -94,6 +101,53 @@ const Croisieres = ({ go }) => {
             </button>
           ))}
         </div>
+      </section>
+
+      {/* Reportage vidéo ACT */}
+      <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-8 md:py-16">
+        <div className="mb-8 md:mb-10 max-w-2xl">
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-3">
+            — {t('page.croisieres.video.label', 'Reportage vidéo')}
+          </div>
+          <h2 className="font-display text-[32px] md:text-[44px] leading-tight">
+            {richT(t('page.croisieres.video.title', 'Une escale ACT, {em}filmée{/em}.'))}
+          </h2>
+          <p className="mt-3 text-ink-600 max-w-xl">
+            {t('page.croisieres.video.intro', 'Le reportage consacré à Africa Connection Tours : accueil des passagers, excursions à terre et coulisses de l\'organisation des escales au Sénégal.')}
+          </p>
+        </div>
+
+        <div className="relative aspect-video overflow-hidden rounded-2xl border border-ink/10 shadow-sm bg-ink">
+          {videoOpen ? (
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${CRUISE_VIDEO_ID}?autoplay=1&rel=0`}
+              title="Africa Connection Tours : Vivez l'aventure avec du Sénégal"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full border-0"
+            />
+          ) : (
+            <button
+              onClick={() => setVideoOpen(true)}
+              aria-label={t('page.croisieres.video.play', 'Lire la vidéo')}
+              className="group absolute inset-0 w-full h-full text-left"
+            >
+              <img
+                src={CRUISE_VIDEO_POSTER}
+                alt={t('page.croisieres.video.play', 'Lire la vidéo')}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+              />
+              <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, rgba(26,22,18,.1) 0%, rgba(26,22,18,.5) 100%)' }}/>
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-16 w-16 md:h-20 md:w-20 rounded-full bg-sand-50/95 text-ink inline-flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform">
+                <Icons.Play size={28}/>
+              </span>
+            </button>
+          )}
+        </div>
+        <p className="mt-3 text-[12.5px] text-ink-500">
+          {t('page.croisieres.video.note', 'Vidéo hébergée sur YouTube — chargée uniquement après votre clic, aucun cookie déposé avant.')}
+        </p>
       </section>
 
       {/* Lightbox */}

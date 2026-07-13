@@ -14,6 +14,7 @@ const Icons = {
   ArrowRight: (p) => <Ic {...p}><path d="M5 12h14M13 5l7 7-7 7"/></Ic>,
   ArrowLeft: (p) => <Ic {...p}><path d="M19 12H5M11 5l-7 7 7 7"/></Ic>,
   ArrowUpRight: (p) => <Ic {...p}><path d="M7 17 17 7M9 7h8v8"/></Ic>,
+  Play: (p) => <Ic {...p}><path d="M8 5.5v13l11-6.5z" fill="currentColor" stroke="none"/></Ic>,
   ChevronRight: (p) => <Ic {...p}><path d="m9 6 6 6-6 6"/></Ic>,
   ChevronDown: (p) => <Ic {...p}><path d="m6 9 6 6 6-6"/></Ic>,
   Plus: (p) => <Ic {...p}><path d="M12 5v14M5 12h14"/></Ic>,
