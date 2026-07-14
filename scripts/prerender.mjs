@@ -93,6 +93,13 @@ async function main() {
   const renderOne = async (route) => {
     const page = await browser.newPage();
     try {
+      // Pas de services externes dans les snapshots : Turnstile (widget avec
+      // état), Sentry, GA — le HTML capturé doit rester neutre et stable.
+      await page.setRequestInterception(true);
+      page.on('request', (req) => {
+        if (/challenges\.cloudflare\.com|sentry|googletagmanager|google-analytics/.test(req.url())) req.abort().catch(() => {});
+        else req.continue().catch(() => {});
+      });
       await page.goto(BASE + route, { waitUntil: 'networkidle2', timeout: 45000 });
       // Contenu réellement rendu (pas seulement le spinner d'amorçage)
       await page.waitForFunction(
@@ -100,9 +107,14 @@ async function main() {
         { timeout: 15000 }
       );
       const html = await page.content();
+      const doc = '<!doctype html>\n' + html.replace(/^<!doctype html>\s*/i, '');
       const out = route === '/' ? join(DIST, 'index.html') : join(DIST, route.slice(1), 'index.html');
       mkdirSync(dirname(out), { recursive: true });
-      writeFileSync(out, '<!doctype html>\n' + html.replace(/^<!doctype html>\s*/i, ''));
+      writeFileSync(out, doc);
+      // Copie plate <route>.html : Render ne résout pas <route>/index.html
+      // pour une URL SANS slash final (le rewrite SPA passe avant) — mais il
+      // sert <route>.html pour /route. Les deux formes sont donc couvertes.
+      if (route !== '/') writeFileSync(join(DIST, route.slice(1) + '.html'), doc);
       console.log(`✅ ${route}`);
     } catch (e) {
       failures++;

@@ -3,9 +3,19 @@
 import { test, expect } from '@playwright/test';
 
 // Coupe les services externes pour des tests hermétiques et rapides.
+// Turnstile est remplacé par un stub qui délivre immédiatement un token :
+// le parcours contact traverse ainsi le flux complet (widget → token →
+// soumission via Edge Function) sans dépendre de Cloudflare.
 const seal = async (page) => {
   await page.route(/supabase\.co|formspree\.io|sentry|google-analytics|googletagmanager/, (route) =>
     route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
+  );
+  await page.route(/challenges\.cloudflare\.com/, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/javascript',
+      body: 'window.turnstile={render:function(el,o){setTimeout(function(){o.callback("e2e-stub-token");},50);return "w1";},remove:function(){}};',
+    })
   );
 };
 

@@ -8,7 +8,10 @@ module.exports = {
       // Avec staticDistDir, LHCI remplace host:port par son serveur statique.
       url: ['http://localhost/', 'http://localhost/circuits/', 'http://localhost/croisieres/'],
       numberOfRuns: 1,
-      settings: { chromeFlags: '--no-sandbox' },
+      // fr-FR forcé : le site suit navigator.language (défaut EN) et
+      // l'audit SEO link-text pénalise les libellés génériques anglais
+      // (« Details ») — la langue de référence SEO du site est le français.
+      settings: { chromeFlags: '--no-sandbox --lang=fr-FR --accept-lang=fr-FR' },
     },
     assert: {
       assertions: {
