@@ -591,13 +591,13 @@ const Mentions = ({ go }) => {
       blocks={[
       { type:'h2', text:'1. Éditeur du site' },
       { type:'p', html:'<strong>Africa Connection Tours (ACT)</strong><br/>Forme juridique : Société Anonyme (SA).<br/>Siège social : 52, rue Félix Faure — BP 11446, Dakar-Peytavin, Sénégal.<br/>Tour-opérateur fondé le 19 août 1996.<br/>Numéro de Registre du Commerce (RCCM) : SNDKR.1996/B 1449.<br/>NINEA : 20104112A3.<br/>Licence agence de voyages : n° 006523.<br/>Capital social : 20 000 000 FCFA.' },
-      { type:'p', html:'<strong>Directeur de la publication :</strong> Salif Badiane, Directeur Général.<br/><strong>Contact :</strong> contact@actours-senegal.com · +221 33 849 52 00.' },
+      { type:'p', html:'<strong>Directeur de la publication :</strong> Salif Badiane, Directeur Général.<br/><strong>Contact :</strong> act@orange.sn · +221 33 849 52 00.' },
       { type:'h2', text:'2. Hébergement' },
       { type:'p', html:'Le site est hébergé par [Nom de l’hébergeur à compléter], dont le siège social est situé à [adresse de l’hébergeur].' },
       { type:'h2', text:'3. Propriété intellectuelle' },
       { type:'p', html:'L’ensemble des contenus présents sur le site (textes, photographies, illustrations, logos, marques) est protégé par le droit d’auteur et reste la propriété exclusive de Africa Connection Tours ou de ses ayants droit. Toute reproduction, représentation, modification ou exploitation sans autorisation écrite préalable est interdite.' },
       { type:'h2', text:'4. Crédits photographiques' },
-      { type:'p', html:'Les photographies du site sont la propriété de Africa Connection Tours ou utilisées avec l’accord de leurs auteurs. Pour toute demande relative aux droits d’usage, écrivez à contact@actours-senegal.com.' },
+      { type:'p', html:'Les photographies du site sont la propriété de Africa Connection Tours ou utilisées avec l’accord de leurs auteurs. Pour toute demande relative aux droits d’usage, écrivez à act@orange.sn.' },
       { type:'h2', text:'5. Données personnelles & cookies' },
       { type:'p', html:'La gestion des données personnelles et des cookies est détaillée dans notre <a href="/privacy/">Politique de confidentialité</a>.' },
       { type:'h2', text:'6. Litiges' },
@@ -637,13 +637,13 @@ const Privacy = ({ go }) => {
         'Vous opposer à leur traitement à des fins commerciales.',
         'Retirer votre consentement aux communications marketing.',
       ]},
-      { type:'p', html:'Pour exercer ces droits, écrivez à <a href="mailto:contact@actours-senegal.com">contact@actours-senegal.com</a>. Nous vous répondrons sous 30 jours.' },
+      { type:'p', html:'Pour exercer ces droits, écrivez à <a href="mailto:act@orange.sn">act@orange.sn</a>. Nous vous répondrons sous 30 jours.' },
       { type:'h2', text:'5. Cookies' },
       { type:'p', html:'Le site utilise des cookies essentiels (fonctionnement du site) et des cookies de mesure d’audience (Google Analytics 4, anonymisés). Aucun cookie publicitaire n’est posé sans votre consentement explicite. Vous pouvez désactiver les cookies via les paramètres de votre navigateur.' },
       { type:'h2', text:'6. Transferts hors Sénégal' },
       { type:'p', html:'Certains de nos prestataires techniques (hébergement, analytics, paiement) sont situés hors du Sénégal. Nous nous assurons qu’ils respectent un niveau de protection équivalent à celui exigé par la loi sénégalaise.' },
       { type:'h2', text:'7. Contact' },
-      { type:'p', html:'Pour toute question sur la confidentialité : <a href="mailto:contact@actours-senegal.com">contact@actours-senegal.com</a>.' },
+      { type:'p', html:'Pour toute question sur la confidentialité : <a href="mailto:act@orange.sn">act@orange.sn</a>.' },
     ]}/>
   );
 };
