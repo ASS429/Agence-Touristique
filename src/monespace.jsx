@@ -249,7 +249,7 @@ const ClientSpace = ({ go }) => {
           </form>
 
           <div className="mt-8 text-center">
-            <a href="/contact" className="text-ink-500 hover:text-terre text-[13px]">
+            <a href="/contact/" className="text-ink-500 hover:text-terre text-[13px]">
               {t('monespace.login.help', 'Besoin d\'aide ? Contactez-nous')}
             </a>
           </div>
@@ -347,7 +347,7 @@ const ClientSpace = ({ go }) => {
             <div className="text-center py-10">
               <div className="text-5xl mb-3 opacity-40">📭</div>
               <p className="text-ink-600 text-[14px]">{t('monespace.reqs.empty', 'Aucune demande enregistrée pour le moment.')}</p>
-              <a href="/custom" className="mt-4 inline-flex items-center gap-2 h-10 px-5 rounded-full bg-terre-600 hover:bg-terre-700 text-sand-50 text-[13.5px] font-medium">
+              <a href="/custom/" className="mt-4 inline-flex items-center gap-2 h-10 px-5 rounded-full bg-terre-600 hover:bg-terre-700 text-sand-50 text-[13.5px] font-medium">
                 {t('monespace.reqs.new', 'Faire une demande')} <Icons.ArrowRight size={13}/>
               </a>
             </div>
@@ -385,7 +385,7 @@ const ClientSpace = ({ go }) => {
           )}
 
           <div className="mt-6 text-center">
-            <a href="/custom" className="text-terre hover:text-terre-700 text-[13.5px] inline-flex items-center gap-1">
+            <a href="/custom/" className="text-terre hover:text-terre-700 text-[13.5px] inline-flex items-center gap-1">
               + {t('monespace.reqs.newLink', 'Nouvelle demande de voyage')}
             </a>
           </div>

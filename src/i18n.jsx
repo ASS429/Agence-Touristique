@@ -4474,10 +4474,13 @@ const parsePath = () => {
 
 // Chemin canonique d'une route — utilisé par go() et exposé aux composants
 // pour construire des href réels (crawlables).
+// AVEC slash final : Render sert <route>/index.html (snapshot prérendu)
+// uniquement pour la forme avec slash — sans slash, le rewrite SPA passe
+// avant et sert le shell. La forme canonique (URL, canonical, sitemap,
+// liens internes) est donc « /croisieres/ ». parsePath tolère les deux.
 const routePath = (route, params = {}) => {
-  let path = (!route || route === 'home') ? '/' : '/' + route;
-  if (params.id) path += '/' + params.id;
-  return path;
+  if (!route || route === 'home') return '/';
+  return '/' + route + (params.id ? '/' + params.id : '') + '/';
 };
 
 // Redirection legacy AVANT le premier rendu : « /#/contact?x=y » → « /contact?x=y ».

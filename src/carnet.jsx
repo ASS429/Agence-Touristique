@@ -99,7 +99,7 @@ const CarnetVoyage = ({ slug, go }) => {
         <p className="text-ink-600 mb-8 text-center max-w-md">
           {t('carnet.notFound.body', 'Ce carnet de voyage n\'existe pas ou n\'est plus disponible.')}
         </p>
-        <a href="/circuits" className="px-6 py-3 rounded-full bg-terre-600 text-sand-50 font-medium hover:bg-terre-700">
+        <a href="/circuits/" className="px-6 py-3 rounded-full bg-terre-600 text-sand-50 font-medium hover:bg-terre-700">
           {t('carnet.notFound.back', 'Voir tous nos circuits')}
         </a>
       </main>
@@ -238,7 +238,7 @@ const CarnetVoyage = ({ slug, go }) => {
 
         {/* Retour catalogue */}
         <div className="mt-10 text-center">
-          <a href="/circuits" className="text-terre-700 hover:text-terre text-[14px] inline-flex items-center gap-1.5">
+          <a href="/circuits/" className="text-terre-700 hover:text-terre text-[14px] inline-flex items-center gap-1.5">
             ← {t('carnet.back', 'Voir tous les circuits ACT')}
           </a>
         </div>

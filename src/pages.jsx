@@ -163,7 +163,7 @@ const Contact = ({ go }) => {
                 </div>
               )}
               <div className="md:col-span-2 flex flex-wrap items-center justify-between gap-4">
-                <p className="text-[12px] text-ink-500 max-w-sm">{t('contact.form.privacyText')} <a href="/privacy" className="underline underline-offset-2 hover:text-terre">{t('contact.form.privacyLink')}</a>.</p>
+                <p className="text-[12px] text-ink-500 max-w-sm">{t('contact.form.privacyText')} <a href="/privacy/" className="underline underline-offset-2 hover:text-terre">{t('contact.form.privacyLink')}</a>.</p>
                 <div className="flex items-center gap-3">
                   <Btn as="a" href={mailtoHref()} variant="outline" size="lg" icon={<Icons.Mail size={16}/>}>
                     {t('contact.form.openMail')}
@@ -599,7 +599,7 @@ const Mentions = ({ go }) => {
       { type:'h2', text:'4. Crédits photographiques' },
       { type:'p', html:'Les photographies du site sont la propriété de Africa Connection Tours ou utilisées avec l’accord de leurs auteurs. Pour toute demande relative aux droits d’usage, écrivez à contact@actours-senegal.com.' },
       { type:'h2', text:'5. Données personnelles & cookies' },
-      { type:'p', html:'La gestion des données personnelles et des cookies est détaillée dans notre <a href="/privacy">Politique de confidentialité</a>.' },
+      { type:'p', html:'La gestion des données personnelles et des cookies est détaillée dans notre <a href="/privacy/">Politique de confidentialité</a>.' },
       { type:'h2', text:'6. Litiges' },
       { type:'p', html:'Le présent site est soumis au droit sénégalais. En cas de litige, et après tentative de résolution amiable, les tribunaux compétents de Dakar seront seuls compétents.' },
     ]}/>

@@ -7,12 +7,12 @@ describe('routePath — chemins canoniques du routeur', () => {
     expect(routePath('')).toBe('/');
     expect(routePath(undefined)).toBe('/');
   });
-  it('sections simples', () => {
-    expect(routePath('circuits')).toBe('/circuits');
-    expect(routePath('croisieres')).toBe('/croisieres');
+  it('sections simples — avec slash final (forme servie prérendue par Render)', () => {
+    expect(routePath('circuits')).toBe('/circuits/');
+    expect(routePath('croisieres')).toBe('/croisieres/');
   });
-  it('routes avec id', () => {
-    expect(routePath('tour', { id: 'grand-tour-7j' })).toBe('/tour/grand-tour-7j');
-    expect(routePath('blog', { id: 'wave-om' })).toBe('/blog/wave-om');
+  it('routes avec id — avec slash final', () => {
+    expect(routePath('tour', { id: 'grand-tour-7j' })).toBe('/tour/grand-tour-7j/');
+    expect(routePath('blog', { id: 'wave-om' })).toBe('/blog/wave-om/');
   });
 });

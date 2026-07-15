@@ -59,14 +59,14 @@ function buildGraph(route, params, tourId, articleId) {
         name: c.title,
         description: c.short || c.subtitle || c.title,
         image: absUrl(c.img),
-        url: `${SITE_URL}/tour/${c.id}`,
+        url: `${SITE_URL}${routePath('tour', { id: c.id })}`,
         provider: PUBLISHER,
         ...(c.rating && c.reviews ? {
           aggregateRating: { '@type': 'AggregateRating', ratingValue: c.rating, reviewCount: c.reviews },
         } : {}),
       });
-      crumbs.push({ name: 'Circuits', item: `${SITE_URL}/circuits` });
-      crumbs.push({ name: c.title, item: `${SITE_URL}/tour/${c.id}` });
+      crumbs.push({ name: 'Circuits', item: `${SITE_URL}${routePath('circuits')}` });
+      crumbs.push({ name: c.title, item: `${SITE_URL}${routePath('tour', { id: c.id })}` });
     }
   } else if (route === 'blog' && params.id) {
     const b = BLOG.find(x => x.id === articleId);
@@ -77,13 +77,13 @@ function buildGraph(route, params, tourId, articleId) {
         headline: b.title,
         description: b.excerpt,
         image: absUrl(b.img),
-        url: `${SITE_URL}/blog/${b.id}`,
+        url: `${SITE_URL}${routePath('blog', { id: b.id })}`,
         author: { '@type': 'Person', name: b.author?.name || 'Africa Connection Tours' },
         publisher: PUBLISHER,
         ...(dp ? { datePublished: dp } : {}),
       });
-      crumbs.push({ name: 'Blog', item: `${SITE_URL}/blog` });
-      crumbs.push({ name: b.title, item: `${SITE_URL}/blog/${b.id}` });
+      crumbs.push({ name: 'Blog', item: `${SITE_URL}${routePath('blog')}` });
+      crumbs.push({ name: b.title, item: `${SITE_URL}${routePath('blog', { id: b.id })}` });
     }
   } else if (route === 'faq') {
     const qas = FAQ.flatMap(g => g.items || []).slice(0, 40);
@@ -97,7 +97,7 @@ function buildGraph(route, params, tourId, articleId) {
         })),
       });
     }
-    crumbs.push({ name: 'FAQ', item: `${SITE_URL}/faq` });
+    crumbs.push({ name: 'FAQ', item: `${SITE_URL}${routePath('faq')}` });
   } else if (route === 'croisieres') {
     // Reportage YouTube intégré sur la page (façade cliquable, voir croisieres.jsx).
     // uploadDate = date de publication réelle sur la chaîne "au senegal point com".
@@ -111,9 +111,9 @@ function buildGraph(route, params, tourId, articleId) {
       contentUrl: 'https://www.youtube.com/watch?v=VzcGdXxk9WQ',
       publisher: PUBLISHER,
     });
-    crumbs.push({ name: 'Croisières', item: `${SITE_URL}/croisieres` });
+    crumbs.push({ name: 'Croisières', item: `${SITE_URL}${routePath('croisieres')}` });
   } else if (route && SECTION_LABELS[route]) {
-    crumbs.push({ name: SECTION_LABELS[route], item: `${SITE_URL}/${route}` });
+    crumbs.push({ name: SECTION_LABELS[route], item: `${SITE_URL}${routePath(route)}` });
   }
 
   if (crumbs.length > 1) {

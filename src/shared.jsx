@@ -18,9 +18,9 @@ const SITE = {
   rccm:            'SNDKR.1996/B 1449',
   ninea:           '20104112A3',
   travelLicense:   'n° 006523',
-  whatsapp:        '221338495200',         // ⚠️ ACT n'a pas encore de mobile WhatsApp dédié — fixe en attendant
-  whatsappDisplay: '+221 33 849 52 00',
-  whatsappAvailable: false,                // tant que false, désactive les CTAs WhatsApp si on veut
+  whatsapp:        '221770957394',         // WhatsApp officiel site — fourni par S. Badiane (mail 14 juil. 2026)
+  whatsappDisplay: '+221 77 095 73 94',
+  whatsappAvailable: true,                 // numéro dédié confirmé par la direction ACT
   phone:           '+221 33 849 52 00',
   phoneAlt:        '+221 33 849 52 83',
   fax:             '+221 33 821 83 26',
@@ -234,7 +234,7 @@ const CookieConsent = () => {
           {before}<em>{em}</em>{after}
         </div>
         <p className="mt-2 text-[13px] text-sand-200 leading-relaxed">
-          {t('cookies.body')} <a href="/privacy" className="underline underline-offset-2 hover:text-terre-300">{t('cookies.learnMore')}</a>.
+          {t('cookies.body')} <a href="/privacy/" className="underline underline-offset-2 hover:text-terre-300">{t('cookies.learnMore')}</a>.
         </p>
         <div className="mt-4 flex items-center gap-2">
           <button onClick={decline} className="px-4 h-9 rounded-full border border-sand-100/30 text-sand-100 text-[12.5px] hover:bg-sand-50/10 transition-colors">{t('cookies.decline')}</button>
@@ -419,7 +419,7 @@ const Header = ({ route, go, topOffset = 0 }) => {
           <Logo inverted={!onLight} onClick={(e)=>{e.preventDefault(); go('home');}} />
           <nav className="hidden lg:flex items-center gap-1" aria-label="Navigation principale">
             {nav.map(n => (
-              <a key={n.id} href={`/${n.id}`} onClick={(e)=>handleNav(e, n.id)}
+              <a key={n.id} href={`/${n.id}/`} onClick={(e)=>handleNav(e, n.id)}
                  aria-current={route===n.id ? 'page' : undefined}
                  className={`px-3 py-2 rounded-full text-[13.5px] transition-colors ${
                    onLight
@@ -470,14 +470,14 @@ const Header = ({ route, go, topOffset = 0 }) => {
           </div>
           <nav className="p-5 flex flex-col" aria-label="Navigation mobile">
             {nav.map(n => (
-              <a key={n.id} href={`/${n.id}`} onClick={(e)=>handleNav(e, n.id)}
+              <a key={n.id} href={`/${n.id}/`} onClick={(e)=>handleNav(e, n.id)}
                  aria-current={route===n.id ? 'page' : undefined}
                  className="py-3.5 text-2xl font-display border-b border-ink/5 flex items-center justify-between">
                 <span>{n.label}</span>
                 <Icons.ArrowUpRight size={18} className="text-ink-400" aria-hidden="true"/>
               </a>
             ))}
-            <a href="/faq" onClick={(e)=>handleNav(e,'faq')}
+            <a href="/faq/" onClick={(e)=>handleNav(e,'faq')}
                aria-current={route==='faq' ? 'page' : undefined}
                className="py-3.5 text-2xl font-display border-b border-ink/5 flex items-center justify-between">
               <span>{t('nav.faq')}</span>
@@ -719,7 +719,7 @@ const Footer = ({ go }) => {
   // parent), on retombe sur une navigation native par chemin, qui marche partout.
   const nav = typeof go === 'function' ? go : (target) => { window.location.assign(target === 'home' ? '/' : '/' + target); };
   const link = (route, label) => (
-    <li><a href={`/${route}`} onClick={(e)=>{e.preventDefault(); nav(route);}} className="hover:text-sand-50">{label}</a></li>
+    <li><a href={`/${route}/`} onClick={(e)=>{e.preventDefault(); nav(route);}} className="hover:text-sand-50">{label}</a></li>
   );
   return (
     <footer className="bg-ink text-sand-100 pt-20 pb-10 mt-24" data-screen-label="Footer">
@@ -832,9 +832,9 @@ const Footer = ({ go }) => {
             <span>NINEA · {SITE.ninea}</span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="/mentions" className="hover:text-sand-50">{t('footer.legal')}</a>
-            <a href="/cgv"      className="hover:text-sand-50">{t('footer.cgv')}</a>
-            <a href="/privacy"  className="hover:text-sand-50">{t('footer.privacy')}</a>
+            <a href="/mentions/" className="hover:text-sand-50">{t('footer.legal')}</a>
+            <a href="/cgv/"      className="hover:text-sand-50">{t('footer.cgv')}</a>
+            <a href="/privacy/"  className="hover:text-sand-50">{t('footer.privacy')}</a>
           </div>
         </div>
       </div>

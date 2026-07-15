@@ -56,6 +56,8 @@ const ROUTES = [
 ];
 
 // --- 2. Sitemap --------------------------------------------------------
+// URLs canoniques AVEC slash final : c'est la seule forme pour laquelle
+// Render sert le HTML prérendu (sans slash, le rewrite SPA sert le shell).
 const today = new Date().toISOString().slice(0, 10);
 const prio = (r) =>
   r === '/'                    ? '1.0' :
@@ -64,7 +66,7 @@ const prio = (r) =>
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${ROUTES.map(r => `  <url>
-    <loc>${SITE}${r}</loc>
+    <loc>${SITE}${r === '/' ? '/' : r + '/'}</loc>
     <lastmod>${today}</lastmod>
     <priority>${prio(r)}</priority>
   </url>`).join('\n')}

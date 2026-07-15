@@ -22,8 +22,8 @@ const seal = async (page) => {
 test('Parcours devis : home → circuits → fiche circuit → CTA WhatsApp', async ({ page }) => {
   await seal(page);
   await page.goto('/');
-  await page.click('header nav a[href="/circuits"]');
-  await expect(page).toHaveURL(/\/circuits$/);
+  await page.click('header nav a[href^="/circuits"]');
+  await expect(page).toHaveURL(/\/circuits\/?$/);
   // Le catalogue est rendu (contenu, pas seulement le shell)
   await expect(page.locator('#main-content')).toContainText(/circuit/i);
   // Les cartes naviguent par onClick(go) : navigation directe vers une fiche
@@ -63,7 +63,7 @@ test('Parcours langue : bascule EN → la nav change', async ({ page }) => {
 test('Parcours legacy + vidéo : /#/croisieres redirigé, façade → iframe nocookie', async ({ page }) => {
   await seal(page);
   await page.goto('/#/croisieres');
-  await expect(page).toHaveURL(/\/croisieres$/);
+  await expect(page).toHaveURL(/\/croisieres\/?$/);
   // Façade vidéo : aucune iframe YouTube avant le clic (RGPD)
   await expect(page.locator('iframe[src*="youtube"]')).toHaveCount(0);
   await page.locator('button[aria-label*="vidéo" i], button[aria-label*="video" i]').first().click();

@@ -19,7 +19,7 @@ describe('buildGraph — JSON-LD par route', () => {
     const g = buildGraph('tour', {}, 'grand-tour-7j', null);
     const trip = g.find(x => x['@type'] === 'TouristTrip');
     expect(trip).toBeTruthy();
-    expect(trip.url).toBe('https://act-senegal.com/tour/grand-tour-7j');
+    expect(trip.url).toBe('https://act-senegal.com/tour/grand-tour-7j/');
     expect(g.find(x => x['@type'] === 'BreadcrumbList')).toBeTruthy();
   });
   it('croisières → VideoObject (reportage ACT)', () => {
