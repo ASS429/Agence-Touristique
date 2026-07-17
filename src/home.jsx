@@ -2,7 +2,7 @@ import React from 'react';
 import { useI18n } from './i18n.jsx';
 import { Icons } from './icons.jsx';
 import { Photo } from './photo.jsx';
-import { Btn, CircuitCard, Footer, Price, Section, StarRow, buildWaURL } from './shared.jsx';
+import { Btn, CircuitCard, Footer, Price, SITE, Section, StarRow, buildWaURL } from './shared.jsx';
 import { CIRCUITS, DESTINATIONS, BLOG, INSTA, TESTIMONIALS, IMG } from './data.jsx';
 // Home page — uses shared CircuitCard, Price, and go() for in-app navigation.
 
@@ -474,9 +474,9 @@ const Insta = () => {
       <div className="max-w-[1280px] mx-auto px-4 md:px-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
         <div>
           <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-terre mb-3">— {t('home.insta.label')}</div>
-          <h2 className="font-display text-[32px] md:text-[44px] leading-none">@actours_senegal</h2>
+          <h2 className="font-display text-[32px] md:text-[44px] leading-none">@africaconnectiontours</h2>
         </div>
-        <a href="#" className="text-[14px] inline-flex items-center gap-1.5 hover:text-terre">{t('home.insta.follow')} <Icons.ArrowUpRight size={14}/></a>
+        <a href={SITE.instagram} target="_blank" rel="noreferrer" className="text-[14px] inline-flex items-center gap-1.5 hover:text-terre">{t('home.insta.follow')} <Icons.ArrowUpRight size={14}/></a>
       </div>
     <div className="relative">
       <div className="flex gap-3 md:gap-4 marquee w-max">

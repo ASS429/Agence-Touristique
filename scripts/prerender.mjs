@@ -90,7 +90,7 @@ async function main() {
 
   const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-gpu'] });
   let failures = 0;
-  const CONCURRENCY = 4;
+  const CONCURRENCY = Number(process.env.PRERENDER_CONCURRENCY) || 4;
 
   const renderOne = async (route) => {
     const page = await browser.newPage();

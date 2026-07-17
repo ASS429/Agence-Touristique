@@ -46,7 +46,7 @@ const excDefaultFilters = () => ({
 const filterExcursions = (filters) => {
   let list = EXCURSIONS.slice();
   if (filters.kinds.length)  list = list.filter(e => filters.kinds.includes(e.kind));
-  if (filters.starts.length) list = list.filter(e => filters.starts.includes(e.start));
+  if (filters.starts.length) list = list.filter(e => filters.starts.includes(e.start) || (e.start2 && filters.starts.includes(e.start2)));
   if (filters.types.length)  list = list.filter(e => filters.types.some(t => e.types.includes(t)));
   if (filters.destIds.length) list = list.filter(e => filters.destIds.some(d => e.destIds.includes(d)));
   switch (filters.sort) {

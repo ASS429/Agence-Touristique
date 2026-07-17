@@ -225,9 +225,16 @@ const Contact = ({ go }) => {
                 </div>
               </div>
               <div className="mt-5 flex items-center gap-2">
-                {SITE.instagram && <a href={SITE.instagram} aria-label="Instagram" target="_blank" rel="noreferrer" className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><Icons.Instagram size={15}/></a>}
-                <a href={SITE.facebook} aria-label="Facebook" target="_blank" rel="noreferrer" className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><Icons.Facebook size={15}/></a>
-                <a href={SITE.twitter} aria-label="Twitter / X" target="_blank" rel="noreferrer" className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><Icons.Tiktok size={15}/></a>
+                {[
+                  { I: Icons.Instagram, l:'Instagram',   href: SITE.instagram },
+                  { I: Icons.XSocial,   l:'X (Twitter)', href: SITE.twitter },
+                  { I: Icons.Tiktok,    l:'TikTok',      href: SITE.tiktok },
+                  { I: Icons.Youtube,   l:'YouTube',     href: SITE.youtube },
+                  { I: Icons.Linkedin,  l:'LinkedIn',    href: SITE.linkedin },
+                  { I: Icons.Facebook,  l:'Facebook',    href: SITE.facebook },
+                ].filter(s=>s.href).map(({I,l,href})=>(
+                  <a key={l} href={href} aria-label={l} target="_blank" rel="noreferrer" className="h-9 w-9 rounded-full border border-ink/15 inline-flex items-center justify-center hover:bg-ink hover:text-sand-50 transition"><I size={15}/></a>
+                ))}
               </div>
             </div>
           </div>
@@ -304,7 +311,9 @@ const About = ({ go }) => {
           </div>
           <div className="relative">
             <div className="grid grid-cols-2 gap-3">
-              <Photo tone="terre" mood="portrait" label={t('about.histoire.photo.salif')} ratio="aspect-[3/4]"/>
+              {/* Pas de portrait du DG : volonté ACT d'éviter la personnalisation
+                  (mail S. Badiane, 17 juil. 2026) — visuel institutionnel à la place. */}
+              <Photo tone="terre" mood="portrait" label={t('about.histoire.photo.equipe')} ratio="aspect-[3/4]" src={IMG('Ile de gorée', 6)} alt="Accueil des voyageurs — île de Gorée"/>
               <div className="grid grid-rows-2 gap-3">
                 <Photo tone="sand" mood="city" label={t('about.histoire.photo.siege')} ratio="aspect-square" src={IMG('Dakar', 6)} alt="Siège ACT, Dakar-Peytavin"/>
                 <Photo tone="atlant" mood="water" label={t('about.histoire.photo.bureau')} ratio="aspect-square" src={IMG('Delta du Saloum', 5)} alt="Réseau ouest-africain"/>
@@ -668,9 +677,10 @@ const Cgv = ({ go }) => {
       ]},
       { type:'h2', text:'5. Annulation par le Client' },
       { type:'ul', items:[
-        '<strong>Plus de 21 jours avant le départ</strong> : remboursement intégral de l’acompte.',
-        '<strong>Entre 21 et 7 jours avant le départ</strong> : 50 % de l’acompte remboursé.',
-        '<strong>Moins de 7 jours avant le départ</strong> : l’acompte est conservé mais peut être reporté sur un autre circuit dans les 12 mois.',
+        '<strong>Jusqu’à 20 jours avant le départ</strong> : annulation sans frais, remboursement intégral des sommes versées.',
+        '<strong>De 19 à 8 jours avant le départ</strong> : pénalité de 30 % du montant total du voyage.',
+        '<strong>À 7 jours du départ</strong> : pénalité de 50 % du montant total.',
+        '<strong>Moins de 7 jours avant le départ</strong> : pénalité de 100 % — aucun remboursement.',
         'L’annulation doit être notifiée par écrit (email ou WhatsApp).',
       ]},
       { type:'h2', text:'6. Annulation par l’Agence' },

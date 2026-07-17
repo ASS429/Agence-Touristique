@@ -28,9 +28,13 @@ const SITE = {
   address:         '52, rue Félix Faure, BP 11446, Dakar-Peytavin',
   addressShort:    'Dakar-Plateau',
   website:         'act-senegal.com',
+  // Réseaux sociaux officiels — liens fournis par ACT (17 juil. 2026).
+  twitter:         'https://x.com/actours221',
+  instagram:       'https://www.instagram.com/africaconnectiontours',
+  tiktok:          'https://www.tiktok.com/@africaconnectiont',
+  youtube:         'https://www.youtube.com/@CONNECTIONTOURSAFRICA',
+  linkedin:        'https://www.linkedin.com/in/connection-tours-africa-04a3a5422/',
   facebook:        'https://www.facebook.com/AfricaConnectionTours',
-  twitter:         'https://twitter.com/actours_senegal',
-  instagram:       '',                     // pas encore fourni par l'agence
   // Formspree DÉSACTIVÉ (2026-07) : les demandes sont enregistrées en base
   // Supabase (admin « Demandes reçues ») et notifiées à ACT par email via
   // l'Edge Function Resend. Plus de transit par Formspree (service US).
@@ -44,7 +48,7 @@ const SITE = {
   // : si l'utilisateur a fermé la promo X, elle ne réapparaît plus avec le
   // même id. Changer l'id pour relancer une nouvelle annonce.
   promo: {
-    active:    true,
+    active:    false,                      // désactivée à la demande d'ACT (mail S. Badiane, 17 juil. 2026)
     id:        'saison-seche-2026',
     label:     'Offre saison sèche',
     title:     'Janvier–Février : -10 % sur les circuits du Nord',
@@ -762,10 +766,13 @@ const Footer = ({ go }) => {
             </p>
             <div className="mt-6 flex items-center gap-2">
               {[
+                { I: Icons.Instagram, l:'Instagram',    href: SITE.instagram },
+                { I: Icons.XSocial,   l:'X (Twitter)',  href: SITE.twitter },
+                { I: Icons.Tiktok,    l:'TikTok',       href: SITE.tiktok },
+                { I: Icons.Youtube,   l:'YouTube',      href: SITE.youtube },
+                { I: Icons.Linkedin,  l:'LinkedIn',     href: SITE.linkedin },
                 { I: Icons.Facebook,  l:'Facebook',     href: SITE.facebook },
-                { I: Icons.Tiktok,    l:'Twitter / X',  href: SITE.twitter },
-                ...(SITE.instagram ? [{ I: Icons.Instagram, l:'Instagram', href: SITE.instagram }] : []),
-              ].map(({I,l,href},i)=>(
+              ].filter(s=>s.href).map(({I,l,href},i)=>(
                 <a key={i} href={href} target="_blank" rel="noreferrer" aria-label={l} className="h-10 w-10 rounded-full border border-sand-100/15 inline-flex items-center justify-center hover:bg-sand-50 hover:text-ink transition">
                   <I size={16}/>
                 </a>

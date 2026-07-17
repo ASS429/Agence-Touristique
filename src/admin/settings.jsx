@@ -38,10 +38,12 @@ const SETTINGS_SECTIONS = [
         title: 'Présence en ligne',
         kicker: 'Réseaux sociaux',
         fields: [
-          { key: 'social.facebook',  label: 'URL Facebook',  multi: false },
           { key: 'social.instagram', label: 'URL Instagram', multi: false },
+          { key: 'social.x',         label: 'URL X (Twitter)', multi: false },
+          { key: 'social.tiktok',    label: 'URL TikTok',    multi: false },
+          { key: 'social.youtube',   label: 'URL YouTube',   multi: false },
           { key: 'social.linkedin',  label: 'URL LinkedIn',  multi: false },
-          { key: 'social.youtube',   label: 'URL YouTube',   multi: false }
+          { key: 'social.facebook',  label: 'URL Facebook',  multi: false }
         ]
       }
     ]

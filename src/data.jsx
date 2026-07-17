@@ -342,10 +342,11 @@ const EXCURSIONS = [
     img:'images_du_senegal/photos_act_book/saloum/cases-pilotis-01.jpg' },
 
   // ---- Journée à Saint-Louis (doc ACT « 1 JOURNEE A SAINT LOUIS », juillet 2026) ----
+  // start2 : départ également possible depuis Dakar (confirmé ACT, 17 juil. 2026)
   { id:'saint-louis-fullday', title:'1 journée à Saint-Louis', subtitle:'Cité classée UNESCO, Gandiole & calèche',
-    kind:'full', start:'saly', days:1, nights:0, priceXOF:null, tone:'terre', mood:'city',
+    kind:'full', start:'saly', start2:'dakar', days:1, nights:0, priceXOF:null, tone:'terre', mood:'city',
     schedule:'8h00 → 19h00  (déjeuner inclus)',
-    short:"Départ matinal par la route côtière panoramique et ses marchés maraîchers. Arrivée à Gandiole : tour en pirogue à l'embouchure du fleuve Sénégal, sites d'oiseaux. Déjeuner de gastronomie saint-louisienne. Après-midi en calèche : maisons coloniales aux balcons en fer forgé, quartier pittoresque des pêcheurs de Guet Ndar. Retour vers Saly avec halte artisanale à Mékhé.",
+    short:"Départ matinal par la route côtière panoramique et ses marchés maraîchers. Arrivée à Gandiole : tour en pirogue à l'embouchure du fleuve Sénégal, sites d'oiseaux. Déjeuner de gastronomie saint-louisienne. Après-midi en calèche : maisons coloniales aux balcons en fer forgé, quartier pittoresque des pêcheurs de Guet Ndar. Retour vers Saly avec halte artisanale à Mékhé. Départ possible depuis Saly ou Dakar.",
     types:['culture','nature'], destIds:['saint-louis'], popularity:89,
     img: IMG('Saint-Louis', 3) },
 ];
@@ -755,11 +756,13 @@ const PARTNERS = [
 ];
 
 // === Key figures (About) ====================================================
+// Chiffres réels confirmés par ACT (mail S. Badiane, 17 juil. 2026) :
+// ~38 792 clients traités depuis 1996.
 const FIGURES = [
-  { k:'12 ans',   v:'à organiser le Sénégal' },
-  { k:'2 400+',  v:'voyageurs accueillis' },
-  { k:'14',      v:'circuits permanents' },
-  { k:'47',      v:'guides & partenaires' },
+  { k:'38 792', v:'voyageurs accompagnés depuis 1996' },
+  { k:'30',     v:"années d'expertise réceptive" },
+  { k:'6',      v:"pays couverts en Afrique de l'Ouest" },
+  { k:'6',      v:"langues d'accueil" },
 ];
 
 // === FAQ ====================================================================
@@ -776,7 +779,7 @@ const FAQ = [
   ]},
   { cat:'Annulation & modifications', items:[
     { q:'Quelle est votre politique d’annulation ?',
-      a:'Annulation gratuite jusqu’à 21 jours avant le départ. Entre 21 et 7 jours : 50 % remboursés. Moins de 7 jours : l’acompte est conservé mais reportable sur un autre circuit dans les 12 mois.' },
+      a:'Annulation sans frais jusqu’à 20 jours avant le départ. De 19 à 8 jours : pénalité de 30 % du montant total. À 7 jours : 50 %. Moins de 7 jours : 100 %.' },
     { q:'Puis-je modifier mes dates ?',
       a:'Oui, gratuitement jusqu’à 14 jours avant le départ. Au-delà, une nouvelle réservation peut être faite avec votre acompte intact.' },
     { q:'Et si ACT doit annuler ?',
@@ -882,7 +885,7 @@ const CIRCUIT_DETAIL = {
     { q:'Quels moyens de paiement acceptez-vous ?',
       a:'Wave, Orange Money, virement bancaire, carte Visa/Mastercard, et espèces (FCFA ou EUR). Un acompte de 30% confirme la réservation, le solde se règle au plus tard 7 jours avant le départ.' },
     { q:'Quelle est votre politique d’annulation ?',
-      a:'Annulation gratuite jusqu’à 21 jours avant le départ. Entre 21 et 7 jours : 50% remboursés. Moins de 7 jours : l’acompte est conservé mais reportable sur un autre circuit dans les 12 mois.' },
+      a:'Annulation sans frais jusqu’à 20 jours avant le départ. De 19 à 8 jours : pénalité de 30% du montant total. À 7 jours : 50%. Moins de 7 jours : 100%.' },
     { q:'Le transport est-il privé ?',
       a:'Oui — 4x4 ou minibus climatisé selon la taille du groupe, avec chauffeur professionnel. Vous ne partagez le véhicule avec personne d’autre.' },
     { q:'Peut-on partir avec des enfants ?',
