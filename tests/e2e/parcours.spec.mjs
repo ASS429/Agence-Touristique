@@ -27,8 +27,8 @@ test('Parcours devis : home → circuits → fiche circuit → CTA WhatsApp', as
   // Le catalogue est rendu (contenu, pas seulement le shell)
   await expect(page.locator('#main-content')).toContainText(/circuit/i);
   // Les cartes naviguent par onClick(go) : navigation directe vers une fiche
-  await page.goto('/tour/grand-tour-7j');
-  await expect(page.locator('h1')).toContainText(/tour|nord/i);
+  await page.goto('/tour/saint-louis-touba-3j');
+  await expect(page.locator('h1')).toContainText(/saint-louis|touba/i);
   // CTA WhatsApp présent (conversion)
   await expect(page.locator('a[href*="wa.me"]').first()).toBeVisible();
 });

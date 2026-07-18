@@ -257,6 +257,18 @@ const ExcursionTour = ({ exc, onBack, onOpenTour, go }) => {
   );
 };
 
+// Prestations génériques des circuits multi-jours (brochure ACT sans détail
+// par circuit — à affiner quand ACT transmet l'inclus/non-inclus de chacun).
+const GENERIC_INCLUDES = [
+  'Transport privé climatisé tout le séjour',
+  'Guide francophone (anglais sur demande)',
+  'Hébergement, dîners & petits-déjeuners selon programme',
+  'Déjeuners mentionnés au programme',
+  'Entrées des sites & activités du programme',
+  'Eau minérale à bord',
+  'Assistance WhatsApp 24/7',
+];
+
 const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
   const { t, richT } = useI18n();
   // Les excursions partagent la route /tour/:id : sans ce branchement, toute
@@ -271,6 +283,10 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
   const isCanonical = tourId === CIRCUIT_DETAIL.id;
   const catTitle    = t(`circuit.${cat.id}.title`,    cat.title);
   const catSubtitle = t(`circuit.${cat.id}.subtitle`, cat.subtitle);
+  // Circuits réels (brochure ACT) : `itinerary` fournit le programme jour par
+  // jour propre au circuit — la fiche type canonique ne sert plus que de
+  // gabarit (FAQ, prestations) et de fallback pour les circuits sans détail.
+  const hasItinerary = Array.isArray(cat.itinerary) && cat.itinerary.length > 0;
   const d = {
     ...CIRCUIT_DETAIL,
     id: cat.id,
@@ -280,9 +296,18 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
     reviews: cat.reviews,
     badges: cat.badges?.length ? cat.badges : CIRCUIT_DETAIL.badges,
     priceXOF: cat.priceXOF,
+    days: hasItinerary ? cat.itinerary : CIRCUIT_DETAIL.days,
+    // Durée réelle du circuit dans les infos pratiques (le gabarit disait « 5 jours »)
+    pratique: CIRCUIT_DETAIL.pratique.map(p =>
+      p.label === 'Durée' ? { ...p, value: `${cat.days} jour${cat.days > 1 ? 's' : ''} / ${cat.nights} nuit${cat.nights > 1 ? 's' : ''}` } : p),
+    // Prestations : celles détaillées du circuit vitrine, sinon la base générique
+    includes: isCanonical ? CIRCUIT_DETAIL.includes : GENERIC_INCLUDES,
+    excludes: CIRCUIT_DETAIL.excludes,
     gallery: isCanonical ? CIRCUIT_DETAIL.gallery : [
       { tone: cat.tone, mood: cat.mood, label: catTitle.toLowerCase(), img: cat.img },
-      ...CIRCUIT_DETAIL.gallery.slice(1),
+      ...(hasItinerary
+        ? cat.itinerary.map(day => ({ tone: day.tone, mood: day.mood, label: day.title.toLowerCase(), img: day.img }))
+        : CIRCUIT_DETAIL.gallery.slice(1)),
     ],
   };
   const waMsg = t('tour.wa.interest').replace('{title}', d.title);
@@ -315,13 +340,13 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
             {d.title}<br/><em className="text-terre">{d.subtitle}</em>
           </h1>
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-ink-600">
-            <span className="inline-flex items-center gap-1.5"><StarRow value={d.rating} size={14}/><span className="text-ink font-medium">{d.rating}</span><span>· {d.reviews} {t('common.reviews')}</span></span>
+            {d.rating && <span className="inline-flex items-center gap-1.5"><StarRow value={d.rating} size={14}/><span className="text-ink font-medium">{d.rating}</span><span>· {d.reviews} {t('common.reviews')}</span></span>}
             <span className="inline-flex items-center gap-1.5"><Icons.Calendar size={14}/> {t('tour.meta.daysNights').replace('{days}', cat.days).replace('{nights}', cat.nights)}</span>
-            <span className="inline-flex items-center gap-1.5"><Icons.MapPin size={14}/> Dakar → Saloum</span>
+            <span className="inline-flex items-center gap-1.5"><Icons.MapPin size={14}/> {cat.route || 'Dakar'}</span>
             <span className="inline-flex items-center gap-1.5"><Icons.Users size={14}/> {t('tour.meta.travelers')}</span>
           </div>
           <p className="mt-7 max-w-2xl text-[16px] md:text-[17px] text-ink-700 leading-relaxed">
-            Cinq jours pour rencontrer trois Sénégal distincts : l’île-mémoire de Gorée, le lac qui rosit au soleil, et les bolongs du delta du Saloum traversés en pirogue. Construit autour de pauses, de bons repas, et de gens qu’on connaît depuis longtemps.
+            {t(`circuit.${d.id}.short`, cat.short)}
           </p>
         </div>
 
@@ -346,8 +371,8 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
                 </div>
                 <div className="grid md:grid-cols-[1fr,1.1fr] gap-5 md:gap-8 items-center bg-sand-50 rounded-3xl p-5 md:p-7">
                   <div>
-                    <h3 className="font-display text-[26px] md:text-[34px] leading-tight">{day.title}</h3>
-                    <p className="mt-3 text-[14.5px] text-ink-600 leading-relaxed">{day.short}</p>
+                    <h3 className="font-display text-[26px] md:text-[34px] leading-tight">{t(`circuit.${d.id}.day.${day.n}.t`, day.title)}</h3>
+                    <p className="mt-3 text-[14.5px] text-ink-600 leading-relaxed">{t(`circuit.${d.id}.day.${day.n}.d`, day.short)}</p>
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Pill tone="sand"><Icons.Clock size={11}/> {t('tour.day.pill.day')}</Pill>
                       <Pill tone="sand"><Icons.Users size={11}/> {t('tour.day.pill.guide')}</Pill>
@@ -397,7 +422,7 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
       {/* Infos pratiques + carte */}
       <Section id="infos" label={t('tour.section.info.label')} title={richT(t('tour.section.info.title'))}
                className="py-16 md:py-24 bg-sand-100">
-        <div className="grid md:grid-cols-[1fr,1.2fr] gap-8 md:gap-12">
+        <div className={`grid gap-8 md:gap-12 ${isCanonical ? 'md:grid-cols-[1fr,1.2fr]' : 'max-w-2xl'}`}>
           <dl className="grid grid-cols-1 gap-y-5">
             {d.pratique.map((p,i)=>(
               <div key={i} className="grid grid-cols-[140px,1fr] gap-4 border-b border-ink/10 pb-4 last:border-0">
@@ -406,16 +431,20 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
               </div>
             ))}
           </dl>
-          <div>
-            <TourMap/>
-            <p className="mt-3 text-[12.5px] font-mono text-ink-500">{t('tour.section.info.disclaimer')}</p>
-          </div>
+          {/* Carte illustrée : ses étapes (Gorée/Lac Rose/Saloum) ne valent que
+              pour le circuit vitrine — masquée sur les autres fiches. */}
+          {isCanonical && (
+            <div>
+              <TourMap/>
+              <p className="mt-3 text-[12.5px] font-mono text-ink-500">{t('tour.section.info.disclaimer')}</p>
+            </div>
+          )}
         </div>
       </Section>
 
       {/* Avis */}
       <Section id="avis-circuit" label={t('tour.section.reviews.label')} title={richT(t('tour.section.reviews.title'))}
-               kicker={t('tour.section.reviews.kicker').replace('{rating}', d.rating).replace('{reviews}', d.reviews)}
+               kicker={d.rating ? t('tour.section.reviews.kicker').replace('{rating}', d.rating).replace('{reviews}', d.reviews) : undefined}
                className="py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-5 md:gap-6">
           {TOUR_REVIEWS.map((r,i)=>(
@@ -458,10 +487,12 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
             return (
               <button key={c.id} onClick={()=>{ onOpenTour(c.id); window.scrollTo({top:0}); }} className="group text-left flex flex-col">
                 <Photo tone={c.tone} mood={c.mood} label={`${c.days}j`} ratio="aspect-[5/4]" className="mb-4 group-hover:scale-[1.01] transition-transform" src={c.img} alt={sTitle}/>
-                <div className="flex items-center gap-2 mb-1.5">
-                  <StarRow value={c.rating} size={12}/>
-                  <span className="text-[12px] text-ink-500">{c.rating}</span>
-                </div>
+                {c.rating && (
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <StarRow value={c.rating} size={12}/>
+                    <span className="text-[12px] text-ink-500">{c.rating}</span>
+                  </div>
+                )}
                 <h3 className="font-display text-[24px] leading-tight">{sTitle}</h3>
                 <div className="text-[13px] text-ink-600 mt-0.5">{sSubtitle}</div>
                 <div className="mt-3 flex items-end justify-between">

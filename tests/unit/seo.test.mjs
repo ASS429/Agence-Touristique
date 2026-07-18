@@ -16,11 +16,19 @@ describe('parseFrDate — dates françaises du blog → ISO', () => {
 
 describe('buildGraph — JSON-LD par route', () => {
   it('fiche circuit → TouristTrip + fil d\'Ariane', () => {
-    const g = buildGraph('tour', {}, 'grand-tour-7j', null);
+    const g = buildGraph('tour', {}, 'saint-louis-2j', null);
     const trip = g.find(x => x['@type'] === 'TouristTrip');
     expect(trip).toBeTruthy();
-    expect(trip.url).toBe('https://act-senegal.com/tour/grand-tour-7j/');
+    expect(trip.url).toBe('https://act-senegal.com/tour/saint-louis-2j/');
     expect(g.find(x => x['@type'] === 'BreadcrumbList')).toBeTruthy();
+  });
+  it('fiche excursion → TouristTrip + fil d\'Ariane Excursions', () => {
+    const g = buildGraph('tour', {}, 'saint-louis-fullday', null);
+    const trip = g.find(x => x['@type'] === 'TouristTrip');
+    expect(trip).toBeTruthy();
+    expect(trip.url).toBe('https://act-senegal.com/tour/saint-louis-fullday/');
+    const crumbs = g.find(x => x['@type'] === 'BreadcrumbList');
+    expect(JSON.stringify(crumbs)).toContain('Excursions');
   });
   it('croisières → VideoObject (reportage ACT)', () => {
     const g = buildGraph('croisieres', {}, null, null);

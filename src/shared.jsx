@@ -579,10 +579,15 @@ const CircuitCard = ({ c, onOpen, size = 'md' }) => {
       <button onClick={()=>onOpen(c.id)} className="block w-full text-left">
         <Photo tone={c.tone} mood={c.mood} label={`${c.days}j`} ratio={size==='sm' ? 'aspect-[5/4]' : 'aspect-[4/5]'} className="mb-4 group-hover:scale-[1.01] transition-transform" rounded="rounded-2xl" src={c.img} alt={title}/>
       </button>
-      <div className="flex items-center gap-2 mb-2">
-        <StarRow value={c.rating} size={12}/>
-        <span className="text-[12px] text-ink-500">{c.rating} · {c.reviews} {t('common.reviews')}</span>
-      </div>
+      {/* Note affichée seulement si le circuit a de vrais avis (pas de notes inventées) */}
+      {c.rating ? (
+        <div className="flex items-center gap-2 mb-2">
+          <StarRow value={c.rating} size={12}/>
+          <span className="text-[12px] text-ink-500">{c.rating} · {c.reviews} {t('common.reviews')}</span>
+        </div>
+      ) : (
+        <div className="mb-2 text-[12px] text-ink-500">{c.days > 1 ? `${c.days}j / ${c.nights}n` : ''}</div>
+      )}
       <button onClick={()=>onOpen(c.id)} className="text-left">
         <h3 className="font-display text-[22px] md:text-[24px] leading-tight group-hover:text-terre transition-colors">{title}</h3>
         <div className="text-[13px] text-ink-600 mt-1">{subtitle}</div>

@@ -291,8 +291,8 @@ const ProfilACT = ({ go }) => {
 // ============================================================================
 const ProduitsCircuits = ({ onOpenTour, go }) => {
   const { t, richT } = useI18n();
-  // Mix : circuits signature + programme diaspora pour montrer la variété
-  const picks = ['goree-lac-saloum','diaspora-essentiel','casamance-essentielle','lompoul-saint-louis']
+  // Mix : circuits réels de la brochure ACT (nord, sainte, delta, sud)
+  const picks = ['saint-louis-2j','saint-louis-touba-3j','saloum-lac-rose-toubacouta-3j','casamance-mandingue-4j']
     .map(id => CIRCUITS.find(c=>c.id===id)).filter(Boolean);
   return (
     <Section id="produits-circuits" label={t('home.produits.label')}

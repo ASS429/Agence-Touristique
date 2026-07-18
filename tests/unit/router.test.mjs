@@ -12,7 +12,7 @@ describe('routePath — chemins canoniques du routeur', () => {
     expect(routePath('croisieres')).toBe('/croisieres/');
   });
   it('routes avec id — avec slash final', () => {
-    expect(routePath('tour', { id: 'grand-tour-7j' })).toBe('/tour/grand-tour-7j/');
+    expect(routePath('tour', { id: 'saint-louis-2j' })).toBe('/tour/saint-louis-2j/');
     expect(routePath('blog', { id: 'wave-om' })).toBe('/blog/wave-om/');
   });
 });
