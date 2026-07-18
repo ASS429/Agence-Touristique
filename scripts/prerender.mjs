@@ -88,13 +88,25 @@ async function main() {
                         { shell: true, stdio: 'ignore' });
   await wait(6000);
 
-  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-gpu'] });
+  // Locale forcée fr-FR : le Chrome des machines CI/Render est en-US, ce qui
+  // faisait basculer la détection i18n (navigator.language) en anglais et
+  // produisait des snapshots EN alors que le <head> statique déclare lang=fr.
+  // Même logique que le fix Lighthouse CI (Chrome LHCI forcé fr-FR).
+  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-gpu', '--lang=fr-FR'] });
   let failures = 0;
   const CONCURRENCY = Number(process.env.PRERENDER_CONCURRENCY) || 4;
 
   const renderOne = async (route) => {
     const page = await browser.newPage();
     try {
+      // Verrouille la langue AVANT tout script de la page : navigator.language
+      // (détection i18n) + act_lang en localStorage (court-circuite la détection).
+      await page.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, 'language',  { get: () => 'fr-FR' });
+        Object.defineProperty(navigator, 'languages', { get: () => ['fr-FR', 'fr'] });
+        try { localStorage.setItem('act_lang', 'FR'); } catch {}
+      });
+      await page.setExtraHTTPHeaders({ 'Accept-Language': 'fr-FR,fr;q=0.9' });
       // Pas de services externes dans les snapshots : Turnstile (widget avec
       // état), Sentry, GA — le HTML capturé doit rester neutre et stable.
       await page.setRequestInterception(true);
