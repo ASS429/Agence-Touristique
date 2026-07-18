@@ -12,7 +12,7 @@
      Sentry, Supabase, Leaflet/unpkg + tuiles OSM (via https:), GA (inactif),
      YouTube nocookie (reportage croisières, iframe chargée au clic).
      Le header render.yaml fournit en plus frame-ancestors 'none'. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://browser.sentry-cdn.com https://www.googletagmanager.com https://unpkg.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://unpkg.com; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.ingest.de.sentry.io https://formspree.io https://www.google-analytics.com https://region1.google-analytics.com; frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://browser.sentry-cdn.com https://www.googletagmanager.com https://plausible.io https://unpkg.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://unpkg.com; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.ingest.de.sentry.io https://formspree.io https://plausible.io https://www.google-analytics.com https://region1.google-analytics.com; frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'" />
 <title>Africa Connection Tours — Agence touristique Dakar depuis 1996</title>
 <meta name="description" content="Africa Connection Tours (ACT) — tour-opérateur basé à Dakar depuis 1996. Circuits, excursions, sur-mesure au Sénégal et en Afrique de l'Ouest." />
 <meta property="og:title" content="Africa Connection Tours — Agence touristique Dakar" />
@@ -122,6 +122,11 @@
      (voir src/shared.jsx) puisse pusher dès le premier clic, même avant
      l'installation de GA4/GTM côté agence. -->
 <script>window.dataLayer = window.dataLayer || [];</script>
+
+<!-- Plausible Analytics — mesure d'audience sans cookie, conforme RGPD (aucun
+     bandeau de consentement requis). Chargé inconditionnellement : nécessaire
+     pour que Plausible détecte l'installation. Domaine = propriété Plausible. -->
+<script defer data-domain="act-senegal.com" src="https://plausible.io/js/script.js"></script>
 
 <!-- Cloudflare Turnstile — anti-bot sur les formulaires (contact + sur-mesure).
      INACTIF tant que la clé de site est vide : aucun script n'est chargé et
