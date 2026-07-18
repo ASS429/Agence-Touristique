@@ -27,6 +27,8 @@ const SITE = {
   email:           'act@orange.sn',        // confirmé ACT (et non contact@actours-senegal.com)
   address:         '52, rue Félix Faure, BP 11446, Dakar-Peytavin',
   addressShort:    'Dakar-Plateau',
+  // Fiche Google Maps officielle (Business Profile revendiqué le 18 juil. 2026)
+  maps:            'https://maps.app.goo.gl/g4JKeMCMXLXRVupg8',
   website:         'act-senegal.com',
   // Réseaux sociaux officiels — liens fournis par ACT (17 juil. 2026).
   twitter:         'https://x.com/actours221',
@@ -812,13 +814,15 @@ const Footer = ({ go }) => {
           <div className="md:col-span-4">
             <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-sand-300 mb-4">{t('footer.contactLabel')}</div>
             <ul className="space-y-3 text-[14px] text-sand-100">
-              <li className="flex items-start gap-2.5"><Icons.MapPin size={16} className="mt-0.5 text-terre-300 shrink-0"/> {SITE.address} — Sénégal</li>
+              <li className="flex items-start gap-2.5"><Icons.MapPin size={16} className="mt-0.5 text-terre-300 shrink-0"/> <a href={SITE.maps} target="_blank" rel="noreferrer" className="hover:text-sand-50 hover:underline underline-offset-2">{SITE.address} — Sénégal</a></li>
               <li className="flex items-center gap-2.5"><Icons.Phone size={16} className="text-terre-300"/> {SITE.phone}</li>
               <li className="flex items-center gap-2.5"><Icons.Whatsapp size={16} className="text-terre-300"/> {SITE.whatsappDisplay}</li>
               <li className="flex items-center gap-2.5"><Icons.Mail size={16} className="text-terre-300"/> {SITE.email}</li>
               <li className="flex items-start gap-2.5"><Icons.Clock size={16} className="mt-0.5 text-terre-300 shrink-0"/> {t('footer.openingHours')}</li>
             </ul>
-            <div className="mt-5 rounded-2xl overflow-hidden h-32 bg-ink-800 border border-sand-100/10 relative">
+            {/* Mini-carte décorative → ouvre la fiche Google Maps de l'agence */}
+            <a href={SITE.maps} target="_blank" rel="noreferrer" aria-label="Ouvrir la fiche Google Maps d'Africa Connection Tours"
+               className="mt-5 block rounded-2xl overflow-hidden h-32 bg-ink-800 border border-sand-100/10 relative hover:border-terre-300/40 transition-colors">
               <div className="absolute inset-0 opacity-40" style={{background:'radial-gradient(80% 80% at 30% 50%, #1F5E5A 0%, transparent 70%)'}}/>
               <svg viewBox="0 0 400 200" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                 <path d="M 30 40 L 380 30 L 390 170 L 20 180 Z" fill="none" stroke="#7BAAA5" strokeWidth="0.5" opacity=".4"/>
@@ -829,7 +833,7 @@ const Footer = ({ go }) => {
                 <span>{SITE.addressShort}</span>
                 <span>{t('footer.sinceTagline').replace(/^Tour[- ]operator |^Tour-opérateur |^Tour operator |^Reiseveranstalter /,'')}</span>
               </div>
-            </div>
+            </a>
           </div>
         </div>
 

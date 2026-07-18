@@ -212,8 +212,11 @@ const Contact = ({ go }) => {
             <div className="p-6">
               <div className="font-display text-[22px] leading-tight">{t('contact.aside.title')}</div>
               <div className="mt-3 text-[14px] text-ink-700 leading-relaxed">
-                {SITE.address}<br/>{t('contact.aside.country')}
+                <a href={SITE.maps} target="_blank" rel="noreferrer" className="hover:text-terre hover:underline underline-offset-2">{SITE.address}</a><br/>{t('contact.aside.country')}
               </div>
+              <a href={SITE.maps} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1.5 text-[13px] text-terre hover:underline underline-offset-2">
+                <Icons.MapPin size={14}/> {t('contact.aside.itinerary', 'Itinéraire sur Google Maps')} <Icons.ArrowUpRight size={12}/>
+              </a>
               <div className="mt-5 pt-5 border-t border-ink/10 grid grid-cols-2 gap-3 text-[12.5px]">
                 <div>
                   <div className="font-mono text-[10.5px] uppercase tracking-wider text-ink-500">{t('contact.aside.hours')}</div>
