@@ -3,7 +3,7 @@ import { useI18n } from './i18n.jsx';
 import { Icons } from './icons.jsx';
 import { Photo } from './photo.jsx';
 import { Btn, Footer, Pill, Price, Section, StarRow, buildWaURL } from './shared.jsx';
-import { CIRCUITS, CIRCUIT_DETAIL, FAQ, TOUR_REVIEWS, MAP_STOPS, SENEGAL_PATH, CASAMANCE_PATH } from './data.jsx';
+import { CIRCUITS, CIRCUIT_DETAIL, EXCURSIONS, FAQ, TOUR_REVIEWS, MAP_STOPS, SENEGAL_PATH, CASAMANCE_PATH } from './data.jsx';
 import { DeparturesWidget } from './departures-widget.jsx';
 // Tour detail — fiche circuit type "Gorée · Lac Rose · Saloum"
 
@@ -118,8 +118,151 @@ const Faq = ({ items }) => {
   );
 };
 
+// Encart devis (desktop) + barre CTA mobile — partagés fiche circuit / fiche
+// excursion. Décision ACT : pas de prix affichés, CTAs devis uniquement.
+const QuoteAside = ({ waMsg, go }) => {
+  const { t } = useI18n();
+  return (
+    <aside className="md:sticky md:top-28 self-start hidden md:block">
+      <div className="rounded-3xl border border-ink/10 bg-sand-50 p-6 shadow-xl shadow-ink/5">
+        <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-terre">{t('tour.quote.kicker')}</div>
+        <div className="font-display text-[34px] md:text-[38px] leading-[1.05] mt-1.5">{t('tour.quote.title')}</div>
+        <p className="text-[13.5px] text-ink-600 mt-2.5 leading-relaxed">{t('tour.quote.intro')}</p>
+
+        <div className="mt-5 space-y-2.5">
+          <Btn as="a" href={buildWaURL(waMsg)} target="_blank" rel="noreferrer"
+               variant="wa" size="lg" className="w-full" icon={<Icons.Whatsapp size={18}/>}>
+            {t('cta.quoteWhatsApp')}
+          </Btn>
+          <Btn variant="outline" size="lg" className="w-full" icon={<Icons.Mail size={16}/>}
+               onClick={()=> go && go('contact')}>
+            {t('cta.quoteEmail')}
+          </Btn>
+        </div>
+
+        <div className="mt-5 p-3.5 rounded-2xl bg-sand-100/80 border border-ink/5">
+          <div className="text-[11px] font-mono uppercase tracking-[0.16em] text-ink-500 mb-1.5">{t('tour.price.waLabel')}</div>
+          <div className="text-[12.5px] text-ink-700 leading-relaxed font-mono">
+            "{waMsg}"
+          </div>
+        </div>
+
+        <ul className="mt-5 space-y-2.5 text-[13px] text-ink-700">
+          <li className="flex items-center gap-2"><Icons.Shield size={14} className="text-atlantique"/>{t('tour.assurance.cancel')}</li>
+          <li className="flex items-center gap-2"><Icons.Wallet size={14} className="text-atlantique"/>{t('tour.assurance.deposit')}</li>
+          <li className="flex items-center gap-2"><Icons.RefreshCw size={14} className="text-atlantique"/>{t('tour.assurance.reschedule')}</li>
+        </ul>
+      </div>
+    </aside>
+  );
+};
+
+const MobileCtaBar = ({ waMsg }) => {
+  const { t } = useI18n();
+  return (
+    <div className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-sand-50 border-t border-ink/10 px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.15)]">
+      <Btn as="a" href={buildWaURL(waMsg)} target="_blank" rel="noreferrer"
+           variant="wa" size="md" className="w-full" icon={<Icons.Whatsapp size={16}/>}>
+        {t('cta.quoteWhatsApp')}
+      </Btn>
+    </div>
+  );
+};
+
+// Fiche excursion — variante compacte de la fiche circuit. Les excursions
+// (sorties à la journée / demi-journée) partagent la route /tour/:id mais
+// pas le gabarit circuit : pas d'itinéraire multi-jours ni de carte, on
+// affiche leur vrai contenu (description, format, point de départ, horaires).
+const ExcursionTour = ({ exc, onBack, onOpenTour, go }) => {
+  const { t, richT } = useI18n();
+  const title    = t(`excursion.${exc.id}.title`,    exc.title);
+  const subtitle = t(`excursion.${exc.id}.subtitle`, exc.subtitle);
+  const short    = t(`excursion.${exc.id}.short`,    exc.short);
+  const schedule = exc.schedule ? t(`excursion.${exc.id}.schedule`, exc.schedule) : null;
+  // start2 : second point de départ possible (ex. Saint-Louis depuis Saly OU Dakar)
+  const startPlaces = [exc.start, exc.start2].filter(Boolean)
+    .map(s => t(`excursions.start.${s}`, s)).join(' / ');
+  const waMsg = t('tour.wa.interest').replace('{title}', title);
+  // Suggestions : même point de départ d'abord, puis les plus populaires.
+  const similar = EXCURSIONS.filter(e => e.id !== exc.id)
+    .sort((a,b) => ((b.start===exc.start)-(a.start===exc.start)) || (b.popularity-a.popularity))
+    .slice(0, 3);
+
+  return (
+    <main className="bg-sand-50" data-screen-label={`Excursion Detail · ${title}`}>
+      {/* Breadcrumb */}
+      <div className="pt-24 md:pt-28 pb-3 max-w-[1280px] mx-auto px-4 md:px-8 flex items-center gap-1.5 text-[12px] font-mono uppercase tracking-[0.16em] text-ink-500">
+        <button onClick={onBack} className="hover:text-terre">{t('tour.breadcrumb.home')}</button>
+        <Icons.ChevronRight size={12}/>
+        <button onClick={()=>go('excursions')} className="hover:text-terre">{t('nav.excursions')}</button>
+        <Icons.ChevronRight size={12}/>
+        <span className="text-ink truncate">{title}</span>
+      </div>
+
+      {/* Photo principale */}
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8 pt-4">
+        <Photo tone={exc.tone} mood={exc.mood} label={title.toLowerCase()} rounded="rounded-2xl" ratio="aspect-[16/7]" src={exc.img} alt={title}/>
+      </div>
+
+      {/* Titre + infos + description + encart devis */}
+      <section className="max-w-[1280px] mx-auto px-4 md:px-8 pt-10 md:pt-14 pb-16 grid md:grid-cols-[1.6fr,1fr] gap-10 lg:gap-16">
+        <div>
+          <div className="flex flex-wrap items-center gap-2 mb-5">
+            <Pill tone="terre">{t(`excursions.kind.${exc.kind}`, exc.kind === 'half' ? 'Demi-journée' : 'Journée complète')}</Pill>
+            <Pill tone="sand"><Icons.MapPin size={11}/> {t('tour.exc.departFrom').replace('{place}', startPlaces)}</Pill>
+          </div>
+          <h1 className="font-display text-[40px] sm:text-[58px] md:text-[76px] leading-[0.98]">
+            {title}<br/><em className="text-terre">{subtitle}</em>
+          </h1>
+          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-ink-600">
+            {schedule && <span className="inline-flex items-center gap-1.5"><Icons.Clock size={14}/> {schedule}</span>}
+            <span className="inline-flex items-center gap-1.5"><Icons.MapPin size={14}/> {t('tour.exc.departFrom').replace('{place}', startPlaces)}</span>
+            <span className="inline-flex items-center gap-1.5"><Icons.Users size={14}/> {t('tour.meta.travelers')}</span>
+          </div>
+          <p className="mt-7 max-w-2xl text-[16px] md:text-[17px] text-ink-700 leading-relaxed">{short}</p>
+        </div>
+        <QuoteAside waMsg={waMsg} go={go}/>
+      </section>
+
+      {/* FAQ réservation (commune aux fiches) */}
+      <Section id="faq" label={t('tour.section.faq.label')} title={richT(t('tour.section.faq.title'))}
+               className="py-16 md:py-24 bg-sand-100">
+        <div className="max-w-3xl">
+          <Faq items={CIRCUIT_DETAIL.faqs}/>
+        </div>
+      </Section>
+
+      {/* Autres excursions */}
+      <Section id="similar" label={t('tour.section.similar.label')} title={richT(t('tour.exc.similar.title'))}
+               className="py-16 md:py-24">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+          {similar.map(e => {
+            const sTitle    = t(`excursion.${e.id}.title`,    e.title);
+            const sSubtitle = t(`excursion.${e.id}.subtitle`, e.subtitle);
+            return (
+              <button key={e.id} onClick={()=>{ onOpenTour(e.id); window.scrollTo({top:0}); }} className="group text-left flex flex-col">
+                <Photo tone={e.tone} mood={e.mood} label={t(`excursions.kind.${e.kind}`, '')} ratio="aspect-[5/4]" className="mb-4 group-hover:scale-[1.01] transition-transform" src={e.img} alt={sTitle}/>
+                <h3 className="font-display text-[24px] leading-tight">{sTitle}</h3>
+                <div className="text-[13px] text-ink-600 mt-0.5">{sSubtitle}</div>
+                <span className="mt-3 inline-flex items-center gap-1.5 text-[13px] group-hover:text-terre">{t('tour.similar.see')} <Icons.ArrowUpRight size={14}/></span>
+              </button>
+            );
+          })}
+        </div>
+      </Section>
+
+      <Footer go={go}/>
+      <MobileCtaBar waMsg={waMsg}/>
+    </main>
+  );
+};
+
 const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
   const { t, richT } = useI18n();
+  // Les excursions partagent la route /tour/:id : sans ce branchement, toute
+  // fiche excursion retombait sur CIRCUITS[0] (« Excursion à Gorée »).
+  const exc = EXCURSIONS.find(e => e.id === tourId);
+  if (exc) return <ExcursionTour exc={exc} onBack={onBack} onOpenTour={onOpenTour} go={go}/>;
   // Lookup the picked circuit from the catalog; merge with the full detail
   // (which acts as the canonical "fiche type" content for any circuit shown
   // in this prototype). Title, subtitle, price, badges follow the catalog
@@ -184,37 +327,7 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
 
         {/* Sticky quote card (desktop) — décision ACT : pas de prix affichés,
             on bascule sur un encart "Sur devis" centré sur les CTAs. */}
-        <aside className="md:sticky md:top-28 self-start hidden md:block">
-          <div className="rounded-3xl border border-ink/10 bg-sand-50 p-6 shadow-xl shadow-ink/5">
-            <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-terre">{t('tour.quote.kicker')}</div>
-            <div className="font-display text-[34px] md:text-[38px] leading-[1.05] mt-1.5">{t('tour.quote.title')}</div>
-            <p className="text-[13.5px] text-ink-600 mt-2.5 leading-relaxed">{t('tour.quote.intro')}</p>
-
-            <div className="mt-5 space-y-2.5">
-              <Btn as="a" href={buildWaURL(waMsg)} target="_blank" rel="noreferrer"
-                   variant="wa" size="lg" className="w-full" icon={<Icons.Whatsapp size={18}/>}>
-                {t('cta.quoteWhatsApp')}
-              </Btn>
-              <Btn variant="outline" size="lg" className="w-full" icon={<Icons.Mail size={16}/>}
-                   onClick={()=> go && go('contact')}>
-                {t('cta.quoteEmail')}
-              </Btn>
-            </div>
-
-            <div className="mt-5 p-3.5 rounded-2xl bg-sand-100/80 border border-ink/5">
-              <div className="text-[11px] font-mono uppercase tracking-[0.16em] text-ink-500 mb-1.5">{t('tour.price.waLabel')}</div>
-              <div className="text-[12.5px] text-ink-700 leading-relaxed font-mono">
-                "{waMsg}"
-              </div>
-            </div>
-
-            <ul className="mt-5 space-y-2.5 text-[13px] text-ink-700">
-              <li className="flex items-center gap-2"><Icons.Shield size={14} className="text-atlantique"/>{t('tour.assurance.cancel')}</li>
-              <li className="flex items-center gap-2"><Icons.Wallet size={14} className="text-atlantique"/>{t('tour.assurance.deposit')}</li>
-              <li className="flex items-center gap-2"><Icons.RefreshCw size={14} className="text-atlantique"/>{t('tour.assurance.reschedule')}</li>
-            </ul>
-          </div>
-        </aside>
+        <QuoteAside waMsg={waMsg} go={go}/>
       </section>
 
       {/* Programme */}
@@ -370,12 +483,7 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
       <Footer go={go}/>
 
       {/* Mobile sticky bar — décision ACT : pas de prix, CTA "Devis" plein largeur */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-sand-50 border-t border-ink/10 px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.15)]">
-        <Btn as="a" href={buildWaURL(waMsg)} target="_blank" rel="noreferrer"
-             variant="wa" size="md" className="w-full" icon={<Icons.Whatsapp size={16}/>}>
-          {t('cta.quoteWhatsApp')}
-        </Btn>
-      </div>
+      <MobileCtaBar waMsg={waMsg}/>
     </main>
   );
 };

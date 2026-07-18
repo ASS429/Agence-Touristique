@@ -1,5 +1,5 @@
 import React from 'react';
-import { CIRCUITS, BLOG, FAQ } from './data.jsx';
+import { CIRCUITS, EXCURSIONS, BLOG, FAQ } from './data.jsx';
 import { routePath } from './i18n.jsx';
 
 // =====================================================================
@@ -52,7 +52,9 @@ function buildGraph(route, params, tourId, articleId) {
   const crumbs = [{ name: 'Accueil', item: SITE_URL + '/' }];
 
   if (route === 'tour') {
+    // La route /tour/:id sert les circuits ET les excursions (fiche dédiée).
     const c = CIRCUITS.find(x => x.id === tourId);
+    const e = c ? null : EXCURSIONS.find(x => x.id === tourId);
     if (c) {
       graph.push({
         '@type': 'TouristTrip',
@@ -67,6 +69,17 @@ function buildGraph(route, params, tourId, articleId) {
       });
       crumbs.push({ name: 'Circuits', item: `${SITE_URL}${routePath('circuits')}` });
       crumbs.push({ name: c.title, item: `${SITE_URL}${routePath('tour', { id: c.id })}` });
+    } else if (e) {
+      graph.push({
+        '@type': 'TouristTrip',
+        name: e.title,
+        description: e.short || e.subtitle || e.title,
+        image: absUrl(e.img),
+        url: `${SITE_URL}${routePath('tour', { id: e.id })}`,
+        provider: PUBLISHER,
+      });
+      crumbs.push({ name: 'Excursions', item: `${SITE_URL}${routePath('excursions')}` });
+      crumbs.push({ name: e.title, item: `${SITE_URL}${routePath('tour', { id: e.id })}` });
     }
   } else if (route === 'blog' && params.id) {
     const b = BLOG.find(x => x.id === articleId);
@@ -156,7 +169,7 @@ const setMeta = (selector, attr, value) => {
 function updateHead(route, params, tourId, articleId) {
   let meta = PAGE_META[route] || null;
   if (route === 'tour') {
-    const c = CIRCUITS.find(x => x.id === tourId);
+    const c = CIRCUITS.find(x => x.id === tourId) || EXCURSIONS.find(x => x.id === tourId);
     if (c) meta = { title: `${c.title} — Africa Connection Tours`, desc: c.short || c.subtitle || c.title };
   } else if (route === 'blog' && params.id) {
     const b = BLOG.find(x => x.id === articleId);
