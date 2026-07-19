@@ -17,10 +17,13 @@ function LoginScreen({ onSuccess }) {
 
   // Échappatoire : purge la session locale corrompue (cause du « Connexion
   // trop lente » et du besoin d'ouvrir une fenêtre privée), puis recharge.
+  // Rechargement forcé à 3 s quoi qu'il arrive : le bouton ne peut jamais
+  // rester bloqué en « Réinitialisation… ».
   const resetSession = async () => {
     setResetting(true);
+    const force = setTimeout(() => window.location.reload(), 3000);
     try { await window.sbResetAuthStorage?.(); } catch { /* best-effort */ }
-    // Recharge dur pour repartir d'un état propre (sans SW pour /admin).
+    clearTimeout(force);
     window.location.reload();
   };
 

@@ -16,38 +16,23 @@ import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL      = window.__ACT_SUPABASE_URL__      || 'https://divcmjwqgsdkdsdrjwbg.supabase.co';
 const SUPABASE_ANON_KEY = window.__ACT_SUPABASE_ANON_KEY__ || 'sb_publishable_TzKuydg2b8QXUJSztNiW9A_NVAY6pD7';
 
-// Verrou résilient pour l'auth (remplace le navigator.locks par défaut).
-// Problème résolu : signInWithPassword / refresh peuvent rester bloqués
-// indéfiniment sur un verrou navigator.locks périmé (laissé par un onglet ou
-// un chargement précédent) → le bouton « Se connecter » tourne sans fin.
-// Ici, si le verrou n'est pas acquis en 5 s, on exécute l'opération SANS
-// verrou plutôt que de bloquer l'interface.
-async function resilientLock(name, acquireTimeout, fn) {
-  if (typeof navigator === 'undefined' || !navigator.locks || !navigator.locks.request) {
-    return await fn();
-  }
-  const controller = new AbortController();
-  // 2,5 s suffisent : au-delà, le verrou est presque sûrement périmé (onglet
-  // fermé, contexte crashé) → on exécute sans verrou plutôt que d'accumuler
-  // des attentes qui menaient au « Connexion trop lente ».
-  const timer = setTimeout(() => controller.abort(), acquireTimeout > 0 ? acquireTimeout : 2500);
-  try {
-    return await navigator.locks.request(name, { signal: controller.signal }, async () => {
-      clearTimeout(timer);
-      return await fn();
-    });
-  } catch (_e) {
-    clearTimeout(timer);
-    return await fn();  // verrou indisponible/périmé : on n'attend pas indéfiniment
-  }
-}
+// Verrou d'auth NEUTRALISÉ. Le navigator.locks par défaut de Supabase pouvait
+// rester bloqué indéfiniment sur un verrou périmé (laissé par un onglet fermé
+// ou un contexte crashé), faisant « traîner » aussi bien la connexion que la
+// déconnexion — d'où « Connexion trop lente » et l'obligation d'ouvrir une
+// fenêtre privée. Un garde-fou par timeout ne suffisait pas sur tous les
+// navigateurs. Pour un back-office mono-administrateur, on exécute donc chaque
+// opération d'auth DIRECTEMENT, sans jamais solliciter le LockManager du
+// navigateur (compromis assumé : pas de coordination inter-onglets du refresh
+// de token, sans impact réel pour un usage à un seul administrateur).
+const noopLock = async (_name, _acquireTimeout, fn) => fn();
 
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     storageKey: 'act-admin-session',
-    lock: resilientLock
+    lock: noopLock
   }
 });
 
@@ -160,13 +145,13 @@ function sbOnAuthChange(cb) {
   return sb.auth.onAuthStateChange((_event, session) => cb(session?.user || null));
 }
 
-// Réinitialise l'état d'authentification local. Résout le cas où une session
-// stockée corrompue/expirée fait « traîner » le chargement ou la connexion
-// (l'utilisateur devait ouvrir une fenêtre privée). On purge la clé de
-// session Supabase + toute clé sb-* résiduelle, puis on relâche au mieux les
-// Web Locks d'auth restés verrouillés. Ne touche à rien d'autre du site.
+// Réinitialise l'état local (équivalent « fenêtre privée » en un clic).
+// N'effectue AUCUN appel réseau/auth (qui pourrait justement être ce qui
+// bloque) : purge synchrone du stockage de session, puis désinstallation des
+// service workers et vidage des caches, le tout best-effort. À appeler avant
+// un rechargement dur de la page.
 async function sbResetAuthStorage() {
-  try { await sb.auth.signOut({ scope: 'local' }); } catch { /* best-effort */ }
+  // 1. Session Supabase (clé dédiée + clés sb-* résiduelles) — synchrone.
   try {
     for (let i = localStorage.length - 1; i >= 0; i--) {
       const k = localStorage.key(i);
@@ -175,6 +160,20 @@ async function sbResetAuthStorage() {
       }
     }
   } catch { /* stockage indisponible */ }
+  // 2. Service workers : on les désinstalle pour repartir propre.
+  try {
+    if (navigator.serviceWorker) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister().catch(() => {})));
+    }
+  } catch { /* ignore */ }
+  // 3. Caches (dont l'ancien shell admin éventuel).
+  try {
+    if (window.caches) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k).catch(() => {})));
+    }
+  } catch { /* ignore */ }
 }
 
 // Interop window + exports ES.
