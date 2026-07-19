@@ -13,6 +13,16 @@ function LoginScreen({ onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showPass, setShowPass] = useState(false);
+  const [resetting, setResetting] = useState(false);
+
+  // Échappatoire : purge la session locale corrompue (cause du « Connexion
+  // trop lente » et du besoin d'ouvrir une fenêtre privée), puis recharge.
+  const resetSession = async () => {
+    setResetting(true);
+    try { await window.sbResetAuthStorage?.(); } catch { /* best-effort */ }
+    // Recharge dur pour repartir d'un état propre (sans SW pour /admin).
+    window.location.reload();
+  };
 
   const submit = async (e) => {
     e.preventDefault();
@@ -141,6 +151,23 @@ function LoginScreen({ onSuccess }) {
           <div className="mt-6 text-center text-[12px] text-mute-400">
             Accès réservé aux administrateurs autorisés.
           </div>
+
+          {/* Escape hatch : connexion lente / bloquée → réinitialiser la session */}
+          <div className="mt-5 rounded-2xl bg-sand-100 border border-bone-300 p-3.5 text-center">
+            <div className="text-[12px] text-mute-600">Connexion lente ou bloquée ?</div>
+            <button
+              type="button"
+              onClick={resetSession}
+              disabled={resetting}
+              className="mt-1.5 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-terra-700 hover:text-terra-600 disabled:opacity-60 transition"
+            >
+              {resetting
+                ? <><span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full act-spin"/> Réinitialisation…</>
+                : <><Icon name="refresh" size={13}/> Réinitialiser la session et réessayer</>}
+            </button>
+            <div className="mt-1 text-[11px] text-mute-400">Efface la session locale — plus besoin d'ouvrir une fenêtre privée.</div>
+          </div>
+
           <div className="mt-4 text-center">
             <a href="../" className="text-[12px] text-mute-500 hover:text-terra-600 transition">
               ← Retour au site public

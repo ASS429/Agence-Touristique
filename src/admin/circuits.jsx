@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Icon } from './icons.jsx';
 import { LangPills, MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
 import { DraftRestoreBar, EditorLayout, ItemsTable, ListToolbar, PagePad, Thumb, readDraft, useAutosave, useCollection } from './list-editor.jsx';
+import { PhotoPicker, SlugField, uploadImageFile } from './form-fields.jsx';
 import { ActionBtn, Field, Input, LangDots, Select, StatusPill, mediaSrc, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
@@ -181,9 +182,9 @@ function CircuitEditor({ circuit, onClose, col }) {
       {tab === 'general' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field label="Slug (URL)" required hint="Généré depuis le titre. Modifiable.">
-              <Input value={form.slug} onChange={e => set({ slug: e.target.value })} placeholder="dakar-decouverte-7j"/>
-            </Field>
+            <div className="sm:col-span-2">
+              <SlugField value={form.slug} onChange={v => set({ slug: v })} isNew={isNew} prefix="/tour/"/>
+            </div>
             <Field label="Ordre d'affichage" hint="Plus petit = affiché en premier">
               <Input type="number" value={form.sort_order} onChange={e => set({ sort_order: parseInt(e.target.value) || 0 })}/>
             </Field>
@@ -205,19 +206,7 @@ function CircuitEditor({ circuit, onClose, col }) {
             </Field>
           </div>
 
-          <Field label="Photo hero (16:9)">
-            {form.hero_photo ? (
-              <div className="relative h-[150px] rounded-2xl overflow-hidden border border-bone-300">
-                <img src={mediaSrc(form.hero_photo)} alt="" className="w-full h-full object-cover"/>
-                <button onClick={() => set({ hero_photo: '' })} className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 text-danger-600 flex items-center justify-center shadow"><Icon name="trash" size={14}/></button>
-              </div>
-            ) : (
-              <div className="relative h-[150px] rounded-2xl overflow-hidden border border-bone-300 act-hero-ph">
-                <span className="absolute left-3 bottom-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-mute-400">Photo — hero 16:9 · URL</span>
-              </div>
-            )}
-            <Input value={form.hero_photo || ''} onChange={e => set({ hero_photo: e.target.value })} placeholder="https://…" className="mt-3"/>
-          </Field>
+          <PhotoPicker value={form.hero_photo} onChange={url => set({ hero_photo: url })} category="circuits" label="Photo principale (hero 16:9)"/>
         </div>
       )}
 
@@ -479,9 +468,19 @@ function BadgesEditor({ value, onChange }) {
 // =====================================================================
 function GalleryEditor({ value, onChange }) {
   const [activeLang, setActiveLang] = useState('fr');
+  const [uploadingIdx, setUploadingIdx] = useState(null);
   const add = () => onChange([...value, { url: '', alt_fr: '', alt_en: '', alt_it: '', alt_de: '' }]);
   const remove = (i) => onChange(value.filter((_, idx) => idx !== i));
   const update = (i, patch) => onChange(value.map((it, idx) => idx === i ? { ...it, ...patch } : it));
+  const uploadAt = async (i, file) => {
+    if (!file) return;
+    setUploadingIdx(i);
+    try {
+      const url = await uploadImageFile(file, 'circuits');
+      if (url) { update(i, { url }); window.toast('Photo téléversée', 'success'); }
+    } catch (e) { window.toast('Erreur : ' + e.message, 'error'); }
+    finally { setUploadingIdx(null); }
+  };
 
   return (
     <div>
@@ -499,12 +498,20 @@ function GalleryEditor({ value, onChange }) {
         )}
         {value.map((p, i) => (
           <div key={i} className="flex items-start gap-3 bg-white border border-bone-200 rounded-2xl p-3">
-            {p.url
-              ? <img src={mediaSrc(p.url)} alt="" className="w-24 h-24 object-cover rounded-xl flex-shrink-0"/>
-              : <div className="w-24 h-24 rounded-xl flex-shrink-0 act-thumb-a"/>
-            }
+            <label className="w-24 h-24 rounded-xl flex-shrink-0 relative overflow-hidden cursor-pointer group" title="Cliquer pour téléverser">
+              {p.url
+                ? <img src={mediaSrc(p.url)} alt="" className="w-full h-full object-cover"/>
+                : <div className="w-full h-full act-thumb-a"/>
+              }
+              <div className="absolute inset-0 bg-ink-900/0 group-hover:bg-ink-900/45 flex items-center justify-center transition">
+                {uploadingIdx === i
+                  ? <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full act-spin"/>
+                  : <Icon name="upload" size={18} className="text-white opacity-0 group-hover:opacity-100 transition"/>}
+              </div>
+              <input type="file" accept="image/*" className="hidden" onChange={e => uploadAt(i, e.target.files?.[0])}/>
+            </label>
             <div className="flex-1 space-y-2">
-              <Input value={p.url} onChange={e => update(i, { url: e.target.value })} placeholder="URL de la photo (Médiathèque ou externe)"/>
+              <Input value={p.url} onChange={e => update(i, { url: e.target.value })} placeholder="Cliquez la vignette pour téléverser, ou collez une URL"/>
               <Input
                 value={p[`alt_${activeLang}`] || ''}
                 onChange={e => update(i, { [`alt_${activeLang}`]: e.target.value })}

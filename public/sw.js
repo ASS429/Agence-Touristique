@@ -4,7 +4,7 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v42';
+const VERSION = 'act-v43';
 // Note de version — affichée aux utilisateurs PWA via la notification
 // "nouvelle version disponible" (voir NotifyUpdate dans shared.jsx).
 // Format : { fr, en, it, de }. Mise à jour à chaque nouvelle version.
@@ -86,6 +86,13 @@ self.addEventListener('fetch', (e) => {
   // sans intercepter — le navigateur s'en charge. (Plus aucun CDN pour
   // React/Babel/Tailwind/polices depuis la migration Vite : tout est self-hosté.)
   if (url.origin !== self.location.origin) return;
+
+  // Back-office (/admin) : JAMAIS de cache ni d'interception. L'admin doit
+  // toujours charger la dernière version depuis le réseau — un shell ou un
+  // bundle admin caché (référençant des assets purgés) rendait la connexion
+  // lente ou bloquée, obligeant à ouvrir une fenêtre privée. On laisse donc
+  // le navigateur gérer directement toutes les requêtes /admin.
+  if (url.pathname === '/admin' || url.pathname.startsWith('/admin/')) return;
 
   // Navigation HTML : network-first, fallback cache.
   if (req.mode === 'navigate') {

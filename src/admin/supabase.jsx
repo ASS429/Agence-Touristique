@@ -27,7 +27,10 @@ async function resilientLock(name, acquireTimeout, fn) {
     return await fn();
   }
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), acquireTimeout > 0 ? acquireTimeout : 5000);
+  // 2,5 s suffisent : au-delà, le verrou est presque sûrement périmé (onglet
+  // fermé, contexte crashé) → on exécute sans verrou plutôt que d'accumuler
+  // des attentes qui menaient au « Connexion trop lente ».
+  const timer = setTimeout(() => controller.abort(), acquireTimeout > 0 ? acquireTimeout : 2500);
   try {
     return await navigator.locks.request(name, { signal: controller.signal }, async () => {
       clearTimeout(timer);
@@ -157,13 +160,30 @@ function sbOnAuthChange(cb) {
   return sb.auth.onAuthStateChange((_event, session) => cb(session?.user || null));
 }
 
+// Réinitialise l'état d'authentification local. Résout le cas où une session
+// stockée corrompue/expirée fait « traîner » le chargement ou la connexion
+// (l'utilisateur devait ouvrir une fenêtre privée). On purge la clé de
+// session Supabase + toute clé sb-* résiduelle, puis on relâche au mieux les
+// Web Locks d'auth restés verrouillés. Ne touche à rien d'autre du site.
+async function sbResetAuthStorage() {
+  try { await sb.auth.signOut({ scope: 'local' }); } catch { /* best-effort */ }
+  try {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const k = localStorage.key(i);
+      if (k && (k === 'act-admin-session' || k.startsWith('sb-') || k.includes('supabase.auth'))) {
+        localStorage.removeItem(k);
+      }
+    }
+  } catch { /* stockage indisponible */ }
+}
+
 // Interop window + exports ES.
 const SUPABASE_CONFIGURED = !SUPABASE_URL.includes('REPLACE-ME') && SUPABASE_ANON_KEY !== 'REPLACE-ME';
 if (typeof window !== 'undefined') Object.assign(window, {
   SB: sb, sbList, sbGet, sbInsert, sbUpdate, sbDelete, sbUpload, sbRemoveStorage,
-  sbSignIn, sbSignOut, sbGetUser, sbGetSession, sbIsAdmin, sbOnAuthChange, SUPABASE_CONFIGURED,
+  sbSignIn, sbSignOut, sbGetUser, sbGetSession, sbIsAdmin, sbOnAuthChange, sbResetAuthStorage, SUPABASE_CONFIGURED,
 });
 export {
   sb as SB, sbList, sbGet, sbInsert, sbUpdate, sbDelete, sbUpload, sbRemoveStorage,
-  sbSignIn, sbSignOut, sbGetUser, sbGetSession, sbIsAdmin, sbOnAuthChange, SUPABASE_CONFIGURED,
+  sbSignIn, sbSignOut, sbGetUser, sbGetSession, sbIsAdmin, sbOnAuthChange, sbResetAuthStorage, SUPABASE_CONFIGURED,
 };

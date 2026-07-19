@@ -3,6 +3,7 @@ import { GalleryEditor, MultilangListEditor } from './circuits.jsx';
 import { Icon } from './icons.jsx';
 import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
 import { DraftRestoreBar, EditorLayout, ItemsTable, ListToolbar, PagePad, Thumb, readDraft, useAutosave, useCollection } from './list-editor.jsx';
+import { PhotoPicker, SlugField } from './form-fields.jsx';
 import { Field, Input, LangDots, Select, StatusPill, timeAgo, truncate } from './ui.jsx';
 
 // =====================================================================
@@ -143,32 +144,32 @@ function ExcursionEditor({ excursion, onClose, col }) {
     >
       {showRestore && <DraftRestoreBar onRestore={() => { setForm(initialDraft); setShowRestore(false); }} onDismiss={() => { setShowRestore(false); clearDraft(); }}/>}
       {tab === 'general' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field label="Slug (URL)" required>
-            <Input value={form.slug} onChange={e => set({ slug: e.target.value })}/>
-          </Field>
-          <Field label="Ordre d'affichage">
-            <Input type="number" value={form.sort_order} onChange={e => set({ sort_order: parseInt(e.target.value) || 0 })}/>
-          </Field>
-          <Field label="Format" required>
-            <Select value={form.format} onChange={e => set({ format: e.target.value })}>
-              <option value="halfday">Demi-journée</option>
-              <option value="fullday">Journée complète</option>
-            </Select>
-          </Field>
-          <Field label="Point de départ" required>
-            <Select value={form.start_point} onChange={e => set({ start_point: e.target.value })}>
-              <option value="dakar">Dakar</option>
-              <option value="saly">Saly</option>
-              <option value="saint-louis">Saint-Louis</option>
-            </Select>
-          </Field>
-          <Field label="Région / zone">
-            <Input value={form.region || ''} onChange={e => set({ region: e.target.value })} placeholder="Petite Côte, Sine Saloum…"/>
-          </Field>
-          <Field label="Photo (URL)">
-            <Input value={form.hero_photo || ''} onChange={e => set({ hero_photo: e.target.value })}/>
-          </Field>
+        <div className="space-y-4">
+          <PhotoPicker value={form.hero_photo} onChange={url => set({ hero_photo: url })} category="excursions" label="Photo principale"/>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="sm:col-span-2">
+              <SlugField value={form.slug} onChange={v => set({ slug: v })} isNew={isNew} prefix="/tour/"/>
+            </div>
+            <Field label="Ordre d'affichage">
+              <Input type="number" value={form.sort_order} onChange={e => set({ sort_order: parseInt(e.target.value) || 0 })}/>
+            </Field>
+            <Field label="Région / zone">
+              <Input value={form.region || ''} onChange={e => set({ region: e.target.value })} placeholder="Petite Côte, Sine Saloum…"/>
+            </Field>
+            <Field label="Format" required>
+              <Select value={form.format} onChange={e => set({ format: e.target.value })}>
+                <option value="halfday">Demi-journée</option>
+                <option value="fullday">Journée complète</option>
+              </Select>
+            </Field>
+            <Field label="Point de départ" required>
+              <Select value={form.start_point} onChange={e => set({ start_point: e.target.value })}>
+                <option value="dakar">Dakar</option>
+                <option value="saly">Saly</option>
+                <option value="saint-louis">Saint-Louis</option>
+              </Select>
+            </Field>
+          </div>
         </div>
       )}
 

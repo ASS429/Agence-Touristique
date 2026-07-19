@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from './icons.jsx';
 import { MultilangField, pickLangValues, spreadLangValues } from './lang.jsx';
 import { DraftRestoreBar, EditorLayout, ListToolbar, PagePad, readDraft, useAutosave, useCollection } from './list-editor.jsx';
+import { PhotoPicker, SlugField } from './form-fields.jsx';
 import { ActionBtn, EmptyState, Field, Input, LangDots, Select, Spinner, StatusPill, mediaSrc, timeAgo } from './ui.jsx';
 
 // =====================================================================
@@ -135,23 +136,23 @@ function AtelierEditor({ atelier, onClose, col }) {
       footerLeft={atelier.updated_at && <><Icon name="clock" size={13}/> {timeAgo(atelier.updated_at)}</>}
     >
       {showRestore && <DraftRestoreBar onRestore={() => { setForm(initialDraft); setShowRestore(false); }} onDismiss={() => { setShowRestore(false); clearDraft(); }}/>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Field label="Slug (URL)" required>
-          <Input value={form.slug} onChange={e => set({ slug: e.target.value })}/>
-        </Field>
-        <Field label="Catégorie" required>
-          <Select value={form.category} onChange={e => set({ category: e.target.value })}>
-            <option value="artisanat">Artisanat</option>
-            <option value="musique">Musique</option>
-            <option value="danse">Danse</option>
-          </Select>
-        </Field>
-        <Field label="Ordre">
-          <Input type="number" value={form.sort_order} onChange={e => set({ sort_order: parseInt(e.target.value) || 0 })}/>
-        </Field>
-        <Field label="Photo (URL)">
-          <Input value={form.hero_photo || ''} onChange={e => set({ hero_photo: e.target.value })}/>
-        </Field>
+      <div className="space-y-4">
+        <PhotoPicker value={form.hero_photo} onChange={url => set({ hero_photo: url })} category="ateliers" label="Photo de l'atelier" ratio="aspect-[4/3]"/>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="sm:col-span-2">
+            <SlugField value={form.slug} onChange={v => set({ slug: v })} isNew={isNew} prefix="/ateliers/"/>
+          </div>
+          <Field label="Catégorie" required>
+            <Select value={form.category} onChange={e => set({ category: e.target.value })}>
+              <option value="artisanat">Artisanat</option>
+              <option value="musique">Musique</option>
+              <option value="danse">Danse</option>
+            </Select>
+          </Field>
+          <Field label="Ordre">
+            <Input type="number" value={form.sort_order} onChange={e => set({ sort_order: parseInt(e.target.value) || 0 })}/>
+          </Field>
+        </div>
       </div>
 
       <MultilangField label="Titre" required values={pickLangValues(form, 'title')} onChange={v => set(spreadLangValues('title', v))}/>
