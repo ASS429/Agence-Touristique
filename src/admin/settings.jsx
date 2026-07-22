@@ -118,6 +118,23 @@ const SETTINGS_SECTIONS = [
         ]
       }
     ]
+  },
+  {
+    id: 'integrations',
+    label: 'Intégrations',
+    icon: 'sparkle',
+    cards: [
+      {
+        title: 'Outils externes (Phase 3)',
+        kicker: 'Activation en un collage',
+        note: 'Ces modules sont prêts : chacun s\'active dès que vous collez l\'identifiant ou la clé correspondante, puis « Enregistrer ». Laissez vide pour garder le module désactivé.',
+        fields: [
+          { key: 'integrations.crisp_id',        label: 'Chat en direct — Identifiant de site Crisp', multi: false },
+          { key: 'integrations.google_reviews_url', label: 'Avis Google — lien de votre fiche', multi: false },
+          { key: 'integrations.openweather_key', label: 'Météo — clé API OpenWeather', multi: false }
+        ]
+      }
+    ]
   }
 ];
 

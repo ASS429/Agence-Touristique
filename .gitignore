@@ -23,6 +23,9 @@ desktop.ini
 *.swo
 
 # Documents internes / livrables clients (gardés en local uniquement)
+# remise-agence/ = dossier de clôture (montants, comptes, QR, PDF) — NE JAMAIS
+# publier dans le dépôt public.
+remise-agence/
 briefing-*.md
 contrat-*.md
 budget-*.md

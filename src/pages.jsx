@@ -5,6 +5,7 @@ import { Photo } from './photo.jsx';
 import { Btn, Footer, PageHero, Section, TurnstileWidget, buildWaURL, SITE } from './shared.jsx';
 import { FAQ, VALUES, FIGURES, IMG } from './data.jsx';
 import { DestinationsMap } from './map.jsx';
+import { ActGoogleReviews, ActWeather } from './integrations.jsx';
 // Contact + À propos + FAQ pages — grouped to keep file count tight.
 
 // ============================================================================
@@ -241,6 +242,10 @@ const Contact = ({ go }) => {
               </div>
             </div>
           </div>
+
+          {/* Phase 3 — dormants tant que non configurés dans Réglages → Intégrations */}
+          <ActWeather className="mt-4"/>
+          <ActGoogleReviews className="mt-4"/>
         </aside>
       </section>
 

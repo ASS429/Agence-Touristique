@@ -14,6 +14,7 @@ import { Avatar, Btn, truncate } from './ui.jsx';
 const ADMIN_SECTIONS = [
   { id: 'dashboard',    label: 'Vue d\'ensemble',     icon: 'overview',    group: 'Général' },
   { id: 'contacts',     label: 'Demandes reçues',     icon: 'mail',        group: 'Général' },
+  { id: 'marketing',    label: 'Marketing',           icon: 'sparkle',     group: 'Général' },
 
   { id: 'circuits',     label: 'Circuits',            icon: 'map',         group: 'Catalogue' },
   { id: 'departures',   label: 'Dates de départ',     icon: 'calendar',    group: 'Catalogue' },
@@ -27,13 +28,16 @@ const ADMIN_SECTIONS = [
   { id: 'faq',          label: 'FAQ',                 icon: 'help',        group: 'À propos' },
 
   { id: 'media',        label: 'Médiathèque',         icon: 'image',       group: 'Ressources' },
-  { id: 'settings',     label: 'Réglages site',       icon: 'settings',    group: 'Ressources' }
+  { id: 'settings',     label: 'Réglages site',       icon: 'settings',    group: 'Ressources' },
+
+  { id: 'team',         label: 'Administrateurs',     icon: 'users',       group: 'Administration' }
 ];
 
 // Libellés header (breadcrumb + titre)
 const SECTION_TITLES = {
   dashboard:    ['Général',    'Tableau de bord'],
   contacts:     ['Général',    'Demandes reçues'],
+  marketing:    ['Général',    'Marketing'],
   circuits:     ['Catalogue',  'Circuits'],
   departures:   ['Catalogue',  'Dates de départ'],
   excursions:   ['Catalogue',  'Excursions'],
@@ -43,7 +47,8 @@ const SECTION_TITLES = {
   newsletter:   ['Contenus',   'Newsletter'],
   faq:          ['À propos',   'FAQ'],
   media:        ['Ressources', 'Médiathèque'],
-  settings:     ['Ressources', 'Réglages site']
+  settings:     ['Ressources', 'Réglages site'],
+  team:         ['Administration', 'Administrateurs']
 };
 
 // Contexte CTA "+ Nouveau" par section (le shell déclenche un événement,
@@ -56,7 +61,8 @@ const CTA_LABELS = {
   blog:         'Nouvel article',
   testimonials: 'Nouveau témoignage',
   newsletter:   'Composer une campagne',
-  faq:          'Nouvelle question'
+  faq:          'Nouvelle question',
+  team:         'Ajouter un administrateur'
 };
 
 function useHashRoute() {
@@ -253,6 +259,16 @@ function AdminHeader({ activeSection, onToggleSidebar, onOpenMobileMenu, onSearc
           className="w-[220px] h-10 pl-9 pr-3.5 rounded-full border border-bone-400 bg-white text-[13.5px] outline-none focus:border-terra-600 focus:ring-[3px] focus:ring-terra-600/12 transition"
         />
       </div>
+
+      {/* Aide — rouvre le guide de prise en main */}
+      <button
+        aria-label="Guide de prise en main"
+        title="Guide de prise en main"
+        className="w-10 h-10 rounded-full border border-bone-400 bg-white text-mute-700 hover:bg-sand-100 hover:text-terra-600 flex items-center justify-center transition flex-shrink-0"
+        onClick={() => window.dispatchEvent(new CustomEvent('act-open-onboarding'))}
+      >
+        <Icon name="help" size={18}/>
+      </button>
 
       {/* Bell notification */}
       <button

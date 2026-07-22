@@ -29,6 +29,9 @@ const SITE = {
   addressShort:    'Dakar-Plateau',
   // Fiche Google Maps officielle (Business Profile revendiqué le 18 juil. 2026)
   maps:            'https://maps.app.goo.gl/g4JKeMCMXLXRVupg8',
+  // Place ID Google (public) — sert au lien direct « Laisser un avis »
+  // (search.google.com/local/writereview), sans API ni clé.
+  googlePlaceId:   'ChIJPaz9X8RzwQ4RLF1QNFb1FBE',
   website:         'act-senegal.com',
   // Réseaux sociaux officiels — liens fournis par ACT (17 juil. 2026).
   twitter:         'https://x.com/actours221',

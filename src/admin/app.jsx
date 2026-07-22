@@ -37,6 +37,9 @@ import { FAQPage } from './faq.jsx';
 import { MediaPage } from './media.jsx';
 import { SettingsPage } from './settings.jsx';
 import { ContactsPage } from './contacts.jsx';
+import { TeamPage } from './team.jsx';
+import { MarketingPage } from './marketing.jsx';
+import { OnboardingGuide } from './onboarding.jsx';
 
 function AdminApp() {
   const [user, setUser] = useState(null);
@@ -109,7 +112,9 @@ function AdminApp() {
     faq:          <FAQPage/>,
     media:        <MediaPage/>,
     settings:     <SettingsPage/>,
-    contacts:     <ContactsPage/>
+    contacts:     <ContactsPage/>,
+    marketing:    <MarketingPage/>,
+    team:         <TeamPage/>
   };
 
   const page = routes[route.section] || <DashboardPage/>;
@@ -119,6 +124,7 @@ function AdminApp() {
       <AdminShell user={user}>
         {page}
       </AdminShell>
+      <OnboardingGuide/>
       <ToastContainer/>
       <ConfirmHost/>
     </>

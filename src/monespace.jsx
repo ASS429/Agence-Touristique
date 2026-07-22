@@ -2,6 +2,7 @@ import React from 'react';
 import { useI18n } from './i18n.jsx';
 import { Icons } from './icons.jsx';
 import { Footer } from './shared.jsx';
+import { ReferralShare } from './integrations.jsx';
 // =====================================================================
 // src/monespace.jsx — Espace client sécurisé (magic link)
 //
@@ -331,6 +332,9 @@ const ClientSpace = ({ go }) => {
             </button>
           </div>
         </section>
+
+        {/* Parrainage simple (Phase 3) */}
+        <ReferralShare code={user.email} className="mb-10"/>
 
         {/* Bloc demandes */}
         <section className="rounded-3xl bg-white border border-ink/10 p-6 md:p-8">

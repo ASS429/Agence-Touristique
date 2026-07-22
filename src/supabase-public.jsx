@@ -134,6 +134,12 @@
   // -------------------------------------------------------------------
   window.actSaveContactRequest = async function(payload, turnstileToken) {
     if (!configured) return { skipped: true };
+    // Parrainage simple : rattache le code ?ref= capté (integrations.jsx) à la
+    // demande, dans extra.referral_code — visible côté admin (marketing).
+    try {
+      const ref = window.actGetReferral && window.actGetReferral();
+      if (ref) payload = { ...payload, extra: { ...(payload.extra || {}), referral_code: ref } };
+    } catch (_) { /* ignore */ }
     const NOTIFY_FN = 'hyper-task';
     try {
       const sb = await getSb();

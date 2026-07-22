@@ -21,6 +21,7 @@ import { Mice } from './mice.jsx';
 // content.jsx APRÈS data/i18n : son enrichissement synchrone lit window.DICT/
 // BLOG/FAQ (peuplés par l'interop de data.jsx et i18n.jsx).
 import './content.jsx';            // side-effect : window.useContentVersion, pickLang
+import './integrations.jsx';       // side-effect : chat Crisp + capture parrainage (Phase 3)
 // App: router + i18n provider + page switching.
 
 const AppShell = () => {
