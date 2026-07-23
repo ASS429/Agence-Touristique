@@ -7,6 +7,22 @@ import { CIRCUITS, CIRCUIT_DETAIL, EXCURSIONS, FAQ, TOUR_REVIEWS, MAP_STOPS, SEN
 import { DeparturesWidget } from './departures-widget.jsx';
 // Tour detail — fiche circuit type "Gorée · Lac Rose · Saloum"
 
+// Formes singulier/pluriel des unités de durée par langue. En français, 0 ET 1
+// prennent le singulier (« 0 nuit », « 1 jour ») ; en EN/IT/DE seul 1 est au
+// singulier. Corrige l'ancien affichage « 1 jours / 0 nuits ».
+const DURATION_UNITS = {
+  EN: { day:['day','days'],     night:['night','nights'] },
+  FR: { day:['jour','jours'],   night:['nuit','nuits'] },
+  IT: { day:['giorno','giorni'],night:['notte','notti'] },
+  DE: { day:['Tag','Tage'],     night:['Nacht','Nächte'] },
+};
+const durationLabel = (lang, days, nights) => {
+  const U = DURATION_UNITS[lang] || DURATION_UNITS.EN;
+  const singular = (n) => (lang === 'FR' ? n <= 1 : n === 1);
+  const unit = (n, k) => `${n} ${singular(n) ? U[k][0] : U[k][1]}`;
+  return `${unit(days, 'day')} / ${unit(nights, 'night')}`;
+};
+
 const TourGallery = ({ gallery }) => {
   const { t } = useI18n();
   const [lb, setLb] = React.useState(null); // index for lightbox
@@ -270,7 +286,7 @@ const GENERIC_INCLUDES = [
 ];
 
 const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
-  const { t, richT } = useI18n();
+  const { t, richT, lang } = useI18n();
   // Les excursions partagent la route /tour/:id : sans ce branchement, toute
   // fiche excursion retombait sur CIRCUITS[0] (« Excursion à Gorée »).
   const exc = EXCURSIONS.find(e => e.id === tourId);
@@ -287,11 +303,12 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
   // jour propre au circuit — la fiche type canonique ne sert plus que de
   // gabarit (FAQ, prestations) et de fallback pour les circuits sans détail.
   const hasItinerary = Array.isArray(cat.itinerary) && cat.itinerary.length > 0;
+  const durLabel = durationLabel(lang, cat.days, cat.nights);
   const d = {
     ...CIRCUIT_DETAIL,
     id: cat.id,
     title: catTitle,
-    subtitle: isCanonical ? CIRCUIT_DETAIL.subtitle : t('tour.subtitle.fallback').replace('{days}', cat.days).replace('{nights}', cat.nights),
+    subtitle: isCanonical ? CIRCUIT_DETAIL.subtitle : t('tour.subtitle.fallback').replace('{duration}', durLabel),
     rating: cat.rating,
     reviews: cat.reviews,
     badges: cat.badges?.length ? cat.badges : CIRCUIT_DETAIL.badges,
@@ -299,7 +316,7 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
     days: hasItinerary ? cat.itinerary : CIRCUIT_DETAIL.days,
     // Durée réelle du circuit dans les infos pratiques (le gabarit disait « 5 jours »)
     pratique: CIRCUIT_DETAIL.pratique.map(p =>
-      p.label === 'Durée' ? { ...p, value: `${cat.days} jour${cat.days > 1 ? 's' : ''} / ${cat.nights} nuit${cat.nights > 1 ? 's' : ''}` } : p),
+      p.label === 'Durée' ? { ...p, value: durLabel } : p),
     // Prestations : celles détaillées du circuit vitrine, sinon la base générique
     includes: isCanonical ? CIRCUIT_DETAIL.includes : GENERIC_INCLUDES,
     excludes: CIRCUIT_DETAIL.excludes,
@@ -341,7 +358,7 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
           </h1>
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-ink-600">
             {d.rating && <span className="inline-flex items-center gap-1.5"><StarRow value={d.rating} size={14}/><span className="text-ink font-medium">{d.rating}</span><span>· {d.reviews} {t('common.reviews')}</span></span>}
-            <span className="inline-flex items-center gap-1.5"><Icons.Calendar size={14}/> {t('tour.meta.daysNights').replace('{days}', cat.days).replace('{nights}', cat.nights)}</span>
+            <span className="inline-flex items-center gap-1.5"><Icons.Calendar size={14}/> {durLabel}</span>
             <span className="inline-flex items-center gap-1.5"><Icons.MapPin size={14}/> {cat.route || 'Dakar'}</span>
             <span className="inline-flex items-center gap-1.5"><Icons.Users size={14}/> {t('tour.meta.travelers')}</span>
           </div>
