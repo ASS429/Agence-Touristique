@@ -8,12 +8,17 @@ import { ActionBtn, Btn, EmptyState, Field, Input, LangDots, Select, Spinner, St
 // src/admin/faq.jsx — CRUD FAQ (accordion groupé, design refondu)
 // =====================================================================
 
+// Les catégories DOIVENT correspondre EXACTEMENT à faq_items.category en base :
+// les questions sont groupées par cette valeur, donc un id qui ne correspond pas
+// = questions comptées mais invisibles. Valeurs issues du seed FAQ.
 const FAQ_CATEGORIES = [
-  { id: 'general',     label: 'Général' },
-  { id: 'reservation', label: 'Avant le départ' },
-  { id: 'voyage',      label: 'Sur place' },
-  { id: 'paiement',    label: 'Paiement & annulation' },
-  { id: 'sante',       label: 'Santé & sécurité' }
+  { id: 'Réservation & paiement',        label: 'Réservation & paiement' },
+  { id: 'Annulation & modifications',    label: 'Annulation & modifications' },
+  { id: 'Avant le voyage',               label: 'Avant le voyage' },
+  { id: 'Pendant le voyage',             label: 'Pendant le voyage' },
+  { id: 'Voyages sur mesure',            label: 'Voyages sur mesure' },
+  { id: 'Diaspora & retour aux sources', label: 'Diaspora & retour aux sources' },
+  { id: 'Tourisme responsable',          label: 'Tourisme responsable' },
 ];
 
 function FAQPage() {
@@ -22,7 +27,7 @@ function FAQPage() {
   const [openId, setOpenId] = useState(null);
 
   const openCreate = () => setEditing({
-    category: 'general',
+    category: FAQ_CATEGORIES[0].id,
     question_fr: '', answer_fr: '',
     published: false, sort_order: 100
   });
@@ -49,6 +54,13 @@ function FAQPage() {
 
   const catLabelMap = Object.fromEntries(FAQ_CATEGORIES.map(c => [c.id, c.label]));
 
+  // Ordre d'affichage : catégories connues (dans l'ordre) qui ont des questions,
+  // puis toute autre catégorie présente en base — tolérant, rien n'est masqué.
+  const catOrder = [
+    ...FAQ_CATEGORIES.map(c => c.id).filter(id => grouped[id]?.length),
+    ...Object.keys(grouped).filter(id => grouped[id]?.length && !catLabelMap[id]),
+  ];
+
   return (
     <PagePad maxWidth="max-w-[860px]">
       <div className="flex items-center gap-3 mb-6 flex-wrap">
@@ -67,13 +79,13 @@ function FAQPage() {
         <EmptyState icon={<Icon name="help" size={28}/>} title="Aucune question FAQ"/>
       ) : (
         <div className="space-y-6">
-          {FAQ_CATEGORIES.map(cat => {
-            const items = grouped[cat.id];
+          {catOrder.map(catId => {
+            const items = grouped[catId];
             if (!items || items.length === 0) return null;
             return (
-              <div key={cat.id}>
+              <div key={catId}>
                 <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-mute-400 mb-2.5">
-                  {cat.label}
+                  {catLabelMap[catId] || catId}
                 </div>
                 <div className="flex flex-col gap-2.5">
                   {items.map(item => {
