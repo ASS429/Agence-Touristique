@@ -131,6 +131,7 @@ const SETTINGS_SECTIONS = [
         fields: [
           { key: 'integrations.crisp_id',        label: 'Chat en direct — Identifiant de site Crisp', multi: false },
           { key: 'integrations.google_reviews_url', label: 'Avis Google — lien de votre fiche', multi: false },
+          { key: 'integrations.tripadvisor_url', label: 'Avis TripAdvisor — lien de votre profil', multi: false },
           { key: 'integrations.openweather_key', label: 'Météo — clé API OpenWeather', multi: false }
         ]
       }

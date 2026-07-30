@@ -49,6 +49,8 @@ const TXT = {
   reviewsSub:   { fr: 'Votre retour aide d\'autres voyageurs à nous découvrir.', en: 'Your feedback helps other travellers discover us.', it: 'Il tuo parere aiuta altri viaggiatori a scoprirci.', de: 'Ihre Meinung hilft anderen Reisenden, uns zu entdecken.' },
   reviewsSee:   { fr: 'Voir les avis', en: 'See reviews', it: 'Vedi le recensioni', de: 'Bewertungen ansehen' },
   reviewsWrite: { fr: 'Laisser un avis', en: 'Leave a review', it: 'Lascia una recensione', de: 'Bewertung abgeben' },
+  reviewsTitleGen: { fr: 'Vos avis', en: 'Our reviews', it: 'Le nostre recensioni', de: 'Unsere Bewertungen' },
+  reviewsTrip:  { fr: 'Voir sur TripAdvisor', en: 'See on TripAdvisor', it: 'Vedi su TripAdvisor', de: 'Auf TripAdvisor ansehen' },
   weatherLabel: { fr: 'Météo à Dakar', en: 'Weather in Dakar', it: 'Meteo a Dakar', de: 'Wetter in Dakar' },
   refTitle:  { fr: 'Parrainez vos proches', en: 'Refer your friends', it: 'Invita i tuoi amici', de: 'Empfehlen Sie uns weiter' },
   refSub:    { fr: 'Partagez votre lien : quand un proche nous contacte via celui-ci, nous le savons — et nous vous en remercions.', en: 'Share your link: when a friend contacts us through it, we know — and we thank you for it.', it: 'Condividi il tuo link: quando un amico ci contatta tramite esso, lo sappiamo — e ti ringraziamo.', de: 'Teilen Sie Ihren Link: Wenn eine Bekannte uns darüber kontaktiert, wissen wir es — und danken Ihnen dafür.' },
@@ -111,7 +113,8 @@ if (typeof window !== 'undefined') {
 // =====================================================================
 export function ActGoogleReviews({ className = '' }) {
   const seeUrl = useIntegration('integrations.google_reviews_url') || SITE.maps;
-  if (!seeUrl) return null;
+  const tripUrl = useIntegration('integrations.tripadvisor_url') || SITE.tripadvisor;
+  if (!seeUrl && !tripUrl) return null;
   // Lien direct « écrire un avis » (ouvre la fenêtre d'avis Google) — via le
   // Place ID public, sans API ni clé.
   const writeUrl = SITE.googlePlaceId
@@ -121,27 +124,41 @@ export function ActGoogleReviews({ className = '' }) {
     <div className={`rounded-3xl border border-ink/5 shadow-xl shadow-ink/5 bg-sand-50 p-6 ${className}`}>
       <div className="flex items-center gap-2 text-[13px] font-semibold text-atlantique">
         <span aria-hidden style={{ fontSize: 16, lineHeight: 1 }}>★★★★★</span>
-        Google
+        {tripUrl ? 'Google · TripAdvisor' : 'Google'}
       </div>
-      <div className="mt-2 font-display text-[22px] leading-tight">{tr('reviewsTitle')}</div>
+      <div className="mt-2 font-display text-[22px] leading-tight">{tr(tripUrl ? 'reviewsTitleGen' : 'reviewsTitle')}</div>
       <p className="mt-1.5 text-[13.5px] text-ink-600 leading-relaxed">{tr('reviewsSub')}</p>
       <div className="mt-4 flex flex-wrap gap-2.5">
-        <a
-          href={writeUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full bg-ink text-sand-50 text-[13.5px] font-semibold hover:bg-terre transition"
-        >
-          {tr('reviewsWrite')} →
-        </a>
-        <a
-          href={seeUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border border-ink/15 text-ink-700 text-[13.5px] font-semibold hover:bg-sand-100 transition"
-        >
-          {tr('reviewsSee')}
-        </a>
+        {seeUrl && (
+          <a
+            href={writeUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full bg-ink text-sand-50 text-[13.5px] font-semibold hover:bg-terre transition"
+          >
+            {tr('reviewsWrite')} →
+          </a>
+        )}
+        {seeUrl && (
+          <a
+            href={seeUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border border-ink/15 text-ink-700 text-[13.5px] font-semibold hover:bg-sand-100 transition"
+          >
+            {tr('reviewsSee')}
+          </a>
+        )}
+        {tripUrl && (
+          <a
+            href={tripUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border border-ink/15 text-ink-700 text-[13.5px] font-semibold hover:bg-sand-100 transition"
+          >
+            {tr('reviewsTrip')}
+          </a>
+        )}
       </div>
     </div>
   );

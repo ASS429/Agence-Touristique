@@ -29,6 +29,8 @@ const SITE = {
   addressShort:    'Dakar-Plateau',
   // Fiche Google Maps officielle (Business Profile revendiqué le 18 juil. 2026)
   maps:            'https://maps.app.goo.gl/g4JKeMCMXLXRVupg8',
+  // Profil TripAdvisor officiel (lien fourni par ACT, 19 juil. 2026)
+  tripadvisor:     'https://www.tripadvisor.com/Attraction_Review-g293831-d34567015-Reviews-Africa_Connection_Tours-Dakar_Dakar_Region.html',
   // Place ID Google (public) — sert au lien direct « Laisser un avis »
   // (search.google.com/local/writereview), sans API ni clé.
   googlePlaceId:   'ChIJPaz9X8RzwQ4RLF1QNFb1FBE',
