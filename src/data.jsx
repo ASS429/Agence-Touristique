@@ -1,3 +1,5 @@
+import { BLOG_BODY_I18N } from './blog-i18n.jsx';
+
 // All mock data used across the site.
 
 // === IMAGE HELPERS ==========================================================
@@ -888,6 +890,10 @@ const BLOG = [
       { type:'p', html:'Notre circuit <a href="/tour/saint-louis-2j/">Saint-Louis · 2 jours</a> enchaîne avec l’architecture coloniale et le parc du Djoudj — la formule idéale pour le nord. Une nuit dans les dunes de Lompoul s’y ajoute <a href="/custom/">sur mesure</a>, en chemin entre Dakar et Saint-Louis.' },
     ] },
 ];
+
+// Attache les traductions EN/IT/DE du corps des articles (le FR reste dans
+// body ; blog.jsx lit bodyByLang[lang] et retombe sur body si langue absente).
+BLOG.forEach(a => { const b = BLOG_BODY_I18N[a.id]; if (b) a.bodyByLang = b; });
 
 const BLOG_CATEGORIES = [
   { id:'all',          label:'Tous' },

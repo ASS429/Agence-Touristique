@@ -441,7 +441,10 @@ const Temoignages = () => {
 };
 
 const BlogTeaser = ({ go }) => {
-  const { t, richT } = useI18n();
+  const { t, richT, lang } = useI18n();
+  // Titre/extrait localisés (comme blog.jsx) : pickLang lit title_<lang> /
+  // excerpt_<lang>, injectés depuis le dictionnaire par content.jsx.
+  const L = (b, f) => window.pickLang ? window.pickLang(b, f, lang) : (b[f] || '');
   const picks = BLOG.slice(0, 3);
   return (
     <Section id="blog-spot" label={t('home.blog.label')} title={richT(t('home.blog.title'))}
@@ -451,11 +454,11 @@ const BlogTeaser = ({ go }) => {
       <div className="grid md:grid-cols-3 gap-5 md:gap-6">
         {picks.map(b => (
           <button key={b.id} onClick={()=>go('blog', b.id)} className="group flex flex-col text-left bg-sand-50 rounded-3xl overflow-hidden hover:shadow-xl transition-shadow">
-            <Photo tone={b.tone} mood={b.mood} label={b.tag} ratio="aspect-[5/4]" rounded="" src={b.img} alt={b.title}/>
+            <Photo tone={b.tone} mood={b.mood} label={b.tag} ratio="aspect-[5/4]" rounded="" src={b.img} alt={L(b,'title')}/>
             <div className="p-6 flex flex-col flex-1">
               <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-ink-500">{b.tag} · {b.readTime}</div>
-              <h3 className="font-display text-[24px] leading-tight mt-2 group-hover:text-terre transition-colors">{b.title}</h3>
-              <p className="text-[14px] text-ink-600 leading-relaxed mt-2.5">{b.excerpt}</p>
+              <h3 className="font-display text-[24px] leading-tight mt-2 group-hover:text-terre transition-colors">{L(b,'title')}</h3>
+              <p className="text-[14px] text-ink-600 leading-relaxed mt-2.5">{L(b,'excerpt')}</p>
               <div className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium">
                 {t('home.blog.readArticle')} <Icons.ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform"/>
               </div>
