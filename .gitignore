@@ -61,3 +61,7 @@ supabase/seed/seed_content_full.sql
 # Config Supabase locale (URLs staging, service_role key, jamais côté client)
 supabase/.env
 supabase/config.local.js
+
+# Dossier de travail du projet 2 (plateforme de reservation) : avant-vente,
+# montants, proposition commerciale, correspondance client — NE JAMAIS publier.
+plateforme de réservation/
