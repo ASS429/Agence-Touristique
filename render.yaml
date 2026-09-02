@@ -18,6 +18,14 @@ services:
     # relais (routes dynamiques : /monespace, /carnet/:slug, contenus admin).
     # L'admin est une seconde page (/admin/), routage hash interne conservé.
     routes:
+      # Héritage : l'ancien site (Joomla) exposait ses pages sous /index.php/...
+      # Ces URL sont encore dans l'index Google (ex. /index.php/en/about-us).
+      # Sans règle, le rewrite SPA ci-dessous les sert en 200 → Google les
+      # garde comme doublons « soft 404 » du nouveau site. Un 301 explicite
+      # les fait disparaître de l'index et transfère leur ancienneté.
+      - type: redirect
+        source: /index.php/*
+        destination: /
       - type: rewrite
         source: /admin
         destination: /admin/index.html
@@ -57,6 +65,21 @@ services:
       - path: /manifest.webmanifest
         name: Cache-Control
         value: public, max-age=3600
+
+      # Espace client : privé. Le noindex est posé par seo.jsx côté JS, mais
+      # /monespace/ n'est pas prérendu — un crawler qui n'exécute pas le JS
+      # reçoit un shell indexable. L'en-tête règle le cas sans dépendre du JS.
+      - path: /monespace/*
+        name: X-Robots-Tag
+        value: noindex, nofollow
+      - path: /monespace
+        name: X-Robots-Tag
+        value: noindex, nofollow
+
+      # Admin : jamais indexé (double ceinture avec le <meta robots> de la page)
+      - path: /admin/*
+        name: X-Robots-Tag
+        value: noindex, nofollow
 
       # Headers de sécurité globaux
       - path: /*
