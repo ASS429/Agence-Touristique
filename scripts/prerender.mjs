@@ -55,6 +55,18 @@ const ROUTES = [
   ...blogs.map(id => '/blog/' + id),
 ];
 
+// Routes PRIVEES : prerendues mais JAMAIS listees dans le sitemap.
+// /monespace est l'espace client. seo.jsx y pose <meta robots="noindex,
+// nofollow">, mais seulement a l'execution du JS : sans snapshot, l'hebergeur
+// sert le shell SPA nu et un crawler qui n'execute pas le JS recoit une page
+// parfaitement indexable. Le prerendu fige le noindex dans le HTML livre.
+// NB : l'en-tete X-Robots-Tag de render.yaml ne suffit pas. Ce service Render
+// n'a pas ete cree depuis un Blueprint -> ses headers et ses routes viennent
+// du dashboard, render.yaml y est purement documentaire (verifie le
+// 2026-09-02 : aucune des regles Cache-Control du fichier n'est servie).
+const PRIVATE_ROUTES = ['/monespace'];
+const ALL_ROUTES = [...ROUTES, ...PRIVATE_ROUTES];
+
 // --- 2. Sitemap --------------------------------------------------------
 // URLs canoniques AVEC slash final : c'est la seule forme pour laquelle
 // Render sert le HTML prérendu (sans slash, le rewrite SPA sert le shell).
@@ -138,8 +150,8 @@ async function main() {
     }
   };
 
-  for (let i = 0; i < ROUTES.length; i += CONCURRENCY) {
-    await Promise.all(ROUTES.slice(i, i + CONCURRENCY).map(renderOne));
+  for (let i = 0; i < ALL_ROUTES.length; i += CONCURRENCY) {
+    await Promise.all(ALL_ROUTES.slice(i, i + CONCURRENCY).map(renderOne));
   }
 
   await browser.close().catch(() => {});
@@ -149,8 +161,8 @@ async function main() {
   }
 
   console.log(failures
-    ? `\n❌ ${failures}/${ROUTES.length} route(s) en échec.`
-    : `\n✅ ${ROUTES.length} pages prérendues.`);
+    ? `\n❌ ${failures}/${ALL_ROUTES.length} route(s) en échec.`
+    : `\n✅ ${ALL_ROUTES.length} pages prérendues.`);
   // Render : ne bloque pas le déploiement (SPA fallback OK) ; CI : échoue.
   process.exit(failures && !process.env.RENDER ? 1 : 0);
 }

@@ -2,6 +2,19 @@
 # Le site est désormais compilé par Vite : Render installe les dépendances,
 # lance `npm run build`, et publie le dossier `dist/`.
 # Render lit ce fichier automatiquement quand on connecte le dépôt GitHub.
+#
+# ⚠️ ATTENTION — CE FICHIER EST DOCUMENTAIRE, PAS LA SOURCE DE VÉRITÉ.
+# Le service act-senegal-site n'a PAS été créé depuis un Blueprint : ses
+# routes, ses headers et son buildCommand vivent dans le dashboard Render.
+# Vérifié en prod le 2026-09-02 — AUCUNE règle Cache-Control de ce fichier
+# n'est servie (/sw.js, /robots.txt, /assets/* renvoient tous le défaut
+# `public, max-age=0, s-maxage=300`), et `Permissions-Policy` en ligne n'a
+# pas le `interest-cohort=()` déclaré ici. Les headers de sécurité actifs
+# ont été saisis à la main dans le dashboard.
+# => Toute règle ajoutée ci-dessous doit être RECOPIÉE dans le dashboard
+#    Render (Settings → Redirects/Rewrites et Settings → Headers) pour
+#    prendre effet. Ce qui peut être fait côté code (prérendu, meta, robots.txt)
+#    doit l'être en priorité : voir PRIVATE_ROUTES dans scripts/prerender.mjs.
 
 services:
   - type: web
