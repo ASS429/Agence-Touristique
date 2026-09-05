@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icons } from './icons.jsx';
-import { useI18n } from './i18n.jsx';
+import { useI18n, routePath } from './i18n.jsx';
 import { Photo } from './photo.jsx';
 // Shared components: Logo, Header (router + i18n aware), WhatsAppFloat,
 // Footer, StarRow, Pills/Buttons, Section, Price (currency aware).
@@ -577,15 +577,29 @@ const Section = ({ id, label, title, kicker, intro, children, className = '', bg
 // d'origine. Quand les traductions DeepL Pro arrivent (Phase 2), elles
 // remplacent automatiquement le fallback sans modification de code.
 // ============================================================================
-const CircuitCard = ({ c, onOpen, size = 'md' }) => {
+// --- Liens reels vers les fiches et les articles -----------------------------
+// Les cartes du catalogue etaient des <button onClick> : parfaitement
+// cliquables pour un visiteur, totalement invisibles pour un moteur, qui n'a
+// aucun href a suivre. Resultat mesure le 2026-09-05 : 56 des 70 URL du
+// sitemap (47 fiches /tour/ + 9 articles) n'avaient AUCUN lien entrant dans
+// le HTML livre, ce qui est la cause classique du statut Search Console
+// « Decouverte, actuellement non indexee ».
+// On passe donc en <a href>. Le routeur (useRouter dans i18n.jsx) intercepte
+// deja les liens internes et navigue en SPA sans rechargement, tout en
+// laissant passer Ctrl/Cmd+clic et clic-milieu vers un nouvel onglet — d'ou
+// l'absence volontaire de onClick ici : l'ajouter casserait ces raccourcis.
+const tourHref    = (id) => routePath('tour', { id });
+const articleHref = (id) => routePath('blog', { id });
+
+const CircuitCard = ({ c, size = 'md' }) => {
   const { t } = useI18n();
   const title    = t(`circuit.${c.id}.title`,    c.title);
   const subtitle = t(`circuit.${c.id}.subtitle`, c.subtitle);
   return (
     <article className="group flex flex-col" data-comment-anchor={`circuit-card-${c.id}`}>
-      <button onClick={()=>onOpen(c.id)} className="block w-full text-left">
+      <a href={tourHref(c.id)} className="block w-full text-left">
         <Photo tone={c.tone} mood={c.mood} label={`${c.days}j`} ratio={size==='sm' ? 'aspect-[5/4]' : 'aspect-[4/5]'} className="mb-4 group-hover:scale-[1.01] transition-transform" rounded="rounded-2xl" src={c.img} alt={title}/>
-      </button>
+      </a>
       {/* Note affichée seulement si le circuit a de vrais avis (pas de notes inventées) */}
       {c.rating ? (
         <div className="flex items-center gap-2 mb-2">
@@ -595,10 +609,10 @@ const CircuitCard = ({ c, onOpen, size = 'md' }) => {
       ) : (
         <div className="mb-2 text-[12px] text-ink-500">{c.days > 1 ? `${c.days}j / ${c.nights}n` : ''}</div>
       )}
-      <button onClick={()=>onOpen(c.id)} className="text-left">
+      <a href={tourHref(c.id)} className="block text-left">
         <h3 className="font-display text-[22px] md:text-[24px] leading-tight group-hover:text-terre transition-colors">{title}</h3>
         <div className="text-[13px] text-ink-600 mt-1">{subtitle}</div>
-      </button>
+      </a>
       <div className="mt-4 flex items-end justify-between">
         <div>
           <div className="text-[10.5px] text-ink-500 font-mono uppercase tracking-wider">
@@ -608,9 +622,9 @@ const CircuitCard = ({ c, onOpen, size = 'md' }) => {
             ? <Price xof={c.priceXOF} className="font-display text-[20px] md:text-[22px] leading-none"/>
             : <span className="font-display text-[20px] md:text-[22px] leading-none">{t('common.onQuote')}</span>}
         </div>
-        <button onClick={()=>onOpen(c.id)} className="h-10 px-4 rounded-full bg-ink text-sand-50 text-[13px] inline-flex items-center gap-1.5 hover:bg-terre transition-colors">
+        <a href={tourHref(c.id)} className="h-10 px-4 rounded-full bg-ink text-sand-50 text-[13px] inline-flex items-center gap-1.5 hover:bg-terre transition-colors">
           {t('cta.details')} <Icons.ArrowRight size={14}/>
-        </button>
+        </a>
       </div>
     </article>
   );
@@ -932,5 +946,5 @@ if (typeof window !== 'undefined') Object.assign(window, {
 export {
   Logo, StarRow, Pill, Btn, Price,
   PromoBanner, CookieConsent, UpdateNotifier, Header, WhatsAppFloat, Section, Footer, CircuitCard, PageHero,
-  TurnstileWidget,
+  TurnstileWidget, tourHref, articleHref,
 };

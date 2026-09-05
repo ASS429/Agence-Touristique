@@ -1,7 +1,7 @@
 import React from 'react';
 import { useI18n } from './i18n.jsx';
 import { Icons } from './icons.jsx';
-import { Btn, CircuitCard, Footer, PageHero } from './shared.jsx';
+import { Btn, CircuitCard, Footer, PageHero, tourHref } from './shared.jsx';
 import { CIRCUITS, DESTINATIONS, IMG } from './data.jsx';
 // Catalogue des circuits — sticky filters (desktop) + drawer (mobile)
 // + grid + pagination + empty state.
@@ -150,7 +150,7 @@ const FiltersBody = ({ f, set, count }) => {
 };
 
 // --- Catalog page -----------------------------------------------------------
-const Catalog = ({ go, onOpenTour, initialFilter }) => {
+const Catalog = ({ go, initialFilter }) => {
   const { t, richT } = useI18n();
   const [f, setF] = React.useState(() => {
     const base = defaultFilters();
@@ -227,7 +227,7 @@ const Catalog = ({ go, onOpenTour, initialFilter }) => {
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
-              {view.map(c => <CircuitCard key={c.id} c={c} onOpen={onOpenTour} size="sm"/>)}
+              {view.map(c => <CircuitCard key={c.id} c={c} size="sm"/>)}
             </div>
           )}
 
@@ -250,6 +250,31 @@ const Catalog = ({ go, onOpenTour, initialFilter }) => {
               </button>
             </div>
           )}
+
+          {/* Index complet — un lien vers CHAQUE circuit.
+              La grille ci-dessus est paginee (9 par page) et le filtrage se
+              fait en memoire : seule la page 1 existe dans le HTML prerendu,
+              donc 12 des 23 circuits n'avaient aucun lien entrant et
+              restaient invisibles pour les moteurs (mesure le 2026-09-05).
+              Cet index les couvre tous et sert aussi de raccourci au visiteur
+              qui cherche un circuit precis. Volontairement place APRES la
+              pagination : c'est un complement de navigation, pas la vitrine. */}
+          <nav aria-labelledby="catalog-index-title" className="mt-16 md:mt-20 border-t border-ink/10 pt-8">
+            <h2 id="catalog-index-title" className="font-display text-[24px] md:text-[28px] leading-tight">
+              {t('catalog.index.title')}
+            </h2>
+            <p className="text-[13px] text-ink-600 mt-1">{t('catalog.index.intro')}</p>
+            <ul className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
+              {CIRCUITS.map(c => (
+                <li key={c.id}>
+                  <a href={tourHref(c.id)}
+                     className="text-[13.5px] text-ink-700 hover:text-terre underline-offset-2 hover:underline">
+                    {t(`circuit.${c.id}.title`, c.title)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           {/* "Vous ne trouvez pas ?" */}
           <div className="mt-16 md:mt-24 rounded-3xl bg-ink text-sand-50 p-8 md:p-12 grid md:grid-cols-[1.4fr,1fr] gap-6 items-center">

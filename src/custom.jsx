@@ -306,7 +306,7 @@ const Field = ({ label, value, onChange, type='text', placeholder }) => (
 );
 
 // --- Page wrapper -----------------------------------------------------------
-const Custom = ({ go, onOpenTour }) => {
+const Custom = ({ go }) => {
   const { t, richT, lang } = useI18n();
   const [stepIdx, setStepIdx] = React.useState(0);
   const [submitted, setSubmitted] = React.useState(false);
@@ -458,7 +458,7 @@ const Custom = ({ go, onOpenTour }) => {
     }
   };
 
-  if (submitted) return <CustomConfirm form={form} picked={picked} go={go} onOpenTour={onOpenTour}/>;
+  if (submitted) return <CustomConfirm form={form} picked={picked} go={go}/>;
 
   return (
     <main className="bg-sand-50">
@@ -538,7 +538,7 @@ const Custom = ({ go, onOpenTour }) => {
 };
 
 // --- Confirmation -----------------------------------------------------------
-const CustomConfirm = ({ form, picked, go, onOpenTour }) => {
+const CustomConfirm = ({ form, picked, go }) => {
   const { t, richT } = useI18n();
   const suggestions = CIRCUITS.slice(0,3);
   const firstName = form.name ? form.name.split(' ')[0] : '';
@@ -578,7 +578,7 @@ const CustomConfirm = ({ form, picked, go, onOpenTour }) => {
       <Section label={t('custom.confirm.waiting')} title={richT(t('custom.confirm.suggestionsTitle'))}
                className="pb-20 md:pb-28">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          {suggestions.map(c => <CircuitCard key={c.id} c={c} onOpen={onOpenTour} size="sm"/>)}
+          {suggestions.map(c => <CircuitCard key={c.id} c={c} size="sm"/>)}
         </div>
       </Section>
 

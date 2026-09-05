@@ -2,7 +2,7 @@ import React from 'react';
 import { useI18n } from './i18n.jsx';
 import { Icons } from './icons.jsx';
 import { Photo } from './photo.jsx';
-import { Btn, Footer, Pill, Price, Section, StarRow, buildWaURL } from './shared.jsx';
+import { Btn, Footer, Pill, Price, Section, StarRow, buildWaURL, tourHref } from './shared.jsx';
 import { CIRCUITS, CIRCUIT_DETAIL, EXCURSIONS, FAQ, TOUR_REVIEWS, MAP_STOPS, SENEGAL_PATH, CASAMANCE_PATH } from './data.jsx';
 import { DeparturesWidget } from './departures-widget.jsx';
 // Tour detail — fiche circuit type "Gorée · Lac Rose · Saloum"
@@ -189,7 +189,7 @@ const MobileCtaBar = ({ waMsg }) => {
 // (sorties à la journée / demi-journée) partagent la route /tour/:id mais
 // pas le gabarit circuit : pas d'itinéraire multi-jours ni de carte, on
 // affiche leur vrai contenu (description, format, point de départ, horaires).
-const ExcursionTour = ({ exc, onBack, onOpenTour, go }) => {
+const ExcursionTour = ({ exc, onBack, go }) => {
   const { t, richT } = useI18n();
   const title    = t(`excursion.${exc.id}.title`,    exc.title);
   const subtitle = t(`excursion.${exc.id}.subtitle`, exc.subtitle);
@@ -256,12 +256,12 @@ const ExcursionTour = ({ exc, onBack, onOpenTour, go }) => {
             const sTitle    = t(`excursion.${e.id}.title`,    e.title);
             const sSubtitle = t(`excursion.${e.id}.subtitle`, e.subtitle);
             return (
-              <button key={e.id} onClick={()=>{ onOpenTour(e.id); window.scrollTo({top:0}); }} className="group text-left flex flex-col">
+              <a key={e.id} href={tourHref(e.id)} className="group text-left flex flex-col">
                 <Photo tone={e.tone} mood={e.mood} label={t(`excursions.kind.${e.kind}`, '')} ratio="aspect-[5/4]" className="mb-4 group-hover:scale-[1.01] transition-transform" src={e.img} alt={sTitle}/>
                 <h3 className="font-display text-[24px] leading-tight">{sTitle}</h3>
                 <div className="text-[13px] text-ink-600 mt-0.5">{sSubtitle}</div>
                 <span className="mt-3 inline-flex items-center gap-1.5 text-[13px] group-hover:text-terre">{t('tour.similar.see')} <Icons.ArrowUpRight size={14}/></span>
-              </button>
+              </a>
             );
           })}
         </div>
@@ -285,12 +285,12 @@ const GENERIC_INCLUDES = [
   'Assistance WhatsApp 24/7',
 ];
 
-const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
+const Tour = ({ onBack, go, tourId = 'goree-lac-saloum' }) => {
   const { t, richT, lang } = useI18n();
   // Les excursions partagent la route /tour/:id : sans ce branchement, toute
   // fiche excursion retombait sur CIRCUITS[0] (« Excursion à Gorée »).
   const exc = EXCURSIONS.find(e => e.id === tourId);
-  if (exc) return <ExcursionTour exc={exc} onBack={onBack} onOpenTour={onOpenTour} go={go}/>;
+  if (exc) return <ExcursionTour exc={exc} onBack={onBack} go={go}/>;
   // Lookup the picked circuit from the catalog; merge with the full detail
   // (which acts as the canonical "fiche type" content for any circuit shown
   // in this prototype). Title, subtitle, price, badges follow the catalog
@@ -502,7 +502,7 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
             const sTitle    = t(`circuit.${c.id}.title`,    c.title);
             const sSubtitle = t(`circuit.${c.id}.subtitle`, c.subtitle);
             return (
-              <button key={c.id} onClick={()=>{ onOpenTour(c.id); window.scrollTo({top:0}); }} className="group text-left flex flex-col">
+              <a key={c.id} href={tourHref(c.id)} className="group text-left flex flex-col">
                 <Photo tone={c.tone} mood={c.mood} label={`${c.days}j`} ratio="aspect-[5/4]" className="mb-4 group-hover:scale-[1.01] transition-transform" src={c.img} alt={sTitle}/>
                 {c.rating && (
                   <div className="flex items-center gap-2 mb-1.5">
@@ -519,7 +519,7 @@ const Tour = ({ onBack, onOpenTour, go, tourId = 'goree-lac-saloum' }) => {
                   </div>
                   <span className="inline-flex items-center gap-1.5 text-[13px] group-hover:text-terre">{t('tour.similar.see')} <Icons.ArrowUpRight size={14}/></span>
                 </div>
-              </button>
+              </a>
             );
           })}
         </div>

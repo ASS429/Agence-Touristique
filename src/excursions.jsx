@@ -2,7 +2,7 @@ import React from 'react';
 import { useI18n } from './i18n.jsx';
 import { Icons } from './icons.jsx';
 import { Photo } from './photo.jsx';
-import { Btn, CircuitCard, Footer, PageHero } from './shared.jsx';
+import { Btn, CircuitCard, Footer, PageHero, tourHref } from './shared.jsx';
 import { Chip, FilterGroup } from './catalog.jsx';
 import { EXCURSIONS, DESTINATIONS, IMG } from './data.jsx';
 // Excursions — page catalogue des activités courtes (demi-journée / journée).
@@ -111,39 +111,39 @@ const ExcFiltersBody = ({ f, set }) => {
 };
 
 // --- Card spécialisée pour excursions (affiche kind + horaires) ---------------
-const ExcursionCard = ({ e, onOpen, size = 'md' }) => {
+const ExcursionCard = ({ e, size = 'md' }) => {
   const { t } = useI18n();
   const title    = t(`excursion.${e.id}.title`,    e.title);
   const subtitle = t(`excursion.${e.id}.subtitle`, e.subtitle);
   const kindLabel = t(`excursions.kind.${e.kind}`, e.kind === 'half' ? 'Demi-journée' : 'Journée complète');
   return (
     <article className="group flex flex-col" data-comment-anchor={`excursion-card-${e.id}`}>
-      <button onClick={()=>onOpen(e.id)} className="block w-full text-left">
+      <a href={tourHref(e.id)} className="block w-full text-left">
         <Photo tone={e.tone} mood={e.mood} label={kindLabel} ratio={size==='sm' ? 'aspect-[5/4]' : 'aspect-[4/5]'} className="mb-4 group-hover:scale-[1.01] transition-transform" rounded="rounded-2xl" src={e.img} alt={title}/>
-      </button>
+      </a>
       <div className="flex items-center gap-2 mb-2 text-[12px] text-ink-500">
         <Icons.Clock size={12} className="text-terre"/>
         <span>{e.schedule}</span>
       </div>
-      <button onClick={()=>onOpen(e.id)} className="text-left">
+      <a href={tourHref(e.id)} className="block text-left">
         <h3 className="font-display text-[22px] md:text-[24px] leading-tight group-hover:text-terre transition-colors">{title}</h3>
         <div className="text-[13px] text-ink-600 mt-1">{subtitle}</div>
-      </button>
+      </a>
       <div className="mt-4 flex items-end justify-between">
         <div>
           <div className="text-[10.5px] text-ink-500 font-mono uppercase tracking-wider">{t('common.priceLabel')}</div>
           <span className="font-display text-[20px] md:text-[22px] leading-none">{t('common.onQuote')}</span>
         </div>
-        <button onClick={()=>onOpen(e.id)} className="h-10 px-4 rounded-full bg-ink text-sand-50 text-[13px] inline-flex items-center gap-1.5 hover:bg-terre transition-colors">
+        <a href={tourHref(e.id)} className="h-10 px-4 rounded-full bg-ink text-sand-50 text-[13px] inline-flex items-center gap-1.5 hover:bg-terre transition-colors">
           {t('cta.details')} <Icons.ArrowRight size={14}/>
-        </button>
+        </a>
       </div>
     </article>
   );
 };
 
 // --- Page Excursions ---------------------------------------------------------
-const Excursions = ({ go, onOpenTour }) => {
+const Excursions = ({ go }) => {
   const { t, richT } = useI18n();
   const [f, setF] = React.useState(excDefaultFilters);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -209,7 +209,7 @@ const Excursions = ({ go, onOpenTour }) => {
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
-              {list.map(e => <ExcursionCard key={e.id} e={e} onOpen={onOpenTour} size="sm"/>)}
+              {list.map(e => <ExcursionCard key={e.id} e={e} size="sm"/>)}
             </div>
           )}
 

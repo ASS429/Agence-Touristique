@@ -2,12 +2,12 @@ import React from 'react';
 import { useI18n } from './i18n.jsx';
 import { Icons } from './icons.jsx';
 import { Photo } from './photo.jsx';
-import { Btn, Footer, Header, PageHero, Section, buildWaURL } from './shared.jsx';
+import { Btn, Footer, Header, PageHero, Section, buildWaURL, tourHref, articleHref } from './shared.jsx';
 import { BLOG, BLOG_CATEGORIES, CIRCUITS, IMG } from './data.jsx';
 // Blog — list page + article detail page.
 
 // =============== List page ==================================================
-const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
+const BlogList = ({ go }) => {
   const { t, richT, lang } = useI18n();
   const L = (b, f) => window.pickLang ? window.pickLang(b, f, lang) : (b[f] || '');
   const [cat, setCat]     = React.useState('all');
@@ -46,7 +46,7 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
 
       {/* Featured article */}
       <Section label="À la une" title={null} className="pt-16 md:pt-20 pb-10">
-        <button onClick={()=>onOpenArticle(featured.id)} className="group block w-full text-left">
+        <a href={articleHref(featured.id)} className="group block w-full text-left">
           <div className="grid md:grid-cols-[1.1fr,1fr] gap-6 md:gap-10 items-stretch">
             <Photo tone={featured.tone} mood={featured.mood} label={featured.tag} ratio="aspect-[5/4] md:aspect-[5/3]" rounded="rounded-3xl" src={featured.img} alt={L(featured,'title')}/>
             <div className="flex flex-col justify-center">
@@ -65,7 +65,7 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
               </div>
             </div>
           </div>
-        </button>
+        </a>
       </Section>
 
       {/* Category chips */}
@@ -89,7 +89,7 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
         ) : (
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
             {view.map(b => (
-              <button key={b.id} onClick={()=>onOpenArticle(b.id)}
+              <a key={b.id} href={articleHref(b.id)}
                 className="group flex flex-col text-left bg-sand-50 rounded-3xl overflow-hidden border border-ink/5 hover:shadow-xl transition-shadow">
                 <Photo tone={b.tone} mood={b.mood} label={b.tag} ratio="aspect-[5/4]" rounded="" src={b.img} alt={L(b,'title')}/>
                 <div className="p-5 md:p-6 flex flex-col flex-1">
@@ -101,7 +101,7 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
                     <span className="inline-flex items-center gap-1 text-ink-700 group-hover:text-terre">Lire <Icons.ArrowRight size={12}/></span>
                   </div>
                 </div>
-              </button>
+              </a>
             ))}
           </div>
         )}
@@ -142,7 +142,7 @@ const BlogList = ({ go, onOpenArticle, onOpenTour }) => {
 };
 
 // =============== Article page ===============================================
-const BlogArticle = ({ id, go, onOpenArticle, onOpenTour }) => {
+const BlogArticle = ({ id, go }) => {
   const { lang } = useI18n();
   const L = (b, f) => window.pickLang ? window.pickLang(b, f, lang) : (b[f] || '');
   const article = BLOG.find(b => b.id === id) || BLOG[0];
@@ -221,7 +221,7 @@ const BlogArticle = ({ id, go, onOpenArticle, onOpenTour }) => {
                 <ul className="mt-5 space-y-3">
                   {relatedCircuits.map(c => (
                     <li key={c.id}>
-                      <button onClick={()=>onOpenTour(c.id)} className="w-full flex items-center gap-3 group text-left">
+                      <a href={tourHref(c.id)} className="w-full flex items-center gap-3 group text-left">
                         <div className="h-12 w-12 rounded-xl overflow-hidden shrink-0">
                           <Photo tone={c.tone} mood={c.mood} showLabel={false} rounded="" className="h-12 w-12" src={c.img} alt={c.title}/>
                         </div>
@@ -230,7 +230,7 @@ const BlogArticle = ({ id, go, onOpenArticle, onOpenTour }) => {
                           <div className="text-[11px] text-sand-300 truncate">{c.days}j · {c.subtitle}</div>
                         </div>
                         <Icons.ArrowUpRight size={14} className="text-sand-300 shrink-0"/>
-                      </button>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -246,7 +246,7 @@ const BlogArticle = ({ id, go, onOpenArticle, onOpenTour }) => {
       <Section label="À lire aussi" title={null} className="pb-16">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
           {relatedArticles.map(b => (
-            <button key={b.id} onClick={()=>onOpenArticle(b.id)}
+            <a key={b.id} href={articleHref(b.id)}
               className="group flex flex-col text-left bg-sand-100 rounded-3xl overflow-hidden hover:shadow-xl transition-shadow">
               <Photo tone={b.tone} mood={b.mood} label={b.tag} ratio="aspect-[5/4]" rounded="" src={b.img} alt={L(b,'title')}/>
               <div className="p-5">
@@ -254,7 +254,7 @@ const BlogArticle = ({ id, go, onOpenArticle, onOpenTour }) => {
                 <h3 className="font-display text-[22px] leading-tight mt-2 group-hover:text-terre">{L(b,'title')}</h3>
                 <div className="text-[12px] text-ink-500 mt-2">{b.date} · {b.readTime}</div>
               </div>
-            </button>
+            </a>
           ))}
         </div>
       </Section>

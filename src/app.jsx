@@ -72,8 +72,6 @@ const AppShell = () => {
   // Ouverture d'un Tour OU d'une Excursion. Les deux passent par la même
   // fiche détail (mêmes données : days/short/destIds/photos) — la page Tour
   // détecte d'où vient l'id et fallback sur CIRCUIT_DETAIL si excursion.
-  const openTour = (id) => { setTourId(id); go('tour', { id }); };
-  const openArticle = (id) => { setArticleId(id); go('blog', { id }); };
 
   // Wrap go() so we can pass a catalog filter (e.g. diaspora)
   const navigate = (target, extra) => {
@@ -97,17 +95,17 @@ const AppShell = () => {
 
   const showPage = () => {
     switch (route) {
-      case 'home':     return <Home onOpenTour={openTour} go={navigate}/>;
-      case 'tour':     return <Tour tourId={tourId} onBack={()=>navigate('home')} onOpenTour={openTour} go={navigate}/>;
-      case 'circuits':   return <Catalog go={navigate} onOpenTour={openTour} initialFilter={catalogFilter}/>;
-      case 'excursions': return <Excursions go={navigate} onOpenTour={openTour}/>;
+      case 'home':     return <Home go={navigate}/>;
+      case 'tour':     return <Tour tourId={tourId} onBack={()=>navigate('home')} go={navigate}/>;
+      case 'circuits':   return <Catalog go={navigate} initialFilter={catalogFilter}/>;
+      case 'excursions': return <Excursions go={navigate}/>;
       case 'croisieres': return <Croisieres go={navigate}/>;
       case 'ateliers':   return <Ateliers   go={navigate}/>;
-      case 'custom':     return <Custom go={navigate} onOpenTour={openTour}/>;
+      case 'custom':     return <Custom go={navigate}/>;
       case 'blog':
         return params.id
-          ? <BlogArticle id={articleId} go={navigate} onOpenArticle={openArticle} onOpenTour={openTour}/>
-          : <BlogList go={navigate} onOpenArticle={openArticle} onOpenTour={openTour}/>;
+          ? <BlogArticle id={articleId} go={navigate}/>
+          : <BlogList go={navigate}/>;
       case 'carnet':   return <CarnetVoyage slug={params.id} go={navigate}/>;
       case 'monespace': return <ClientSpace go={navigate}/>;
       case 'contact':  return <Contact go={navigate}/>;

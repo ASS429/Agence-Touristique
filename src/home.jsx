@@ -289,7 +289,7 @@ const ProfilACT = ({ go }) => {
 // ============================================================================
 // Produits & circuits — sélection de la home
 // ============================================================================
-const ProduitsCircuits = ({ onOpenTour, go }) => {
+const ProduitsCircuits = ({ go }) => {
   const { t, richT } = useI18n();
   // Mix : circuits réels de la brochure ACT (nord, sainte, delta, sud)
   const picks = ['saint-louis-2j','saint-louis-touba-3j','saloum-lac-rose-toubacouta-3j','casamance-mandingue-4j']
@@ -300,7 +300,7 @@ const ProduitsCircuits = ({ onOpenTour, go }) => {
              kicker={t('home.produits.kicker')}
              className="py-20 md:py-28" screenLabel="05 Produits & circuits">
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-        {picks.map(c => <CircuitCard key={c.id} c={c} onOpen={onOpenTour}/>)}
+        {picks.map(c => <CircuitCard key={c.id} c={c}/>)}
       </div>
       <div className="mt-10 md:mt-12 flex justify-center">
         <Btn onClick={()=>go('circuits')} variant="primary" size="lg" icon={<Icons.ArrowRight size={18}/>}>
@@ -496,7 +496,7 @@ const Insta = () => {
   );
 };
 
-const Home = ({ onOpenTour, go }) => (
+const Home = ({ go }) => (
   <main>
     <Hero go={go}/>
     <Reassurance/>
@@ -506,7 +506,7 @@ const Home = ({ onOpenTour, go }) => (
         catalogue renommé 'Circuits & produits'. */}
     <SenegalSelonACT/>
     <ProfilACT go={go}/>
-    <ProduitsCircuits onOpenTour={onOpenTour} go={go}/>
+    <ProduitsCircuits go={go}/>
     <Destinations go={go}/>
     <DestinationsMap go={go}/>
     <Pourquoi/>
