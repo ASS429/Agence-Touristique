@@ -4,15 +4,15 @@
 // (JSX, images, vidéo) → permet de naviguer hors-ligne sur les pages déjà
 // visitées, utile en 3G/4G instable.
 
-const VERSION = 'act-v44';
+const VERSION = 'act-v45';
 // Note de version — affichée aux utilisateurs PWA via la notification
 // "nouvelle version disponible" (voir NotifyUpdate dans shared.jsx).
 // Format : { fr, en, it, de }. Mise à jour à chaque nouvelle version.
 const RELEASE_NOTES = {
-  fr: 'Site plus rapide et plus léger : chargement optimisé, polices intégrées, meilleure fluidité.',
-  en: 'Faster, lighter site: optimized loading, bundled fonts, smoother experience.',
-  it: 'Sito più veloce e leggero: caricamento ottimizzato, font integrati, maggiore fluidità.',
-  de: 'Schnellere, leichtere Website: optimiertes Laden, integrierte Schriften, flüssiger.',
+  fr: 'Nouveau logo Africa Connection Tours.',
+  en: 'New Africa Connection Tours logo.',
+  it: 'Nuovo logo di Africa Connection Tours.',
+  de: 'Neues Logo von Africa Connection Tours.',
 };
 
 // Cache séparé pour les images / vidéos / fonts, avec un plafond d'entrées.
@@ -40,7 +40,7 @@ const trimMediaCache = async () => {
 const CORE = [
   '/',
   '/index.html',
-  '/assets/logo-act.png',
+  '/assets/logo-act-web.png',
   '/manifest.webmanifest',
 ];
 

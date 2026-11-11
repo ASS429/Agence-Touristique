@@ -107,7 +107,7 @@ function AdminSidebar({ user, collapsed, mobileOpen, onCloseMobile, activeSectio
       {/* Header : logo + nom agence */}
       <div className="p-4 flex items-center gap-2.5">
         <div className="flex-shrink-0 bg-white rounded-xl p-1.5 shadow-lg">
-          <img src="../assets/logo-act.png" alt="ACT" className="block" style={{ height: collapsed ? 22 : 26, width: 'auto' }}/>
+          <img src="../assets/logo-act-web.png" alt="ACT" className="block" style={{ height: collapsed ? 22 : 26, width: 'auto' }}/>
         </div>
         {!collapsed && (
           <div className="min-w-0 overflow-hidden">

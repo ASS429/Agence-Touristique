@@ -106,9 +106,9 @@ const Logo = ({ inverted = false, className = '', onClick }) => (
   <a href="/" onClick={onClick}
      className={`inline-flex items-center gap-2.5 ${className}`}>
     <img
-      src="assets/logo-act.png"
+      src="assets/logo-act-web.png"
       alt=""
-      width="44"
+      width="70"
       height="44"
       className="h-10 w-auto md:h-11 select-none"
       draggable={false}

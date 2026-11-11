@@ -95,7 +95,7 @@ function LoginScreen({ onSuccess }) {
         <div className="w-full max-w-[380px]">
           {/* Logo dans une carte */}
           <div className="inline-flex bg-white border border-bone-200 rounded-2xl px-4 py-3 shadow-lg shadow-ink-800/10">
-            <img src="../assets/logo-act.png" alt="Africa Connection Tours" style={{ height: 40, width: 'auto', display: 'block' }}/>
+            <img src="../assets/logo-act-web.png" alt="Africa Connection Tours" style={{ height: 40, width: 'auto', display: 'block' }}/>
           </div>
 
           <div className="mt-8 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-mute-400">
